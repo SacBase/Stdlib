@@ -23,12 +23,12 @@
 
 /********************************************************************/
 
-#ifdef UNIX_ALPHA
+#ifdef SAC_FOR_OSF_ALPHA
 
 extern int random();
 extern int srandom(unsigned seed);
 
-#else /* UNIX_ALPHA */
+#else /* SAC_FOR_OSF_ALPHA */
 
 extern long int random();
 extern void srandom(unsigned seed);
