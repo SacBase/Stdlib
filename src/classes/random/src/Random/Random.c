@@ -65,13 +65,20 @@ int SACrandom(int min, int max)
   
   do
   {
-	 n=random();
+     n=random();
   } 
   while (n==RAND_MAX);
   
-  return((int)((n/(double)RAND_MAX) * (max-min+1) + min));
+  return((int)(((n%RAND_MAX)/(double)RAND_MAX) * (max-min+1) + min));
 }
 
+/*
+ * The modulo operation in the above line is required due to a very special
+ * Solaris 7 feature:
+ * While the libc function random expects RAND_MAX to be 2147483647,
+ * stdlib.h defines RAND_MAX to be 32768. Without caution this results
+ * in a rather undesired behaviour.
+ */
 
 /********************************************************************/
 
@@ -86,8 +93,16 @@ double SACdrandom(double min, double max)
   } 
   while (n==RAND_MAX);
   
-  return((n/(double)RAND_MAX) * (max-min) + min);
+  return(((n%RAND_MAX)/(double)RAND_MAX) * (max-min) + min);
 }
+
+/*
+ * The modulo operation in the above line is required due to a very special
+ * Solaris 7 feature:
+ * While the libc function random expects RAND_MAX to be 2147483647,
+ * stdlib.h defines RAND_MAX to be 32768. Without caution this results
+ * in a rather undesired behaviour.
+ */
 
 
 
