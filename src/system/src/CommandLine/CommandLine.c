@@ -3,8 +3,9 @@
  */
 
 
-#include "sac.h"
+#include <string.h>
 
+#include "sac.h"
 
 
 /*****************************************************/
@@ -31,7 +32,7 @@ ComLine *create_TheCommandLine(int argc, char *argv[])
 {
   ComLine *parameters;
   
-  parameters=(ComLine *)MALLOC(sizeof(ComLine));
+  parameters=(ComLine *)SAC_MALLOC(sizeof(ComLine));
   
   parameters->argc=argc;
   parameters->argv=argv;
@@ -58,13 +59,13 @@ char *SACargv(int n)
   
   if (n<TheCommandLine->argc)
   {
-    result=(char*)MALLOC(strlen((TheCommandLine->argv)[n])+1);
+    result=(char*)SAC_MALLOC(strlen((TheCommandLine->argv)[n])+1);
   
     strcpy(result, (TheCommandLine->argv)[n]);
   }
   else
   {
-    result=(char*)MALLOC(1);
+    result=(char*)SAC_MALLOC(1);
     result[0]=0;
   }
   
@@ -87,7 +88,7 @@ char *SACargvall()
     len += strlen(TheCommandLine->argv[i]);
   }
   
-  result=(char*)MALLOC(len+1+TheCommandLine->argc);
+  result=(char*)SAC_MALLOC(len+1+TheCommandLine->argc);
 
   strcpy(result, (TheCommandLine->argv)[0]);
   
