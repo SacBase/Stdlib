@@ -11,4 +11,4 @@
 #include "icm2c.h"
 
 
-extern int putenv(char *);
+extern int putenv(const char *);

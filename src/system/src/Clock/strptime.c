@@ -7,7 +7,7 @@
 #include "Time.h"
 
 
-extern char *strptime(char *, char *, struct tm *);
+extern char *strptime(const char *, const char *, struct tm *);
 
 /* 
  * Unfortunately, the function strptime() is not declared in time.h !
