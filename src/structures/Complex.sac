@@ -8,16 +8,6 @@ typedef double[2] complex;
   /*  Functions for composing and decomposing of complex numbers.  */
 
 
-inline complex mkcomplex(double REAL, double IMAG)
-{
-  return((:complex)[REAL, IMAG]);
-}
-
-
-inline complex mkcomplex(double REAL)
-{
-  return((:complex)[REAL, 0.0d]);
-}
 
 
 inline double real(complex CPX)
@@ -52,6 +42,14 @@ inline  complex toc(float  REAL, float  IMAG)
 inline  complex toc(double REAL, double IMAG)
 {
   return((:complex)[REAL, IMAG]);
+}
+
+
+/* inlinig results in broken code */
+inline complex toc(double[2] COMP)   /* add by jfe */
+{
+  return((:complex)COMP);
+
 }
 
 
@@ -128,6 +126,11 @@ inline  float , float  tof(complex C)
 inline  double, double tod(complex C)
 {
   return(real(C), imag(C));
+}
+
+inline  double[2] todv(complex C)
+{
+  return([real(C), imag(C)]);
 }
 
 
