@@ -12,12 +12,12 @@
 int SACstrtoi(string *remain, string input, int base)
 {
   int res;
-  char **rem;
+  char *rem;
   
-  res=(int)strtol(input, rem, base);
+  res=(int)strtol(input, & rem, base);
   
-  *remain=(string)SAC_MALLOC(strlen(*rem)+1);
-  strcpy(*remain, *rem);
+  *remain=(string)SAC_MALLOC(strlen(rem)+1);
+  strcpy(*remain, rem);
   
   return(res);
 }
