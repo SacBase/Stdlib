@@ -13,7 +13,7 @@ string strins(string old, int pos, string insert)
 {
   string new;
   
-  RANGECHECK(pos, 0, strlen(old), old);
+  RANGECHECK((size_t)pos, 0, strlen(old), old);
   
   new=(string)SAC_MALLOC(strlen(old)+strlen(insert)+1);
   

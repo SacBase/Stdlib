@@ -13,7 +13,7 @@ string strext(string old, int first, int len)
 {
   string new;
   
-  RANGECHECK(first, 0, strlen(old)-1, old);
+  RANGECHECK((size_t)first, 0, strlen(old)-1, old);
   
   if (len<=0)
   {
@@ -25,7 +25,7 @@ string strext(string old, int first, int len)
 	 new=(string)SAC_MALLOC(len+1);
 	 strncpy(new, old+first, len);
     
-    if (first+len<=strlen(old))
+    if ((size_t)(first+len)<=strlen(old))
     {
       new[len]=0;
     }

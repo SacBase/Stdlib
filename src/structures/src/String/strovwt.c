@@ -24,7 +24,7 @@ void strovwt( SAC_ND_PARAM_out( new_nt, string),
   int len_insert_pos = len_insert+pos;
   char store;
 
-  RANGECHECK( pos, 0, strlen( SAC_ND_A_FIELD( old_nt)),
+  RANGECHECK( (size_t)pos, 0, strlen( SAC_ND_A_FIELD( old_nt)),
               SAC_ND_A_FIELD( old_nt));
   
   if (len_insert_pos <= len_old) {
@@ -72,7 +72,7 @@ void strovwt( SAC_ND_PARAM_out_rc( string, new),
   int len_insert_pos=len_insert+pos;
   char store;
   
-  RANGECHECK(pos, 0, strlen(old), old);
+  RANGECHECK((size_t)pos, 0, strlen(old), old);
   
   if (len_insert_pos<=len_old) {
     store=old[len_insert_pos];

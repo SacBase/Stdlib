@@ -20,7 +20,7 @@ void strtake( SAC_ND_PARAM_out( new_nt, string),
   SAC_ND_DECL__DESC( new_nt, )
   SAC_ND_DECL__DATA( new_nt, string, )
 
-  RANGECHECK( n, 0, strlen( SAC_ND_A_FIELD( old_nt)), SAC_ND_A_FIELD( old_nt));
+  RANGECHECK( (size_t)n, 0, strlen( SAC_ND_A_FIELD( old_nt)), SAC_ND_A_FIELD( old_nt));
   
   if (SAC_ND_A_RC( old_nt) == 1) {
     SAC_ND_A_DESC( new_nt) = SAC_ND_A_DESC( old_nt);
@@ -47,7 +47,7 @@ void strtake( SAC_ND_PARAM_out_rc( string, new),
 {
   SAC_ND_DECL_RC(string, new);
   
-  RANGECHECK(n, 0, strlen(old), old);
+  RANGECHECK((size_t)n, 0, strlen(old), old);
   
   if (SAC_ND_A_RC(old)==1) {
     new=old;

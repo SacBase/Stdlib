@@ -11,7 +11,7 @@
 
 char strsel(string s, int pos)
 {
-  RANGECHECK(pos, 0, strlen(s)-1, s);
+  RANGECHECK((size_t)pos, 0, strlen(s)-1, s);
   
   return(s[pos]);
 }
