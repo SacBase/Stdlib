@@ -83,15 +83,6 @@ int	Edquot() {return( EDQUOT );}		       	/* Disc quota exceeded */
 int	Estale() {return( ESTALE );}		       	/* Stale NFS file handle */
 int	Eremote() {return(EREMOTE  );}		       	/* Too many levels of remote in path */
 
-/* streams */
-
-#ifndef SAC_FOR_OSX_MAC
-int	Enostr() {return( ENOSTR );}		      	/* Device is not a stream */
-int	Etime() {return(ETIME  );}	       		/* Timer expired */
-int	Enosr() {return(ENOSR  );}	       		/* Out of streams resources */
-int	Enomsg() {return(ENOMSG  );}	       		/* No message of desired type */
-int	Ebadmsg() {return( EBADMSG );}	       		/* Trying to read unreadable message */
-#endif
 
 
 
