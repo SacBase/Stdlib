@@ -13,7 +13,7 @@ time_t *SACgettime()
 {
   time_t *res;
   
-  res=(time_t*)MALLOC(sizeof(time_t));
+  res=(time_t*)SAC_MALLOC(sizeof(time_t));
   time(res);
   return(res);
 }

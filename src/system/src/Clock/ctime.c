@@ -15,7 +15,7 @@ string SACctime(time_t *t)
   
   buffer=ctime(t);
   
-  result=(string)MALLOC(strlen(buffer)+1);
+  result=(string)SAC_MALLOC(strlen(buffer)+1);
   strcpy(result, buffer);
   
   return(result);

@@ -22,7 +22,7 @@ time_t *SACmktime(int *success, int year, int mon, int day,
   t.tm_min=min;
   t.tm_sec=sec;
   
-  res=(time_t*)MALLOC(sizeof(time_t));
+  res=(time_t*)SAC_MALLOC(sizeof(time_t));
 
   *res=mktime(&t);
 

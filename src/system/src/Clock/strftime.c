@@ -15,7 +15,7 @@ string SACstrftime(int len, string format, time_t *t)
   
   tt=localtime(t);
   
-  result=(string)MALLOC(len+1);
+  result=(string)SAC_MALLOC(len+1);
   
   strftime(result, len, format, tt);
   

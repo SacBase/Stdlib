@@ -28,10 +28,10 @@ time_t *SACstrptime(string *result, string s, string format)
   
   remain=strptime(s, format, &tt);
   
-  *result=(string)MALLOC(strlen(remain)+1);
+  *result=(string)SAC_MALLOC(strlen(remain)+1);
   strcpy(*result, remain);
   
-  t=(time_t*)MALLOC(sizeof(time_t));
+  t=(time_t*)SAC_MALLOC(sizeof(time_t));
   *t=mktime(&tt);
   
   return(t);
