@@ -23,7 +23,7 @@ char *SACstrerror(int num)
   
   buffer=strerror(num);
   
-  result=(char *)MALLOC(strlen(buffer)+1);
+  result=(char *)SAC_MALLOC(strlen(buffer)+1);
   strcpy(result, buffer);
   
   return(result);

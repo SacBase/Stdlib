@@ -14,7 +14,7 @@ char *SACtmpnam()
   char *buffer, *name;
   
   buffer=tmpnam(NULL);
-  name=(char *)MALLOC(strlen(buffer)+1);
+  name=(char *)SAC_MALLOC(strlen(buffer)+1);
   strcpy(name, buffer);
   
   return(name);

@@ -17,7 +17,7 @@ char *SACtempnam(char *dir, char *prefix)
   name=tempnam(dir, prefix);
   if (name==NULL)
   {
-    name=(char*)MALLOC(1);
+    name=(char*)SAC_MALLOC(1);
     *name=0;
   }
   

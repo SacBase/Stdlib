@@ -11,12 +11,12 @@ char *GetEnv(char *envvar)
   
   if (buffer==NULL)
   {
-	 result=(char*)MALLOC(1);
+	 result=(char*)SAC_MALLOC(1);
 	 result[0]=0;
   }
   else
   {
-	 result=(char*)MALLOC(strlen(buffer)+1);
+	 result=(char*)SAC_MALLOC(strlen(buffer)+1);
 	 strcpy(result, buffer);
   }
   

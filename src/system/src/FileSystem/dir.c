@@ -16,7 +16,7 @@ char *SACgetcwd()
   int size=100;
   char *success;
   
-  res=(char *) MALLOC(size);
+  res=(char *)SAC_MALLOC(size);
   
   success=getcwd(res, size);
   
@@ -24,7 +24,7 @@ char *SACgetcwd()
   {
     size*=2;
     free(res);
-    res=(char *) MALLOC(size);
+    res=(char *)SAC_MALLOC(size);
     success=getcwd(res, size);
   }
   
@@ -104,6 +104,4 @@ int SACrmdir(char *name)
     
   
 /*****************************************************************/
-
-
 
