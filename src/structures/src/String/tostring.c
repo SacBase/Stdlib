@@ -20,7 +20,7 @@ void to_string( SAC_ND_PARAM_out( str_nt, string),
   SAC_ND_DECL__DESC( str_nt, )
   SAC_ND_DECL__DATA( str_nt, string, )
 
-  if (SAC_ND_A_RC( ar_nt) == 1) {
+  if ((SAC_ND_A_RC( ar_nt) == 1) && (SAC_ND_READ( ar_nt, length - 1) == '\0')) {
     SAC_ND_A_DESC( str_nt) = SAC_ND_A_DESC( ar_nt);
     SAC_ND_A_FIELD( str_nt) = SAC_ND_A_FIELD( ar_nt);
   }
