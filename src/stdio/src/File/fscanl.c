@@ -14,7 +14,7 @@ char* fscanl(FILE *stream, int length)
 {
   char *input, *success;
   
-  input=(char*)MALLOC(length+3);
+  input=(char*)SAC_MALLOC(length+3);
   
   success=fgets(input, length+1, stream);
   
