@@ -35,3 +35,4 @@ void _drop( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *
   *res__p = res;
   *res__rc__p = &res->rc;
 }
+

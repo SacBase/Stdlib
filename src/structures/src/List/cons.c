@@ -34,3 +34,4 @@ void cons( SAC_ND_KS_DEC_OUT_RC(list *, res), int elem, SAC_ND_KS_DEC_IN_RC(list
   *res__rc__p = &res->rc;
 }
 
+

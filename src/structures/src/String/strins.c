@@ -28,3 +28,4 @@ string strins(string old, int pos, string insert)
 
 
 /*****************************************************************/
+

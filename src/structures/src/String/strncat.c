@@ -24,3 +24,4 @@ string SACstrncat(string first, string second, int n)
 
 
 /*****************************************************************/
+

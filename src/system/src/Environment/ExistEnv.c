@@ -8,3 +8,4 @@ int ExistEnv(char *envvar)
   return((int)getenv(envvar));
 }
 
+

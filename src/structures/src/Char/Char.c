@@ -18,3 +18,4 @@ int __dummy_value_which_is_completely_useless=0;
  *  table at all. Finding no symbol table lets the linker give some
  *  nasty warnings. These are suppressed by the above dummy symbol.
  */
+
