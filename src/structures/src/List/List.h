@@ -15,9 +15,9 @@
 #ifdef TAGGED_ARRAYS
      
 typedef struct LIST {
-  int                  elem;
-  struct LIST          *rest;
-  SAC_array_descriptor *desc;
+  int                    elem;
+  struct LIST            *rest;
+  SAC_array_descriptor_t desc;
 } list;
 
 #else
