@@ -23,9 +23,17 @@
 
 /********************************************************************/
 
-extern long int random();
+#ifdef UNIX_ALPHA
 
+extern int random();
+extern int srandom(unsigned seed);
+
+#else /* UNIX_ALPHA */
+
+extern long int random();
 extern void srandom(unsigned seed);
+
+#endif
 
 
 /********************************************************************/
