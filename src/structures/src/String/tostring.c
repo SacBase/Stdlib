@@ -40,7 +40,7 @@ void to_string( SAC_ND_PARAM_out( str_nt, string),
 #undef str_nt
 #undef ar_nt  
 
-#else
+#else  /* TAGGED_ARRAYS */
 
 void to_string( SAC_ND_PARAM_out_rc( string, str),
                 SAC_ND_PARAM_in_rc( char*, ar),
@@ -66,6 +66,6 @@ void to_string( SAC_ND_PARAM_out_rc( string, str),
   SAC_ND_RET_out_rc( str, str);
 }
   
-#endif
+#endif  /* TAGGED_ARRAYS */
 
 /*****************************************************************/

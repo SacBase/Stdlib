@@ -39,7 +39,10 @@ void strtake( SAC_ND_PARAM_out( new_nt, string),
   SAC_ND_RET_out( new_nt, new_nt)
 }
 
-#else
+#undef new_nt
+#undef old_nt
+
+#else  /* TAGGED_ARRAYS */
 
 void strtake( SAC_ND_PARAM_out_rc( string, new),
               SAC_ND_PARAM_in_rc( string, old),
@@ -65,6 +68,6 @@ void strtake( SAC_ND_PARAM_out_rc( string, new),
   SAC_ND_RET_out_rc( new, new);
 }
 
-#endif
+#endif  /* TAGGED_ARRAYS */
 
 /*****************************************************************/

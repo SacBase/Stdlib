@@ -6,19 +6,15 @@
 #include "StringC.h"
 
 
-
 /*****************************************************************/
 
-string copy_string(string s)
+string copy_string( string s)
 {
   string new;
   
-  STRDUP(new, s);
+  STRDUP( new, s);
   
-  return(new);
+  return( new);
 }
 
-
 /*****************************************************************/
-
-

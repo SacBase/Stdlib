@@ -6,31 +6,26 @@
 #include "StringC.h"
 
 
-
 /*****************************************************************/
 
-double SACstrtod(string *remain, string input)
+double SACstrtod( string *remain, string input)
 {
   double res;
   char *rem;
   
-  res=strtod(input, & rem);
+  res = strtod( input, &rem);
   
-  *remain=(string)SAC_MALLOC(strlen(rem)+1);
-  strcpy(*remain, rem);
+  *remain = (string) SAC_MALLOC( strlen( rem) + 1);
+  strcpy( *remain, rem);
   
-  return(res);
+  return( res);
 }
-
 
 /*****************************************************************/
 
-double SACtod(string input)
+double SACtod( string input)
 {
-  return(strtod(input, NULL));
+  return( strtod( input, NULL));
 }
 
-
 /*****************************************************************/
-
-

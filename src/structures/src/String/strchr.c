@@ -6,27 +6,20 @@
 #include "StringC.h"
 
 
-
 /*****************************************************************/
 
-int SACstrchr(string str, char c)
+int SACstrchr( string str, char c)
 {
   char *occur;
-  
-  occur=strchr(str, c);
-  
-  if (occur==NULL)
-  {
-	 return(-1);
+
+  occur = strchr( str, c);
+
+  if (occur == NULL) {
+    return( -1);
   }
-  else
-  {
-	 return(occur-str);
+  else {
+    return( occur - str);
   }
 }
 
-
-
 /*****************************************************************/
-
-
