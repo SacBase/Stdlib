@@ -12,18 +12,18 @@ void append( SAC_ND_KS_DEC_OUT_RC(list *, res),
 /*
  * we do have now:
  * - list **res__p;
- * -  int **__res_rc__p;
+ * -  int **res__rc__p;
  * - list *elemsA;
- * -  int *__elemsA_rc;
+ * -  int *elemsA__rc;
  * - list *elemsB;
- * -  int *__elemsB_rc;
+ * -  int *elemsB__rc;
  */
   list *new;
 
 
   if ( elemsA->rest == NULL) { /* elemsA == NIL! */
     *res__p = elemsB;
-    *__res_rc__p = __elemsB_rc;
+    *res__rc__p = elemsB__rc;
     if(--elemsA->rc == 0)
       free_list( elemsA);
   }
@@ -31,7 +31,7 @@ void append( SAC_ND_KS_DEC_OUT_RC(list *, res),
 
     if( elemsA->rc == 1) { /* re-use all elems while rc==1 ! */
       *res__p = elemsA;
-      *__res_rc__p = __elemsA_rc;
+      *res__rc__p = elemsA__rc;
 
       do {
         new = elemsA;
@@ -61,7 +61,7 @@ void append( SAC_ND_KS_DEC_OUT_RC(list *, res),
     fprintf( stderr, "creating CONS at (%p)\n", new);
 #endif
       *res__p = new;
-      *__res_rc__p = &new->rc;
+      *res__rc__p = &new->rc;
       elemsA->rc--;
 
       elemsA = elemsA->rest; /* elemsA has to be one in advance of new ! */

@@ -18,13 +18,13 @@ int nth( int n, SAC_ND_KS_DEC_IN_RC(list *, elems))
   int res;
 
   if( n<0)
-    __SAC__Runtime_Error( "negative first arg of nth\n");
+    SAC_RuntimeError( "negative first arg of nth\n");
 
   ptr = elems;
   while( n>0) {
     ptr=ptr->rest;
     if( ptr->rest == NULL)
-      __SAC__Runtime_Error( "first arg of nth %d larger than length of list\n", n);
+      SAC_RuntimeError( "first arg of nth %d larger than length of list\n", n);
     n--;
   }
   res = ptr->elem;

@@ -11,10 +11,10 @@ void cons( SAC_ND_KS_DEC_OUT_RC(list *, res), int elem, SAC_ND_KS_DEC_IN_RC(list
 /*
  * we do have now: 
  * - list **res__p;
- * -  int **__res_rc__p;
+ * -  int **res__rc__p;
  * -  int elem;
  * - list *elems;
- * -  int *__elems_rc;
+ * -  int *elems__rc;
  */
 
   list * res;
@@ -31,6 +31,6 @@ void cons( SAC_ND_KS_DEC_OUT_RC(list *, res), int elem, SAC_ND_KS_DEC_IN_RC(list
 
 
   *res__p = res;
-  *__res_rc__p = &res->rc;
+  *res__rc__p = &res->rc;
 }
 

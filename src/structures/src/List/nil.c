@@ -12,7 +12,7 @@ void nil(SAC_ND_KS_DEC_OUT_RC(list *, res))
 /*
  * we do have now: 
  * - list **res__p;
- * -  int **__res_rc__p;
+ * -  int **res__rc__p;
  */
   list *res;
 
@@ -25,7 +25,7 @@ void nil(SAC_ND_KS_DEC_OUT_RC(list *, res))
 #endif
 
   *res__p = res;
-  *__res_rc__p = &res->rc;
+  *res__rc__p = &res->rc;
 
 }
 

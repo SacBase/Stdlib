@@ -18,7 +18,7 @@ int hd(SAC_ND_KS_DEC_IN_RC(list *, elems))
   int res;
 
   if( elems->rest == NULL)
-    __SAC__Runtime_Error( "hd applied to NIL\n");
+    SAC_RuntimeError( "hd applied to NIL\n");
   res = elems->elem;
 
   if(--elems->rc == 0)

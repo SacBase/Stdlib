@@ -11,19 +11,19 @@ void _drop( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *
 /*
  * we do have now:
  * - list **res__p;
- * -  int **__res_rc__p;
+ * -  int **res__rc__p;
  * -  int n;
  * - list *elems;
- * -  int *__elems_rc;
+ * -  int *elems__rc;
  */
   list * res=elems;
 
   if( n<0)
-    __SAC__Runtime_Error( "negative first arg of drop\n");
+    SAC_RuntimeError( "negative first arg of drop\n");
 
   while( n>0) {
     if( res->rest == NULL)
-      __SAC__Runtime_Error( "first arg of drop %d larger than length of list\n", n);
+      SAC_RuntimeError( "first arg of drop %d larger than length of list\n", n);
     res=res->rest;
     n--;
   }
@@ -33,5 +33,5 @@ void _drop( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *
     free_list( elems);
 
   *res__p = res;
-  *__res_rc__p = &res->rc;
+  *res__rc__p = &res->rc;
 }
