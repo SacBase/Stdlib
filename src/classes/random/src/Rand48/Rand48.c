@@ -6,6 +6,8 @@
 #include <stdlib.h> 
 #include <stdio.h>
 
+#include "sac.h"
+
 
 /********************************************************************/
 
@@ -60,7 +62,7 @@ int *SACrand48array(int size, int min, int max)
 {
   int i, *arr;
   
-  arr=(int*)MALLOC(size*sizeof(int));
+  arr=(int*)SAC_MALLOC(size*sizeof(int));
   
   for (i=0; i<size; i++)
   {
@@ -82,7 +84,7 @@ double *SACdrand48array(int size, double min, double max)
   int i;
   double *arr;
   
-  arr=(double*)MALLOC(size*sizeof(double));
+  arr=(double*)SAC_MALLOC(size*sizeof(double));
   
   for (i=0; i<size; i++)
   {
@@ -94,9 +96,4 @@ double *SACdrand48array(int size, double min, double max)
 
 
 /********************************************************************/
-
-
-
-
-
 
