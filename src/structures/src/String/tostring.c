@@ -32,7 +32,7 @@ void to_string(SAC_ND_KS_DEC_OUT_RC(string, str),
 	 SAC_ND_DEC_RC_FREE_ARRAY(ar, 1);
   }
 
-  SAC_ND_KS_RET_OUT_RC(str);
+  SAC_ND_KS_RET_OUT_RC( str, str);
 }
   
 
