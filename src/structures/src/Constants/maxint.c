@@ -5,5 +5,3 @@ int maxint()
 {
   return( INT_MAX);
 }
-
-

@@ -1,9 +1,7 @@
 #include <float.h>
 
 
-int mindouble()
+double mindouble()
 {
   return( DBL_MIN);
 }
-
-

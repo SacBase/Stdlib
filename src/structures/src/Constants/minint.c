@@ -5,5 +5,3 @@ int minint()
 {
   return( INT_MIN);
 }
-
-

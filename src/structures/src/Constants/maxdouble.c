@@ -1,9 +1,7 @@
 #include <float.h>
 
 
-int maxdouble()
+double maxdouble()
 {
   return( DBL_MAX);
 }
-
-

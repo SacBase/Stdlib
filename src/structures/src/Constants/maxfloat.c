@@ -1,9 +1,7 @@
 #include <float.h>
 
 
-int maxfloat()
+float maxfloat()
 {
   return( FLT_MAX);
 }
-
-
