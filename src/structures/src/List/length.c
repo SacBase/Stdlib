@@ -6,8 +6,6 @@
 #include "List.h"
 
 
-#ifdef TAGGED_ARRAYS
-
 #define elems_nt (elems, (SCL, (HID, (NUQ,))))
 
 int length( SAC_ND_PARAM_in( elems_nt, list *))
@@ -27,29 +25,3 @@ int length( SAC_ND_PARAM_in( elems_nt, list *))
 }
 
 #undef elems_nt
-
-#else  /* TAGGED_ARRAYS */
-
-int length( SAC_ND_PARAM_in_rc( list *, elems))
-{
-  /*
-   * we do have now:
-   * - list *elems;
-   * -  int *__elems_rc;
-   */
-
-  list *ptr = elems;
-  int res = 0;
-
-  while (ptr->rest != NULL) {
-    ptr = ptr->rest;
-    res++;
-  }
-  if (--(*(elems->rc)) == 0) {
-    free_list( elems);
-  }
-
-  return( res);
-}
-
-#endif  /* TAGGED_ARRAYS */
