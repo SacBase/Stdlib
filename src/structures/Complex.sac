@@ -1,6 +1,7 @@
 Module Complex:
 
 import Math: all;
+import Array: all;
 
 typedef double[2] complex;
 
@@ -214,6 +215,14 @@ inline complex + (double  X1, complex X2)
                     ((:double[2])X2)[[1]]]);
 }
 
+/*
+inline complex[+] + (complex[+] X1, complex X2)
+{
+  res = with (. <= iv <= .)
+       	genarray( drop([-1],shape(X1)), ((:complex)((:double[+])X1)[iv]) + X2); 
+  return(res);  
+}
+*/
 
 inline complex - (complex X1, complex X2)
 {
@@ -234,7 +243,6 @@ inline complex - (double  X1, complex X2)
   return((:complex)[X1 - ((:double[2])X2)[[0]], 
                     ((:double[2])X2)[[1]]]);
 }
-
 
 inline complex * (complex X1, complex X2)
 {
