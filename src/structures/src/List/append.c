@@ -99,7 +99,7 @@ void append( SAC_ND_PARAM_out( res_nt, list *),
 #undef elemsB_nt
 #undef new_nt
 
-#else
+#else  /* TAGGED_ARRAYS */
 
 void append( SAC_ND_PARAM_out_rc( list *, res),
              SAC_ND_PARAM_in_rc( list *, elemsA),
@@ -192,4 +192,4 @@ void append( SAC_ND_PARAM_out_rc( list *, res),
   }
 }
 
-#endif
+#endif  /* TAGGED_ARRAYS */

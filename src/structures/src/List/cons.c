@@ -38,7 +38,7 @@ void cons( SAC_ND_PARAM_out( res_nt, list *),
 #undef elemsB_nt
 #undef new_nt
 
-#else
+#else  /* TAGGED_ARRAYS */
 
 void cons( SAC_ND_PARAM_out_rc( list *, res),
            int elem,
@@ -70,4 +70,4 @@ void cons( SAC_ND_PARAM_out_rc( list *, res),
   *res__rc__p = res->rc;
 }
 
-#endif
+#endif  /* TAGGED_ARRAYS */

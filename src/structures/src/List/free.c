@@ -25,7 +25,7 @@ void free_list( list *elems)
   while ((elems != NULL) && (--(DESC_RC( elems->desc)) == 0));
 }
 
-#else
+#else  /* TAGGED_ARRAYS */
 
 void free_list( list *elems)
 {
@@ -44,4 +44,4 @@ void free_list( list *elems)
   while ((elems != NULL) && (--(*(elems->rc)) == 0));
 }
 
-#endif
+#endif  /* TAGGED_ARRAYS */

@@ -28,7 +28,7 @@ int hd( SAC_ND_PARAM_in( elems_nt, list *))
 
 #undef elems_nt
 
-#else
+#else  /* TAGGED_ARRAYS */
 
 int hd( SAC_ND_PARAM_in_rc( list *, elems))
 {
@@ -51,4 +51,4 @@ int hd( SAC_ND_PARAM_in_rc( list *, elems))
   return( res);
 }
 
-#endif
+#endif  /* TAGGED_ARRAYS */

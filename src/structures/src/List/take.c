@@ -131,7 +131,7 @@ void _take( SAC_ND_PARAM_out( res_nt, list *),
 #undef new_nt
 #undef last_nt
 
-#else
+#else  /* TAGGED_ARRAYS */
 
 void _take( SAC_ND_PARAM_out_rc( list *, res),
             int n,
@@ -247,4 +247,4 @@ void _take( SAC_ND_PARAM_out_rc( list *, res),
   }
 }
 
-#endif
+#endif  /* TAGGED_ARRAYS */
