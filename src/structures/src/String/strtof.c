@@ -12,12 +12,12 @@
 float SACstrtof(string *remain, string input)
 {
   float res;
-  char **rem;
+  char *rem;
   
-  res=(float)strtod(input, rem);
+  res=(float)strtod(input, & rem);
   
-  *remain=(string)SAC_MALLOC(strlen(*rem)+1);
-  strcpy(*remain, *rem);
+  *remain=(string)SAC_MALLOC(strlen(rem)+1);
+  strcpy(*remain, rem);
   
   return(res);
 }

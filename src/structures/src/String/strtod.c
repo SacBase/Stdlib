@@ -12,12 +12,12 @@
 double SACstrtod(string *remain, string input)
 {
   double res;
-  char **rem;
+  char *rem;
   
-  res=strtod(input, rem);
+  res=strtod(input, & rem);
   
-  *remain=(string)SAC_MALLOC(strlen(*rem)+1);
-  strcpy(*remain, *rem);
+  *remain=(string)SAC_MALLOC(strlen(rem)+1);
+  strcpy(*remain, rem);
   
   return(res);
 }
