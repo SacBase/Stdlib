@@ -1,7 +1,7 @@
 #include <limits.h>
 
 
-int minint()
+int maxint()
 {
   return( INT_MAX);
 }

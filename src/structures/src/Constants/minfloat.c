@@ -1,7 +1,7 @@
 #include <float.h>
 
 
-int minint()
+int minfloat()
 {
   return( FLT_MIN);
 }

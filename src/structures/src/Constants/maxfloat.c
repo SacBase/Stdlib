@@ -1,7 +1,7 @@
 #include <float.h>
 
 
-int minint()
+int maxfloat()
 {
   return( FLT_MAX);
 }
