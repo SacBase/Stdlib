@@ -6,7 +6,7 @@
 #include "List.h"
 
 
-int nth( int n, ND_KS_DEC_IN_RC(list *, elems))
+int nth( int n, SAC_ND_KS_DEC_IN_RC(list *, elems))
 {
 /*
  * we do have now:

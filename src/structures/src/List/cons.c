@@ -6,7 +6,7 @@
 #include "List.h"
 
 
-void cons( ND_KS_DEC_OUT_RC(list *, res), int elem, ND_KS_DEC_IN_RC(list *, elems))
+void cons( SAC_ND_KS_DEC_OUT_RC(list *, res), int elem, SAC_ND_KS_DEC_IN_RC(list *, elems))
 {
 /*
  * we do have now: 
@@ -19,7 +19,7 @@ void cons( ND_KS_DEC_OUT_RC(list *, res), int elem, ND_KS_DEC_IN_RC(list *, elem
 
   list * res;
 
-  res = (list *)malloc(sizeof(list));
+  res = (list *)SAC_MALLOC(sizeof(list));
   res->rc = 1;
   res->elem = elem;
   res->rest = elems;

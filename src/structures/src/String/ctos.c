@@ -13,7 +13,7 @@ string SACctos(double *n)
 {
   char *res;
   
-  res=(char*)RT_MALLOC(120);
+  res=(char*)SAC_MALLOC(120);
   
   sprintf(res, "(%g,%g)", n[0], n[1]);
   

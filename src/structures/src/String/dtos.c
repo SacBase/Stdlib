@@ -13,7 +13,7 @@ string SACdtos(double n)
 {
   char *res;
   
-  res=(char*)RT_MALLOC(60);
+  res=(char*)SAC_MALLOC(60);
   
   sprintf(res, "%g", n);
   

@@ -13,7 +13,7 @@ string SACstrncat(string first, string second, int n)
 {
   string new;
   
-  new=(string)RT_MALLOC(strlen(first)+n+1);
+  new=(string)SAC_MALLOC(strlen(first)+n+1);
   
   strcpy(new, first);
   strncat(new, second, n);

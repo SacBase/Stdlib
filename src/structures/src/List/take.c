@@ -6,7 +6,7 @@
 #include "List.h"
 
 
-void _take( ND_KS_DEC_OUT_RC(list *, res), int n, ND_KS_DEC_IN_RC(list *, elems))
+void _take( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *, elems))
 {
 /*
  * we do have now:
@@ -22,7 +22,7 @@ void _take( ND_KS_DEC_OUT_RC(list *, res), int n, ND_KS_DEC_IN_RC(list *, elems)
   if( n<0)
     __SAC__Runtime_Error( "negative first arg of take\n");
 
-  last = (list *)malloc(sizeof(list));
+  last = (list *)SAC_MALLOC(sizeof(list));
   last->rc = 1;
   last->rest = NULL;
 #if TRACE
@@ -71,7 +71,7 @@ void _take( ND_KS_DEC_OUT_RC(list *, res), int n, ND_KS_DEC_IN_RC(list *, elems)
        * Now, we do know that we have at least one element to copy.
        * After doing so, we have to decrement the rc of elems !
        */
-      new = (list *)malloc(sizeof(list));
+      new = (list *)SAC_MALLOC(sizeof(list));
       new->rc = 1;
       new->elem = elems->elem;
 #if TRACE
@@ -91,7 +91,7 @@ void _take( ND_KS_DEC_OUT_RC(list *, res), int n, ND_KS_DEC_IN_RC(list *, elems)
     while( n>0) {
       if( elems->rest == NULL)
         __SAC__Runtime_Error( "first arg of take %d larger than length of list\n", n);
-      new->rest = (list *)malloc(sizeof(list));
+      new->rest = (list *)SAC_MALLOC(sizeof(list));
 #if TRACE
       fprintf( stderr, "       [ %d   .   (%p)]\n", new->elem, new->rest);
       fprintf( stderr, "creating CONS at (%p)\n", new->rest);

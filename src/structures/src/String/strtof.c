@@ -16,7 +16,7 @@ float SACstrtof(string *remain, string input)
   
   res=(float)strtod(input, rem);
   
-  *remain=(string)RT_MALLOC(strlen(*rem)+1);
+  *remain=(string)SAC_MALLOC(strlen(*rem)+1);
   strcpy(*remain, *rem);
   
   return(res);

@@ -19,7 +19,7 @@ string SACsprintf(string format, ...)
   vsprintf(buffer, format, arg_p);
   va_end(arg_p);
 
-  new=(string)RT_MALLOC(strlen(buffer)+1);
+  new=(string)SAC_MALLOC(strlen(buffer)+1);
   strcpy(new, buffer);
   
   return(new);

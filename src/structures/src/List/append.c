@@ -6,8 +6,8 @@
 #include "List.h"
 
 
-void append( ND_KS_DEC_OUT_RC(list *, res),
-             ND_KS_DEC_IN_RC(list *, elemsA), ND_KS_DEC_IN_RC(list *, elemsB))
+void append( SAC_ND_KS_DEC_OUT_RC(list *, res),
+             SAC_ND_KS_DEC_IN_RC(list *, elemsA), SAC_ND_KS_DEC_IN_RC(list *, elemsB))
 {
 /*
  * we do have now:
@@ -54,7 +54,7 @@ void append( ND_KS_DEC_OUT_RC(list *, res),
     }
 
     else { /* copy first elem & decrement rc of elemsA ! */
-      new = (list *)malloc(sizeof(list));
+      new = (list *)SAC_MALLOC(sizeof(list));
       new->rc = 1;
       new->elem = elemsA->elem;
 #if TRACE
@@ -71,7 +71,7 @@ void append( ND_KS_DEC_OUT_RC(list *, res),
      * elemsA is one in front!
      */
     while( elemsA->rest != NULL) {
-      new->rest = (list *)malloc(sizeof(list));
+      new->rest = (list *)SAC_MALLOC(sizeof(list));
 #if TRACE
     fprintf( stderr, "       [ %d   .   (%p)]\n", new->elem, new->rest);
     fprintf( stderr, "creating CONS at (%p)\n", new->rest);

@@ -7,7 +7,7 @@
 
 
 
-void nil(ND_KS_DEC_OUT_RC(list *, res))
+void nil(SAC_ND_KS_DEC_OUT_RC(list *, res))
 {
 /*
  * we do have now: 
@@ -16,7 +16,7 @@ void nil(ND_KS_DEC_OUT_RC(list *, res))
  */
   list *res;
 
-  res = (list *)malloc(sizeof(list));
+  res = (list *)SAC_MALLOC(sizeof(list));
   res->rc = 1;
   res->rest = NULL;
 

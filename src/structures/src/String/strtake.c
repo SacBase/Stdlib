@@ -9,31 +9,31 @@
 
 /*****************************************************************/
 
-void strtake(ND_KS_DEC_OUT_RC(string, new),
-				 ND_KS_DEC_IN_RC(string, old),
+void strtake(SAC_ND_KS_DEC_OUT_RC(string, new),
+				 SAC_ND_KS_DEC_IN_RC(string, old),
 				 int n)
 {
-  ND_DECL_RC(string, new);
+  SAC_ND_DECL_RC(string, new);
   
   RANGECHECK(n, 0, strlen(old), old);
   
-  if (ND_A_RC(old)==1)
+  if (SAC_ND_A_RC(old)==1)
   {
 	 new=old;
 	 new[n]=0;
-	 ND_A_RCP(new)=ND_A_RCP(old);
+	 SAC_ND_A_RCP(new)=SAC_ND_A_RCP(old);
   }
   else
   {
-	 new=(string)RT_MALLOC(n+1);
+	 new=(string)SAC_MALLOC(n+1);
 	 strncpy(new, old, n);
     new[n]=0;
     
-	 ND_ALLOC_RC(new);
-	 ND_SET_RC(new, 1);
+	 SAC_ND_ALLOC_RC(new);
+	 SAC_ND_SET_RC(new, 1);
   }
   
-  ND_KS_RET_OUT_RC(new);
+  SAC_ND_KS_RET_OUT_RC(new);
 }
 
 
