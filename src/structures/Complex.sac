@@ -1,7 +1,7 @@
 Module Complex:
 
 import Math: all;
-import Array: all;
+
 
 typedef double[2] complex;
 
@@ -294,7 +294,7 @@ inline complex / (double  X1, complex X2)
       + ((:double[2])X2)[[1]] * ((:double[2])X2)[[1]];
   
   return((:complex)[X1 * ((:double[2])X2)[[0]] / Z, 
-                    - X1 * ((:double[2])X2)[[1]] / Z]);
+                    0d - X1 * ((:double[2])X2)[[1]] / Z]);
 }
 
 
@@ -348,7 +348,7 @@ inline bool != (double  X1, complex X2)
   
 inline complex conj(complex X)
 {
-  return((:complex)[((:double[2])X)[[0]], (-1.0d) * ((:double[2])X)[[1]]]);
+  return((:complex)[((:double[2])X)[[0]], (0d-1.0d) * ((:double[2])X)[[1]]]);
 }
 
 
@@ -382,7 +382,7 @@ inline complex sin(complex X)
 inline complex cos(complex X)
 {
   return((:complex)[cos(((:double[2])X)[[0]]) * cosh(((:double[2])X)[[1]]), 
-                    (-1.0d) * sin(((:double[2])X)[[0]]) 
+                    (0d-1.0d) * sin(((:double[2])X)[[0]]) 
                          * sinh(((:double[2])X)[[1]])]);
 }
 
@@ -391,20 +391,20 @@ inline complex tan(complex X)
 {
   Z = cos(2.0d*((:double[2])X)[[0]]) + cosh(2.0d*((:double[2])X)[[1]]);
   
-  return((:complex)[sin(2*((:double[2])X)[[0]]) / Z, 
-                    sinh(2*((:double[2])X)[[1]]) / Z]);
+  return((:complex)[sin(2d*((:double[2])X)[[0]]) / Z, 
+                    sinh(2d*((:double[2])X)[[1]]) / Z]);
 }
 
 
 inline complex asin(complex X)
 {
-  return((-1.0d)*i()*log(i()*X + sqrt(1.0d-X*X)));
+  return((0d-1.0d)*i()*log(i()*X + sqrt(1.0d-X*X)));
 }
 
 
 inline complex acos(complex X)
 {
-  return((-1.0d)*i()*log(X + sqrt(X*X-1.0d)));
+  return((0d-1.0d)*i()*log(X + sqrt(X*X-1.0d)));
 }
 
 
@@ -508,7 +508,7 @@ inline complex sqrt(complex X)
                      + sqrt(((:double[2])X)[[0]] * ((:double[2])X)[[0]]
                             + ((:double[2])X)[[1]] * ((:double[2])X)[[1]]))),
                     sqrt(0.5d * 
-		    ((-1.0d) * ((:double[2])X)[[0]]
+		    ((0d-1.0d) * ((:double[2])X)[[0]]
                      + sqrt(((:double[2])X)[[0]] 
                               * ((:double[2])X)[[0]]
                             + ((:double[2])X)[[1]]
