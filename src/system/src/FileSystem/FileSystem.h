@@ -3,9 +3,6 @@
  */
 
 
-/* this define is needed for some Linux systems */
-#define _SVID_SOURCE
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
