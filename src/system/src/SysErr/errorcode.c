@@ -76,7 +76,6 @@ int	Ehostunreach() {return( EHOSTUNREACH );}			/* No route to host */
 int	Enotempty() {return(ENOTEMPTY  );}			/* Directory not empty */
 
 /* quotas & mush */
-int	Eproclim() {return(EPROCLIM  );}			/* Too many processes */
 int	Eusers() {return( EUSERS );}		       	/* Too many users */
 int	Edquot() {return( EDQUOT );}		       	/* Disc quota exceeded */
 
