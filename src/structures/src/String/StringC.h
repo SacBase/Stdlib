@@ -3,11 +3,10 @@
  */
 
 
-#include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
 #include "sac.h"
 
@@ -32,6 +31,3 @@
                          strcpy(new, old);
 
 typedef char* string;
-
-
-
