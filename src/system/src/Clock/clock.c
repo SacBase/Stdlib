@@ -1,12 +1,12 @@
 /*
- *  Implementation of class Time
+ *  Implementation of standard class Clock
  */
 
 
-void *Clock;
+void *TheClock;
 
 
-void *create_Clock()
+void *create_TheClock()
 {
   return(0);
 }
