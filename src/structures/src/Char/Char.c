@@ -16,3 +16,4 @@ char tochar_double( double i)
 {
   return( (char)i);
 }
+

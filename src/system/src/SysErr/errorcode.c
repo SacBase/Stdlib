@@ -91,3 +91,4 @@ int	Enomsg() {return(ENOMSG  );}	       		/* No message of desired type */
 int	Ebadmsg() {return( EBADMSG );}	       		/* Trying to read unreadable message */
 
 
+
