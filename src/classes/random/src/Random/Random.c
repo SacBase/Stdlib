@@ -9,7 +9,14 @@
 
 /********************************************************************/
 
+
+#ifndef RAND_MAX
 #define RAND_MAX 2147483647
+#endif
+/*
+ * Normally, RAND_MAX is defined in stdlib.h.
+ * Unfortunatly, it's missing on some systems.
+ */ 
 
 
 /********************************************************************/
