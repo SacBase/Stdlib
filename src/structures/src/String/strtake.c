@@ -33,7 +33,7 @@ void strtake(SAC_ND_KS_DEC_OUT_RC(string, new),
 	 SAC_ND_SET_RC(new, 1);
   }
   
-  SAC_ND_KS_RET_OUT_RC(new);
+  SAC_ND_KS_RET_OUT_RC( new, new);
 }
 
 

@@ -54,7 +54,7 @@ void strovwt(SAC_ND_KS_DEC_OUT_RC(string, new),
 	 SAC_ND_DEC_RC_FREE_ARRAY(old, 1);
   }
 
-  SAC_ND_KS_RET_OUT_RC(new);
+  SAC_ND_KS_RET_OUT_RC( new, new);
 }
 
 
