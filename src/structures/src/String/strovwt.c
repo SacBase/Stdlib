@@ -44,7 +44,7 @@ void strovwt(ND_KS_DEC_OUT_RC(string, new),
   }
   else
   {
-	 new=(string)MALLOC(len_insert_pos+1);
+	 new=(string)RT_MALLOC(len_insert_pos+1);
 	 strncpy(new, old, pos);
     new[pos]=0;
     

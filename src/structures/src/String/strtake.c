@@ -25,7 +25,7 @@ void strtake(ND_KS_DEC_OUT_RC(string, new),
   }
   else
   {
-	 new=(string)MALLOC(n+1);
+	 new=(string)RT_MALLOC(n+1);
 	 strncpy(new, old, n);
     new[n]=0;
     

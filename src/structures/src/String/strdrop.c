@@ -15,7 +15,7 @@ string strdrop(string old, int n)
   
   RANGECHECK(n, 0, strlen(old), old);
   
-  new=(string)MALLOC(strlen(old)-n+1);
+  new=(string)RT_MALLOC(strlen(old)-n+1);
   strcpy(new, old+n);
   
   return(new);

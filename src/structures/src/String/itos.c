@@ -13,7 +13,7 @@ string SACitos(int n)
 {
   char *res;
   
-  res=(char*)MALLOC(40);
+  res=(char*)RT_MALLOC(40);
   
   sprintf(res, "%d", n);
   

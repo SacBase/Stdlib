@@ -17,12 +17,12 @@ string strext(string old, int first, int len)
   
   if (len<=0)
   {
-	 new=(string)MALLOC(1);
+	 new=(string)RT_MALLOC(1);
 	 new[0]=0;
   }
   else
   {
-	 new=(string)MALLOC(len+1);
+	 new=(string)RT_MALLOC(len+1);
 	 strncpy(new, old+first, len);
     
     if (first+len<=strlen(old))

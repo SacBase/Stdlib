@@ -16,7 +16,7 @@ int SACstrtoi(string *remain, string input, int base)
   
   res=(int)strtol(input, rem, base);
   
-  *remain=(string)MALLOC(strlen(*rem)+1);
+  *remain=(string)RT_MALLOC(strlen(*rem)+1);
   strcpy(*remain, *rem);
   
   return(res);

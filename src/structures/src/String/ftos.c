@@ -13,7 +13,7 @@ string SACftos(float n)
 {
   char *res;
   
-  res=(char*)MALLOC(60);
+  res=(char*)RT_MALLOC(60);
   
   sprintf(res, "%g", n);
   

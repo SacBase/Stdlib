@@ -15,11 +15,11 @@
 
 #ifdef CHECK
 
-#ifndef MALLOC
-#define MALLOC(size) __SAC__Runtime_malloc(size)
-#endif   /* MALLOC  */
+/* #ifndef MALLOC */
+/* #define MALLOC(size) __SAC__Runtime_malloc(size) */
+/* #endif  */
 
-#define STRDUP(new, old) new=(string)MALLOC(strlen(old)+1);  \
+#define STRDUP(new, old) new=(string)RT_MALLOC(strlen(old)+1);  \
                          strcpy(new, old);
 
 #define RANGECHECK(check, lower, upper, str)									\
@@ -31,7 +31,7 @@
 
 #else  /* CHECK */
 
-#define MALLOC(size) malloc(size)
+/* #define MALLOC(size) malloc(size) */
 #define STRDUP(new, old) new=strdup(old)
 #define RANGECHECK(check, lower, upper, str)
 

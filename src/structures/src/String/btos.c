@@ -13,7 +13,7 @@ string SACbtos(bool n)
 {
   char *res;
   
-  res=(char*)MALLOC(8);
+  res=(char*)RT_MALLOC(8);
   
   if (n)
   {

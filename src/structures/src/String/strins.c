@@ -15,7 +15,7 @@ string strins(string old, int pos, string insert)
   
   RANGECHECK(pos, 0, strlen(old), old);
   
-  new=(string)MALLOC(strlen(old)+strlen(insert)+1);
+  new=(string)RT_MALLOC(strlen(old)+strlen(insert)+1);
   
   strncpy(new, old, pos);
   new[pos]=0;

@@ -22,7 +22,7 @@ void to_string(ND_KS_DEC_OUT_RC(string, str),
   }
   else
   {
-	 str=(string)MALLOC(length+1);
+	 str=(string)RT_MALLOC(length+1);
     strncpy(str, ND_A_FIELD(ar), length);
 	 str[length]=0;
 	 
