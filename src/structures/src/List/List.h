@@ -20,3 +20,5 @@ typedef struct LIST {
 } list;
 
 
+extern void free_list(list *elems);
+
