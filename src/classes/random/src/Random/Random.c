@@ -25,7 +25,7 @@
 
 extern long int random();
 
-extern void srandom(int seed);
+extern void srandom(unsigned seed);
 
 
 /********************************************************************/
