@@ -7,8 +7,7 @@
 #include <string.h>
 #include <malloc.h>
 
-#include "libsac.h"
-#include "icm2c.h"
+#include "sac.h"
 
 
 #ifndef HAVE_PUTENV

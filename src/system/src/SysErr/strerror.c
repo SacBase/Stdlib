@@ -6,8 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "icm2c.h"
-#include "libsac.h"
+#include "sac.h"
 
 
 /*****************************************************************/
