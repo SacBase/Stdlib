@@ -6,21 +6,23 @@
 #include "List.h"
 
 
-void _take( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *, elems))
+void _take( SAC_ND_PARAM_out_rc( list *, res),
+            int n,
+            SAC_ND_PARAM_in_rc( list *, elems))
 {
-/*
- * we do have now:
- * - list **res__p;
- * -  int **res__rc__p;
- * -  int n;
- * - list *elems;
- * -  int *elems__rc;
- */
+  /*
+   * we do have now:
+   * - list **res__p;
+   * -  int **res__rc__p;
+   * -  int n;
+   * - list *elems;
+   * -  int *elems__rc;
+   */
   list *new, *last;
 
-
-  if( n<0)
+  if (n<0) {
     SAC_RuntimeError( "negative first arg of take\n");
+  }
 
   last = (list *)SAC_MALLOC(sizeof(list));
   last->rc = 1;
@@ -29,8 +31,7 @@ void _take( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *
   fprintf( stderr, "creating NIL  at (%p)\n", last);
 #endif
 
-
-  if( n == 0) {
+  if (n == 0) {
     *res__p = last;
     *res__rc__p = &last->rc;
     if(--elems->rc == 0)
@@ -103,11 +104,9 @@ void _take( SAC_ND_KS_DEC_OUT_RC(list *, res), int n, SAC_ND_KS_DEC_IN_RC(list *
       n--;
     }
     new->rest = last;
+
 #if TRACE
     fprintf( stderr, "       [ %d   .   (%p)]\n", new->elem, new->rest);
 #endif
   }
 }
-
-
-

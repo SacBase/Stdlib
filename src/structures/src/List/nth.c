@@ -6,14 +6,14 @@
 #include "List.h"
 
 
-int nth( int n, SAC_ND_KS_DEC_IN_RC(list *, elems))
+int nth( int n, SAC_ND_PARAM_in_rc( list *, elems))
 {
-/*
- * we do have now:
- * -  int n;
- * - list *elems;
- * -  int *__elems_rc;
- */
+  /*
+   * we do have now:
+   * -  int n;
+   * - list *elems;
+   * -  int *__elems_rc;
+   */
   list *ptr;
   int res;
 
@@ -29,11 +29,9 @@ int nth( int n, SAC_ND_KS_DEC_IN_RC(list *, elems))
   }
   res = ptr->elem;
 
-  if(--elems->rc == 0)
+  if(--elems->rc == 0) {
     free_list( elems);
+  }
 
   return( res);
 }
-
-
-

@@ -6,13 +6,13 @@
 #include "List.h"
 
 
-int length( SAC_ND_KS_DEC_IN_RC(list *, elems))
+int length( SAC_ND_PARAM_in_rc( list *, elems))
 {
-/*
- * we do have now:
- * - list *elems;
- * -  int *__elems_rc;
- */
+  /*
+   * we do have now:
+   * - list *elems;
+   * -  int *__elems_rc;
+   */
 
   list *ptr=elems;
   int res=0;
@@ -21,10 +21,9 @@ int length( SAC_ND_KS_DEC_IN_RC(list *, elems))
     ptr=ptr->rest;
     res++;
   }
-  if(--elems->rc == 0)
+  if(--elems->rc == 0) {
     free_list( elems);
+  }
 
   return( res);
 }
-
-

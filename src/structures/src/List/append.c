@@ -6,18 +6,19 @@
 #include "List.h"
 
 
-void append( SAC_ND_KS_DEC_OUT_RC(list *, res),
-             SAC_ND_KS_DEC_IN_RC(list *, elemsA), SAC_ND_KS_DEC_IN_RC(list *, elemsB))
+void append( SAC_ND_PARAM_out_rc( list *, res),
+             SAC_ND_PARAM_in_rc( list *, elemsA),
+             SAC_ND_PARAM_in_rc( list *, elemsB))
 {
-/*
- * we do have now:
- * - list **res__p;
- * -  int **res__rc__p;
- * - list *elemsA;
- * -  int *elemsA__rc;
- * - list *elemsB;
- * -  int *elemsB__rc;
- */
+  /*
+   * we do have now:
+   * - list **res__p;
+   * -  int **res__rc__p;
+   * - list *elemsA;
+   * -  int *elemsA__rc;
+   * - list *elemsB;
+   * -  int *elemsB__rc;
+   */
   list *new;
 
 
@@ -90,5 +91,3 @@ void append( SAC_ND_KS_DEC_OUT_RC(list *, res),
       free_list(elemsA);
   }
 }
-
-
