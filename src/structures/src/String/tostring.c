@@ -25,7 +25,7 @@ void to_string( SAC_ND_PARAM_out( str_nt, string),
     SAC_ND_A_FIELD( str_nt) = SAC_ND_A_FIELD( ar_nt);
   }
   else {
-    SAC_ND_ALLOC__DESC( str_nt)
+    SAC_ND_ALLOC__DESC( str_nt, 0)
     SAC_ND_SET__RC( str_nt, 1)
     SAC_ND_A_FIELD( str_nt) = (string) SAC_MALLOC( length + 1);
     strncpy( SAC_ND_A_FIELD( str_nt), SAC_ND_A_FIELD( ar_nt), length);

@@ -27,7 +27,7 @@ void strtake( SAC_ND_PARAM_out( new_nt, string),
     SAC_ND_A_FIELD( new_nt) = SAC_ND_A_FIELD( old_nt);
   }
   else {
-    SAC_ND_ALLOC__DESC( new_nt)
+    SAC_ND_ALLOC__DESC( new_nt, 0)
     SAC_ND_SET__RC( new_nt, 1)
     SAC_ND_A_FIELD( new_nt) = (string) SAC_MALLOC( n + 1);
     strncpy( SAC_ND_A_FIELD( new_nt), SAC_ND_A_FIELD( old_nt), n);
