@@ -23,7 +23,7 @@ char *SACgetcwd()
   while (success!=NULL)
   {
     size*=2;
-    free(res);
+    SAC_FREE(res);
     res=(char *)SAC_MALLOC(size);
     success=getcwd(res, size);
   }
