@@ -17,19 +17,21 @@ int nth( int n, SAC_ND_PARAM_in_rc( list *, elems))
   list *ptr;
   int res;
 
-  if( n<0)
+  if (n < 0) {
     SAC_RuntimeError( "negative first arg of nth\n");
+  }
 
   ptr = elems;
-  while( n>0) {
-    ptr=ptr->rest;
-    if( ptr->rest == NULL)
+  while (n > 0) {
+    ptr = ptr->rest;
+    if (ptr->rest == NULL) {
       SAC_RuntimeError( "first arg of nth %d larger than length of list\n", n);
+    }
     n--;
   }
   res = ptr->elem;
 
-  if(--elems->rc == 0) {
+  if (--(*(elems->rc)) == 0) {
     free_list( elems);
   }
 

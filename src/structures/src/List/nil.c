@@ -15,14 +15,16 @@ void nil( SAC_ND_PARAM_out_rc( list *, res))
    */
   list *res;
 
-  res = (list *)SAC_MALLOC(sizeof(list));
-  res->rc = 1;
+  res = (list *) SAC_MALLOC( sizeof( list));
   res->rest = NULL;
 
+  res->rc = (int *) SAC_MALLOC( sizeof( int));
+  (*res->rc) = 1;
+
 #if TRACE
-  fprintf( stderr, "creating NIL  at (%p)\n", res);
+  fprintf( stderr, "creating NIL at (%p)\n", res);
 #endif
 
   *res__p = res;
-  *res__rc__p = &res->rc;
+  *res__rc__p = res->rc;
 }

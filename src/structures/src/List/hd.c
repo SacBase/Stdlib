@@ -20,9 +20,9 @@ int hd( SAC_ND_PARAM_in_rc( list *, elems))
   }
   res = elems->elem;
 
-  if (--elems->rc == 0) {
+  if (--(*(elems->rc)) == 0) {
     free_list( elems);
   }
 
-  return(res);
+  return( res);
 }

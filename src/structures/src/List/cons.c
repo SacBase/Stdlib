@@ -21,16 +21,17 @@ void cons( SAC_ND_PARAM_out_rc( list *, res),
 
   list *res;
 
-  res = (list *)SAC_MALLOC(sizeof(list));
-  res->rc = 1;
+  res = (list *) SAC_MALLOC( sizeof( list));
   res->elem = elem;
+  res->rc = (int *) SAC_MALLOC( sizeof( int));
+  *(res->rc) = 1;
   res->rest = elems;
 
 #if TRACE
-    fprintf( stderr, "creating CONS at (%p)\n", res);
-    fprintf( stderr, "       [ %d   .   (%p)]\n", elem, elems);
+  fprintf( stderr, "creating CONS at (%p)\n", res);
+  fprintf( stderr, "       [ %d   .   (%p)]\n", elem, elems);
 #endif
 
   *res__p = res;
-  *res__rc__p = &res->rc;
+  *res__rc__p = res->rc;
 }

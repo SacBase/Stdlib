@@ -16,19 +16,19 @@ void tl( SAC_ND_PARAM_out_rc( list *, res),
    * - list *elems;
    * -  int *elems__rc;
    */
-  list * res;
+  list *res;
 
-  if( elems->rest == NULL) {
+  if (elems->rest == NULL) {
     SAC_RuntimeError( "tl applied to NIL\n");
   }
   res = elems->rest;
 
-  res->rc++;
+  (*(res->rc))++;
 
-  if(--elems->rc == 0) {
+  if (--(*(elems->rc)) == 0) {
     free_list( elems);
   }
   
   *res__p = res;
-  *res__rc__p = &res->rc;
+  *res__rc__p = res->rc;
 }

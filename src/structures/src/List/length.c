@@ -14,14 +14,14 @@ int length( SAC_ND_PARAM_in_rc( list *, elems))
    * -  int *__elems_rc;
    */
 
-  list *ptr=elems;
-  int res=0;
+  list *ptr = elems;
+  int res = 0;
 
-  while( ptr->rest != NULL) {
-    ptr=ptr->rest;
+  while (ptr->rest != NULL) {
+    ptr = ptr->rest;
     res++;
   }
-  if(--elems->rc == 0) {
+  if (--(*(elems->rc)) == 0) {
     free_list( elems);
   }
 
