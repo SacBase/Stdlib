@@ -6,14 +6,13 @@
 
 #include "TermFile.h"
 
-#include <varargs.h>
-
 
 /*****************************************************************/
 
+
 void SACprintf( char *format, va_list args)
 {
-  printf( format, args);
+  vprintf( format, args);
 }
 
 
