@@ -8,8 +8,6 @@
 
 /*****************************************************************/
 
-#ifdef TAGGED_ARRAYS
-
 #define new_nt (new, (SCL, (HID, (NUQ,))))
 #define old_nt (old, (SCL, (HID, (NUQ,))))
 
@@ -41,33 +39,5 @@ void strtake( SAC_ND_PARAM_out( new_nt, string),
 
 #undef new_nt
 #undef old_nt
-
-#else  /* TAGGED_ARRAYS */
-
-void strtake( SAC_ND_PARAM_out_rc( string, new),
-              SAC_ND_PARAM_in_rc( string, old),
-              int n)
-{
-  SAC_ND_DECL_RC(string, new);
-  
-  RANGECHECK((size_t)n, 0, strlen(old), old);
-  
-  if (SAC_ND_A_RC(old)==1) {
-    new=old;
-    new[n]=0;
-    SAC_ND_A_RCP(new)=SAC_ND_A_RCP(old);
-  }
-  else {
-    new=(string)SAC_MALLOC(n+1);
-    strncpy(new, old, n);
-    new[n]=0;
-    SAC_ND_ALLOC_RC(new);
-    SAC_ND_SET_RC(new, 1);
-  }
-
-  SAC_ND_RET_out_rc( new, new);
-}
-
-#endif  /* TAGGED_ARRAYS */
 
 /*****************************************************************/
