@@ -28,7 +28,7 @@ ComLine *TheCommandLine;
 /*****************************************************/
 
 
-ComLine *create_TheCommandline(int argc, char *argv[])
+ComLine *create_TheCommandLine(int argc, char *argv[])
 {
   ComLine *parameters;
   
