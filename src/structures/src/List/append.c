@@ -8,17 +8,17 @@
 
 #ifdef TAGGED_ARRAYS
 
-#define res_nt (res, (AUD, (NHD, (NUQ,))))
-#define elemsA_nt (elemsA, (AUD, (NHD, (NUQ,))))
-#define elemsB_nt (elemsB, (AUD, (NHD, (NUQ,))))
-#define new_nt (new, (AUD, (NHD, (NUQ,))))
+#define res_nt    (res,    (SCL, (HID, (NUQ,))))
+#define elemsA_nt (elemsA, (SCL, (HID, (NUQ,))))
+#define elemsB_nt (elemsB, (SCL, (HID, (NUQ,))))
+#define new_nt    (new,    (SCL, (HID, (NUQ,))))
 
-void append( SAC_ND_PARAM_out( res_nt, list),
-             SAC_ND_PARAM_in( elemsA_nt, list),
-             SAC_ND_PARAM_in( elemsB_nt, list))
+void append( SAC_ND_PARAM_out( res_nt, list *),
+             SAC_ND_PARAM_in( elemsA_nt, list *),
+             SAC_ND_PARAM_in( elemsB_nt, list *))
 {
   SAC_ND_DECL__DESC( new_nt, )
-  SAC_ND_DECL__DATA( new_nt, list, )
+  SAC_ND_DECL__DATA( new_nt, list *, )
 
   if (elemsA->rest == NULL) { /* elemsA == NIL! */
     SAC_ND_RET_out( res_nt, elemsB_nt)
@@ -54,7 +54,7 @@ void append( SAC_ND_PARAM_out( res_nt, list),
     else { /* copy first elem & decrement rc of 'elemsA'! */
       new = (list *) SAC_MALLOC( sizeof( list));
       new->elem = elemsA->elem;
-      SAC_ND_ALLOC__DESC( new_nt)
+      SAC_ND_ALLOC__DESC( new_nt, 0)
       SAC_ND_SET__RC( new_nt, 1)
       new->desc = SAC_ND_A_DESC( new_nt);
 #if TRACE
@@ -78,7 +78,7 @@ void append( SAC_ND_PARAM_out( res_nt, list),
 #endif
       new = new->rest;
       new->elem = elemsA->elem;
-      SAC_ND_ALLOC__DESC( new_nt)
+      SAC_ND_ALLOC__DESC( new_nt, 0)
       SAC_ND_SET__RC( new_nt, 1)
       new->desc = SAC_ND_A_DESC( new_nt);
       elemsA = elemsA->rest;

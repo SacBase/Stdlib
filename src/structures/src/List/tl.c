@@ -8,14 +8,14 @@
 
 #ifdef TAGGED_ARRAYS
 
-#define res_nt   (res,   (AUD, (NHD, (NUQ,))))
-#define elems_nt (elems, (AUD, (NHD, (NUQ,))))
+#define res_nt   (res,   (SCL, (HID, (NUQ,))))
+#define elems_nt (elems, (SCL, (HID, (NUQ,))))
 
-void tl( SAC_ND_PARAM_out( res_nt, list),
-         SAC_ND_PARAM_in( elems_nt, list))
+void tl( SAC_ND_PARAM_out( res_nt, list *),
+         SAC_ND_PARAM_in( elems_nt, list *))
 {
   SAC_ND_DECL__DESC( res_nt, )
-  SAC_ND_DECL__DATA( res_nt, list, )
+  SAC_ND_DECL__DATA( res_nt, list *, )
 
   if (elems->rest == NULL) {
     SAC_RuntimeError( "tl applied to NIL\n");

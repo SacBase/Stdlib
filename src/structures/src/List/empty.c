@@ -8,9 +8,9 @@
 
 #ifdef TAGGED_ARRAYS
 
-#define elems_nt (elems, (AUD, (NHD, (NUQ,))))
+#define elems_nt (elems, (SCL, (HID, (NUQ,))))
 
-int empty( SAC_ND_PARAM_in( elems_nt, list))
+int empty( SAC_ND_PARAM_in( elems_nt, list *))
 {
   int res;
 

@@ -8,19 +8,19 @@
 
 #ifdef TAGGED_ARRAYS
 
-#define res_nt   (res,   (AUD, (NHD, (NUQ,))))
-#define elems_nt (elems, (AUD, (NHD, (NUQ,))))
-#define new_nt   (new,   (AUD, (NHD, (NUQ,))))
-#define last_nt  (last,  (AUD, (NHD, (NUQ,))))
+#define res_nt   (res,   (SCL, (HID, (NUQ,))))
+#define elems_nt (elems, (SCL, (HID, (NUQ,))))
+#define new_nt   (new,   (SCL, (HID, (NUQ,))))
+#define last_nt  (last,  (SCL, (HID, (NUQ,))))
 
-void _take( SAC_ND_PARAM_out( res_nt, list),
+void _take( SAC_ND_PARAM_out( res_nt, list *),
             int n,
-            SAC_ND_PARAM_in( elems_nt, list))
+            SAC_ND_PARAM_in( elems_nt, list *))
 {
   SAC_ND_DECL__DESC( new_nt, )
-  SAC_ND_DECL__DATA( new_nt, list, )
+  SAC_ND_DECL__DATA( new_nt, list *, )
   SAC_ND_DECL__DESC( last_nt, )
-  SAC_ND_DECL__DATA( last_nt, list, )
+  SAC_ND_DECL__DATA( last_nt, list *, )
 
   if (n < 0) {
     SAC_RuntimeError( "negative first arg of take\n");
@@ -28,7 +28,7 @@ void _take( SAC_ND_PARAM_out( res_nt, list),
 
   last = (list *) SAC_MALLOC( sizeof( list));
   last->rest = NULL;
-  SAC_ND_ALLOC__DESC( last_nt)
+  SAC_ND_ALLOC__DESC( last_nt, 0)
   SAC_ND_SET__RC( last_nt, 1)
   last->desc = SAC_ND_A_DESC( last_nt);
 #if TRACE
@@ -83,7 +83,7 @@ void _take( SAC_ND_PARAM_out( res_nt, list),
        */
       new = (list *) SAC_MALLOC( sizeof( list));
       new->elem = elems->elem;
-      SAC_ND_ALLOC__DESC( new_nt)
+      SAC_ND_ALLOC__DESC( new_nt, 0)
       SAC_ND_SET__RC( new_nt, 1)
       new->desc = SAC_ND_A_DESC( new_nt);
 #if TRACE
@@ -111,7 +111,7 @@ void _take( SAC_ND_PARAM_out( res_nt, list),
 #endif
       new = new->rest;
       new->elem = elems->elem;
-      SAC_ND_ALLOC__DESC( new_nt)
+      SAC_ND_ALLOC__DESC( new_nt, 0)
       SAC_ND_SET__RC( new_nt, 1)
       new->desc = SAC_ND_A_DESC( new_nt);
 
