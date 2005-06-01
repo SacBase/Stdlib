@@ -1,0 +1,7 @@
+module Array;
+
+import ArrayBasics: all;
+import ArrayArith: all;
+import ArrayTransform: all;
+
+export all;
