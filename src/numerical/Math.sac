@@ -1,19 +1,22 @@
 module Math;
 
+use ScalarArith: all;
 export all;
 
 
 #include "../../config/config.h"
-
-#ifdef NEED_LIBM
-#pragma linkwith "libm"
-#endif
 
 
   /* Trigonometric functions.  */
 
 
 external double cos(double X);
+#ifdef NEED_LIBM
+#pragma linkwith "m"
+#else
+;
+#endif
+
     /* Cosine of X.  */
 
 external double sin(double X);
