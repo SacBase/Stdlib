@@ -1,0 +1,89 @@
+/******************************************************************************
+ *
+ *  This file contains several macros for duplicating function definitions
+ *  in the standard library. When modifying them you should keep in mind
+ *  that these are used in several SaC modules. Among these are:
+ *
+ *  ScalarArith.sac
+ *  ArrayBasics.sac
+ *  ArrayArith.sac
+ *  ArrayTransform.sac
+ *
+ ******************************************************************************/
+
+/******************************************************************************
+ *
+ * Macros for mimicking polymorphism on elementary types....
+ *
+ ******************************************************************************/
+
+#define BUILT_IN( fun)    \
+fun( int)                 \
+fun( double)
+
+#define NUM( fun)         \
+fun( int)                 \
+fun( double)
+
+
+/********************************************************************************
+ *
+ * Macros for generating MACRO calls for all arithmetic operations
+ *
+ ********************************************************************************/
+
+#define MAP_ARI_OPS( ext, a)            \
+MAP_BIN_##ext( +, _add_SxS_, a, a)      \
+MAP_BIN_##ext( -, _sub_SxS_, a, a)      \
+MAP_BIN_##ext( *, _mul_SxS_, a, a)      \
+MAP_BIN_##ext( /, _div_SxS_, a, a)      \
+MAP_BIN_##ext( max, _max_, a, a)        \
+MAP_BIN_##ext( min, _min_, a, a)        \
+MAP_MON_##ext( -, _neg_, a, a)          \
+MAP_MON_##ext( abs, _abs_, a, a)
+
+
+#define MAP_INT_OPS( ext)               \
+MAP_BIN_##ext( %, _mod_, int, int) 
+
+
+
+/********************************************************************************
+ *
+ * Macros for generating MACRO calls for all relational operations
+ *
+ ********************************************************************************/
+
+#define MAP_REL_OPS( ext, a)            \
+MAP_BIN_##ext( ==,  _eq_, a, bool)      \
+MAP_BIN_##ext( !=, _neq_, a, bool)      \
+MAP_BIN_##ext(  <,  _lt_, a, bool)      \
+MAP_BIN_##ext( <=,  _le_, a, bool)      \
+MAP_BIN_##ext(  >,  _gt_, a, bool)      \
+MAP_BIN_##ext( >=,  _ge_, a, bool)
+
+
+/********************************************************************************
+ *
+ * Macros for generating MACRO calls for all logic operations
+ *
+ ********************************************************************************/
+
+#define MAP_LOG_OPS( ext)               \
+MAP_BIN_##ext( &&, _and_, bool, bool)   \
+MAP_BIN_##ext( ||,  _or_, bool, bool)   \
+MAP_MON_##ext(  !, _not_, bool, bool)
+
+
+/********************************************************************************
+ *
+ * Macros for generating MACRO calls for all conversion operations
+ *
+ ********************************************************************************/
+
+#define MAP_CONV_OPS( ext, a)           \
+MAP_MON_##ext( tod, _tod_S_, a, double)  \
+MAP_MON_##ext( tof, _tof_S_, a, float)   \
+MAP_MON_##ext( toi, _toi_S_, a, int)
+
+
