@@ -19,10 +19,12 @@
 
 #define BUILT_IN( fun)    \
 fun( int)                 \
+fun( float)               \
 fun( double)
 
 #define NUM( fun)         \
 fun( int)                 \
+fun( float)               \
 fun( double)
 
 
