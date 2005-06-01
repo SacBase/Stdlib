@@ -1,0 +1,96 @@
+module MathArray;
+
+use ScalarArith: {zero};
+import Math: all;
+export all;
+
+
+
+/*****************************************************************************
+ *
+ *   This module exports the following functions:
+ *
+ *
+ *
+ * float[+]  exp( float[+]  A);
+ * double[+] exp( double[+] A);
+ *
+ * float[+]  log( float[+]  A);
+ * double[+] log( double[+] A);
+ *
+ * float[+]  fabs( float[+]  A);
+ * double[+] fabs( double[+] A);
+ *
+ * float[+]  sqrt( float[+]  A);
+ * double[+] sqrt( double[+] A);
+ *
+ * float[+]  pow( float[+]  A, float e);
+ * double[+] pow( double[+] A, double e);
+ *
+ * float[+]  floor( float[+]  A);
+ * double[+] floor( double[+] A);
+ *
+ *****************************************************************************/
+
+
+/*****************************************************************************
+ *
+ *   Definition of code templates.
+ *
+ *****************************************************************************/
+ 
+/*
+ * Operator array template.
+ */
+ 
+#define OP_A_TEMPLATE(op, restype, argtype)                 \
+inline restype[+] op (argtype[+] A)                         \
+{                                                           \
+  argtype array_elem;                                       \
+                                                            \
+  result = with (. <= iv <= .) {                            \
+             array_elem = A[iv];                            \
+           }                                                \
+           genarray( shape(A), op (array_elem),zero(A));    \
+                                                            \
+  return(result);                                           \
+}
+
+#define OP_AS_TEMPLATE(op, restype, argtype)                \
+inline restype[+] op (argtype[+] A, argtype S)              \
+{                                                           \
+  argtype array_elem;                                       \
+                                                            \
+  result = with (. <= iv <= .) {                            \
+             array_elem = A[iv];                            \
+           }                                                \
+           genarray( shape(A), op (array_elem, S),zero(A)); \
+                                                            \
+  return(result);                                           \
+}
+
+/*****************************************************************************
+ *
+ *   Definition of meta templates.
+ *
+ *****************************************************************************/
+
+#define ALL_TYPES_1(template, arg1)                     \
+template(arg1, float, float)                            \
+template(arg1, double, double)
+
+/*****************************************************************************
+ *
+ *   Definition of SAC standard module MathArray.
+ *
+ *****************************************************************************/
+
+ALL_TYPES_1( OP_A_TEMPLATE, log)
+ALL_TYPES_1( OP_A_TEMPLATE, exp)
+ALL_TYPES_1( OP_A_TEMPLATE, fabs)
+ALL_TYPES_1( OP_A_TEMPLATE, sqrt)
+ALL_TYPES_1( OP_A_TEMPLATE, floor)
+
+ALL_TYPES_1( OP_AS_TEMPLATE, pow)
+
+
