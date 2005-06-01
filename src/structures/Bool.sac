@@ -1,0 +1,36 @@
+/*****************************************************************************
+ *
+ * file:   Bool.sac
+ *
+ * prefix: ---
+ *
+ * description:
+ *
+ *   This module implementation is part of the SAC standard library.
+ *
+ *   It implements some primitives on boolean arguments that are not
+ *   hard-wired into the compiler.
+ *
+ *
+ *****************************************************************************/
+
+module Bool;
+
+export all;
+
+
+/*
+ *  Type conversion operations.
+ */
+
+inline int toi( bool b)
+{
+  if( b) {
+    res = 1;
+  } else {
+    res = 0;
+  }
+  return( res);
+}
+
+
