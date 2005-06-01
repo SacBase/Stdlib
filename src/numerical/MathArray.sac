@@ -1,6 +1,7 @@
 module MathArray;
 
 use ScalarArith: {zero};
+use ArrayBasics: all;
 import Math: all;
 export all;
 
