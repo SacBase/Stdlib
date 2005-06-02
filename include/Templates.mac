@@ -20,7 +20,10 @@
 #define BUILT_IN( fun)    \
 fun( int)                 \
 fun( float)               \
-fun( double)
+fun( double)              \
+fun( bool)                \
+fun( char)
+
 
 #define NUM( fun)         \
 fun( int)                 \
