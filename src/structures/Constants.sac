@@ -3,20 +3,20 @@ module Constants;
 export all;
 
 external int     minint();
-    #pragma linkobj "minint.o"
+    #pragma linkobj "src/Constants/minint.o"
 
 external int     maxint();
-    #pragma linkobj "maxint.o"
+    #pragma linkobj "src/Constants/maxint.o"
 
 external float   minfloat();
-    #pragma linkobj "minfloat.o"
+    #pragma linkobj "src/Constants/minfloat.o"
 
 external float   maxfloat();
-    #pragma linkobj "maxfloat.o"
+    #pragma linkobj "src/Constants/maxfloat.o"
 
 external double  mindouble();
-    #pragma linkobj "mindouble.o"
+    #pragma linkobj "src/Constants/mindouble.o"
 
 external double  maxdouble();
-    #pragma linkobj "maxdouble.o"
+    #pragma linkobj "src/Constants/maxdouble.o"
 
