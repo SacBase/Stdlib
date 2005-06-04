@@ -1,0 +1,12 @@
+module Structures;
+
+import Array   : all;
+import Char    : all;
+import String  : all;
+import Complex : all;
+import List    : all;
+
+export all;
+
+
+
