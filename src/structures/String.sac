@@ -1,0 +1,300 @@
+module String;
+
+import Char: all;
+import ScalarArith: {&&,!=,==,+,>=,>,<=,<};
+import ArrayBasics: {sel};
+
+export all;
+
+external typedef string;
+#if 0
+    #pragma freefun "free"
+#endif
+
+external string to_string(char[+] A, int LENGTH);
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/tostring.o"
+    /* Convert character array to string. */
+
+external string strmod(string S, int P, char C);
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/strmod.o"
+    /* Change position P of string S to character C. */
+
+external string strins(string S1, int P, string S2);
+    #pragma linkobj "src/String/strins.o"
+    /* Insert string S2 into string S1 starting at position P. */
+
+external string strovwt(string S1, int P, string S2);
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/strovwt.o"
+    /* Overwrite string S2 with string S1 starting at position P. */
+
+external char strsel(string S, int P);
+    #pragma linkobj "src/String/strsel.o"
+    /* Select character P of string S. */
+
+external string strcat(string S1, string S2);
+    #pragma linkname "SACstrcat"
+    #pragma linkobj "src/String/strcat.o"
+    /* Concatenate strings S1 and S2. */
+
+external string + (string S1, string S2);
+    #pragma linkname "SACstrcat"
+    #pragma linkobj "src/String/strcat.o"
+    /* Infix version of strcat. */
+
+external string strncat(string S1, string S2, int N);
+    #pragma linkname "SACstrncat"
+    #pragma linkobj "src/String/strncat.o"
+    /* Concatenate string S1 and the first N characters of string S2. */
+    
+external int strcmp(string S1, string S2);
+    /* Compare strings S1 and S2.
+       Result is negative if S1 < S2, positive if S1 > S2 
+       and zero if S1 == S2. */
+
+external int strncmp(string S1, string S2, int N);
+    /* Compare the first N characters of strings S1 and S2.
+       Result is negative if S1 < S2, positive if S1 > S2 
+       and zero if S1 == S2. */
+
+external int strlen(string S);
+    #pragma linkname "SACstrlen"
+    #pragma linkobj "src/String/strlen.o"
+    /* Return the length of string S. */
+
+
+external string strtake(string S, int N);
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/strtake.o"
+    /* Return the first N characters of string S. */
+
+external string strdrop(string S, int N);
+    #pragma linkobj "src/String/strdrop.o"
+    /* Return all but the first N characters of string S. */
+   
+external string strext(string S, int FIRST, int LEN);
+    #pragma linkobj "src/String/strext.o"
+    /* Extract the substring beginning at character FIRST with length
+       LEN from string S. */
+
+
+external string sprintf(string FORMAT, ...);
+    #pragma linkname "SACsprintf"
+    #pragma linkobj "src/String/sprintf.o"
+    /* Generate a string depending on the format string and a
+       variable number of arguments similar to the printf and fprintf
+       functions. */
+
+external int, ... sscanf(string S, string FORMAT);
+    /* Scan the string S concerning the format string FORMAT.
+       The format string is the same as for fscanf.
+       The int result gives the maximum number of successfully performed 
+       conversions. 
+       CAUTION: In contrast to C, conversion specifiers related to
+                strings are not supported and may cause runtime
+                errors. Use sscanf_str instead. */
+       
+external string sscanf_str(string S, string FORMAT);
+    /* Scan the string S concerning the format string FORMAT.
+       FORMAT must have exactly one string conversion specifier.
+       The scanned substring is returned. */
+
+
+external int strchr(string S, char C); 
+    #pragma linkobj "src/String/strchr.o"
+    #pragma linkname "SACstrchr"
+    /* Return the position of the first occurrence of character C
+       in string S. The result is -1 if character C does not occurr
+       at all. */
+
+external int strrchr(string S, char C); 
+    #pragma linkname "SACstrrchr"
+    #pragma linkobj "src/String/strrchr.o"
+    /* Return the position of the last occurrence of character C
+       in string S. The result is -1 if character C does not occurr
+       at all. */
+
+external int strcspn(string S, string REJECT);
+    /* Return the length of the initial segment of S which
+       consists entirely of characters not in REJECT.  */
+
+external int strspn(string S, string ACCEPT);
+    /* Return the length of the initial segment of S which
+       consists entirely of characters in ACCEPT.  */
+
+
+external int, string strtoi(string S, int BASE);
+    #pragma linkname "SACstrtoi"
+    #pragma linkobj "src/String/strtoi.o"
+    /* Convert the string S into an integer value. BASE specifies the format
+       and must be in the range from 2 to 32. This feature allows for 
+       scanning hexadecimal or octal numbers as well as decimal
+       representations. The string result contains the remainder of the 
+       input string. */
+
+external float, string strtof(string S);
+    #pragma linkname "SACstrtof"
+    #pragma linkobj "src/String/strtof.o"
+    /* Convert the string S into a float value. The string result
+       contains the remainder of the input string. */
+
+external double, string strtod(string S);
+    #pragma linkname "SACstrtod"
+    #pragma linkobj "src/String/strtod.o"
+    /* Convert the string S into a double value. The string result
+       contains the remainder of the input string. */
+
+
+external int toi(string S);
+    #pragma linkname "SACtoi"
+    #pragma linkobj "src/String/strtoi.o"
+    /* Convert the string S into an integer value. In contrast to strtoi
+       the number must always be in decimal representation. */
+
+external float tof(string S);
+    #pragma linkname "SACtof"
+    #pragma linkobj "src/String/strtof.o"
+    /* Convert the string S into a float value. */
+
+external double tod(string S);
+    #pragma linkname "SACtod"
+    #pragma linkobj "src/String/strtod.o"
+    /* Convert the string S into a double value. */
+
+
+external string tos(int N);
+    #pragma linkname "SACitos"
+    #pragma linkobj "src/String/itos.o"
+    /*  Convert integer into string.  */
+
+external string tos(float N);
+    #pragma linkname "SACftos"
+    #pragma linkobj "src/String/itos.o"
+    /*  Convert float into string.    */
+
+external string tos(double N);
+    #pragma linkname "SACdtos"
+    #pragma linkobj "src/String/itos.o"
+    /*  Convert double into string.   */
+
+external string tos(bool B);
+    #pragma linkname "SACbtos"
+    #pragma linkobj "src/String/itos.o"
+    /*  Convert boolean into string.  */
+
+
+
+
+#if 0
+inline string to_string(char[.] arr)
+{
+  int len;
+  len=shape(arr)[[0]];
+  return(to_string(arr, len));
+}
+
+/*
+ * At the moment (9.9.96) the above function causes segmentation faults
+ * in Constant Folding as well as in compile.c
+ */
+#endif
+
+
+#if 0
+
+inline char sel(int[.] index, string s)
+{
+  return(strsel(s, index[[0]]));
+}
+
+/*
+ * Here, we have a problem with Splitwrappers!!
+ */
+#endif
+
+inline string modarray(string s, int[1] index, char c)
+{
+  return(strmod(s, index[[0]], c));
+}
+
+
+inline string modarray(string s1, int[1] index, string s2)
+{
+  return(strovwt(s1, index[[0]], s2));
+}
+
+
+#define COMPARE_STRINGS(cmp)                    \
+inline bool cmp (string A, string B)            \
+{                                               \
+  return(strcmp(A,B) cmp 0);                    \
+}
+
+
+COMPARE_STRINGS(==)
+COMPARE_STRINGS(!=)
+COMPARE_STRINGS(<)
+COMPARE_STRINGS(<=)
+COMPARE_STRINGS(>)
+COMPARE_STRINGS(>=)
+
+
+
+#define TEST_STRING(pred)                       \
+inline  bool pred(string S)                     \
+{                                               \
+  i=0;                                          \
+  result = true;                                \
+  c = S[[i]];                                   \
+                                                \
+  while (result && (c != '\0')) {               \
+    if (pred(c)) {                              \
+      i += 1;                                   \
+      c = S[[i]];                               \
+    }                                           \
+    else {                                      \
+      result = false;                           \
+    }                                           \
+  }                                             \
+                                                \
+  return(result);                               \
+}
+
+
+TEST_STRING(isalpha)
+TEST_STRING(isupper)
+TEST_STRING(islower)
+TEST_STRING(isdigit)
+TEST_STRING(isxdigit)
+TEST_STRING(isspace)
+TEST_STRING(ispunct)
+TEST_STRING(isalnum)
+TEST_STRING(isprint)
+TEST_STRING(isgraph)
+TEST_STRING(iscntrl)
+
+
+#define CONVERT_STRING(convert)                 \
+inline  string convert (string S)               \
+{                                               \
+  s=S;                                          \
+                                                \
+  for (i=0; s[[i]] != '\0'; i++)                \
+  {                                             \
+    s[[i]]=convert(s[[i]]);                     \
+  }                                             \
+                                                \
+  return(s);                                    \
+}
+
+
+CONVERT_STRING(tolower)
+CONVERT_STRING(toupper)
+
+
+
+
+
+
