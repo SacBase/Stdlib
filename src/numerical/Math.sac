@@ -20,21 +20,27 @@ external double cos(double X);
     /* Cosine of X.  */
 
 external double sin(double X);
+    #pragma linksign [0,1]
     /* Sine of X.  */
 
 external double tan(double X);
+    #pragma linksign [0,1]
     /* Tangent of X.  */
 
 external double acos(double X);
+    #pragma linksign [0,1]
     /* Arc cosine of X.  */
 
 external double asin(double X);
+    #pragma linksign [0,1]
     /* Arc sine of X.  */
 
 external double atan(double X);
+    #pragma linksign [0,1]
     /* Arc tangent of X.  */
     
 external double atan2(double X, double Y);
+    #pragma linksign [0,1,2]
     /* Arc tangent of Y/X.  */
 
 
@@ -43,21 +49,27 @@ external double atan2(double X, double Y);
 
 
 external double cosh(double X);
+    #pragma linksign [0,1]
     /* Hyperbolic cosine of X.  */
 
 external double sinh(double X);
+    #pragma linksign [0,1]
     /* Hyperbolic sine of X.  */
 
 external double tanh(double X);
+    #pragma linksign [0,1]
     /* Hyperbolic tangent of X.  */
 
 external double acosh(double X);
+    #pragma linksign [0,1]
     /* Hyperbolic arc cosine of X.  */
 
 external double asinh(double X);
+    #pragma linksign [0,1]
     /* Hyperbolic arc sine of X.  */
 
 external double atanh(double X);
+    #pragma linksign [0,1]
     /* Hyperbolic arc tangent of X.  */
     
 
@@ -66,6 +78,7 @@ external double atanh(double X);
 
 
 external double exp(double X);
+    #pragma linksign [0,1]
     /* Exponentional function of X.  */
 
 external double, int frexp(double X);
@@ -73,21 +86,26 @@ external double, int frexp(double X);
     /* Break X into a normalized fraction and an integral power of 2.  */
 
 external double ldexp(double X, int EXP);
+    #pragma linksign [0,2,1]
     /* X times (two to the EXP power).  */
 
 external double log(double X);
+    #pragma linksign [0,1]
     /* Natural logarithm of X.  */
 
 external double log10(double X);
+    #pragma linksign [0,1]
     /* Base-ten logarithm of X.  */
 
 external double expm1(double X);
+    #pragma linksign [0,1]
     /* Return exp(X) - 1.  */
 
 external double log1p(double X);
+    #pragma linksign [0,1]
     /* Return log(1 + X).  */
 
-external double, int modf(double X);
+external double, double modf(double X);
     #pragma linksign [0,2,1]
     /* Break VALUE into integral and fractional parts.  */
 
@@ -97,12 +115,15 @@ external double, int modf(double X);
 
 
 external double pow(double X, double Y);
+    #pragma linksign [0,1,2]
     /* Return X to the Y power.  */
 
 external double sqrt(double X);
+    #pragma linksign [0,1]
     /* Return the square root of X.  */
 
 external double cbrt(double X);
+    #pragma linksign [0,1]
     /* Return the cube root of X.  */
 
 
@@ -111,15 +132,19 @@ external double cbrt(double X);
 
 
 external double ceil(double X);
+    #pragma linksign [0,1]
     /* Smallest integral value not less than X.  */
 
 external double fabs(double X);
+    #pragma linksign [0,1]
     /* Absolute value of X.  */
 
 external double floor(double X);
+    #pragma linksign [0,1]
     /* Largest integer not greater than X.  */
 
 external double fmod(double X, double Y);
+    #pragma linksign [0,1,2]
     /* Floating-point modulo remainder of X/Y.  */
 
 
@@ -128,12 +153,15 @@ external double fmod(double X, double Y);
 
 
 external bool isinf(double X);
+    #pragma linksign [0,1]
     /* Check X for infinity.  */
   
 external bool isnan(double X);
+    #pragma linksign [0,1]
     /* Check X for being NaN (not a number).  */
 
 external bool finite(double X);
+    #pragma linksign [0,1]
     /* Check X for being finite and not NaN.  */
 
 
@@ -141,13 +169,16 @@ external bool finite(double X);
   /* Miscellaneous  */
 
 external double copysign(double X, double Y);
+    #pragma linksign [0,1,2]
     /* Return X with its signed changed to Y's.  */
 
 external double rint(double X);
+    #pragma linksign [0,1]
     /* Return the integer nearest X in the direction of the
        prevailing rounding mode.  */
 
 external double hypot(double X, double Y);
+    #pragma linksign [0,1,2]
     /* Return `sqrt(X*X + Y*Y)'.  */
 
 
@@ -300,10 +331,10 @@ external double hypot(double X, double Y);
   }
     /* Return log(1 + X).  */
 
-  inline float, int modf(float X)
+  inline float, float modf(float X)
   {
     a, b = modf(tod(X));
-    return(tof(a), b);
+    return(tof(a), tof(b));
   }
     /* Break VALUE into integral and fractional parts.  */
 
