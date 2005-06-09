@@ -202,17 +202,12 @@ inline string to_string(char[.] arr)
 #endif
 
 
-#if 0
 
 inline char sel(int[.] index, string s)
 {
   return(strsel(s, index[[0]]));
 }
 
-/*
- * Here, we have a problem with Splitwrappers!!
- */
-#endif
 
 inline string modarray(string s, int[1] index, char c)
 {
