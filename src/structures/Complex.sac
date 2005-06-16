@@ -1,7 +1,10 @@
-Module Complex:
+module Complex;
 
-import Math: all;
+use Math: all;
 
+export all;
+
+#if 0
 
 typedef double[2] complex;
 
@@ -520,6 +523,13 @@ inline complex sqrt(complex X)
 
 
 
+#else
 
+int dummy()
+{
+  return(0);
+}
+
+#endif
 
 
