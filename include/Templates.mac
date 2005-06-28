@@ -75,9 +75,9 @@ MAP_BIN_##ext( >=,  _ge_, a, bool)
  ********************************************************************************/
 
 #define MAP_LOG_OPS( ext)               \
-MAP_BIN_##ext( &&, _and_, bool, bool)   \
-MAP_BIN_##ext( ||,  _or_, bool, bool)   \
-MAP_MON_##ext(  !, _not_, bool, bool)
+MAP_BIN_##ext( &, _and_, bool, bool)    \
+MAP_BIN_##ext( |,  _or_, bool, bool)    \
+MAP_MON_##ext( !, _not_, bool, bool)
 
 
 /********************************************************************************
