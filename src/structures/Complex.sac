@@ -305,42 +305,42 @@ inline complex / (double  X1, complex X2)
 inline bool == (complex X1, complex X2)
 {
   return((((:double[2])X1)[[0]] == ((:double[2])X2)[[0]]) 
-         && (((:double[2])X1)[[1]] == ((:double[2])X2)[[1]]));
+         & (((:double[2])X1)[[1]] == ((:double[2])X2)[[1]]));
 }
 
 
 inline bool == (complex X1, double  X2)
 {
   return((((:double[2])X1)[[0]] == X2) 
-         && (((:double[2])X1)[[1]] == 0.0d));
+         & (((:double[2])X1)[[1]] == 0.0d));
 }
 
 
 inline bool == (double  X1, complex X2)
 {
   return((X1 == ((:double[2])X2)[[0]]) 
-         && (0.0d == ((:double[2])X2)[[1]]));
+         & (0.0d == ((:double[2])X2)[[1]]));
 }
 
 
 inline bool != (complex X1, complex X2)
 {
   return((((:double[2])X1)[[0]] != ((:double[2])X2)[[0]])
-         || (((:double[2])X1)[[1]] != ((:double[2])X2)[[1]]));
+         | (((:double[2])X1)[[1]] != ((:double[2])X2)[[1]]));
 }
 
 
 inline bool != (complex X1, double  X2)
 {
   return((((:double[2])X1)[[0]] != X2)
-         || (((:double[2])X1)[[1]] != 0.0d));
+         | (((:double[2])X1)[[1]] != 0.0d));
 }
 
 
 inline bool != (double  X1, complex X2)
 {
   return((X1 != ((:double[2])X2)[[0]])
-         || (0.0d != ((:double[2])X2)[[1]]));
+         | (0.0d != ((:double[2])X2)[[1]]));
 }
 
 

@@ -1,7 +1,7 @@
 module String;
 
 import Char: all;
-import ScalarArith: {&&,!=,==,+,>=,>,<=,<};
+import ScalarArith: {&,!=,==,+,>=,>,<=,<};
 import ArrayBasics: {sel};
 
 export all;
@@ -244,7 +244,7 @@ inline  bool pred(string S)                     \
   result = true;                                \
   c = S[[i]];                                   \
                                                 \
-  while (result && (c != '\0')) {               \
+  while (result & (c != '\0')) {                \
     if (pred(c)) {                              \
       i += 1;                                   \
       c = S[[i]];                               \
