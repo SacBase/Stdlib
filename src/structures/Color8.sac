@@ -1,0 +1,57 @@
+module Color8;
+
+use Array: all;
+export all;
+
+typedef int[3] color;
+
+inline color Black()
+{
+  return( (:Color8::color)[0,0,0]);
+}
+
+inline color White()
+{
+  return( (:color)[0,0,0]);
+}
+
+inline color Red()
+{
+  return( (:color)[255,0,0]);
+}
+
+inline color Green()
+{
+  return( (:color)[0,255,0]);
+}
+
+inline color Blue()
+{
+  return( (:color)[0,0,255]);
+}
+
+inline color Color( int[3] col)
+{
+  min_col = [0, 0, 0];
+  max_col = [255, 255, 255];
+
+  col = max( min( col, max_col), min_col);
+  return( (:color)col);
+}
+
+inline color Color( int x, int y, int z)
+{
+  return( Color( [x,y,z]));
+}
+
+
+inline color[256] GenLinearClut( color c1, color c2)
+{
+  res = with( i)
+          ( .<= [i] <=.) {
+            val = ( 1d -  tod(i) / 256d) * tod((:int[3]) c1) + (tod(i) / 256d) * tod((:int[3])c2);
+          } : Color( toi( val));
+        genarray( [256], Black());
+  return( res);
+}
+
