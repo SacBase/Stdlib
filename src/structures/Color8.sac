@@ -13,7 +13,7 @@ inline color Black()
 
 inline color White()
 {
-  return( (:color)[0,0,0]);
+  return( (:color)[255,255,255]);
 }
 
 inline color Red()
@@ -53,6 +53,14 @@ inline color[256] GenLinearClut( color c1, color c2)
             val = ( 1d -  tod(i) / 256d) * tod((:int[3]) c1) + (tod(i) / 256d) * tod((:int[3])c2);
           } : Color( toi( val));
         genarray( [256], Black());
+  return( res);
+}
+
+inline color[256] GenAlternatingClut( color c1, color c2)
+{
+  res = with( i)
+          ( .<= [i] <=. step [2]) : c1;
+        genarray( [256], c2);
   return( res);
 }
 
