@@ -1,6 +1,7 @@
 module Color8;
 
-use Array: all;
+use Array: all except { sel} ;
+import Array: { sel };
 export all;
 
 typedef int[3] color;
@@ -55,3 +56,8 @@ inline color[256] GenLinearClut( color c1, color c2)
   return( res);
 }
 
+inline color sel( int idx, color[.] clut)
+{
+  res = ((:int[.,.])clut)[[idx]];
+  return( (:color)res);
+}
