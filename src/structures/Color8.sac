@@ -8,7 +8,7 @@ typedef int[3] color;
 
 inline color black()
 {
-  return( (:Color8::color)[0,0,0]);
+  return( (:color)[0,0,0]);
 }
 
 inline color white()
@@ -31,7 +31,7 @@ inline color blue()
   return( (:color)[0,0,255]);
 }
 
-inline color color( int[3] col)
+inline color newColor( int[3] col)
 {
   min_col = [0, 0, 0];
   max_col = [255, 255, 255];
@@ -40,9 +40,9 @@ inline color color( int[3] col)
   return( (:color)col);
 }
 
-inline color color( int x, int y, int z)
+inline color newColor( int x, int y, int z)
 {
-  return( color( [x,y,z]));
+  return( newColor( [x,y,z]));
 }
 
 
@@ -51,7 +51,7 @@ inline color[256] genLinearClut( color c1, color c2)
   res = with( i)
           ( .<= [i] <=.) {
             val = ( 1d -  tod(i) / 256d) * tod((:int[3]) c1) + (tod(i) / 256d) * tod((:int[3])c2);
-          } : color( toi( val));
+          } : newColor( toi( val));
         genarray( [256], black());
   return( res);
 }
