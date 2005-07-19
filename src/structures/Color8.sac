@@ -1,6 +1,6 @@
 module Color8;
 
-use Array: all except { sel} ;
+use Array: all except { sel, shape, dim} ;
 import Array: { sel };
 export all;
 
@@ -64,8 +64,26 @@ inline color[256] GenAlternatingClut( color c1, color c2)
   return( res);
 }
 
-inline color sel( int idx, color[.] clut)
+inline color[*] sel( int idx, color[*] clut)
 {
-  res = ((:int[.,.])clut)[[idx]];
-  return( (:color)res);
+  return( clut[[idx]]);
 }
+
+inline color[*] sel( int[.] idx, color[*] a)
+{
+  res = Array::sel( idx, ((:int[*])a));
+  return( (:color[*])res);
+}
+
+inline
+int dim( color[*] a)
+{
+  return( Array::dim((:int[*])a) - 1 );
+}
+
+inline
+int[.] shape( color[*] a)
+{
+  return( _drop_SxV_( -1, Array::shape((:int[*])a)) );
+}
+
