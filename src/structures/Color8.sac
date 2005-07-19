@@ -42,7 +42,7 @@ inline color color( int[3] col)
 
 inline color color( int x, int y, int z)
 {
-  return( Color( [x,y,z]));
+  return( color( [x,y,z]));
 }
 
 
@@ -51,8 +51,8 @@ inline color[256] genLinearClut( color c1, color c2)
   res = with( i)
           ( .<= [i] <=.) {
             val = ( 1d -  tod(i) / 256d) * tod((:int[3]) c1) + (tod(i) / 256d) * tod((:int[3])c2);
-          } : Color( toi( val));
-        genarray( [256], Black());
+          } : color( toi( val));
+        genarray( [256], black());
   return( res);
 }
 
