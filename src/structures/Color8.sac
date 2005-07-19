@@ -6,32 +6,32 @@ export all;
 
 typedef int[3] color;
 
-inline color Black()
+inline color black()
 {
   return( (:Color8::color)[0,0,0]);
 }
 
-inline color White()
+inline color white()
 {
   return( (:color)[255,255,255]);
 }
 
-inline color Red()
+inline color red()
 {
   return( (:color)[255,0,0]);
 }
 
-inline color Green()
+inline color green()
 {
   return( (:color)[0,255,0]);
 }
 
-inline color Blue()
+inline color blue()
 {
   return( (:color)[0,0,255]);
 }
 
-inline color Color( int[3] col)
+inline color color( int[3] col)
 {
   min_col = [0, 0, 0];
   max_col = [255, 255, 255];
@@ -40,13 +40,13 @@ inline color Color( int[3] col)
   return( (:color)col);
 }
 
-inline color Color( int x, int y, int z)
+inline color color( int x, int y, int z)
 {
   return( Color( [x,y,z]));
 }
 
 
-inline color[256] GenLinearClut( color c1, color c2)
+inline color[256] genLinearClut( color c1, color c2)
 {
   res = with( i)
           ( .<= [i] <=.) {
@@ -56,7 +56,7 @@ inline color[256] GenLinearClut( color c1, color c2)
   return( res);
 }
 
-inline color[256] GenAlternatingClut( color c1, color c2)
+inline color[256] genAlternatingClut( color c1, color c2)
 {
   res = with( i)
           ( .<= [i] <=. step [2]) : c1;
