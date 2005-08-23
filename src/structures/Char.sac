@@ -1,5 +1,6 @@
 module Char;
 
+use ArrayBasics: {shape, sel};
 export all;
 
 external bool isalpha  (char C);
@@ -48,14 +49,25 @@ external char toupper (char C);
        and vice versa. */
 
 external char tochar( int N);
+    #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/Char.o"
     #pragma linkname "tochar_int"
 external char tochar( float N);
+    #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/Char.o"
     #pragma linkname "tochar_float"
 external char tochar( double N);
+    #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/Char.o"
     #pragma linkname "tochar_double"
+
+inline
+char[*] tochar( int[+] a)
+{
+  res = with( . <= iv <= .)
+        genarray( shape( a), tochar( a[iv]), ' ');
+  return( res);
+}
 
     /* These functions convert numerical values into a char (byte) value */
 
