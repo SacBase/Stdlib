@@ -32,6 +32,7 @@ external string strovwt(string S1, int P, string S2);
     /* Overwrite string S2 with string S1 starting at position P. */
 
 external char strsel(string S, int P);
+    #pragma linksign[ 0,1,2]
     #pragma linkobj "src/String/strsel.o"
     /* Select character P of string S. */
 
@@ -61,6 +62,7 @@ external int strncmp(string S1, string S2, int N);
        and zero if S1 == S2. */
 
 external int strlen(string S);
+    #pragma linksign[ 0,1]
     #pragma linkname "SACstrlen"
     #pragma linkobj "src/String/strlen.o"
     /* Return the length of string S. */
@@ -193,6 +195,14 @@ inline string to_string(char[.] arr)
   int len;
   len=shape(arr)[[0]];
   return(to_string(arr ++ ['\0'], len));
+}
+
+inline char[.] tochar( string s)
+{
+  res = with(iv)
+          (. <= [i] <= .) : strsel(s, i);
+        genarray( [strlen(s)], ' ');
+  return( res);
 }
 
 
