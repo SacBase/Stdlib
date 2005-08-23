@@ -2,7 +2,8 @@ module String;
 
 import Char: all;
 import ScalarArith: {&,!=,==,+,>=,>,<=,<};
-import ArrayBasics: {sel};
+import ArrayBasics: {shape,sel};
+import ArrayTransform: {++};
 
 export all;
 
@@ -187,20 +188,12 @@ external string tos(bool B);
 
 
 
-#if 0
 inline string to_string(char[.] arr)
 {
   int len;
   len=shape(arr)[[0]];
-  return(to_string(arr, len));
+  return(to_string(arr ++ ['\0'], len));
 }
-
-/*
- * At the moment (9.9.96) the above function causes segmentation faults
- * in Constant Folding as well as in compile.c
- */
-#endif
-
 
 
 inline char sel(int[.] index, string s)
