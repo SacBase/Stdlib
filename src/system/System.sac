@@ -1,0 +1,12 @@
+module System;
+
+import World:       all;
+import Terminal:    all;
+import FileSys:     all;
+
+import CommandLine: all;
+import Env:         all;
+import Clock:       all;
+import SysErr:      all;
+
+export all;

@@ -1,0 +1,59 @@
+ClassDec external CommandLine:
+
+
+import World:
+{
+global objects: TheWorld;
+}
+
+import String:
+{
+implicit types: string;
+}
+
+
+own:
+{
+global objects:
+
+  CommandLine TheCommandLine;
+    #pragma effect TheWorld
+
+  /*
+   *  The global object TheCommandLine of class CommandLine serves as a 
+   *  representation of the shell command used for starting program execution.
+   *  It is derived from the global object TheWorld in
+   *  order to represent this part or sub-world of the execution environment.
+   */
+
+functions:
+
+  int argc();
+    #pragma touch TheCommandLine
+    #pragma linkname "SACargc"
+
+  string argv();
+    #pragma touch TheCommandLine
+    #pragma linkname "SACargvall"
+
+  string argv(int N);
+    #pragma touch TheCommandLine
+    #pragma linkname "SACargv"
+
+
+  /* These functions provide access to the shell command by which
+     a program has been started.
+
+     argc()  returns the number of command line parameters including the
+             program's name itself.
+
+     argv()  returns the entire command line.
+
+     argv(n) returns the nth command line parameter. Remember that argv(0)
+             returns the program's name itself.
+
+  */
+
+}
+
+

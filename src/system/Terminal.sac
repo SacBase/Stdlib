@@ -1,0 +1,22 @@
+class Terminal;
+
+external classtype;
+
+export all except { create_TheTerminal};
+
+
+objdef Terminal TheTerminal = create_TheTerminal( );
+
+/*
+ *  The global object TheTerminal of class Terminal serves as a representation
+ *  for a terminal screen. It is derived from the global object TheWorld in
+ *  order to represent this part or sub-world of the execution environment.
+ *  It is also used to synchronise the standard I/O streams stdin, stdout,
+ *  and stderr.
+ */
+
+external Terminal create_TheTerminal( );
+    #pragma effect World::TheWorld
+    #pragma linksign[0]
+    #pragma linkobj "src/Terminal/terminal.o"
+

@@ -1,0 +1,32 @@
+class World;
+
+external classtype;
+
+export all except { create_TheWorld};
+
+
+
+objdef World TheWorld = create_TheWorld();
+
+/*
+ *  The global object TheWorld of class World serves as a representation of the
+ *  execution environment. It provides access to resources residing
+ *  outside the functional framework of a SAC program.
+ *
+ *  In order to allow concurrent access to unrelated parts of the
+ *  execution environment, some other predefined global objects are 
+ *  derived from world upon program start. These represent disjoint
+ *  partitions of the execution environment or outside world.
+ *
+ *  These are: - TheTerminal
+ *             - TheFileSys
+ *             - TheEnvironment
+ *             - TheCommandLine
+ *             - TheClock
+ */
+
+
+external World create_TheWorld();
+    #pragma linksign[0]
+    #pragma linkobj "src/World/World.o"
+

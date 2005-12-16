@@ -1,0 +1,57 @@
+class Environment;
+
+external classtype;
+
+use String : {string};
+
+export all;
+
+objdef Environment TheEnvironment = create_TheEnvironment( );
+
+/*
+ *  The global object TheEnvironment of class Environment serves as
+ *  a representation of the environment.
+ *  It is derived from the global object TheWorld in
+ *  order to represent this part or sub-world of the execution environment.
+ */
+
+external Environment create_TheEnvironment( );
+    #pragma effect World::TheWorld
+    #pragma linksign [0]
+    #pragma linkobj  "src/Environment/Env.o"
+
+
+external string GetEnv(string ENVVAR);
+    #pragma effect TheEnvironment
+    /*
+     * Get the value of the environment variable ENVVAR from the current
+     * environment.
+     */
+
+external bool ExistEnv(string ENVVAR);
+    #pragma effect TheEnvironment
+    /*
+     * Check if the environment variable ENVVAR exists in the current
+     * environment.
+     */
+
+external bool SetEnv(string ENVVAR, string VALUE, bool OVERWRITE);
+    #pragma effect TheEnvironment
+    /*
+     * Set the environment variable ENVVAR to VALUE. If ENVVAR is already
+     * set in the current environment, then the old value is only 
+     * overwritten if OVERWRITE evaluates to true. The boolean result
+     * informs about success or failure of this operation.
+     */
+  
+external void UnsetEnv(string ENVVAR);
+    #pragma effect TheEnvironment
+    /*
+     * Clear the environment variable ENVVAR from the current environment.
+     */
+
+
+
+
+
+
