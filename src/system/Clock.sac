@@ -11,7 +11,7 @@ external typedef time;
 
 objdef Clock TheClock = create_TheClock( );
 
-external FileSystem create_TheClock( );
+external Clock create_TheClock( );
     #pragma effect World::TheWorld
     #pragma linksign [0]
     #pragma linkobj  "src/Clock/clock.o"
