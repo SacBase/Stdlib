@@ -33,4 +33,36 @@ inline int toi( bool b)
   return( res);
 }
 
+inline bool tob( int i)
+{ 
+ if ( _eq_(1,i) )
+	res = true;
+ else if ( _eq_(0,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+	
+inline bool tob( float i)
+{ 
+ if ( _eq_(1f,i) )
+	res = true;
+ else if ( _eq_(0f,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool tob( double i)
+{ 
+ if ( _eq_(1.0,i) )
+	res = true;
+ else if ( _eq_(0.0,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
 

@@ -1,0 +1,31 @@
+/*****************************************************************************
+ *
+ * file:   Bits.sac
+ *
+ * prefix: ---
+ *
+ * description:
+ *
+ *   This module implementation is part of the SAC standard library.
+ *
+ *   It implements some bitwise operations on integers.
+ *
+ *
+ *****************************************************************************/
+
+module Bits;
+
+export all;
+
+
+external int  BitShiftRightLogical(int k, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+    
+
+external int  BitAND(int mask, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+    
