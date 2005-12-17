@@ -2,10 +2,10 @@ module System;
 
 import World:       all;
 import Terminal:    all;
-import FileSys:     all;
+import FileSystem:  all;
 
 import CommandLine: all;
-import Env:         all;
+import Environment: all;
 import Clock:       all;
 import SysErr:      all;
 
