@@ -23,6 +23,8 @@ external Environment create_TheEnvironment( );
 
 external string GetEnv(string ENVVAR);
     #pragma effect TheEnvironment
+    #pragma linksign [0,1]
+    #pragma linkobj  "src/Environment/GetEnv.o"
     /*
      * Get the value of the environment variable ENVVAR from the current
      * environment.
@@ -30,6 +32,8 @@ external string GetEnv(string ENVVAR);
 
 external bool ExistEnv(string ENVVAR);
     #pragma effect TheEnvironment
+    #pragma linksign [0,1]
+    #pragma linkobj  "src/Environment/ExistEnv.o"
     /*
      * Check if the environment variable ENVVAR exists in the current
      * environment.
@@ -37,6 +41,8 @@ external bool ExistEnv(string ENVVAR);
 
 external bool SetEnv(string ENVVAR, string VALUE, bool OVERWRITE);
     #pragma effect TheEnvironment
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj  "src/Environment/SetEnv.o"
     /*
      * Set the environment variable ENVVAR to VALUE. If ENVVAR is already
      * set in the current environment, then the old value is only 
@@ -46,6 +52,7 @@ external bool SetEnv(string ENVVAR, string VALUE, bool OVERWRITE);
   
 external void UnsetEnv(string ENVVAR);
     #pragma effect TheEnvironment
+    #pragma linkobj  "src/Environment/UnsetEnv.o"
     /*
      * Clear the environment variable ENVVAR from the current environment.
      */

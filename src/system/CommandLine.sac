@@ -1,23 +1,12 @@
-ClassDec external CommandLine:
+class CommandLine;
 
+external classtype;
 
-import World:
-{
-global objects: TheWorld;
-}
+use String : {string};
 
-import String:
-{
-implicit types: string;
-}
+export all;
 
-
-own:
-{
-global objects:
-
-  CommandLine TheCommandLine;
-    #pragma effect TheWorld
+objdef CommandLine TheCommandLine = create_TheCommandLine( );
 
   /*
    *  The global object TheCommandLine of class CommandLine serves as a 
@@ -26,19 +15,29 @@ global objects:
    *  order to represent this part or sub-world of the execution environment.
    */
 
-functions:
+external  CommandLine create_TheCommandLine( );
+    #pragma effect World::TheWorld
+    #pragma linksign [0]
+    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
-  int argc();
-    #pragma touch TheCommandLine
+
+external  int argc();
+    #pragma effect TheCommandLine
     #pragma linkname "SACargc"
+    #pragma linksign [0]
+    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
-  string argv();
-    #pragma touch TheCommandLine
+external  string argv();
+    #pragma effect TheCommandLine
     #pragma linkname "SACargvall"
+    #pragma linksign [0]
+    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
-  string argv(int N);
-    #pragma touch TheCommandLine
+external  string argv(int N);
+    #pragma effect TheCommandLine
     #pragma linkname "SACargv"
+    #pragma linksign [0,1]
+    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
 
   /* These functions provide access to the shell command by which
@@ -53,7 +52,5 @@ functions:
              returns the program's name itself.
 
   */
-
-}
 
 
