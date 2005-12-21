@@ -1,0 +1,15 @@
+module StdIO;
+
+import File:      all;
+import TermFile:  all;
+
+import ScalarIO:  all;
+import ArrayIO:   all;
+import FibreIO:   all;
+import ListIO:    all;
+import ComplexIO: all;
+
+export all;
+
+
+
