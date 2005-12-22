@@ -23,9 +23,38 @@ external int  BitShiftRightLogical(int k, int val);
     #pragma linkobj "src/Bits/Bitwise.o"
     /* Bitwise shifts and mask operations. */
     
+external int  BitShiftLeftLogical(int k, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+
+external int  BitShiftRightAlgebraic(int k, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+    
+external int  BitShiftLeftAlgebraic(int k, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
 
 external int  BitAND(int mask, int val);
     #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+    
+external int  BitOR(int mask, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+    
+external int  BitXOR(int mask, int val);
+    #pragma linksign[0,1,2]
+    #pragma linkobj "src/Bits/Bitwise.o"
+    /* Bitwise shifts and mask operations. */
+    
+external int  BitOnesComplement(int val);
+    #pragma linksign[0,1]
     #pragma linkobj "src/Bits/Bitwise.o"
     /* Bitwise shifts and mask operations. */
     

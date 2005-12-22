@@ -80,15 +80,3 @@ MAP_BIN_##ext( |,  _or_, bool, bool)    \
 MAP_MON_##ext( !, _not_, bool, bool)
 
 
-/********************************************************************************
- *
- * Macros for generating MACRO calls for all conversion operations
- *
- ********************************************************************************/
-
-#define MAP_CONV_OPS( ext, a)           \
-MAP_MON_##ext( tod, _tod_S_, a, double)  \
-MAP_MON_##ext( tof, _tof_S_, a, float)   \
-MAP_MON_##ext( toi, _toi_S_, a, int)
-
-
