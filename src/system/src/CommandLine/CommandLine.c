@@ -28,14 +28,13 @@ ComLine *TheCommandLine;
 /*****************************************************/
 
 
-ComLine *create_TheCommandLine(int argc, char *argv[])
+ComLine *create_TheCommandLine()
 {
   ComLine *parameters;
   
   parameters=(ComLine *)SAC_MALLOC(sizeof(ComLine));
   
-  parameters->argc=argc;
-  parameters->argv=argv;
+  SAC_COMMANDLINE_GET( parameters->argc, parameters->argv);
   
   return(parameters);
 }
