@@ -1,0 +1,205 @@
+Module FibreIO:
+
+
+import IOresources: all;
+
+import FibrePrint: all;
+
+import FibreScan: all;
+
+
+
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+
+
+int[+]  FibreScanIntArray( File &stream, int[+] shp)
+{
+  return( FibreScanIntArray( stream, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+
+
+float[+]  FibreScanFloatArray( File &stream, int[+] shp)
+{
+  return( FibreScanFloatArray( stream, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+
+
+double[+]  FibreScanDoubleArray( File &stream, int[+] shp)
+{
+  return( FibreScanDoubleArray( stream, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+int[+]  FibreScanIntArray( TermFile &stream, int[+] shp)
+{
+  return( FibreScanIntArray( stream, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+
+
+float[+]  FibreScanFloatArray( TermFile &stream, int[+] shp)
+{
+  return( FibreScanFloatArray( stream, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+
+
+double[+]  FibreScanDoubleArray( TermFile &stream, int[+] shp)
+{
+  return( FibreScanDoubleArray( stream, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+int[+]  FibreScanIntArray( int[+] shp)
+{
+  return( FibreScanIntArray( stdin, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+
+
+float[+]  FibreScanFloatArray( int[+] shp)
+{
+  return( FibreScanFloatArray( stdin, (shape(shp))[[0]], shp));
+}
+
+
+/*****************************************************************/
+
+
+double[+]  FibreScanDoubleArray( int[+] shp)
+{
+  return( FibreScanDoubleArray( stdin, (shape(shp))[[0]], shp));
+}
+
+
+
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+
+
+
+inline void FibrePrint(File &stream, int[+] arr)
+{
+  FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+
+
+inline void FibrePrint(File &stream, float[+] arr)
+{
+  FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+
+
+inline void FibrePrint(File &stream, double[+] arr)
+{
+  FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+inline void FibrePrint(TermFile &stream, int[+] arr)
+{
+  FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+
+
+inline void FibrePrint(TermFile &stream, float[+] arr)
+{
+  FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+
+
+inline void FibrePrint(TermFile &stream, double[+] arr)
+{
+  FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+inline void FibrePrint(int[+] arr)
+{
+  FibrePrint(stdout, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+
+
+inline void FibrePrint(float[+] arr)
+{
+  FibrePrint(stdout, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+
+
+inline void FibrePrint(double[+] arr)
+{
+  FibrePrint(stdout, dim(arr), shape(arr), arr);
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+inline int FibreScanInt()
+{
+   return(FibreScanInt( stdin));
+}
+
+inline float FibreScanFloat()
+{
+   return(FibreScanFloat( stdin));
+}
+
+inline double FibreScanDouble()
+{
+   return(FibreScanDouble( stdin));
+}
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+
+

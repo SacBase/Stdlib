@@ -1,0 +1,348 @@
+Module ComplexIO:
+
+
+/*****************************************************************/
+
+
+import IOresources: all;
+
+import TermFile:
+{ 
+  functions: fprintf, printf, fscanf, scanf;
+}
+
+import File:
+{ 
+  functions: fprintf, fscanf;
+}
+
+import String:
+{
+  implicit types: string;
+  functions: to_string; 
+}
+
+import Complex:
+{
+  explicit types: complex;
+  functions: imag, real, toc;
+}
+
+
+
+/*****************************************************************/
+
+inline void fprint(File &stream, complex c)
+{
+  fprintf(stream, "(%g,%g)", real(c), imag(c));
+}
+
+
+/*****************************************************************/
+
+inline void fprint(File &stream, complex c, int mode)
+{
+  if (mode==2)
+  {
+    fprintf(stream, "%g %g", real(c), imag(c));
+  }
+  else
+  {
+    if (mode==1)
+    {
+      fprintf(stream, "%g+%gi", real(c), imag(c));
+    }
+    else
+    {
+      fprintf(stream, "(%g, %g)", real(c), imag(c));
+    }
+  }
+}
+
+
+/*****************************************************************/
+
+inline void fprint(File &stream, complex c, int mode, int prec)
+{
+  if (mode==2)
+  {
+    fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
+  }
+  else
+  {
+    if (mode==1)
+    {
+      fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
+    }
+    else
+    {
+      fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
+    }
+  }
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+inline void fprint(TermFile &stream, complex c)
+{
+  fprintf(stream, "(%g,%g)", real(c), imag(c));
+}
+
+
+/*****************************************************************/
+
+inline void fprint(TermFile &stream, complex c, int mode)
+{
+  if (mode==2)
+  {
+    fprintf(stream, "%g %g", real(c), imag(c));
+  }
+  else
+  {
+    if (mode==1)
+    {
+      fprintf(stream, "%g+%gi", real(c), imag(c));
+    }
+    else
+    {
+      fprintf(stream, "(%g, %g)", real(c), imag(c));
+    }
+  }
+}
+
+
+/*****************************************************************/
+
+inline void fprint(TermFile &stream, complex c, int mode, int prec)
+{
+  if (mode==2)
+  {
+    fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
+  }
+  else
+  {
+    if (mode==1)
+    {
+      fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
+    }
+    else
+    {
+      fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
+    }
+  }
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+inline void print(complex c)
+{
+  printf("(%g,%g)", real(c), imag(c));
+}
+
+
+/*****************************************************************/
+
+inline void print(complex c, int mode)
+{
+  if (mode==2)
+  {
+    printf("%g %g", real(c), imag(c));
+  }
+  else
+  {
+    if (mode==1)
+    {
+      printf("%g+%gi", real(c), imag(c));
+    }
+    else
+    {
+      printf("(%g, %g)", real(c), imag(c));
+    }
+  }
+}
+
+
+/*****************************************************************/
+
+inline void print(complex c, int mode, int prec)
+{
+  if (mode==2)
+  {
+    printf("%.*g %.*g", prec, real(c), prec, imag(c));
+  }
+  else
+  {
+    if (mode==1)
+    {
+      printf("%.*g+%.*gi", prec, real(c), prec, imag(c));
+    }
+    else
+    {
+      printf("(%.*g, %.*g)", prec, real(c), prec, imag(c));
+    }
+  }
+}
+
+
+
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+
+
+inline bool, complex fscancomplex(File &stream)
+{
+  double real;
+  double imag;
+
+  real=0.0d;
+  imag=0.0d;
+
+  success, real, imag=fscanf(stream, "(%lf,%lf)");
+  
+  return(success==2, toc(real, imag));
+}
+
+
+/*****************************************************************/
+
+
+inline bool, complex fscancomplex(File &stream, int mode)
+{
+  double real;
+  double imag;
+
+  real=0.0d;
+  imag=0.0d;
+
+  if (mode==2)
+  {
+    success, real, imag=fscanf(stream, "%lf %lf");
+  }
+  else
+  {
+    if (mode==1)
+    {
+      success, real, imag=fscanf(stream, "%lf+%lfi");
+    }
+    else
+    {
+      success, real, imag=fscanf(stream, "(%lf,%lf)");
+    }
+  }
+
+  
+  return(success==2, toc(real, imag));
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+inline bool, complex fscancomplex(TermFile &stream)
+{
+  double real;
+  double imag;
+
+  real=0.0d;
+  imag=0.0d;
+
+  success, real, imag=fscanf(stream, "(%lf,%lf)");
+  
+  return(success==2, toc(real, imag));
+}
+
+
+/*****************************************************************/
+
+
+inline bool, complex fscancomplex(TermFile &stream, int mode)
+{
+  double real;
+  double imag;
+
+  real=0.0d;
+  imag=0.0d;
+
+  if (mode==2)
+  {
+    success, real, imag=fscanf(stream, "%lf %lf");
+  }
+  else
+  {
+    if (mode==1)
+    {
+      success, real, imag=fscanf(stream, "%lf+%lfi");
+    }
+    else
+    {
+      success, real, imag=fscanf(stream, "(%lf,%lf)");
+    }
+  }
+
+  
+  return(success==2, toc(real, imag));
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+inline bool, complex scancomplex()
+{
+  double real;
+  double imag;
+
+  real=0.0d;
+  imag=0.0d;
+
+  success, real, imag=scanf("(%lf,%lf)");
+  
+  return(success==2, toc(real, imag));
+}
+
+
+/*****************************************************************/
+
+
+inline bool, complex scancomplex(int mode)
+{
+  double real;
+  double imag;
+
+  real=0.0d;
+  imag=0.0d;
+
+  if (mode==2)
+  {
+    success, real, imag=scanf("%lf %lf");
+  }
+  else
+  {
+    if (mode==1)
+    {
+      success, real, imag=scanf("%lf+%lfi");
+    }
+    else
+    {
+      success, real, imag=scanf("(%lf,%lf)");
+    }
+  }
+
+  
+  return(success==2, toc(real, imag));
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+

@@ -1,0 +1,386 @@
+Module ListIO:
+
+
+/*****************************************************************/
+
+
+import IOresources: all;
+
+import File:
+{
+  functions: fprintf, feof;
+}
+
+import TermFile:
+{
+  functions: fprintf, printf, feof;
+}
+
+import ScalarIO:
+{
+  functions: fscanint, scanint;
+}
+
+import List: all;
+
+import String:
+{
+  implicit types: string;
+  functions: to_string;
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+
+
+list fscanlist( File &stream)
+{
+  l = nil();
+  success = true;
+
+  while ((! feof( stream)) && success) {
+    success, elem = fscanint( stream);
+    if (success) {
+      l = append( cons( elem, nil()), l);
+    }
+  }
+
+  return( l);
+}
+
+
+/*****************************************************************/
+
+
+list fscanlist( File &stream, int length)
+{
+  l = nil();
+  success = true;
+  cnt = 0;
+
+  while ((! feof( stream)) && success && (cnt < length)) {
+    success, elem = fscanint( stream);
+
+    if (success) {
+      l = append( cons( elem, nil()), l);
+    }
+  }
+
+  return(l);
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+list fscanlist( TermFile &stream)
+{
+  l = nil();
+  success = true;
+
+  while ((! feof( stream)) && success) {
+    success, elem = fscanint( stream);
+    if (success) {
+      l = append( cons( elem, nil()), l);
+    }
+  }
+
+  return( l);
+}
+
+
+/*****************************************************************/
+
+
+list fscanlist( TermFile &stream, int length)
+{
+  l = nil();
+  success = true;
+  cnt = 0;
+
+  while ((! feof( stream)) && success && (cnt < length)) {
+    success, elem = fscanint( stream);
+
+    if (success) {
+      l = append( cons( elem, nil()), l);
+    }
+  }
+
+  return(l);
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+list scanlist()
+{
+  l = nil();
+  success = true;
+
+  while (success) {
+    success, elem = scanint();
+    if (success) {
+      l = append( cons( elem, nil()), l);
+    }
+  }
+
+  return( l);
+}
+
+
+/*****************************************************************/
+
+
+list scanlist( int length)
+{
+  l = nil();
+  success = true;
+  cnt = 0;
+
+  while (success && (cnt < length)) {
+    success, elem = scanint();
+
+    if (success) {
+      l = append( cons( elem, nil()), l);
+    }
+  }
+
+  return(l);
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+void fprint( File &stream, list L)
+{
+  fprintf( stream, "(");
+  if (! empty( L)) {
+    fprintf( stream, " %d ", hd( L));
+    L = tl( L);
+    while (! empty( L)) {
+      fprintf( stream, ": %d ", hd( L));
+      L = tl( L);
+    }
+  }
+  fprintf( stream, ")\n");
+}
+
+
+/*****************************************************************/
+
+
+void fprint( File &stream, list L, int ElemsPerLine)
+{
+  fprintf( stream, "(");
+  if (! empty( L)) {
+    fprintf( stream, " %d ", hd( L));
+    L = tl( L);
+    cnt = 1;
+    while ((! empty( L)) && (cnt < ElemsPerLine)) {
+      fprintf( stream, ": %d ", hd( L));
+      L = tl( L);
+      cnt++;
+    }
+    while (! empty( L)) {
+      fprintf( stream, "\n");
+      cnt = 0;
+      while ((! empty( L)) && (cnt < ElemsPerLine)) {
+        fprintf( stream, ": %d ", hd( L));
+        L = tl( L);
+        cnt++;
+      }
+    }
+  }
+  fprintf( stream, ")\n");
+}
+
+
+/*****************************************************************/
+
+
+void fprint( File &stream, list L, int ElemsPerLine, int ColWidth)
+{
+  fprintf( stream, "(");
+  if (! empty( L)) {
+    fprintf( stream, " %*d ", ColWidth, hd( L));
+    L = tl( L);
+    cnt = 1;
+    while ((! empty( L)) && (cnt < ElemsPerLine)) {
+      fprintf( stream, ": %*d ", ColWidth, hd( L));
+      L = tl( L);
+      cnt++;
+    }
+    while (! empty( L)) {
+      fprintf( stream, "\n");
+      cnt = 0;
+      while ((! empty( L)) && (cnt < ElemsPerLine)) {
+        fprintf( stream, ": %*d ", ColWidth, hd( L));
+        L = tl( L);
+        cnt++;
+      }
+    }
+  }
+  fprintf( stream, ")\n");
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+void fprint( TermFile &stream, list L)
+{
+  fprintf( stream, "(");
+  if (! empty( L)) {
+    fprintf( stream, " %d ", hd( L));
+    L = tl( L);
+    while (! empty( L)) {
+      fprintf( stream, ": %d ", hd( L));
+      L = tl( L);
+    }
+  }
+  fprintf( stream, ")\n");
+}
+
+
+/*****************************************************************/
+
+
+void fprint( TermFile &stream, list L, int ElemsPerLine)
+{
+  fprintf( stream, "(");
+  if (! empty( L)) {
+    fprintf( stream, " %d ", hd( L));
+    L = tl( L);
+    cnt = 1;
+    while ((! empty( L)) && (cnt < ElemsPerLine)) {
+      fprintf( stream, ": %d ", hd( L));
+      L = tl( L);
+      cnt++;
+    }
+    while (! empty( L)) {
+      fprintf( stream, "\n");
+      cnt = 0;
+      while ((! empty( L)) && (cnt < ElemsPerLine)) {
+        fprintf( stream, ": %d ", hd( L));
+        L = tl( L);
+        cnt++;
+      }
+    }
+  }
+  fprintf( stream, ")\n");
+}
+
+
+/*****************************************************************/
+
+
+void fprint( TermFile &stream, list L, int ElemsPerLine, int ColWidth)
+{
+  fprintf( stream, "(");
+  if (! empty( L)) {
+    fprintf( stream, " %*d ", ColWidth, hd( L));
+    L = tl( L);
+    cnt = 1;
+    while ((! empty( L)) && (cnt < ElemsPerLine)) {
+      fprintf( stream, ": %*d ", ColWidth, hd( L));
+      L = tl( L);
+      cnt++;
+    }
+    while (! empty( L)) {
+      fprintf( stream, "\n");
+      cnt = 0;
+      while ((! empty( L)) && (cnt < ElemsPerLine)) {
+        fprintf( stream, ": %*d ", ColWidth, hd( L));
+        L = tl( L);
+        cnt++;
+      }
+    }
+  }
+  fprintf( stream, ")\n");
+}
+
+
+/*****************************************************************/
+/*****************************************************************/
+
+
+void print( list L)
+{
+  printf( "(");
+  if (! empty( L)) {
+    printf( " %d ", hd( L));
+    L = tl( L);
+    while (! empty( L)) {
+      printf( ": %d ", hd( L));
+      L = tl( L);
+    }
+  }
+  printf( ")\n");
+}
+
+
+/*****************************************************************/
+
+
+void print( list L, int ElemsPerLine)
+{
+  printf( "(");
+  if (! empty( L)) {
+    printf( " %d ", hd( L));
+    L = tl( L);
+    cnt = 1;
+    while ((! empty( L)) && (cnt < ElemsPerLine)) {
+      printf( ": %d ", hd( L));
+      L = tl( L);
+      cnt++;
+    }
+    while (! empty( L)) {
+      printf( "\n");
+      cnt = 0;
+      while ((! empty( L)) && (cnt < ElemsPerLine)) {
+        printf( ": %d ", hd( L));
+        L = tl( L);
+        cnt++;
+      }
+    }
+  }
+  printf( ")\n");
+}
+
+
+/*****************************************************************/
+
+
+void print( list L, int ElemsPerLine, int ColWidth)
+{
+  printf( "(");
+  if (! empty( L)) {
+    printf( " %*d ", ColWidth, hd( L));
+    L = tl( L);
+    cnt = 1;
+    while ((! empty( L)) && (cnt < ElemsPerLine)) {
+      printf( ": %*d ", ColWidth, hd( L));
+      L = tl( L);
+      cnt++;
+    }
+    while (! empty( L)) {
+      printf( "\n");
+      cnt = 0;
+      while ((! empty( L)) && (cnt < ElemsPerLine)) {
+        printf( ": %*d ", ColWidth, hd( L));
+        L = tl( L);
+        cnt++;
+      }
+    }
+  }
+  printf( ")\n");
+}
