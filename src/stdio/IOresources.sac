@@ -1,0 +1,9 @@
+module  IOresources;
+
+import File : { File };
+import TermFile : { stdin, stdout, stderr };
+import Terminal : { TheTerminal };
+import FileSystem : { TheFileSystem };
+import World : { TheWorld };
+
+export all;
