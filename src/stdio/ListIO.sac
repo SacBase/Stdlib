@@ -1,34 +1,17 @@
-Module ListIO:
+module ListIO;
 
 
 /*****************************************************************/
 
 
-import IOresources: all;
+use IOresources: all;
 
-import File:
-{
-  functions: fprintf, feof;
-}
+use File: { File };
+use TermFile: { TermFile };
+use List: all;
+use String: { string, to_string};
 
-import TermFile:
-{
-  functions: fprintf, printf, feof;
-}
-
-import ScalarIO:
-{
-  functions: fscanint, scanint;
-}
-
-import List: all;
-
-import String:
-{
-  implicit types: string;
-  functions: to_string;
-}
-
+export all;
 
 /*****************************************************************/
 /*****************************************************************/

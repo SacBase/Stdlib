@@ -1,33 +1,17 @@
-Module ComplexIO:
+module ComplexIO;
 
 
 /*****************************************************************/
 
 
-import IOresources: all;
+use IOresources: all;
 
-import TermFile:
-{ 
-  functions: fprintf, printf, fscanf, scanf;
-}
+use TermFile : { TermFile };
+use File: { File };
+use String: { string, to_string};
+use Complex: { complex, imag, real, toc};
 
-import File:
-{ 
-  functions: fprintf, fscanf;
-}
-
-import String:
-{
-  implicit types: string;
-  functions: to_string; 
-}
-
-import Complex:
-{
-  explicit types: complex;
-  functions: imag, real, toc;
-}
-
+export all;
 
 
 /*****************************************************************/

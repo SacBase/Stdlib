@@ -1,13 +1,13 @@
-Module FibreIO:
+module FibreIO;
 
 
-import IOresources: all;
+use IOresources: all;
+use FibrePrint: all;
+use FibreScan: all;
+use File : { File };
+use TermFile : { File };
 
-import FibrePrint: all;
-
-import FibreScan: all;
-
-
+export all;
 
 /*****************************************************************/
 /*****************************************************************/
