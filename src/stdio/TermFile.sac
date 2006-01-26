@@ -8,13 +8,13 @@ use Terminal : { TheTerminal };
 export all;
 
 external objdef TermFile stdin;
-    #pragma linkname "SACstdin"
+    #pragma linkname "stdin"
 
 external objdef TermFile stdout;
-    #pragma linkname "SACstdout"
+    #pragma linkname "stdout"
 
 external objdef TermFile stderr;
-    #pragma linkname "SACstderr"
+    #pragma linkname "stderr"
 
 
 

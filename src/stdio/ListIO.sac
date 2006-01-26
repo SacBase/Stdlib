@@ -10,6 +10,8 @@ use File: { File };
 use TermFile: { TermFile };
 use List: all;
 use String: { string, to_string};
+use ScalarIO : { scanint };
+use ScalarArith : all;
 
 export all;
 
@@ -18,6 +20,7 @@ export all;
 /*****************************************************************/
 /*****************************************************************/
 
+#ifdef BUG197FIXED
 
 list fscanlist( File &stream)
 {
@@ -137,6 +140,7 @@ list scanlist( int length)
   return(l);
 }
 
+#endif /* BUG197FIXED */
 
 /*****************************************************************/
 /*****************************************************************/
@@ -144,16 +148,16 @@ list scanlist( int length)
 
 void fprint( File &stream, list L)
 {
-  fprintf( stream, "(");
+  File::fprintf( stream, "(");
   if (! empty( L)) {
-    fprintf( stream, " %d ", hd( L));
+    File::fprintf( stream, " %d ", hd( L));
     L = tl( L);
     while (! empty( L)) {
-      fprintf( stream, ": %d ", hd( L));
+      File::fprintf( stream, ": %d ", hd( L));
       L = tl( L);
     }
   }
-  fprintf( stream, ")\n");
+  File::fprintf( stream, ")\n");
 }
 
 
@@ -162,27 +166,27 @@ void fprint( File &stream, list L)
 
 void fprint( File &stream, list L, int ElemsPerLine)
 {
-  fprintf( stream, "(");
+  File::fprintf( stream, "(");
   if (! empty( L)) {
-    fprintf( stream, " %d ", hd( L));
+    File::fprintf( stream, " %d ", hd( L));
     L = tl( L);
     cnt = 1;
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
-      fprintf( stream, ": %d ", hd( L));
+      File::fprintf( stream, ": %d ", hd( L));
       L = tl( L);
       cnt++;
     }
     while (! empty( L)) {
-      fprintf( stream, "\n");
+      File::fprintf( stream, "\n");
       cnt = 0;
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
-        fprintf( stream, ": %d ", hd( L));
+        File::fprintf( stream, ": %d ", hd( L));
         L = tl( L);
         cnt++;
       }
     }
   }
-  fprintf( stream, ")\n");
+  File::fprintf( stream, ")\n");
 }
 
 
@@ -191,27 +195,27 @@ void fprint( File &stream, list L, int ElemsPerLine)
 
 void fprint( File &stream, list L, int ElemsPerLine, int ColWidth)
 {
-  fprintf( stream, "(");
+  File::fprintf( stream, "(");
   if (! empty( L)) {
-    fprintf( stream, " %*d ", ColWidth, hd( L));
+    File::fprintf( stream, " %*d ", ColWidth, hd( L));
     L = tl( L);
     cnt = 1;
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
-      fprintf( stream, ": %*d ", ColWidth, hd( L));
+      File::fprintf( stream, ": %*d ", ColWidth, hd( L));
       L = tl( L);
       cnt++;
     }
     while (! empty( L)) {
-      fprintf( stream, "\n");
+      File::fprintf( stream, "\n");
       cnt = 0;
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
-        fprintf( stream, ": %*d ", ColWidth, hd( L));
+        File::fprintf( stream, ": %*d ", ColWidth, hd( L));
         L = tl( L);
         cnt++;
       }
     }
   }
-  fprintf( stream, ")\n");
+  File::fprintf( stream, ")\n");
 }
 
 
@@ -221,16 +225,16 @@ void fprint( File &stream, list L, int ElemsPerLine, int ColWidth)
 
 void fprint( TermFile &stream, list L)
 {
-  fprintf( stream, "(");
+  TermFile::fprintf( stream, "(");
   if (! empty( L)) {
-    fprintf( stream, " %d ", hd( L));
+    TermFile::fprintf( stream, " %d ", hd( L));
     L = tl( L);
     while (! empty( L)) {
-      fprintf( stream, ": %d ", hd( L));
+      TermFile::fprintf( stream, ": %d ", hd( L));
       L = tl( L);
     }
   }
-  fprintf( stream, ")\n");
+  TermFile::fprintf( stream, ")\n");
 }
 
 
@@ -239,27 +243,27 @@ void fprint( TermFile &stream, list L)
 
 void fprint( TermFile &stream, list L, int ElemsPerLine)
 {
-  fprintf( stream, "(");
+  TermFile::fprintf( stream, "(");
   if (! empty( L)) {
-    fprintf( stream, " %d ", hd( L));
+    TermFile::fprintf( stream, " %d ", hd( L));
     L = tl( L);
     cnt = 1;
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
-      fprintf( stream, ": %d ", hd( L));
+      TermFile::fprintf( stream, ": %d ", hd( L));
       L = tl( L);
       cnt++;
     }
     while (! empty( L)) {
-      fprintf( stream, "\n");
+      TermFile::fprintf( stream, "\n");
       cnt = 0;
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
-        fprintf( stream, ": %d ", hd( L));
+        TermFile::fprintf( stream, ": %d ", hd( L));
         L = tl( L);
         cnt++;
       }
     }
   }
-  fprintf( stream, ")\n");
+  TermFile::fprintf( stream, ")\n");
 }
 
 
@@ -268,27 +272,27 @@ void fprint( TermFile &stream, list L, int ElemsPerLine)
 
 void fprint( TermFile &stream, list L, int ElemsPerLine, int ColWidth)
 {
-  fprintf( stream, "(");
+  TermFile::fprintf( stream, "(");
   if (! empty( L)) {
-    fprintf( stream, " %*d ", ColWidth, hd( L));
+    TermFile::fprintf( stream, " %*d ", ColWidth, hd( L));
     L = tl( L);
     cnt = 1;
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
-      fprintf( stream, ": %*d ", ColWidth, hd( L));
+      TermFile::fprintf( stream, ": %*d ", ColWidth, hd( L));
       L = tl( L);
       cnt++;
     }
     while (! empty( L)) {
-      fprintf( stream, "\n");
+      TermFile::fprintf( stream, "\n");
       cnt = 0;
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
-        fprintf( stream, ": %*d ", ColWidth, hd( L));
+        TermFile::fprintf( stream, ": %*d ", ColWidth, hd( L));
         L = tl( L);
         cnt++;
       }
     }
   }
-  fprintf( stream, ")\n");
+  TermFile::fprintf( stream, ")\n");
 }
 
 
@@ -298,16 +302,16 @@ void fprint( TermFile &stream, list L, int ElemsPerLine, int ColWidth)
 
 void print( list L)
 {
-  printf( "(");
+  TermFile::printf( "(");
   if (! empty( L)) {
-    printf( " %d ", hd( L));
+    TermFile::printf( " %d ", hd( L));
     L = tl( L);
     while (! empty( L)) {
-      printf( ": %d ", hd( L));
+      TermFile::printf( ": %d ", hd( L));
       L = tl( L);
     }
   }
-  printf( ")\n");
+  TermFile::printf( ")\n");
 }
 
 
@@ -316,27 +320,27 @@ void print( list L)
 
 void print( list L, int ElemsPerLine)
 {
-  printf( "(");
+  TermFile::printf( "(");
   if (! empty( L)) {
-    printf( " %d ", hd( L));
+    TermFile::printf( " %d ", hd( L));
     L = tl( L);
     cnt = 1;
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
-      printf( ": %d ", hd( L));
+      TermFile::printf( ": %d ", hd( L));
       L = tl( L);
       cnt++;
     }
     while (! empty( L)) {
-      printf( "\n");
+      TermFile::printf( "\n");
       cnt = 0;
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
-        printf( ": %d ", hd( L));
+        TermFile::printf( ": %d ", hd( L));
         L = tl( L);
         cnt++;
       }
     }
   }
-  printf( ")\n");
+  TermFile::printf( ")\n");
 }
 
 
@@ -345,25 +349,25 @@ void print( list L, int ElemsPerLine)
 
 void print( list L, int ElemsPerLine, int ColWidth)
 {
-  printf( "(");
+  TermFile::printf( "(");
   if (! empty( L)) {
-    printf( " %*d ", ColWidth, hd( L));
+    TermFile::printf( " %*d ", ColWidth, hd( L));
     L = tl( L);
     cnt = 1;
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
-      printf( ": %*d ", ColWidth, hd( L));
+      TermFile::printf( ": %*d ", ColWidth, hd( L));
       L = tl( L);
       cnt++;
     }
     while (! empty( L)) {
-      printf( "\n");
+      TermFile::printf( "\n");
       cnt = 0;
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
-        printf( ": %*d ", ColWidth, hd( L));
+        TermFile::printf( ": %*d ", ColWidth, hd( L));
         L = tl( L);
         cnt++;
       }
     }
   }
-  printf( ")\n");
+  TermFile::printf( ")\n");
 }

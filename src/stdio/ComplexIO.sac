@@ -10,6 +10,7 @@ use TermFile : { TermFile };
 use File: { File };
 use String: { string, to_string};
 use Complex: { complex, imag, real, toc};
+use ScalarArith : { == };
 
 export all;
 
@@ -18,7 +19,7 @@ export all;
 
 inline void fprint(File &stream, complex c)
 {
-  fprintf(stream, "(%g,%g)", real(c), imag(c));
+  File::fprintf(stream, "(%g,%g)", real(c), imag(c));
 }
 
 
@@ -28,17 +29,17 @@ inline void fprint(File &stream, complex c, int mode)
 {
   if (mode==2)
   {
-    fprintf(stream, "%g %g", real(c), imag(c));
+    File::fprintf(stream, "%g %g", real(c), imag(c));
   }
   else
   {
     if (mode==1)
     {
-      fprintf(stream, "%g+%gi", real(c), imag(c));
+      File::fprintf(stream, "%g+%gi", real(c), imag(c));
     }
     else
     {
-      fprintf(stream, "(%g, %g)", real(c), imag(c));
+      File::fprintf(stream, "(%g, %g)", real(c), imag(c));
     }
   }
 }
@@ -50,17 +51,17 @@ inline void fprint(File &stream, complex c, int mode, int prec)
 {
   if (mode==2)
   {
-    fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
+    File::fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
   }
   else
   {
     if (mode==1)
     {
-      fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
+      File::fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
     }
     else
     {
-      fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
+      File::fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
     }
   }
 }
@@ -72,7 +73,7 @@ inline void fprint(File &stream, complex c, int mode, int prec)
 
 inline void fprint(TermFile &stream, complex c)
 {
-  fprintf(stream, "(%g,%g)", real(c), imag(c));
+  TermFile::fprintf(stream, "(%g,%g)", real(c), imag(c));
 }
 
 
@@ -82,17 +83,17 @@ inline void fprint(TermFile &stream, complex c, int mode)
 {
   if (mode==2)
   {
-    fprintf(stream, "%g %g", real(c), imag(c));
+    TermFile::fprintf(stream, "%g %g", real(c), imag(c));
   }
   else
   {
     if (mode==1)
     {
-      fprintf(stream, "%g+%gi", real(c), imag(c));
+      TermFile::fprintf(stream, "%g+%gi", real(c), imag(c));
     }
     else
     {
-      fprintf(stream, "(%g, %g)", real(c), imag(c));
+      TermFile::fprintf(stream, "(%g, %g)", real(c), imag(c));
     }
   }
 }
@@ -104,17 +105,17 @@ inline void fprint(TermFile &stream, complex c, int mode, int prec)
 {
   if (mode==2)
   {
-    fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
+    TermFile::fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
   }
   else
   {
     if (mode==1)
     {
-      fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
+      TermFile::fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
     }
     else
     {
-      fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
+      TermFile::fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
     }
   }
 }
@@ -125,7 +126,7 @@ inline void fprint(TermFile &stream, complex c, int mode, int prec)
 
 inline void print(complex c)
 {
-  printf("(%g,%g)", real(c), imag(c));
+  TermFile::printf("(%g,%g)", real(c), imag(c));
 }
 
 
@@ -135,17 +136,17 @@ inline void print(complex c, int mode)
 {
   if (mode==2)
   {
-    printf("%g %g", real(c), imag(c));
+    TermFile::printf("%g %g", real(c), imag(c));
   }
   else
   {
     if (mode==1)
     {
-      printf("%g+%gi", real(c), imag(c));
+      TermFile::printf("%g+%gi", real(c), imag(c));
     }
     else
     {
-      printf("(%g, %g)", real(c), imag(c));
+      TermFile::printf("(%g, %g)", real(c), imag(c));
     }
   }
 }
@@ -157,17 +158,17 @@ inline void print(complex c, int mode, int prec)
 {
   if (mode==2)
   {
-    printf("%.*g %.*g", prec, real(c), prec, imag(c));
+    TermFile::printf("%.*g %.*g", prec, real(c), prec, imag(c));
   }
   else
   {
     if (mode==1)
     {
-      printf("%.*g+%.*gi", prec, real(c), prec, imag(c));
+      TermFile::printf("%.*g+%.*gi", prec, real(c), prec, imag(c));
     }
     else
     {
-      printf("(%.*g, %.*g)", prec, real(c), prec, imag(c));
+      TermFile::printf("(%.*g, %.*g)", prec, real(c), prec, imag(c));
     }
   }
 }
@@ -178,6 +179,7 @@ inline void print(complex c, int mode, int prec)
 /*****************************************************************/
 /*****************************************************************/
 
+#ifdef BUG197FIXED
 
 inline bool, complex fscancomplex(File &stream)
 {
@@ -187,7 +189,7 @@ inline bool, complex fscancomplex(File &stream)
   real=0.0d;
   imag=0.0d;
 
-  success, real, imag=fscanf(stream, "(%lf,%lf)");
+  success, real, imag=File::fscanf(stream, "(%lf,%lf)");
   
   return(success==2, toc(real, imag));
 }
@@ -206,17 +208,17 @@ inline bool, complex fscancomplex(File &stream, int mode)
 
   if (mode==2)
   {
-    success, real, imag=fscanf(stream, "%lf %lf");
+    success, real, imag=File::fscanf(stream, "%lf %lf");
   }
   else
   {
     if (mode==1)
     {
-      success, real, imag=fscanf(stream, "%lf+%lfi");
+      success, real, imag=File::fscanf(stream, "%lf+%lfi");
     }
     else
     {
-      success, real, imag=fscanf(stream, "(%lf,%lf)");
+      success, real, imag=File::fscanf(stream, "(%lf,%lf)");
     }
   }
 
@@ -237,7 +239,7 @@ inline bool, complex fscancomplex(TermFile &stream)
   real=0.0d;
   imag=0.0d;
 
-  success, real, imag=fscanf(stream, "(%lf,%lf)");
+  success, real, imag=TermFile::fscanf(stream, "(%lf,%lf)");
   
   return(success==2, toc(real, imag));
 }
@@ -256,17 +258,17 @@ inline bool, complex fscancomplex(TermFile &stream, int mode)
 
   if (mode==2)
   {
-    success, real, imag=fscanf(stream, "%lf %lf");
+    success, real, imag=TermFile::fscanf(stream, "%lf %lf");
   }
   else
   {
     if (mode==1)
     {
-      success, real, imag=fscanf(stream, "%lf+%lfi");
+      success, real, imag=TermFile::fscanf(stream, "%lf+%lfi");
     }
     else
     {
-      success, real, imag=fscanf(stream, "(%lf,%lf)");
+      success, real, imag=TermFile::fscanf(stream, "(%lf,%lf)");
     }
   }
 
@@ -287,7 +289,7 @@ inline bool, complex scancomplex()
   real=0.0d;
   imag=0.0d;
 
-  success, real, imag=scanf("(%lf,%lf)");
+  success, real, imag=TermFile::scanf("(%lf,%lf)");
   
   return(success==2, toc(real, imag));
 }
@@ -306,17 +308,17 @@ inline bool, complex scancomplex(int mode)
 
   if (mode==2)
   {
-    success, real, imag=scanf("%lf %lf");
+    success, real, imag=TermFile::scanf("%lf %lf");
   }
   else
   {
     if (mode==1)
     {
-      success, real, imag=scanf("%lf+%lfi");
+      success, real, imag=TermFile::scanf("%lf+%lfi");
     }
     else
     {
-      success, real, imag=scanf("(%lf,%lf)");
+      success, real, imag=TermFile::scanf("(%lf,%lf)");
     }
   }
 
@@ -324,6 +326,7 @@ inline bool, complex scancomplex(int mode)
   return(success==2, toc(real, imag));
 }
 
+#endif /* BUG197FIXED */
 
 /*****************************************************************/
 /*****************************************************************/
