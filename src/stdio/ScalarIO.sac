@@ -2,10 +2,7 @@ module ScalarIO;
 
 
 use IOresources: all;
-
 use String : { string, to_string, strlen };
-use File : { File };
-use TermFile : { TermFile };
 use ScalarArith : all;
 
 export all;

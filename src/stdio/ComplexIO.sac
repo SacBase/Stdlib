@@ -5,9 +5,6 @@ module ComplexIO;
 
 
 use IOresources: all;
-
-use TermFile : { TermFile };
-use File: { File };
 use String: { string, to_string};
 use Complex: { complex, imag, real, toc};
 use ScalarArith : { == };

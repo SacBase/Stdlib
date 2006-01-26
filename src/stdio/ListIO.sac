@@ -5,9 +5,6 @@ module ListIO;
 
 
 use IOresources: all;
-
-use File: { File };
-use TermFile: { TermFile };
 use List: all;
 use String: { string, to_string};
 use ScalarIO : { scanint };
