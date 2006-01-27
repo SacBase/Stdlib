@@ -45,6 +45,7 @@ external void  putc(char C);
 
 external char fgetc(TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linksign [0,1]
 external char  getc();
     #pragma effect TheTerminal, stdin
     #pragma linkname "SACgetc"
@@ -94,8 +95,10 @@ external void  printf(string FORMAT, ...);
 
 external int, ... fscanf(TermFile &STREAM, string FORMAT);
     #pragma effect TheTerminal
+    #pragma linksign [0,1,2]
 external int, ...  scanf(string FORMAT);
     #pragma effect TheTerminal, stdin
+    #pragma linksign [0,1]
     /*
      * Scan the given stream STREAM concerning the format string FORMAT.
      * The syntax of format strings is identical to C except that the
@@ -161,6 +164,7 @@ external void  flush();
 
 external bool feof(TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linksign [0,1]
 external bool  eof();
     #pragma effect TheTerminal, stdin
     #pragma linkname "SACeof"

@@ -58,6 +58,7 @@ external  void fputc(char C, File &STREAM);
      */
 
 external  char fgetc(File &STREAM);
+    #pragma linksign [0,1]
     /*
      * Get the next character from the input stream STREAM. 
      */
@@ -91,6 +92,7 @@ external  void fprintf(File &STREAM, string FORMAT, ...);
 
 
 external  int, ... fscanf(File &STREAM, string FORMAT);
+    #pragma linksign [0,1,2]
     /*
      * Scan the given stream STREAM concerning the format string FORMAT.
      * The syntax of format strings is identical to C except that the
@@ -129,6 +131,7 @@ external  string fscanl(File &STREAM, int MAX);
 
 
 external  bool feof(File &STREAM);
+    #pragma linksign [0,1]
     /*
      * Test the stream STREAM for having reached the end of the respective 
      * file.
@@ -151,6 +154,7 @@ external  void fseek(File &STREAM, int OFFSET, int BASE);
 
 
 external  int ftell(File &STREAM);
+    #pragma linksign [0,1]
     /*
      * Return the offset of the current byte relative to
      * the beginning of the file associated with STREAM.
