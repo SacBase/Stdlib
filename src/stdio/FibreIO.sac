@@ -2,14 +2,60 @@ module FibreIO;
 
 
 use IOresources: all;
-use FibrePrint: all;
-use FibreScan: all;
-use File : { File };
-use TermFile : { File };
 
 export all;
 
 /*****************************************************************/
+
+external  int    FibreScanInt( );
+  #pragma linksign[0]
+  #pragma linkobj "src/FibreIO/ScanInt.o"
+  #pragma linkobj "src/FibreIO/lex.FibreScan.o"
+  #pragma linkobj "src/FibreIO/FibreScan.tab.o"
+
+external  float  FibreScanFloat( );
+  #pragma linksign[0]
+  #pragma linkobj "src/FibreIO/ScanFlt.o"
+
+external  double FibreScanDouble( );
+  #pragma linksign[0]
+  #pragma linkobj "src/FibreIO/ScanDbl.o"
+
+external  int[+]  FibreScanIntArray( int DIM, int[.] SHAPE);
+  /*
+   * If we use the new backend, the return value must be a complete AUD
+   * representation -> we must build a descriptor for the return value.
+   */
+  #pragma refcounting [0]
+  #pragma linksign[1,2,3]
+  #pragma linkobj "src/FibreIO/ScanIntArr.o"
+
+external  float[+]  FibreScanFloatArray( int DIM, int[.] SHAPE);
+  #pragma refcounting [0]
+  #pragma linksign[1,2,3]
+  #pragma linkobj "src/FibreIO/ScanFltArr.o"
+
+external  double[+]  FibreScanDoubleArray( int DIM, int[.] SHAPE);
+  #pragma refcounting [0]
+  #pragma linksign[1,2,3]
+  #pragma linkobj "src/FibreIO/ScanDblArr.o"
+
+/*****************************************************************/
+
+external void FibrePrint( int DIM, int[+] SHAPE, int[+] ARRAY);
+  #pragma linkname "FibrePrintIntArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
+
+external void FibrePrint( int DIM, int[+] SHAPE, float[+] ARRAY);
+  #pragma linkname "FibrePrintFloatArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
+
+external void FibrePrint( int DIM, int[+] SHAPE, double[+] ARRAY);
+  #pragma linkname "FibrePrintDoubleArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
+
+
+
 /*****************************************************************/
 /*****************************************************************/
 
@@ -181,23 +227,6 @@ inline void FibrePrint(double[+] arr)
 }
 
 
-/*****************************************************************/
-/*****************************************************************/
-
-inline int FibreScanInt()
-{
-   return(FibreScanInt( stdin));
-}
-
-inline float FibreScanFloat()
-{
-   return(FibreScanFloat( stdin));
-}
-
-inline double FibreScanDouble()
-{
-   return(FibreScanDouble( stdin));
-}
 /*****************************************************************/
 /*****************************************************************/
 /*****************************************************************/
