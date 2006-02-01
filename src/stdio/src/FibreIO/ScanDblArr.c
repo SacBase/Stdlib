@@ -10,7 +10,7 @@
 #define array_nt (array, (AUD, (NHD, (NUQ, ))))
 #define ret_nt   (ret,   (AUD, (NHD, (NUQ, ))))
 
-void FibreScanDoubleArray( SAC_ND_PARAM_out( array_nt, double), int dim, int *shp)
+void FibreScanDoubleArray( SAC_ND_PARAM_out( array_nt, double), FILE *stream, int dim, int *shp)
 {
   SAC_ND_DECL__DATA( ret_nt, double, )
   SAC_ND_DECL__DESC( ret_nt, )
@@ -21,7 +21,7 @@ void FibreScanDoubleArray( SAC_ND_PARAM_out( array_nt, double), int dim, int *sh
   SAC_ND_SET__RC( ret_nt, 1)
 
   start_token = PARSE_DOUBLE_ARRAY;
-  yyin = stdin;
+  yyin = stream;
   given_dim = dim;
   given_shp = shp;
   for( i = 0, size = 1; i < dim; i++) {

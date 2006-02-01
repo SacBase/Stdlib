@@ -91,21 +91,21 @@ void FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
 
 
 
-void FibrePrintIntArray(int dim, int *shape, int *array)
+void FibrePrintIntArray( FILE *stream, int dim, int *shape, int *array)
 {
-  FibreWriteAll(stdout, dim, shape, array, INT, 0, 0);
+  FibreWriteAll(stream, dim, shape, array, INT, 0, 0);
 }
 
 
-void FibrePrintFloatArray(int dim, int *shape, float *array)
+void FibrePrintFloatArray( FILE *stream, int dim, int *shape, float *array)
 {
-  FibreWriteAll(stdout, dim, shape, array, FLOAT, 0, 0);
+  FibreWriteAll(stream, dim, shape, array, FLOAT, 0, 0);
 }
 
 
-void FibrePrintDoubleArray(int dim, int *shape, double *array)
+void FibrePrintDoubleArray( FILE *stream, int dim, int *shape, double *array)
 {
-  FibreWriteAll(stdout, dim, shape, array, DOUBLE, 0, 0);
+  FibreWriteAll(stream, dim, shape, array, DOUBLE, 0, 0);
 }
 
 

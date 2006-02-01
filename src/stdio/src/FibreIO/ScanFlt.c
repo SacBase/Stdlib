@@ -7,9 +7,9 @@
 #include "FibreScan.tab.h"
 
 
-float FibreScanFloat()
+float FibreScanFloat( FILE *stream)
 {
-  yyin = stdin;
+  yyin = stream;
   start_token = PARSE_FLOAT;
   FibreScanparse();
   return( floatval);

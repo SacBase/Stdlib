@@ -11,6 +11,7 @@
 #define ret_nt   (ret,   (AUD, (NHD, (NUQ, ))))
 
 void FibreScanFloatArray( SAC_ND_PARAM_out( array_nt, float),
+                          FILE *stream,
                           int dim, int *shp)
 {
   SAC_ND_DECL__DATA( ret_nt, float, )
@@ -22,7 +23,7 @@ void FibreScanFloatArray( SAC_ND_PARAM_out( array_nt, float),
   SAC_ND_SET__RC( ret_nt, 1)
 
   start_token = PARSE_FLOAT_ARRAY;
-  yyin = stdin;
+  yyin = stream;
   given_dim = dim;
   given_shp = shp;
   for( i = 0, size = 1; i < dim; i++) {

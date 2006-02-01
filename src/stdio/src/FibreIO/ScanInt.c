@@ -7,10 +7,10 @@
 #include "FibreScan.tab.h"
 
 
-int FibreScanInt()
+int FibreScanInt( FILE *stream)
 {
   start_token = PARSE_INT;
-  yyin = stdin;
+  yyin = stream;
   FibreScanparse();
   return( intval);
 }

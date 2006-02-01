@@ -2,55 +2,114 @@ module FibreIO;
 
 
 use IOresources: all;
+use Array : { shape, sel, dim };
 
 export all;
 
-/*****************************************************************/
+/*****************************************************************
+ * FibreScan on File
+ */
 
-external  int    FibreScanInt( );
-  #pragma linksign[0]
+external  int    FibreScanInt( File &stream);
+  #pragma linksign[0,1]
   #pragma linkobj "src/FibreIO/ScanInt.o"
   #pragma linkobj "src/FibreIO/lex.FibreScan.o"
   #pragma linkobj "src/FibreIO/FibreScan.tab.o"
 
-external  float  FibreScanFloat( );
-  #pragma linksign[0]
+external  float  FibreScanFloat( File &stream);
+  #pragma linksign[0,1]
   #pragma linkobj "src/FibreIO/ScanFlt.o"
 
-external  double FibreScanDouble( );
-  #pragma linksign[0]
+external  double FibreScanDouble( File &stream);
+  #pragma linksign[0,1]
   #pragma linkobj "src/FibreIO/ScanDbl.o"
 
-external  int[+]  FibreScanIntArray( int DIM, int[.] SHAPE);
+external  int[+]  FibreScanIntArray( File &stream, int DIM, int[.] SHAPE);
   /*
    * If we use the new backend, the return value must be a complete AUD
    * representation -> we must build a descriptor for the return value.
    */
   #pragma refcounting [0]
-  #pragma linksign[1,2,3]
+  #pragma linksign[1,2,3,4]
   #pragma linkobj "src/FibreIO/ScanIntArr.o"
 
-external  float[+]  FibreScanFloatArray( int DIM, int[.] SHAPE);
+external  float[+]  FibreScanFloatArray( File &stream, int DIM, int[.] SHAPE);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3]
+  #pragma linksign[1,2,3,4]
   #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
-external  double[+]  FibreScanDoubleArray( int DIM, int[.] SHAPE);
+external  double[+]  FibreScanDoubleArray( File &stream, int DIM, int[.] SHAPE);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3]
+  #pragma linksign[1,2,3,4]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-/*****************************************************************/
+/*****************************************************************
+ * FibreScan on TermFile
+ */
 
-external void FibrePrint( int DIM, int[+] SHAPE, int[+] ARRAY);
+external  int    FibreScanInt( TermFile &stream);
+  #pragma linksign[0,1]
+  #pragma linkobj "src/FibreIO/ScanInt.o"
+  #pragma linkobj "src/FibreIO/lex.FibreScan.o"
+  #pragma linkobj "src/FibreIO/FibreScan.tab.o"
+
+external  float  FibreScanFloat( TermFile &stream);
+  #pragma linksign[0,1]
+  #pragma linkobj "src/FibreIO/ScanFlt.o"
+
+external  double FibreScanDouble( TermFile &stream);
+  #pragma linksign[0,1]
+  #pragma linkobj "src/FibreIO/ScanDbl.o"
+
+external  int[+]  FibreScanIntArray( TermFile &stream, int DIM, int[.] SHAPE);
+  /*
+   * If we use the new backend, the return value must be a complete AUD
+   * representation -> we must build a descriptor for the return value.
+   */
+  #pragma refcounting [0]
+  #pragma linksign[1,2,3,4]
+  #pragma linkobj "src/FibreIO/ScanIntArr.o"
+
+external  float[+]  FibreScanFloatArray( TermFile &stream, int DIM, int[.] SHAPE);
+  #pragma refcounting [0]
+  #pragma linksign[1,2,3,4]
+  #pragma linkobj "src/FibreIO/ScanFltArr.o"
+
+external  double[+]  FibreScanDoubleArray( TermFile &stream, int DIM, int[.] SHAPE);
+  #pragma refcounting [0]
+  #pragma linksign[1,2,3,4]
+  #pragma linkobj "src/FibreIO/ScanDblArr.o"
+
+/*****************************************************************
+ * FibrePrint on File
+ */
+
+external void FibrePrint( File &stream, int DIM, int[+] SHAPE, int[+] ARRAY);
   #pragma linkname "FibrePrintIntArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( int DIM, int[+] SHAPE, float[+] ARRAY);
+external void FibrePrint( File &stream, int DIM, int[+] SHAPE, float[+] ARRAY);
   #pragma linkname "FibrePrintFloatArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( int DIM, int[+] SHAPE, double[+] ARRAY);
+external void FibrePrint( File &stream, int DIM, int[+] SHAPE, double[+] ARRAY);
+  #pragma linkname "FibrePrintDoubleArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
+
+
+/*****************************************************************
+ * FibrePrint on TermFile
+ */
+
+external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, int[+] ARRAY);
+  #pragma linkname "FibrePrintIntArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
+
+external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, float[+] ARRAY);
+  #pragma linkname "FibrePrintFloatArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
+
+external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, double[+] ARRAY);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 

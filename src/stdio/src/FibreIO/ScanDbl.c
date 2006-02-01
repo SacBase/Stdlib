@@ -7,9 +7,9 @@
 #include "FibreScan.tab.h"
 
 
-double FibreScanDouble()
+double FibreScanDouble( FILE *stream)
 {
-  yyin = stdin;
+  yyin = stream;
   start_token = PARSE_DOUBLE;
   FibreScanparse();
   return( doubleval);
