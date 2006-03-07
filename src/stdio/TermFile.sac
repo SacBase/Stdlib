@@ -50,6 +50,7 @@ external char  getc();
     #pragma effect TheTerminal, stdin
     #pragma linkname "SACgetc"
     #pragma linkobj "src/TermFile/putget.o"
+    #pragma linksign [0]
     /*
      * Get the next character from the input stream STREAM which must
      * be stdin.
@@ -115,10 +116,12 @@ external string fscans(TermFile &STREAM, int MAX);
     #pragma effect TheTerminal
     #pragma linkname "term_fscans"
     #pragma linkobj "src/TermFile/fscans.o"
+    #pragma linksign [0,2,1]
 external string  scans(int MAX);
     #pragma effect TheTerminal, stdin
     #pragma linkname "term_scans"
     #pragma linkobj "src/TermFile/scans.o"
+    #pragma linksign [0,1]
      /*
       * Read the next character string from the input stream STREAM. Strings
       * are delimited by any whitespace character including the 
@@ -131,10 +134,12 @@ external string fscanl(TermFile &STREAM, int MAX);
     #pragma effect TheTerminal
     #pragma linkname "term_fscanl"
     #pragma linkobj "src/TermFile/fscanl.o"
+    #pragma linksign [0,2,1]
 external string  scanl(int MAX);
     #pragma effect TheTerminal, stdin
     #pragma linkname "term_scanl"
     #pragma linkobj "src/TermFile/scanl.o"
+    #pragma linksign [0,1]
      /*
       * Read the next line from the input stream STREAM. Lines are character
       * strings delimited by any new-line or end-of-file symbol.
