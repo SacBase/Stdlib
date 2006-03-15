@@ -16,10 +16,6 @@
 
 module Bool;
 
-use ArrayBasics: {shape, sel};
-use ArrayArith: {*};
-use ScalarArith: {|,&};
-
 export all;
 
 
@@ -71,24 +67,3 @@ inline bool tob( double i)
 }
 
 
-
-/*
- * Reduction operations
- */
-
-inline bool any( bool[*] a)
-{
-  res = with (0*shape(a) <= iv < shape(a))
-        fold(| , false, a[iv]);
-  
-  return( res);
-}
-
-
-inline bool all( bool[*] a)
-{
-  res = with (0*shape(a) <= iv < shape(a))
-        fold( &, true, a[iv]);
-  
-  return( res);
-}
