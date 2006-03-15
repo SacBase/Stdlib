@@ -162,7 +162,7 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
 }
 
-void PrintBoolArray( FILE **stream, int dim, int * shp, char * a)
+void PrintBoolArray( FILE **stream, int dim, int * shp, bool * a)
 {
   PrintArr(*stream, BOOL, "2%i ", dim, shp, a);
 }
