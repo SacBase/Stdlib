@@ -67,6 +67,9 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
   if( dim == 0) {
     switch(typeflag) {
+      case BOOL:
+        fprintf(stream, format , ((int *)a)[0]);
+        break;
       case INT:
         fprintf(stream, format , ((int *)a)[0]);
         break;
@@ -107,6 +110,9 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
         while (index[n]<shp[dim-1]) {
           switch(typeflag) {
+          case BOOL:
+            fprintf(stream, format , ((int *)a)[Index2Offset(dim,shp,index)]);
+            break;
           case INT:
             fprintf(stream, format , ((int *)a)[Index2Offset(dim,shp,index)]);
             break;
@@ -154,6 +160,11 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
     } /* if (element_count == 0) */
   }
 
+}
+
+void PrintBoolArray( FILE **stream, int dim, int * shp, char * a)
+{
+  PrintArr(*stream, BOOL, "2%i ", dim, shp, a);
 }
 
 void PrintDoubleArray( FILE **stream, int dim, int * shp, double * a)
