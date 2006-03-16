@@ -5,18 +5,35 @@ external classtype;
 use String : {string};
 use Terminal : { TheTerminal };
 
-export all;
+export all except { createStdIn, createStdOut, createStdErr};
 
-external objdef TermFile stdin;
-    #pragma linkname "stdin"
+objdef TermFile stdin = createStdIn();
 
-external objdef TermFile stdout;
-    #pragma linkname "stdout"
+objdef TermFile stdout = createStdOut();
 
-external objdef TermFile stderr;
-    #pragma linkname "stderr"
+objdef TermFile stderr = createStdErr();
 
+  /*
+   * Initialiser Functions creating standard I/O TermFiles
+   */
 
+external TermFile createStdIn();
+    #pragma effect TheTerminal
+    #pragma linkname "SAC_create_stdin"
+    #pragma linkobj "src/TermFile/stdstreams.o"
+    #pragma linksign [0]
+
+external TermFile createStdOut();
+    #pragma effect TheTerminal
+    #pragma linkname "SAC_create_stdout"
+    #pragma linkobj "src/TermFile/stdstreams.o"
+    #pragma linksign [0]
+
+external TermFile createStdErr();
+    #pragma effect TheTerminal
+    #pragma linkname "SAC_create_stderr"
+    #pragma linkobj "src/TermFile/stdstreams.o"
+    #pragma linksign [0]
 
   /*
    *  Each function of class TermFile exists in two versions. One expects

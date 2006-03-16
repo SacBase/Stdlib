@@ -10,26 +10,20 @@
 
 /*****************************************************************/
 
-void *SACstdin;
-void *SACstdout;
-void *SACstderr;
-
-
-/*****************************************************************/
-
-void *create_stdin()
+void *SAC_create_stdin()
 {
   return(stdin);
 }
 
 
-void *create_stdout()
+void *SAC_create_stdout()
 {
+  printf("returning %p", stdout);
   return(stdout);
 }
 
 
-void *create_stderr()
+void *SAC_create_stderr()
 {
   return(stderr);
 }
