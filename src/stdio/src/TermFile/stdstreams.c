@@ -18,7 +18,6 @@ void *SAC_create_stdin()
 
 void *SAC_create_stdout()
 {
-  printf("returning %p", stdout);
   return(stdout);
 }
 
