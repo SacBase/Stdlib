@@ -8,6 +8,7 @@ export all;
  */
 
 external typedef list;
+    #pragma linkobj "src/List/free.o"
 
 external list nil();
     #pragma refcounting [0]
