@@ -162,27 +162,27 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
 }
 
-void PrintBoolArray( FILE **stream, int dim, int * shp, bool * a)
+void ARRAYIO__PrintBoolArray( FILE **stream, int dim, int * shp, bool * a)
 {
   PrintArr(*stream, BOOL, "%2i ", dim, shp, a);
 }
 
-void PrintDoubleArray( FILE **stream, int dim, int * shp, double * a)
+void ARRAYIO__PrintDoubleArray( FILE **stream, int dim, int * shp, double * a)
 {
   PrintArr(*stream, DOUBLE, "%e ", dim, shp, a);
 }
 
-void PrintFloatArray( FILE **stream, int dim, int * shp, float * a)
+void ARRAYIO__PrintFloatArray( FILE **stream, int dim, int * shp, float * a)
 {
   PrintArr(*stream, FLOAT, "%4f ", dim, shp, a);
 }
 
-void PrintIntArray( FILE **stream, int dim, int * shp, int * a)
+void ARRAYIO__PrintIntArray( FILE **stream, int dim, int * shp, int * a)
 {
   PrintArr(*stream, INT, "%2i ", dim, shp, a);
 }
 
-void PrintCharArray( FILE **stream, int dim, int * shp, char * a)
+void ARRAYIO__PrintCharArray( FILE **stream, int dim, int * shp, char * a)
 {
   PrintArr(*stream, CHAR, "%c", dim, shp, a);
 }
