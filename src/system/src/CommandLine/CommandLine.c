@@ -22,7 +22,7 @@ ComLine;
 /*****************************************************/
 
 
-ComLine *TheCommandLine;
+ComLine *SACo_CommandLine__TheCommandLine;
 
 
 /*****************************************************/
@@ -45,7 +45,7 @@ ComLine *create_TheCommandLine()
 
 int SACargc()
 {
-  return(TheCommandLine->argc);
+  return(SACo_CommandLine__TheCommandLine->argc);
 }
 
 
@@ -56,11 +56,11 @@ char *SACargv(int n)
 {
   char *result;
   
-  if (n<TheCommandLine->argc)
+  if (n<SACo_CommandLine__TheCommandLine->argc)
   {
-    result=(char*)SAC_MALLOC(strlen((TheCommandLine->argv)[n])+1);
+    result=(char*)SAC_MALLOC(strlen((SACo_CommandLine__TheCommandLine->argv)[n])+1);
   
-    strcpy(result, (TheCommandLine->argv)[n]);
+    strcpy(result, (SACo_CommandLine__TheCommandLine->argv)[n]);
   }
   else
   {
@@ -82,19 +82,19 @@ char *SACargvall()
   
   len=0;
   
-  for (i=0; i<TheCommandLine->argc; i++)
+  for (i=0; i<SACo_CommandLine__TheCommandLine->argc; i++)
   {
-    len += strlen(TheCommandLine->argv[i]);
+    len += strlen(SACo_CommandLine__TheCommandLine->argv[i]);
   }
   
-  result=(char*)SAC_MALLOC(len+1+TheCommandLine->argc);
+  result=(char*)SAC_MALLOC(len+1+SACo_CommandLine__TheCommandLine->argc);
 
-  strcpy(result, (TheCommandLine->argv)[0]);
+  strcpy(result, (SACo_CommandLine__TheCommandLine->argv)[0]);
   
-  for (i=1; i<TheCommandLine->argc; i++)
+  for (i=1; i<SACo_CommandLine__TheCommandLine->argc; i++)
   {
     strcat(result, " ");
-    strcat(result, (TheCommandLine->argv)[i]);
+    strcat(result, (SACo_CommandLine__TheCommandLine->argv)[i]);
   }
   
   return(result);
