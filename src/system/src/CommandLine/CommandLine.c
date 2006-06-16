@@ -22,7 +22,7 @@ ComLine;
 /*****************************************************/
 
 
-ComLine *SACo_CommandLine__TheCommandLine;
+extern ComLine *SACo_CommandLine__TheCommandLine;
 
 
 /*****************************************************/
