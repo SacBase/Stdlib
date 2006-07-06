@@ -60,8 +60,14 @@ MAP_BIN_##ext( %, _mod_, int, int)
  ********************************************************************************/
 
 #define MAP_REL_OPS( ext, a)            \
+MAP_EQ_OPS( ext, a)                     \
+MAP_COMP_OPS( ext, a)
+
+#define MAP_EQ_OPS( ext, a)             \
 MAP_BIN_##ext( ==,  _eq_, a, bool)      \
-MAP_BIN_##ext( !=, _neq_, a, bool)      \
+MAP_BIN_##ext( !=, _neq_, a, bool)
+
+#define MAP_COMP_OPS( ext, a)           \
 MAP_BIN_##ext(  <,  _lt_, a, bool)      \
 MAP_BIN_##ext( <=,  _le_, a, bool)      \
 MAP_BIN_##ext(  >,  _gt_, a, bool)      \

@@ -6,6 +6,16 @@ use Array : { sel, &, | };
 use ComplexBasics: all;
 
 
+inline complex zero( complex[*] a)
+{
+  return( toc( 0,0));
+}
+
+inline complex one( complex[*] a)
+{
+  return( toc( 1,0));
+}
+
   /*  Binary operations on complex numbers.  */
 
   
@@ -21,6 +31,12 @@ inline complex - (complex X1, complex X2)
                     ((:double[2])X1)[[1]] ScalarArith::- ((:double[2])X2)[[1]]]);
 }
 
+
+inline complex - (complex X1)
+{
+  return((:complex)[ ScalarArith::-(((:double[2])X1)[[0]]),
+                     ScalarArith::-(((:double[2])X1)[[1]]) ]);
+}
 
 inline complex * (complex X1, complex X2)
 {
@@ -52,10 +68,11 @@ inline complex conj(complex X)
 }
 
 
-inline double abs(complex X)
+inline complex abs(complex X)
 {
-  return(Math::sqrt(((:double[2])X)[[0]] ScalarArith::* ((:double[2])X)[[0]]
-              ScalarArith::+ ((:double[2])X)[[1]] ScalarArith::* ((:double[2])X)[[1]]));
+  real = Math::sqrt(((:double[2])X)[[0]] ScalarArith::* ((:double[2])X)[[0]]
+           ScalarArith::+ ((:double[2])X)[[1]] ScalarArith::* ((:double[2])X)[[1]]);
+  return( (:complex[*])[real, 0d]);
 }
 
 
@@ -75,4 +92,32 @@ inline bool != (complex X1, complex X2)
 }
 
 
+inline bool < (complex X1, complex X2)
+{
+  return( real( abs(X1)) ScalarArith::< real( abs( X2)));
+}
 
+inline bool <= (complex X1, complex X2)
+{
+  return( real( abs(X1)) ScalarArith::<= real( abs( X2)));
+}
+
+inline bool > (complex X1, complex X2)
+{
+  return( real( abs(X1)) ScalarArith::> real( abs( X2)));
+}
+
+inline bool >= (complex X1, complex X2)
+{
+  return( real( abs(X1)) ScalarArith::>= real( abs( X2)));
+}
+
+inline complex min( complex X1, complex X2)
+{
+  return( X1 <= X2 ? X1: X2);
+}
+
+inline complex max( complex X1, complex X2)
+{
+  return( X1 >= X2 ? X1: X2);
+}

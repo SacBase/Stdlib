@@ -135,18 +135,6 @@ inline double arg(complex CPX)
 /*  Complex constants.  */
 
 
-inline complex zero( )
-{
-  return((:complex)[0.0d, 0.0d]);
-}
-
-
-inline complex one()
-{
-  return((:complex)[1.0d, 0.0d]);
-}
-
-
 inline complex i()
 {
   return((:complex)[0.0d, 1.0d]);

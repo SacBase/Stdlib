@@ -3,6 +3,9 @@ module Complex;
 import ComplexBasics : all;
 import ComplexScalarArith : all;
 import ComplexMath : all;
+import ComplexArrayBasics : all;
+import ComplexArrayArith : all;
+import ComplexArrayTransform : all;
 
 export all;
 
