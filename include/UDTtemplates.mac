@@ -273,15 +273,15 @@ a[+] rotate (int dimension, int count, a[+] A)                             \
       offset = _modarray_( _mul_SxA_( 0, shape(A)), [dimension], count);   \
       slice_shp = _modarray_(shape(A), [dimension], count);                \
                                                                            \
-      result = with (offset <= iv <= .) {                                  \
+      result = with (offset <= iv < shape(A)) {                            \
                  array_elem = sel(_sub_AxA_(iv,offset), A);                \
                }                                                           \
                modarray( A, iv, array_elem);                               \
                                                                            \
-      result = with (. <= iv <  slice_shp) {                               \
+      result = with (_mul_SxA_(0,shape(result)) <= iv <  slice_shp) {      \
                  array_elem = sel(shape(A)                                 \
                                   ArrayArith::- slice_shp                  \
-                                  ArrayArith::+iv, A);                     \
+                                  ArrayArith::+ iv, A);                    \
                }                                                           \
                modarray( result, iv, array_elem);                          \
     }                                                                      \
