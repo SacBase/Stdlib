@@ -1,4 +1,4 @@
-ClassDec external Random:
+class Random;
 
     /*
      *  Class Random provides a non-linear additive feedback
@@ -12,18 +12,17 @@ ClassDec external Random:
      *  that of class Rand but is also about 2/3 slower. 
      */
 
+external classtype;
 
-own:
-{
-global objects:
+export all;
 
-  Random RandomGen;
-
-functions:
+external objdef Random RandomGen;
 
 
-  void srandom(int SEED);
-    #pragma effect Random:RandomGen
+
+external void srandom(int SEED);
+    #pragma effect Random::RandomGen
+    #pragma linkobj "src/Random/Random.o"
 
     /*
      * Initialize RandomGen to produce a new sequence of pseudo-random
@@ -31,9 +30,11 @@ functions:
      */
 
 
-  int random(int MIN, int MAX);
-    #pragma effect Random:RandomGen
+external int random(int MIN, int MAX);
+    #pragma linksign [0,1,2]
+    #pragma effect Random::RandomGen
     #pragma linkname "SACrandom"
+    #pragma linkobj "src/Random/Random.o"
 
     /*
      * Use RandomGen to generate a new pseudo-random integer in the range
@@ -41,31 +42,56 @@ functions:
      */
 
 
-  double random(double MIN, double MAX);
-    #pragma effect Random:RandomGen
+external double random(double MIN, double MAX);
+    #pragma linksign [0,1,2]
+    #pragma effect Random::RandomGen
     #pragma linkname "SACdrandom"
+    #pragma linkobj "src/Random/Random.o"
 
     /*
      * Use RandomGen to generate a new pseudo-random double precision
      * floating-point number in the interval [MIN, MAX).
      */
 
+#define THEO_IS_A_HERO 0
 
-  int[+] random(int SIZE, int MIN, int MAX);
-    #pragma effect Random:RandomGen
+#if THEO_IS_A_HERO
+
+int[*] random( int[.] shp, int MIN, int MAX)
+{
+  res = with( iv)
+          ( . <= iv <= .) : random( MIN, MAX);
+        genarray( shp, 0);
+  return( res);
+}
+
+double[*] random( int[.] shp, double MIN, double MAX)
+{
+  res = with( iv)
+          ( . <= iv <= .) : random( MIN, MAX);
+        genarray( shp, 0d);
+  return( res);
+}
+
+#else
+external int[+] random(int SIZE, int MIN, int MAX);
+    #pragma effect Random::RandomGen
     #pragma linkname "SACrandomarray"
+    #pragma linkobj "src/Random/Random.o"
+    #pragma refcounting [0]
 
-  double[+] random(int SIZE, double MIN, double MAX);
-    #pragma effect Random:RandomGen
+external double[+] random(int SIZE, double MIN, double MAX);
+    #pragma effect Random::RandomGen
     #pragma linkname "SACdrandomarray"
+    #pragma linkobj "src/Random/Random.o"
+    #pragma refcounting [0]
 
     /*
      * Use RandomGen to generate an array of size SIZE 
      * of pseudo-random numbers.
      */
 
-}
-
+#endif
 
 
 
