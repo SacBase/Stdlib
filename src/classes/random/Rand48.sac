@@ -1,4 +1,4 @@
-ClassDec external Rand48:
+class Rand48;
 
 
     /*
@@ -8,21 +8,22 @@ ClassDec external Rand48:
      */
 
 
-own:
-{
-global objects:
+external classtype;
 
-  Rand48 RandomGen;
-    #pragma linkname "Rand48Gen"
-    #pragma initfun  "create_Rand48Gen"
+export all;
+
+objdef Rand48 RandomGen = randGen();
+
+external Rand48 randGen();
+    #pragma linksign [0]
+    #pragma linkname "create_Rand48Gen"
+    #pragma linkobj  "src/Rand48/Rand48.o"
 
 
-functions:
-
-
-  void srandom(int SEED);
-    #pragma effect Rand48:RandomGen
+external void srandom(int SEED);
+    #pragma effect Rand48::RandomGen
     #pragma linkname "srand48"
+    #pragma linkobj  "src/Rand48/Rand48.o"
 
     /*
      * Initialize RandomGen to produce a new sequence of pseudo-random
@@ -30,9 +31,11 @@ functions:
      */
 
 
-  int random(int MIN, int MAX);
-    #pragma effect Rand48:RandomGen
+external int random(int MIN, int MAX);
+    #pragma linksign [0,1,2]
+    #pragma effect Rand48::RandomGen
     #pragma linkname "SACrand48"
+    #pragma linkobj  "src/Rand48/Rand48.o"
 
     /*
      * Use RandomGen to generate a new pseudo-random integer in the range
@@ -40,9 +43,11 @@ functions:
      */
 
 
-  double random(double MIN, double MAX);
-    #pragma effect Rand48:RandomGen
+external double random(double MIN, double MAX);
+    #pragma linksign [0,1,2]
+    #pragma effect Rand48::RandomGen
     #pragma linkname "SACdrand48"
+    #pragma linkobj  "src/Rand48/Rand48.o"
 
     /*
      * Use RandomGen to generate a new pseudo-random double precision
@@ -50,20 +55,23 @@ functions:
      */
 
 
-  int[+] random(int SIZE, int MIN, int MAX);
-    #pragma effect Rand48:RandomGen
+external int[+] random(int SIZE, int MIN, int MAX);
+    #pragma refcounting [0]
+    #pragma effect Rand48::RandomGen
     #pragma linkname "SACrand48array"
+    #pragma linkobj  "src/Rand48/Rand48.o"
 
-  double[+] random(int SIZE, double MIN, double MAX);
-    #pragma effect Rand48:RandomGen
+external double[+] random(int SIZE, double MIN, double MAX);
+    #pragma refcounting [0]
+    #pragma effect Rand48::RandomGen
     #pragma linkname "SACdrand48array"
+    #pragma linkobj  "src/Rand48/Rand48.o"
 
     /*
      * Use RandomGen to generate an array of size SIZE 
      * of pseudo-random numbers.
      */
 
-}
 
 
 

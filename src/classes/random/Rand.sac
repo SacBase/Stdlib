@@ -1,4 +1,4 @@
-ClassDec external Rand:
+class Rand;
 
     /*
      *  Class Rand provides a multiplicative congruential pseudo-random number 
@@ -14,21 +14,21 @@ ClassDec external Rand:
      */
 
 
-own:
-{
-global objects:
+external classtype;
 
-  Rand RandomGen;
-    #pragma linkname "RandGen"
-    #pragma initfun  "create_RandGen"
+export all;
 
+objdef Rand RandomGen = randGen();
 
-functions:
-
-
-  void srandom(int SEED);
-    #pragma effect Rand:RandomGen
+external Rand randGen();
+    #pragma linksign [0]
+    #pragma linkname "create_RandGen"
+    #pragma linkobj  "src/Rand/Rand.o"
+    
+external void srandom(int SEED);
+    #pragma effect Rand::RandomGen
     #pragma linkname "srand"
+    #pragma linkobj  "src/Rand/Rand.o"
 
     /*
      * Initialize RandomGen to produce a new sequence of pseudo-random
@@ -36,9 +36,11 @@ functions:
      */
 
 
-  int random(int MIN, int MAX);
-    #pragma effect Rand:RandomGen
+external int random(int MIN, int MAX);
+    #pragma linksign [0,1,2]
+    #pragma effect Rand::RandomGen
     #pragma linkname "SACrand"
+    #pragma linkobj  "src/Rand/Rand.o"
 
     /*
      * Use RandomGen to generate a new pseudo-random integer in the range
@@ -46,9 +48,11 @@ functions:
      */
 
 
-  double random(double MIN, double MAX);
-    #pragma effect Rand:RandomGen
+external double random(double MIN, double MAX);
+    #pragma linksign [0,1,2]
+    #pragma effect Rand::RandomGen
     #pragma linkname "SACdrand"
+    #pragma linkobj  "src/Rand/Rand.o"
 
     /*
      * Use RandomGen to generate a new pseudo-random double precision
@@ -56,20 +60,23 @@ functions:
      */
 
 
-  int[+] random(int SIZE, int MIN, int MAX);
-    #pragma effect Rand:RandomGen
+external int[+] random(int SIZE, int MIN, int MAX);
+    #pragma refcounting [0]
+    #pragma effect Rand::RandomGen
     #pragma linkname "SACrandarray"
+    #pragma linkobj  "src/Rand/Rand.o"
 
-  double[+] random(int SIZE, double MIN, double MAX);
-    #pragma effect Rand:RandomGen
+external double[+] random(int SIZE, double MIN, double MAX);
+    #pragma refcounting [0]
+    #pragma effect Rand::RandomGen
     #pragma linkname "SACdrandarray"
+    #pragma linkobj  "src/Rand/Rand.o"
 
     /*
      * Use RandomGen to generate an array of size SIZE 
      * of pseudo-random numbers.
      */
 
-}
 
 
 
