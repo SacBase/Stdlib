@@ -1,0 +1,71 @@
+ClassDec external Rand48:
+
+
+    /*
+     *  Class Rand48 provides a pseudo-random number generator which uses the
+     *  linear congruential algorithm and  48-bit  integer 
+     *  arithmetic.
+     */
+
+
+own:
+{
+global objects:
+
+  Rand48 RandomGen;
+    #pragma linkname "Rand48Gen"
+    #pragma initfun  "create_Rand48Gen"
+
+
+functions:
+
+
+  void srandom(int SEED);
+    #pragma effect Rand48:RandomGen
+    #pragma linkname "srand48"
+
+    /*
+     * Initialize RandomGen to produce a new sequence of pseudo-random
+     * numbers.
+     */
+
+
+  int random(int MIN, int MAX);
+    #pragma effect Rand48:RandomGen
+    #pragma linkname "SACrand48"
+
+    /*
+     * Use RandomGen to generate a new pseudo-random integer in the range
+     * MIN to MAX.
+     */
+
+
+  double random(double MIN, double MAX);
+    #pragma effect Rand48:RandomGen
+    #pragma linkname "SACdrand48"
+
+    /*
+     * Use RandomGen to generate a new pseudo-random double precision
+     * floating-point number in the interval [MIN, MAX).
+     */
+
+
+  int[+] random(int SIZE, int MIN, int MAX);
+    #pragma effect Rand48:RandomGen
+    #pragma linkname "SACrand48array"
+
+  double[+] random(int SIZE, double MIN, double MAX);
+    #pragma effect Rand48:RandomGen
+    #pragma linkname "SACdrand48array"
+
+    /*
+     * Use RandomGen to generate an array of size SIZE 
+     * of pseudo-random numbers.
+     */
+
+}
+
+
+
+
+

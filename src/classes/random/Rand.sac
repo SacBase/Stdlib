@@ -1,0 +1,77 @@
+ClassDec external Rand:
+
+    /*
+     *  Class Rand provides a multiplicative congruential pseudo-random number 
+     *  generator  with period 2**32.
+     *
+     *  Unfortunately, its spectral properties leave a great deal to be
+     *  desired.  The classes Random and Rand48 provide much better,
+     *  though more elaborate, pseudo-random number generators.
+     *
+     *  The low bits of the numbers generated are not very random;
+     *  use  the  middle  bits.  In particular the lowest bit 
+     *  alternates between 0 and 1.
+     */
+
+
+own:
+{
+global objects:
+
+  Rand RandomGen;
+    #pragma linkname "RandGen"
+    #pragma initfun  "create_RandGen"
+
+
+functions:
+
+
+  void srandom(int SEED);
+    #pragma effect Rand:RandomGen
+    #pragma linkname "srand"
+
+    /*
+     * Initialize RandomGen to produce a new sequence of pseudo-random
+     * numbers.
+     */
+
+
+  int random(int MIN, int MAX);
+    #pragma effect Rand:RandomGen
+    #pragma linkname "SACrand"
+
+    /*
+     * Use RandomGen to generate a new pseudo-random integer in the range
+     * MIN to MAX.
+     */
+
+
+  double random(double MIN, double MAX);
+    #pragma effect Rand:RandomGen
+    #pragma linkname "SACdrand"
+
+    /*
+     * Use RandomGen to generate a new pseudo-random double precision
+     * floating-point number in the interval [MIN, MAX).
+     */
+
+
+  int[+] random(int SIZE, int MIN, int MAX);
+    #pragma effect Rand:RandomGen
+    #pragma linkname "SACrandarray"
+
+  double[+] random(int SIZE, double MIN, double MAX);
+    #pragma effect Rand:RandomGen
+    #pragma linkname "SACdrandarray"
+
+    /*
+     * Use RandomGen to generate an array of size SIZE 
+     * of pseudo-random numbers.
+     */
+
+}
+
+
+
+
+

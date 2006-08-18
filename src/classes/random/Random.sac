@@ -1,0 +1,72 @@
+ClassDec external Random:
+
+    /*
+     *  Class Random provides a non-linear additive feedback
+     *  random number generator employing a default table of size
+     *  31 long integers to return successive  pseudo-random  num-
+     *  bers  in the range from 0 to rand_max().  The period of this
+     *  random  number  generator  is  very  large,  approximately
+     *  16*((2**31)-1).
+     *
+     *  This random number generator offers much better results than
+     *  that of class Rand but is also about 2/3 slower. 
+     */
+
+
+own:
+{
+global objects:
+
+  Random RandomGen;
+
+functions:
+
+
+  void srandom(int SEED);
+    #pragma effect Random:RandomGen
+
+    /*
+     * Initialize RandomGen to produce a new sequence of pseudo-random
+     * numbers.
+     */
+
+
+  int random(int MIN, int MAX);
+    #pragma effect Random:RandomGen
+    #pragma linkname "SACrandom"
+
+    /*
+     * Use RandomGen to generate a new pseudo-random integer in the range
+     * MIN to MAX.
+     */
+
+
+  double random(double MIN, double MAX);
+    #pragma effect Random:RandomGen
+    #pragma linkname "SACdrandom"
+
+    /*
+     * Use RandomGen to generate a new pseudo-random double precision
+     * floating-point number in the interval [MIN, MAX).
+     */
+
+
+  int[+] random(int SIZE, int MIN, int MAX);
+    #pragma effect Random:RandomGen
+    #pragma linkname "SACrandomarray"
+
+  double[+] random(int SIZE, double MIN, double MAX);
+    #pragma effect Random:RandomGen
+    #pragma linkname "SACdrandomarray"
+
+    /*
+     * Use RandomGen to generate an array of size SIZE 
+     * of pseudo-random numbers.
+     */
+
+}
+
+
+
+
+
