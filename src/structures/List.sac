@@ -17,21 +17,25 @@ external list cons( int ELEM, list LIST);
     #pragma refcounting [0,2]
     #pragma linkobj "src/List/cons.o"
 external int  hd( list LIST);
+    #pragma linksign [0,1]
     #pragma refcounting [1]
     #pragma linkobj "src/List/hd.o"
 external list tl( list LIST);
     #pragma refcounting [0,1]
     #pragma linkobj "src/List/tl.o"
 external bool empty( list LIST);
+    #pragma linksign [0,1]
     #pragma refcounting [1]
     #pragma linkobj "src/List/empty.o"
 external list append( list LIST1, list LIST2);
     #pragma refcounting [0,1,2]
     #pragma linkobj "src/List/append.o"
 external int  nth( int N, list LIST);
+    #pragma linksign [0,1,2]
     #pragma refcounting [2]
     #pragma linkobj "src/List/nth.o"
 external int  length( list LIST);
+    #pragma linksign [0,1]
     #pragma refcounting [1]
     #pragma linkobj "src/List/length.o"
 external list drop( int N, list LIST);
