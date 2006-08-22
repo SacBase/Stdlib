@@ -53,10 +53,6 @@ external double random(double MIN, double MAX);
      * floating-point number in the interval [MIN, MAX).
      */
 
-#define THEO_IS_A_HERO 0
-
-#if THEO_IS_A_HERO
-
 int[*] random( int[.] shp, int MIN, int MAX)
 {
   res = with( iv)
@@ -72,27 +68,4 @@ double[*] random( int[.] shp, double MIN, double MAX)
         genarray( shp, 0d);
   return( res);
 }
-
-#else
-external int[+] random(int SIZE, int MIN, int MAX);
-    #pragma effect Random::RandomGen
-    #pragma linkname "SACrandomarray"
-    #pragma linkobj "src/Random/Random.o"
-    #pragma refcounting [0]
-
-external double[+] random(int SIZE, double MIN, double MAX);
-    #pragma effect Random::RandomGen
-    #pragma linkname "SACdrandomarray"
-    #pragma linkobj "src/Random/Random.o"
-    #pragma refcounting [0]
-
-    /*
-     * Use RandomGen to generate an array of size SIZE 
-     * of pseudo-random numbers.
-     */
-
-#endif
-
-
-
 

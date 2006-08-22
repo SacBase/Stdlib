@@ -74,44 +74,4 @@ double SACdrand(double min, double max)
 /********************************************************************/
 
 
-int *SACrandarray(int size, int min, int max)
-{
-  int i, *arr;
-  
-  arr=(int*)SAC_MALLOC(size*sizeof(int));
-  
-  for (i=0; i<size; i++)
-  {
-	 arr[i]=SACrand(min, max);
-  }
-  
-  return(arr);
-}
-
-
-
-
-
-/********************************************************************/
-
-
-double *SACdrandarray(int size, double min, double max)
-{
-  int i;
-  double *arr;
-  
-  arr=(double*)SAC_MALLOC(size*sizeof(double));
-  
-  for (i=0; i<size; i++)
-  {
-	 arr[i]=SACdrand(min, max);
-  }
-  
-  return(arr);
-}
-
-
-/********************************************************************/
-
-
 

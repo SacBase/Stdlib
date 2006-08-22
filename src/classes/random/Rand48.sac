@@ -54,26 +54,19 @@ external double random(double MIN, double MAX);
      * floating-point number in the interval [MIN, MAX).
      */
 
+int[*] random( int[.] shp, int MIN, int MAX)
+{
+  res = with( iv)
+          ( . <= iv <= .) : random( MIN, MAX);
+        genarray( shp, 0);
+  return( res);
+}
 
-external int[+] random(int SIZE, int MIN, int MAX);
-    #pragma refcounting [0]
-    #pragma effect Rand48::RandomGen
-    #pragma linkname "SACrand48array"
-    #pragma linkobj  "src/Rand48/Rand48.o"
-
-external double[+] random(int SIZE, double MIN, double MAX);
-    #pragma refcounting [0]
-    #pragma effect Rand48::RandomGen
-    #pragma linkname "SACdrand48array"
-    #pragma linkobj  "src/Rand48/Rand48.o"
-
-    /*
-     * Use RandomGen to generate an array of size SIZE 
-     * of pseudo-random numbers.
-     */
-
-
-
-
-
+double[*] random( int[.] shp, double MIN, double MAX)
+{
+  res = with( iv)
+          ( . <= iv <= .) : random( MIN, MAX);
+        genarray( shp, 0d);
+  return( res);
+}
 
