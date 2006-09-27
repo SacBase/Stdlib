@@ -2,7 +2,8 @@ module Color8;
 
 use Array: all except { sel, shape, dim} ;
 import Array: { sel };
-export all;
+use MathArray : all;
+export all except { Weights2Clut, genSteps };
 
 typedef int[3] color;
 
@@ -45,15 +46,42 @@ inline color newColor( int x, int y, int z)
   return( newColor( [x,y,z]));
 }
 
+inline color[256] Weights2Clut( double[256] w, color c1, color c2)
+{
+  return( (: color[256]) toi( { iv -> w[iv] * tod((:int[3]) c1) } 
+                     + { iv -> (1d - w[iv]) * tod((:int[3]) c2) } ));
+}
+
+inline double[256] genSteps( double from, double to)
+{
+  return( from + tod( iota( 256)) / 256d * ( to - from));
+}
 
 inline color[256] genLinearClut( color c1, color c2)
 {
-  res = with( i)
-          ( .<= [i] <=.) {
-            val = ( 1d -  tod(i) / 256d) * tod((:int[3]) c1) + (tod(i) / 256d) * tod((:int[3])c2);
-          } : newColor( toi( val));
-        genarray( [256], black());
-  return( res);
+  weights = genSteps( 0d, 1d);
+
+  return( Weights2Clut( weights, c1, c2));
+}
+
+inline color[256] genLogarithmicClut( double from, double to,
+                                      color c1, color c2)
+{
+  steps = genSteps( from, to);
+
+  weights = (log( steps) - log( from)) / (log( to) - log( from));
+  
+  return( Weights2Clut( weights, c1, c2));
+}
+
+inline color[256] genExponentialClut( double from, double to, 
+                                      color c1, color c2)
+{
+  steps = genSteps( from, to);
+
+  weights = (exp( steps) - exp( from)) / (exp( to) - exp( from));
+  
+  return( Weights2Clut( weights, c1, c2));
 }
 
 inline color[256] genAlternatingClut( color c1, color c2)
