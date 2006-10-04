@@ -2,7 +2,8 @@ module ComplexScalarArith;
 
 export all;
 
-use Array : { sel, &, | };
+use ArrayBasics : { sel};
+use ScalarArith : { &, | };
 use ComplexBasics: all;
 
 

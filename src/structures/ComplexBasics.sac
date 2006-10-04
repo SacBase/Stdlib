@@ -2,7 +2,7 @@ module ComplexBasics;
 
 export all;
 
-use Array: { sel};
+use ArrayBasics: { sel};
 use Math:  { atan2};
 
 typedef double[2] complex;
