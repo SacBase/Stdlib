@@ -3,7 +3,6 @@ module String;
 import Char: all;
 import ScalarArith: {&,!=,==,+,>=,>,<=,<};
 import ArrayBasics: {shape,sel};
-import ArrayTransform: {++};
 
 export all;
 
@@ -219,7 +218,7 @@ inline string to_string(char[.] arr)
 {
   int len;
   len=shape(arr)[[0]];
-  return(to_string(arr ++ ['\0'], len));
+  return(to_string(_cat_VxV_(arr, ['\0']), len));
 }
 
 inline char[.] tochar( string s)
