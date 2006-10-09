@@ -122,6 +122,8 @@ external int yday(time T);
 
 external int, int, int clock(time T);
     #pragma linkname "SACclock"
+    #pragma linkobj  "src/Clock/date.o"
+    #pragma linksign [0,1,2,3]
     /*
      * Extract hours, minutes, and seconds from time value T. 
      */
