@@ -154,14 +154,20 @@ external double fmod(double X, double Y);
 
 external bool isinf(double X);
     #pragma linksign [0,1]
+    #pragma linkobj "src/Math/isinf.o"
+    #pragma linkname "SAC_MATH_isinf"
     /* Check X for infinity.  */
   
 external bool isnan(double X);
     #pragma linksign [0,1]
+    #pragma linkobj "src/Math/isnan.o"
+    #pragma linkname "SAC_MATH_isnan"
     /* Check X for being NaN (not a number).  */
 
 external bool finite(double X);
     #pragma linksign [0,1]
+    #pragma linkobj "src/Math/isfinite.o"
+    #pragma linkname "SAC_MATH_isfinite"
     /* Check X for being finite and not NaN.  */
 
 
