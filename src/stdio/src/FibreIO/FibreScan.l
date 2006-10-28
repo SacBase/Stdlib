@@ -33,7 +33,10 @@ int yywrap()
 
 %}
 
+%option nounput
+
 %%
+
 %{
 
 /* the next view lines allow for smuggling in a start_token! */
