@@ -30,7 +30,7 @@ void strtake( SAC_ND_PARAM_out( new_nt, string),
     SAC_ND_A_FIELD( new_nt) = (string) SAC_MALLOC( n + 1);
     strncpy( SAC_ND_A_FIELD( new_nt), SAC_ND_A_FIELD( old_nt), n);
 
-    SAC_ND_DEC_RC( old_nt, 1)
+    SAC_ND_DEC_RC_FREE( old_nt, 1, SAC_FREE)
   }
   SAC_ND_A_FIELD( new_nt)[n] = '\0';
 

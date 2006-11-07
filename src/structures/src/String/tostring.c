@@ -29,7 +29,7 @@ void to_string( SAC_ND_PARAM_out( str_nt, string),
     strncpy( SAC_ND_A_FIELD( str_nt), SAC_ND_A_FIELD( ar_nt), length);
     SAC_ND_A_FIELD( str_nt)[length] = '\0';
 
-    SAC_ND_DEC_RC( ar_nt, 1)
+    SAC_ND_DEC_RC_FREE( ar_nt, 1, )
   }
 
   SAC_ND_RET_out( str_nt, str_nt)

@@ -7,9 +7,7 @@ import ArrayBasics: {shape,sel};
 export all;
 
 external typedef string;
-#if 0
     #pragma freefun "free"
-#endif
 
 external string to_string(char[+] A, int LENGTH);
     #pragma refcounting [0,1]
