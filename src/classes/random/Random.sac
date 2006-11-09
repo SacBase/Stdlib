@@ -55,17 +55,17 @@ external double random(double MIN, double MAX);
 
 int[*] random( int[.] shp, int MIN, int MAX)
 {
-  res = with( iv)
-          ( . <= iv <= .) : random( MIN, MAX);
-        genarray( shp, 0);
+  res = with {
+          ( . <= iv <= . ) : random( MIN, MAX );
+        } : genarray( shp, 0 );
   return( res);
 }
 
 double[*] random( int[.] shp, double MIN, double MAX)
 {
-  res = with( iv)
-          ( . <= iv <= .) : random( MIN, MAX);
-        genarray( shp, 0d);
+  res = with {
+          ( . <= iv <= . ) : random( MIN, MAX );
+        } : genarray( shp, 0d );
   return( res);
 }
 
