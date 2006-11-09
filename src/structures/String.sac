@@ -221,9 +221,10 @@ inline string to_string(char[.] arr)
 
 inline char[.] tochar( string s)
 {
-  res = with(iv)
-          (. <= [i] <= .) : strsel(s, i);
-        genarray( [strlen(s)], ' ');
+  res = with {
+          ( . <= [i] <= . ) : strsel( s, i );
+        } : genarray( [strlen(s)], ' ' );
+
   return( res);
 }
 

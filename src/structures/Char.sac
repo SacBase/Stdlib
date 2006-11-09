@@ -64,8 +64,10 @@ external char tochar( double N);
 inline
 char[*] tochar( int[+] a)
 {
-  res = with( . <= iv <= .)
-        genarray( shape( a), tochar( a[iv]), ' ');
+  res = with {
+          ( . <= iv <= . ) : tochar( a[iv] );
+        } : genarray( shape(a), ' ' );
+
   return( res);
 }
 
