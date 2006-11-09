@@ -87,7 +87,7 @@ inline color[256] genExponentialClut( double from, double to,
 inline color[256] genAlternatingClut( color c1, color c2)
 {
   res = with {
-          ( . <= [i] <= . step [2] ) : cl;
+          ( . <= [i] <= . step [2] ) : c1;
         } : genarray( [256], c2 );
 
   return( res);
