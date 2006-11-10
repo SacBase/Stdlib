@@ -15,8 +15,9 @@ inline                                                                          
 b[*] (name)( a[+] A, a[+] B)                                                       \
 {                                                                                  \
   shp = shape( A);                                                                 \
-  res = with( .<= iv <= .)                                                         \
-        genarray( shp, name ( sel(iv, A), sel(iv, B)), name ( one( A), one( B)));  \
+  res = with {                                                                     \
+          ( . <= iv <= . ) : name ( sel(iv, A), sel(iv, B));                       \
+        } : genarray( shp, name( one(A), one(B) ) );                               \
   return( res);                                                                    \
 }
 
@@ -25,8 +26,9 @@ inline                                                                 \
 b[*] (name)( a[+] A, a B)                                              \
 {                                                                      \
   shp = shape( A);                                                     \
-  res = with( .<= iv <= .)                                             \
-        genarray( shp, name ( sel(iv, A), B), name( one( A), one( B)));\
+  res = with {                                                         \
+          ( . <= iv <= . ) : name ( sel(iv, A), B);                    \
+        } : genarray( shp, name( one(A), one(B) ) );                   \
   return( res);                                                        \
 }
 
@@ -35,8 +37,9 @@ inline                                                                 \
 b[*] (name)( a A, a[+] B)                                              \
 {                                                                      \
   shp = shape( B);                                                     \
-  res = with( .<= iv <= .)                                             \
-        genarray( shp, name ( A, sel(iv, B)), name( one( A), one( B)));\
+  res = with {                                                         \
+          ( . <= iv <= . ) : name ( A, sel(iv, B));                    \
+        } : genarray( shp, name( one(A), one(B) ) );                   \
   return( res);                                                        \
 }
 
@@ -51,8 +54,9 @@ inline                                                      \
 b[*] (name)( a[+] A)                                        \
 {                                                           \
   shp = shape( A);                                          \
-  res = with( .<= iv <= .)                                  \
-        genarray( shp, name ( sel(iv, A)), name( zero( A)));\
+  res = with {                                              \
+          ( . <= iv <= . ) : name ( sel(iv, A));            \
+        } : genarray( shp, name( zero(A) ) );               \
   return( res);                                             \
 }
 
@@ -119,10 +123,9 @@ a[*] take( int[.] v, a[*] array)                                                
   offset = ArrayTransform::where( ArrayArith::<( vext, 0),                       \
              _add_AxA_( shape(array), vext),                                     \
              0);                                                                 \
-  res = with( start <= iv < stop )                                               \
-        genarray( ArrayArith::abs(vext),                                         \
-                  sel( _add_AxA_( offset, iv), array),                           \
-                  zero(array));                                                  \
+  res = with {                                                                   \
+          ( start <= iv < stop ) : sel( _add_AxA_( offset, iv), array);          \
+        } : genarray( ArrayArith::abs(vext), zero(array) );                      \
   return( res);                                                                  \
 }
 
@@ -140,8 +143,9 @@ a[*] drop( int[.] v, a[*] array)                                                
   new_shp = ArrayTransform::where( new_shp ArrayArith::< 0, 0, new_shp);          \
   offset = ArrayTransform::where( vext ArrayArith::< 0, 0, vext);                 \
   offset = ArrayTransform::where( offset ArrayArith::< shape( array), offset, 0); \
-  res = with( . <= iv <= .)                                                       \
-        genarray( new_shp, sel( _add_AxA_( offset, iv), array), zero(array));     \
+  res = with {                                                                    \
+          ( . <= iv < . ) : sel( _add_AxA_( offset, iv), array);                  \
+        } : genarray( new_shp, zero(array) );                                     \
   return( res);                                                                   \
 }
 
@@ -152,8 +156,9 @@ a[*] drop( int[.] v, a[*] array)                                                
 inline                                                                    \
 a[*] tile( int[.] shp, int[.] idx, a[*] array)                            \
 {                                                                         \
-  res = with( . <= iv <= .)                                               \
-        genarray( shp, sel( _add_AxA_( idx, iv), array), zero( array));   \
+  res = with {                                                            \
+          ( . <= iv <= . ) : sel( _add_AxA_( idx, iv), array);            \
+        } : genarray( shp, zero(array) );                                 \
   return( res);                                                           \
 }
 
@@ -167,13 +172,16 @@ a[*] (++)( a[+] arr_a, a[+] arr_b)                                          \
                         [0],                                                \
                         _add_SxS_( _sel_([0], shape( arr_a)),               \
                                    _sel_([0], shape( arr_b)) ) );           \
-  res = with( _mul_SxA_(0, new_shp) <= iv < shape( arr_a))                  \
-        genarray( new_shp, sel( iv, arr_a), zero( arr_a));                  \
+  res = with {                                                              \
+          ( _mul_SxA_(0, new_shp) <= iv < shape( arr_a) ) : sel( iv, arr_a);\
+        } : genarray( new_shp, zero( arr_a ) );                             \
   offset =  _modarray_( _mul_SxA_( 0, new_shp),                             \
                         [0],                                                \
                         _sel_([0], shape( arr_a)) );                        \
-  res = with( offset <= iv <= shape( res))                                  \
-        modarray( res, iv, sel( _sub_AxA_( iv, offset), arr_b));            \
+  res = with {                                                              \
+          ( offset <= iv <= shape(res) )                                    \
+          : sel( _sub_AxA_( iv, offset), arr_b);                            \
+        } : modarray( res );                                                \
   return( res);                                                             \
 }
 
@@ -184,8 +192,9 @@ inline                                                                      \
 a[*] (reverse)( a[+] arr_a)                                                 \
 {                                                                           \
   maxidx0 = _sub_SxS_( _sel_( [0], shape( arr_a)), 1);                      \
-  res = with( [0] <= iv = [i] <= [maxidx0])                                 \
-        modarray( arr_a, iv, arr_a[[_sub_SxS_(maxidx0, i)]]);               \
+  res = with {                                                              \
+          ( [0] <= iv = [i] <= [maxidx0] ) : arr_a[[_sub_SxS_(maxidx0, i)]];\
+        } : modarray( arr_a );                                              \
   return( res);                                                             \
 }
 
@@ -212,12 +221,13 @@ a[*] shift (int dimension, int count, a boundary, a[+] A)                     \
       ub = _add_AxA_( shape(A), offset);                                      \
     }                                                                         \
                                                                               \
-    result = with (. <= iv <= .)                                              \
-             genarray( shape(A), boundary, zero(A));                          \
+    result = with {                                                           \
+               ( . <= iv <= . ) : boundary;                                   \
+             } : genarray( shape(A), zero(A) );                               \
                                                                               \
-    result = with (lb <= iv < ub) {                                           \
-               array_elem = sel( _sub_AxA_( iv, offset), A);                  \
-             } modarray( result, iv, array_elem);                             \
+    result = with {                                                           \
+               ( lb <= iv < ub ) : sel( _sub_AxA_( iv, offset), A);           \
+             } : modarray( result );                                          \
   }                                                                           \
   return(result);                                                             \
 }
@@ -273,17 +283,16 @@ a[+] rotate (int dimension, int count, a[+] A)                             \
       offset = _modarray_( _mul_SxA_( 0, shape(A)), [dimension], count);   \
       slice_shp = _modarray_(shape(A), [dimension], count);                \
                                                                            \
-      result = with (offset <= iv < shape(A)) {                            \
-                 array_elem = sel(_sub_AxA_(iv,offset), A);                \
-               }                                                           \
-               modarray( A, iv, array_elem);                               \
+      result = with {                                                      \
+                 (offset <= iv < shape(A)) : sel(_sub_AxA_(iv,offset), A); \
+               } : modarray(A);                                            \
                                                                            \
-      result = with (_mul_SxA_(0,shape(result)) <= iv <  slice_shp) {      \
-                 array_elem = sel(shape(A)                                 \
-                                  ArrayArith::- slice_shp                  \
-                                  ArrayArith::+ iv, A);                    \
-               }                                                           \
-               modarray( result, iv, array_elem);                          \
+      result = with {                                                      \
+                 (_mul_SxA_(0,shape(result)) <= iv <  slice_shp)           \
+                 : sel(shape(A)                                            \
+                       ArrayArith::- slice_shp                             \
+                       ArrayArith::+ iv, A);                               \
+               } : modarray( result );                                     \
     }                                                                      \
   }                                                                        \
   return(result);                                                          \
