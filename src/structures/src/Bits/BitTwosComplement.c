@@ -6,7 +6,7 @@
 
 int SAC_Bits_BitTwosComplement(int val)
 {
-  return( (val ^ 0xFFFFFFFF) + 1);
+  return( (~val) + 1);
 }
 
 /*****************************************************************/
