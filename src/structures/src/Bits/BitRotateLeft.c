@@ -4,9 +4,9 @@
  *
  *****************************************************************/
 
-int SAC_Bits_BitRotateLeft(int k, int val)
+int SAC_Bits_BitRotateLeft( int k, int val)
 {
-  return( (val << k) + (val>>(sizeof(int)-1)));
+  return( (val << k) + (val >>k ));
 }
 
 /*****************************************************************/
