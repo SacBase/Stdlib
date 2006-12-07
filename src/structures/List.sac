@@ -9,39 +9,50 @@ export all;
 
 external typedef list;
     #pragma linkobj "src/List/free.o"
+    #pragma freefun "SAC_List_free_list"
 
 external list nil();
+    #pragma linkname "SAC_List_nil"
     #pragma refcounting [0]
     #pragma linkobj "src/List/nil.o"
 external list cons( int ELEM, list LIST);
+    #pragma linkname "SAC_List_cons"
     #pragma refcounting [0,2]
     #pragma linkobj "src/List/cons.o"
 external int  hd( list LIST);
+    #pragma linkname "SAC_List_hd"
     #pragma linksign [0,1]
     #pragma refcounting [1]
     #pragma linkobj "src/List/hd.o"
 external list tl( list LIST);
+    #pragma linkname "SAC_List_tl"
     #pragma refcounting [0,1]
     #pragma linkobj "src/List/tl.o"
 external bool empty( list LIST);
+    #pragma linkname "SAC_List_empty"
     #pragma linksign [0,1]
     #pragma refcounting [1]
     #pragma linkobj "src/List/empty.o"
 external list append( list LIST1, list LIST2);
+    #pragma linkname "SAC_List_append"
     #pragma refcounting [0,1,2]
     #pragma linkobj "src/List/append.o"
 external int  nth( int N, list LIST);
+    #pragma linkname "SAC_List_nth"
     #pragma linksign [0,1,2]
     #pragma refcounting [2]
     #pragma linkobj "src/List/nth.o"
 external int  length( list LIST);
+    #pragma linkname "SAC_List_length"
     #pragma linksign [0,1]
     #pragma refcounting [1]
     #pragma linkobj "src/List/length.o"
 external list drop( int N, list LIST);
+    #pragma linkname "SAC_List_drop"
     #pragma refcounting [0,2]
     #pragma linkobj "src/List/drop.o"
 external list take( int N, list LIST);
+    #pragma linkname "SAC_List_take"
     #pragma refcounting [0,2]
     #pragma linkobj "src/List/take.o"
     

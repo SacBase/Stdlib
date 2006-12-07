@@ -8,7 +8,7 @@
 
 #define elems_nt (elems, (SCL, (HID, (NUQ,))))
 
-int hd( SAC_ND_PARAM_in( elems_nt, list *))
+int SAC_List_hd( SAC_ND_PARAM_in( elems_nt, list *))
 {
   int res;
 
@@ -18,7 +18,7 @@ int hd( SAC_ND_PARAM_in( elems_nt, list *))
   res = elems->elem;
 
   if (--(DESC_RC( elems->desc)) == 0) {
-    free_list( elems);
+    SAC_List_free_list( elems);
   }
 
   return( res);

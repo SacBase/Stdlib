@@ -194,19 +194,19 @@ external string tos(int N);
 external string tos(float N);
     #pragma linkname "SACftos"
     #pragma linksign [0,1]
-    #pragma linkobj "src/String/itos.o"
+    #pragma linkobj "src/String/ftos.o"
     /*  Convert float into string.    */
 
 external string tos(double N);
     #pragma linkname "SACdtos"
     #pragma linksign [0,1]
-    #pragma linkobj "src/String/itos.o"
+    #pragma linkobj "src/String/dtos.o"
     /*  Convert double into string.   */
 
 external string tos(bool B);
     #pragma linkname "SACbtos"
     #pragma linksign [0,1]
-    #pragma linkobj "src/String/itos.o"
+    #pragma linkobj "src/String/btos.o"
     /*  Convert boolean into string.  */
 
 

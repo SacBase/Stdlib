@@ -19,4 +19,4 @@ typedef struct LIST {
 } list;
 
 
-extern void free_list( list *elems);
+extern void SAC_List_free_list( list *elems);

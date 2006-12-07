@@ -11,7 +11,7 @@
 #define new_nt   (new,   (SCL, (HID, (NUQ,))))
 #define last_nt  (last,  (SCL, (HID, (NUQ,))))
 
-void _take( SAC_ND_PARAM_out( res_nt, list *),
+void SAC_List_take( SAC_ND_PARAM_out( res_nt, list *),
             int n,
             SAC_ND_PARAM_in( elems_nt, list *))
 {
@@ -37,7 +37,7 @@ void _take( SAC_ND_PARAM_out( res_nt, list *),
     SAC_ND_RET_out( res_nt, last_nt)
 
     if (--(DESC_RC( elems->desc)) == 0) {
-      free_list( elems);
+      SAC_List_free_list( elems);
     }
   }
   else {
@@ -63,7 +63,7 @@ void _take( SAC_ND_PARAM_out( res_nt, list *),
        * Now, we decrement the "rest" of elems.
        */
       if (--(DESC_RC( elems->desc)) == 0) {
-        free_list( elems);
+        SAC_List_free_list( elems);
       }
 #if TRACE
       fprintf( stderr, "changing CONS at (%p)\n", new);

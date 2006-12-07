@@ -9,7 +9,7 @@
 #define res_nt   (res,   (SCL, (HID, (NUQ,))))
 #define elems_nt (elems, (SCL, (HID, (NUQ,))))
 
-void cons( SAC_ND_PARAM_out( res_nt, list *),
+void SAC_List_cons( SAC_ND_PARAM_out( res_nt, list *),
            int elem,
            SAC_ND_PARAM_in( elems_nt, list *))
 {

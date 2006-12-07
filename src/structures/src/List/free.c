@@ -6,7 +6,7 @@
 #include "List.h"
 
 
-void free_list( list *elems)
+void SAC_List_free_list( list *elems)
 {
   list *next;
 

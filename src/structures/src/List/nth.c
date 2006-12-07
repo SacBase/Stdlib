@@ -8,7 +8,7 @@
 
 #define elems_nt (elems, (SCL, (HID, (NUQ,))))
 
-int nth( int n, SAC_ND_PARAM_in( elems_nt, list *))
+int SAC_List_nth( int n, SAC_ND_PARAM_in( elems_nt, list *))
 {
   list *ptr;
   int res;
@@ -28,7 +28,7 @@ int nth( int n, SAC_ND_PARAM_in( elems_nt, list *))
   res = ptr->elem;
 
   if (--(DESC_RC( elems->desc)) == 0) {
-    free_list( elems);
+    SAC_List_free_list( elems);
   }
 
   return( res);

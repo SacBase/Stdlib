@@ -11,7 +11,7 @@
 #define elemsB_nt (elemsB, (SCL, (HID, (NUQ,))))
 #define new_nt    (new,    (SCL, (HID, (NUQ,))))
 
-void append( SAC_ND_PARAM_out( res_nt, list *),
+void SAC_List_append( SAC_ND_PARAM_out( res_nt, list *),
              SAC_ND_PARAM_in( elemsA_nt, list *),
              SAC_ND_PARAM_in( elemsB_nt, list *))
 {
@@ -21,7 +21,7 @@ void append( SAC_ND_PARAM_out( res_nt, list *),
   if (elemsA->rest == NULL) { /* elemsA == NIL! */
     SAC_ND_RET_out( res_nt, elemsB_nt)
     if (--(DESC_RC( elemsA->desc)) == 0) {
-      free_list( elemsA);
+      SAC_List_free_list( elemsA);
     }
   }
   else {
@@ -87,7 +87,7 @@ void append( SAC_ND_PARAM_out( res_nt, list *),
 #endif
     /* Finally, we have to do some housekeeping! (see comment above!) */
     if (DESC_RC( elemsA->desc) == 0) {
-      free_list( elemsA);
+      SAC_List_free_list( elemsA);
     }
   }
 }
