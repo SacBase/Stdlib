@@ -133,7 +133,7 @@ external string fscans(TermFile &STREAM, int MAX);
     #pragma effect TheTerminal
     #pragma linkname "term_fscans"
     #pragma linkobj "src/TermFile/fscans.o"
-    #pragma linksign [0,2,1]
+    #pragma linksign [0,1,2]
 external string  scans(int MAX);
     #pragma effect TheTerminal, stdin
     #pragma linkname "term_scans"
@@ -151,7 +151,7 @@ external string fscanl(TermFile &STREAM, int MAX);
     #pragma effect TheTerminal
     #pragma linkname "term_fscanl"
     #pragma linkobj "src/TermFile/fscanl.o"
-    #pragma linksign [0,2,1]
+    #pragma linksign [0,1,2]
 external string  scanl(int MAX);
     #pragma effect TheTerminal, stdin
     #pragma linkname "term_scanl"

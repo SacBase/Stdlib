@@ -108,6 +108,7 @@ external  int, ... fscanf(File &STREAM, string FORMAT);
 
       
 external  string fscans(File &STREAM, int MAX);
+    #pragma linksign [0,1,2]
     #pragma linkobj "src/File/fscans.o"
      /*
       * Read the next character string from the input stream STREAM. Strings
@@ -118,6 +119,7 @@ external  string fscans(File &STREAM, int MAX);
 
 
 external  string fscanl(File &STREAM, int MAX);
+    #pragma linksign [0,1,2]
     #pragma linkobj "src/File/fscanl.o"
      /*
       * Read the next line from the input stream STREAM. Lines are character
