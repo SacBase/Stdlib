@@ -12,13 +12,15 @@
 
 int SACbinfclose(int fd)
 {
-  int error;
-  
-  error = close(fd);
+  int error=-1;
+  int retVal;
+  retVal = close(fd);
+  if (retVal==-1) {
+    error=errno;
+  }
   
   return(error);
 }
-
 
 /*****************************************************************/
 
