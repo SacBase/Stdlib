@@ -19,6 +19,9 @@ export all;
  * float[+]  log( float[+]  A);
  * double[+] log( double[+] A);
  *
+ * float[+]  log10( float[+]  A);
+ * double[+] log10( double[+] A);
+ *
  * float[+]  fabs( float[+]  A);
  * double[+] fabs( double[+] A);
  *
@@ -91,6 +94,7 @@ template(arg1, double, double)
  *****************************************************************************/
 
 ALL_TYPES_1( OP_A_TEMPLATE, log)
+ALL_TYPES_1( OP_A_TEMPLATE, log10)
 ALL_TYPES_1( OP_A_TEMPLATE, exp)
 ALL_TYPES_1( OP_A_TEMPLATE, fabs)
 ALL_TYPES_1( OP_A_TEMPLATE, sqrt)
