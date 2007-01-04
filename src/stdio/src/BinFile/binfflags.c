@@ -30,6 +30,11 @@ int SACbinf_O_CREAT()
   return(O_CREAT);
 }
 
+int SACbinf_O_TRUNC()
+{
+  return(O_TRUNC);
+}
+
 
 /*****************************************************************/
 

@@ -84,6 +84,15 @@ external int O_CREAT();
      * yet exist.
      */
 
+external int O_TRUNC();
+    #pragma linkobj "src/BinFile/binfflags.o"
+    #pragma linkname "SACbinf_O_TRUNC"
+    #pragma linksign [0]
+    /*
+     * Returns the C constant O_TRUNC. If a file already exists and the
+     * open mode allows writing it will be truncated to length 0.
+     */
+
 
   /*
    *  Functions to read from and write to files.
