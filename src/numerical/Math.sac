@@ -11,12 +11,12 @@ export all;
 
 
 external double cos(double X);
+    #pragma linksign [0,1]
 #ifdef NEED_LIBM
 #pragma linkwith "m"
 #else
 ;
 #endif
-
     /* Cosine of X.  */
 
 external double sin(double X);
