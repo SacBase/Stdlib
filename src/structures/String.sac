@@ -8,6 +8,8 @@ export all;
 
 external typedef string;
     #pragma freefun "free"
+    #pragma copyfun "copy_string"
+    #pragma linkobj "src/String/copystr.o"
 
 external string to_string(char[+] A, int LENGTH);
     #pragma refcounting [0,1]
