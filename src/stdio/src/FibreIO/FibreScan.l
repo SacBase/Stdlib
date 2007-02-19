@@ -33,8 +33,6 @@ int yywrap()
 
 %}
 
-%option nounput
-
 %%
 
 %{
