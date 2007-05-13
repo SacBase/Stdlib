@@ -4,6 +4,7 @@ module ScalarIO;
 use IOresources: all;
 use String : { string, to_string, strlen };
 use ScalarArith : all;
+use ArrayFormat: all;
 
 export all;
 
@@ -242,6 +243,41 @@ inline void fprint(TermFile &stream, string s)
 
 
 
+/*****************************************************************/
+/*****************************************************************/
+
+void show(bool c)
+{
+  TermFile::printf("%c\n", Format (c));
+}
+
+/*****************************************************************/
+
+void show(int c)
+{
+  TermFile::printf("%c\n", Format(c));
+}
+
+/*****************************************************************/
+
+void show(float c)
+{
+  TermFile::printf("%c\n", Format(c));
+}
+
+/*****************************************************************/
+
+void show(double c)
+{
+  TermFile::printf("%c\n", Format(c));
+}
+
+/*****************************************************************/
+
+void show(char c)
+{
+  TermFile::printf("%c\n", c);
+}
 
 /*****************************************************************/
 /*****************************************************************/
