@@ -248,28 +248,28 @@ inline void fprint(TermFile &stream, string s)
 
 void show(bool c)
 {
-  TermFile::printf("%c\n", Format (c));
+  TermFile::printf("%s\n", to_string( format(c)));
 }
 
 /*****************************************************************/
 
 void show(int c)
 {
-  TermFile::printf("%c\n", Format(c));
+  TermFile::printf("%s\n", to_string( format(c)));
 }
 
 /*****************************************************************/
 
 void show(float c)
 {
-  TermFile::printf("%c\n", Format(c));
+  TermFile::printf("%s\n", to_string( format(c)));
 }
 
 /*****************************************************************/
 
 void show(double c)
 {
-  TermFile::printf("%c\n", Format(c));
+  TermFile::printf("%s\n", to_string( format(c)));
 }
 
 /*****************************************************************/
