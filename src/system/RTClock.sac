@@ -1,0 +1,15 @@
+module RTClock;
+
+export all;
+
+/*
+ * returns the current time ( seconds, nanoseconds) of the
+ * realtime OS clock. If available, the process specific 
+ * clock is used.
+ */
+external int, int gettime();
+  #pragma linksign [1,2]
+  #pragma linkobj "src/RTClock/gettime.o"
+  #pragma linkwith "rt"
+  #pragma linkname "SAC_RTCLOCK_gettime"
+
