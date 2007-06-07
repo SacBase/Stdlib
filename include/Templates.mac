@@ -46,8 +46,8 @@ MAP_BIN_##ext( *, _mul_SxS_, a, a)      \
 MAP_BIN_##ext( /, _div_SxS_, a, a)      \
 MAP_BIN_##ext( max, _max_SxS_, a, a)    \
 MAP_BIN_##ext( min, _min_SxS_, a, a)    \
-MAP_MON_##ext( -, _neg_SxS_, a, a)      \
-MAP_MON_##ext( abs, _abs_SxS_, a, a)
+MAP_MON_##ext( -, _neg_S_, a, a)      \
+MAP_MON_##ext( abs, _abs_S_, a, a)
 
 
 #define MAP_INT_OPS( ext)               \
@@ -85,6 +85,6 @@ MAP_BIN_##ext( >=,  _ge_SxS_, a, bool)
 #define MAP_LOG_OPS( ext)                   \
 MAP_BIN_##ext( &, _and_SxS_, bool, bool)    \
 MAP_BIN_##ext( |,  _or_SxS_, bool, bool)    \
-MAP_MON_##ext( !, _not_SxS_, bool, bool)
+MAP_MON_##ext( !, _not_S_, bool, bool)
 
 
