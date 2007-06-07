@@ -35,9 +35,9 @@ inline int toi( bool b)
 
 inline bool tob( int i)
 { 
- if ( _eq_(1,i) )
+ if ( _eq_SxS_(1,i) )
 	res = true;
- else if ( _eq_(0,i))
+ else if ( _eq_SxS_(0,i))
 	res = false;
  else
 	res = false; /* Should be domain error!! */
@@ -46,9 +46,9 @@ inline bool tob( int i)
 	
 inline bool tob( float i)
 { 
- if ( _eq_(1f,i) )
+ if ( _eq_SxS_(1f,i) )
 	res = true;
- else if ( _eq_(0f,i))
+ else if ( _eq_SxS_(0f,i))
 	res = false;
  else
 	res = false; /* Should be domain error!! */
@@ -57,9 +57,9 @@ inline bool tob( float i)
 
 inline bool tob( double i)
 { 
- if ( _eq_(1.0,i) )
+ if ( _eq_SxS_(1.0,i) )
 	res = true;
- else if ( _eq_(0.0,i))
+ else if ( _eq_SxS_(0.0,i))
 	res = false;
  else
 	res = false; /* Should be domain error!! */

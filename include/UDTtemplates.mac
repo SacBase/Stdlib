@@ -113,18 +113,18 @@ MAP_COMP_OPS( AxS, a)
 inline                                                                           \
 a[*] take( int[.] v, a[*] array)                                                 \
 {                                                                                \
-  vext = _cat_VxV_( v, _drop_SxV_( _sel_( [0], _shape_( v)), shape( array)));    \
+  vext = _cat_VxV_( v, _drop_SxV_( _sel_VxA_( [0],_shape_A_( v)),shape( array)));\
   start = ArrayTransform::where( ArrayArith::<( vext, 0),                        \
-            ArrayArith::max( ArrayArith::-( _add_AxA_( shape(array), vext)),0),  \
+            ArrayArith::max( ArrayArith::-( _add_VxV_( shape(array), vext)),0),  \
             0);                                                                  \
   stop = ArrayTransform::where( ArrayArith::<(vext, 0),                          \
            ArrayArith::abs(vext),                                                \
            ArrayArith::min( ArrayArith::abs(vext), shape(array)));               \
   offset = ArrayTransform::where( ArrayArith::<( vext, 0),                       \
-             _add_AxA_( shape(array), vext),                                     \
+             _add_VxV_( shape(array), vext),                                     \
              0);                                                                 \
   res = with {                                                                   \
-          ( start <= iv < stop ) : sel( _add_AxA_( offset, iv), array);          \
+          ( start <= iv < stop ) : sel( _add_VxV_( offset, iv), array);          \
         } : genarray( ArrayArith::abs(vext), zero(array) );                      \
   return( res);                                                                  \
 }
@@ -137,14 +137,14 @@ a[*] drop( int[.] v, a[*] array)                                                
 {                                                                                 \
   vext = _cat_VxV_( v,                                                            \
                     ArrayBasics::genarray( [_sub_SxS_( dim( array),               \
-                                             _sel_( [0], _shape_( v)))],          \
+                                             _sel_VxA_( [0], _shape_A_( v)))],    \
                                            0));                                   \
-  new_shp = _sub_AxA_( shape( array), ArrayArith::abs( vext));                    \
+  new_shp = _sub_VxV_( shape( array), ArrayArith::abs( vext));                    \
   new_shp = ArrayTransform::where( new_shp ArrayArith::< 0, 0, new_shp);          \
   offset = ArrayTransform::where( vext ArrayArith::< 0, 0, vext);                 \
   offset = ArrayTransform::where( offset ArrayArith::< shape( array), offset, 0); \
   res = with {                                                                    \
-          ( . <= iv < . ) : sel( _add_AxA_( offset, iv), array);                  \
+          ( . <= iv < . ) : sel( _add_VxV_( offset, iv), array);                  \
         } : genarray( new_shp, zero(array) );                                     \
   return( res);                                                                   \
 }
@@ -157,7 +157,7 @@ inline                                                                    \
 a[*] tile( int[.] shp, int[.] idx, a[*] array)                            \
 {                                                                         \
   res = with {                                                            \
-          ( . <= iv <= . ) : sel( _add_AxA_( idx, iv), array);            \
+          ( . <= iv <= . ) : sel( _add_VxV_( idx, iv), array);            \
         } : genarray( shp, zero(array) );                                 \
   return( res);                                                           \
 }
@@ -168,19 +168,19 @@ a[*] tile( int[.] shp, int[.] idx, a[*] array)                            \
 inline                                                                      \
 a[*] (++)( a[+] arr_a, a[+] arr_b)                                          \
 {                                                                           \
-  new_shp = _modarray_( shape( arr_a),                                      \
-                        [0],                                                \
-                        _add_SxS_( _sel_([0], shape( arr_a)),               \
-                                   _sel_([0], shape( arr_b)) ) );           \
+  new_shp = _modarray_AxVxS_( shape( arr_a),                                \
+                              [0],                                          \
+                              _add_SxS_( _sel_VxA_([0], shape( arr_a)),     \
+                                         _sel_VxA_([0], shape( arr_b)) ) ); \
   res = with {                                                              \
-          ( _mul_SxA_(0, new_shp) <= iv < shape( arr_a) ) : sel( iv, arr_a);\
+          ( _mul_SxV_(0, new_shp) <= iv < shape( arr_a) ) : sel( iv, arr_a);\
         } : genarray( new_shp, zero( arr_a ) );                             \
-  offset =  _modarray_( _mul_SxA_( 0, new_shp),                             \
+  offset =  _modarray_AxVxS_( _mul_SxV_( 0, new_shp),                       \
                         [0],                                                \
-                        _sel_([0], shape( arr_a)) );                        \
+                        _sel_VxA_([0], shape( arr_a)) );                    \
   res = with {                                                              \
           ( offset <= iv <= shape(res) )                                    \
-          : sel( _sub_AxA_( iv, offset), arr_b);                            \
+          : sel( _sub_VxV_( iv, offset), arr_b);                            \
         } : modarray( res );                                                \
   return( res);                                                             \
 }
@@ -191,7 +191,7 @@ a[*] (++)( a[+] arr_a, a[+] arr_b)                                          \
 inline                                                                      \
 a[*] (reverse)( a[+] arr_a)                                                 \
 {                                                                           \
-  maxidx0 = _sub_SxS_( _sel_( [0], shape( arr_a)), 1);                      \
+  maxidx0 = _sub_SxS_( _sel_VxA_( [0], shape( arr_a)), 1);                  \
   res = with {                                                              \
           ( [0] <= iv = [i] <= [maxidx0] ) : arr_a[[_sub_SxS_(maxidx0, i)]];\
         } : modarray( arr_a );                                              \
@@ -207,18 +207,18 @@ a[*] shift (int dimension, int count, a boundary, a[+] A)                     \
   if (count ScalarArith::== 0) {                                              \
     result = A;                                                               \
   } else {                                                                    \
-    max_shift = _sel_( [dimension], shape(A));                                \
+    max_shift = _sel_VxA_( [dimension], shape(A));                            \
                                                                               \
     if (count ScalarArith::> 0) {                                             \
-      count = _min_( count, max_shift);                                       \
-      offset = _modarray_( _mul_SxA_( 0, shape(A)), [dimension], count);      \
+      count = _min_SxS_( count, max_shift);                                   \
+      offset = _modarray_AxVxS_( _mul_SxV_( 0, shape(A)), [dimension], count);\
       lb = offset;                                                            \
       ub = shape(A);                                                          \
     } else {                                                                  \
-      count = _max_( count, _neg_(max_shift));                                \
-      offset = _modarray_( _mul_SxA_( 0, shape(A)), [dimension], count);      \
-      lb = _mul_SxA_( 0, shape(A));                                           \
-      ub = _add_AxA_( shape(A), offset);                                      \
+      count = _max_SxS_( count, _neg_S_(max_shift));                          \
+      offset = _modarray_AxVxS_( _mul_SxV_( 0, shape(A)), [dimension], count);\
+      lb = _mul_SxV_( 0, shape(A));                                           \
+      ub = _add_VxV_( shape(A), offset);                                      \
     }                                                                         \
                                                                               \
     result = with {                                                           \
@@ -226,7 +226,7 @@ a[*] shift (int dimension, int count, a boundary, a[+] A)                     \
              } : genarray( shape(A), zero(A) );                               \
                                                                               \
     result = with {                                                           \
-               ( lb <= iv < ub ) : sel( _sub_AxA_( iv, offset), A);           \
+               ( lb <= iv < ub ) : sel( _sub_VxV_( iv, offset), A);           \
              } : modarray( result );                                          \
   }                                                                           \
   return(result);                                                             \
@@ -238,9 +238,9 @@ a[*] shift (int[.] counts, a boundary, a[+] A)                     \
 {                                                                  \
                                                                    \
   for( i=0;                                                        \
-       i ScalarArith::<_sel_( [0], _shape_(counts));               \
+       i ScalarArith::<_sel_VxA_( [0], _shape_A_(counts));         \
        i=i ScalarArith::+1) {                                      \
-    offset = _sel_([i], counts);                                   \
+    offset = _sel_VxA_([i], counts);                               \
     A = shift( i, offset, boundary, A);                            \
   }                                                                \
                                                                    \
@@ -271,24 +271,24 @@ a[+] rotate (int dimension, int count, a[+] A)                             \
   if(count ScalarArith::== 0) {                                            \
     result = A;                                                            \
   } else {                                                                 \
-    max_rotate = _sel_( [dimension], shape(A));                            \
-    if( _eq_( max_rotate, 0)) {                                            \
+    max_rotate = _sel_VxA_( [dimension], shape(A));                        \
+    if( _eq_SxS_( max_rotate, 0)) {                                        \
       result = A;                                                          \
     } else {                                                               \
-      count = _mod_( count, max_rotate);                                   \
-      if (_lt_(count, 0)) {                                                \
+      count = _mod_SxS_( count, max_rotate);                               \
+      if (_lt_SxS_(count, 0)) {                                            \
         count = _add_SxS_( count, max_rotate);                             \
       }                                                                    \
                                                                            \
-      offset = _modarray_( _mul_SxA_( 0, shape(A)), [dimension], count);   \
-      slice_shp = _modarray_(shape(A), [dimension], count);                \
+      offset = _modarray_AxVxS_(_mul_SxV_( 0, shape(A)),[dimension],count);\
+      slice_shp = _modarray_AxVxS_(shape(A), [dimension], count);          \
                                                                            \
       result = with {                                                      \
-                 (offset <= iv < shape(A)) : sel(_sub_AxA_(iv,offset), A); \
+                 (offset <= iv < shape(A)) : sel(_sub_VxV_(iv,offset), A); \
                } : modarray(A);                                            \
                                                                            \
       result = with {                                                      \
-                 (_mul_SxA_(0,shape(result)) <= iv <  slice_shp)           \
+                 (_mul_SxV_(0,shape(result)) <= iv <  slice_shp)           \
                  : sel(shape(A)                                            \
                        ArrayArith::- slice_shp                             \
                        ArrayArith::+ iv, A);                               \
@@ -304,8 +304,9 @@ a[*] rotate (int[.] counts,  a[+] A)                                   \
 {                                                                      \
   int offset;                                                          \
                                                                        \
-  for( i=0; _lt_(i, _sel_( [0], _shape_(counts))); i=_add_SxS_(i,1)) { \
-    offset = _sel_( [i], counts);                                      \
+  for( i=0; _lt_SxS_(i, _sel_VxA_( [0], _shape_A_(counts)));           \
+       i=_add_SxS_(i,1)) {                                             \
+    offset = _sel_VxA_( [i], counts);                                  \
     A = rotate( i, offset, A);                                         \
   }                                                                    \
                                                                        \
