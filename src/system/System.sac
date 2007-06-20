@@ -1,12 +1,13 @@
 module System;
 
-import World:       all;
-import Terminal:    all;
-import FileSystem:  all;
+import World:        all;
+import Terminal:     all;
+import FileSystem:   all;
 
-import CommandLine: all;
-import Environment: all;
-import Clock:       all;
-import SysErr:      all;
+import CommandLine:  all;
+import Environment:  all;
+import Clock:        all;
+import SysErr:       all;
+import RuntimeError: all;
 
 export all;

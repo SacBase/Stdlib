@@ -1,0 +1,8 @@
+module RuntimeError;
+
+export all;
+
+external void error( int result, String::string message, ...);
+  #pragma effect Terminal::TheTerminal
+  #pragma linkobj "src/RuntimeError/error.o"
+  #pragma linkname "SAC__RUNTIMEERROR_error"
