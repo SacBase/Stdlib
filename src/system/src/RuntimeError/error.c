@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 void SAC__RUNTIMEERROR_error( int result, const char *message, ...)
 {
