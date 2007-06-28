@@ -1,5 +1,7 @@
 module RTClock;
 
+#include "config.h"
+
 export all;
 
 /*
@@ -10,6 +12,8 @@ export all;
 external int, int gettime();
   #pragma linksign [1,2]
   #pragma linkobj "src/RTClock/gettime.o"
-  #pragma linkwith "rt"
   #pragma linkname "SAC_RTCLOCK_gettime"
+#ifdef NEED_LIBRT
+  #pragma linkwith "rt"
+#endif
 
