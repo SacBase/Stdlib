@@ -2,6 +2,7 @@ module Numerical;
 
 import Math: all;
 import MathArray: all;
+import ComplexMath: all;
 
 export all;
 
