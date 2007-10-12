@@ -17,7 +17,7 @@ char* fscans(FILE *stream, int length)
   
   input=(char*)SAC_MALLOC(length+1);
   format=(char*)SAC_MALLOC(32);
-  sprintf(format, "%%%ds", length);
+  sprintf(format, "%%%d[^\n]", length);
   
   success=fscanf(stream, format, input);
   
