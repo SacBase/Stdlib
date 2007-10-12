@@ -1,0 +1,64 @@
+module UTrace;
+
+export all except {PrintHeader,Indent};
+
+use StdIO: all;
+use Structures: all;
+use Indent: all;
+
+objdef Indent offset = to_Indent( 0);
+
+void PrintHeader( string modName, int line)
+{
+  doIndent( ">  ");
+  printf( "----------------------------------------------\n");
+  doIndent( "   ");
+  printf( "%-15s: line %3d: ", modName, line);
+  setIndent( offset, 15+2+4+3+2);
+}
+
+
+void PrintFunEnter( string modName, int line, string funName)
+{
+  incIndent();
+  PrintHeader( modName, line);
+  printf( "%s (\n",  funName);
+  incIndent( offset, strlen( funName) +2);
+}
+
+void PrintFunLeave( string modName, int line, string funName)
+{
+  decIndent();
+  decIndent( offset, strlen( funName) +2);
+} 
+
+void PrintArgsDone( string modName, int line, string funName)
+{
+  doIndent( "   ");
+  doIndent( offset, " ");
+  printf( ");\n");
+}
+
+void PrintArg( string modName, int line, string var, int[*] x)
+{
+  doIndent( "   ");
+  doIndent( offset, " ");
+  printf( " %s = ", var);
+  show( x);
+}
+
+void PrintAssign( string modName, int line, string var, int[*] x)
+{
+  PrintHeader( modName, line);
+  printf( "%s = ", var);
+  show(x);
+}
+
+
+void PrintReturn( string modName, int line, int[*] x)
+{
+  PrintHeader( modName, line);
+  printf( "returning\n");
+  show(x);
+}
+
