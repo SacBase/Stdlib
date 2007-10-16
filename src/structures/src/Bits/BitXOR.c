@@ -4,7 +4,7 @@
  *
  *****************************************************************/
 
-int SAC_Bits_BitOR(int a, int b)
+int SAC_Bits_BitXOR(int a, int b)
 {
   return( a ^ b);
 }
