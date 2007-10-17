@@ -15,6 +15,7 @@ external double cos(double X);
 #ifdef NEED_LIBM
 #pragma linkwith "m"
     /* Cosine of X.  */
+#endif
 
 external double sin(double X);
     #pragma linksign [0,1]
