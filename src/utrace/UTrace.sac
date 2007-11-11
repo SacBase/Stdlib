@@ -7,7 +7,7 @@ use Structures: all;
 use ArrayFormat: all;
 use Indent: all;
 
-objdef Indent offset = to_Indent( 0);
+objdef Indent offset = newIndent( 0);
 
 #define BUILT_IN( fun)    \
 fun( int)                 \

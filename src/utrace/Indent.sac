@@ -8,6 +8,11 @@ use Structures: all;
 
 objdef Indent indent = to_Indent( 0);
 
+Indent newIndent( int value)
+{
+  return( to_Indent( value));
+}
+
 int getIndent( )
 {
   return( getIndent( indent));
