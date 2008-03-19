@@ -179,7 +179,7 @@ a[*] (++)( a[+] arr_a, a[+] arr_b)                                          \
                         [0],                                                \
                         _sel_VxA_([0], shape( arr_a)) );                    \
   res = with {                                                              \
-          ( offset <= iv <= shape(res) )                                    \
+          ( offset <= iv < shape(res) )                                     \
           : sel( _sub_VxV_( iv, offset), arr_b);                            \
         } : modarray( res );                                                \
   return( res);                                                             \
