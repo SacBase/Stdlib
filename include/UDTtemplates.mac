@@ -144,7 +144,7 @@ a[*] drop( int[.] v, a[*] array)                                                
   offset = ArrayTransform::where( vext ArrayArith::< 0, 0, vext);                 \
   offset = ArrayTransform::where( offset ArrayArith::< shape( array), offset, 0); \
   res = with {                                                                    \
-          ( . <= iv < . ) : sel( _add_VxV_( offset, iv), array);                  \
+          ( . <= iv <= . ) : sel( _add_VxV_( offset, iv), array);                 \
         } : genarray( new_shp, zero(array) );                                     \
   return( res);                                                                   \
 }
