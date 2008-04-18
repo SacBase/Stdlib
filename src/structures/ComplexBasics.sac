@@ -97,8 +97,22 @@ inline  double[2] todv(complex C)
   return([real(C), imag(C)]);
 }
 
+inline int, int ptoi(complex C)
+{
+  r,t = ptof(C);
+  return(ScalarArith::toi(r), ScalarArith::toi(t));
+}
 
+inline float, float ptof(complex C)
+{
+  x,y = tof(C);
+  return(Math::sqrt(ScalarArith::tof(norm(C))), Math::atan2(x,y));
+}
 
+inline double, double ptod(complex C)
+{
+  return(Math::sqrt(norm(C)), Math::atan2(real(C),imag(C)));
+}
 
 
 
