@@ -14,6 +14,8 @@ class Random;
 
 external classtype;
 
+use Complex: all;
+
 export all;
 
 external objdef Random RandomGen;
@@ -52,6 +54,28 @@ external double random(double MIN, double MAX);
      * Use RandomGen to generate a new pseudo-random double precision
      * floating-point number in the interval [MIN, MAX).
      */
+
+complex random(double rmin, double rmax, double imin, double imax)
+{
+  return(toc(random(rmin,rmax), random(imin,imax)));
+}
+
+complex random(complex lb, complex rt)
+{
+  return(random(real(lb),real(rt),imag(lb),imag(rt)));
+}
+
+complex prandom(double rmin, double rmax, double thetamin, double thetamax)
+{
+  return(polar(random(rmin,rmax),random(thetamin,thetamax)));
+}
+
+complex prandom(complex lb, complex rt)
+{
+  rlb, tlb = ptod(lb);
+  rrt, trt = ptod(rt);
+  return(prandom(rlb ScalarArith::min rrt, rlb ScalarArith::max rrt, trt, tlb));
+}
 
 int[*] random( int[.] shp, int MIN, int MAX)
 {
