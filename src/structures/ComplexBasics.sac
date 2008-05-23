@@ -151,8 +151,29 @@ inline double arg(complex CPX)
 
 inline complex i()
 {
-  return((:complex)[0.0d, 1.0d]);
+  return( toc( 0,1));
 }
 
+inline complex zero()
+{
+  return( toc( 0,0));
+}
+
+inline complex zero( complex[*] a)
+{
+  /* Provided for compatibility with UDT macro mechanism */
+  return( toc( 0,0));
+}
+
+inline complex one()
+{
+  return( toc( 1,0));
+}
+
+inline complex one( complex[*] a)
+{
+  /* Provided for compatibility with UDT macro mechanism */
+  return( toc( 1,0));
+}
 
 

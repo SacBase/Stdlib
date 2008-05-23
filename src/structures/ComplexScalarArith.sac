@@ -7,16 +7,6 @@ use ScalarArith : { &, | };
 use ComplexBasics: all;
 
 
-inline complex zero( complex[*] a)
-{
-  return( toc( 0,0));
-}
-
-inline complex one( complex[*] a)
-{
-  return( toc( 1,0));
-}
-
   /*  Binary operations on complex numbers.  */
 
   
