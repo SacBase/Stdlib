@@ -12,7 +12,7 @@
 
 #define MAP_BIN_AxA( name, op, a, b)                                               \
 inline                                                                             \
-b[*] (name)( a[+] A, a[+] B)                                                       \
+b[+] (name)( a[+] A, a[+] B)                                                       \
 {                                                                                  \
   shp = shape( A);                                                                 \
   res = with {                                                                     \
@@ -23,7 +23,7 @@ b[*] (name)( a[+] A, a[+] B)                                                    
 
 #define MAP_BIN_AxS( name, op, a, b)                                   \
 inline                                                                 \
-b[*] (name)( a[+] A, a B)                                              \
+b[+] (name)( a[+] A, a B)                                              \
 {                                                                      \
   shp = shape( A);                                                     \
   res = with {                                                         \
@@ -34,7 +34,7 @@ b[*] (name)( a[+] A, a B)                                              \
 
 #define MAP_BIN_SxA( name, op, a, b)                                   \
 inline                                                                 \
-b[*] (name)( a A, a[+] B)                                              \
+b[+] (name)( a A, a[+] B)                                              \
 {                                                                      \
   shp = shape( B);                                                     \
   res = with {                                                         \
@@ -51,7 +51,7 @@ b[*] (name)( a A, a[+] B)                                              \
 
 #define MAP_MON_AxA( name, op, a, b)                        \
 inline                                                      \
-b[*] (name)( a[+] A)                                        \
+b[+] (name)( a[+] A)                                        \
 {                                                           \
   shp = shape( A);                                          \
   res = with {                                              \
@@ -166,7 +166,7 @@ a[*] tile( int[.] shp, int[.] idx, a[*] array)                            \
 
 #define CAT( a)                                                             \
 inline                                                                      \
-a[*] (++)( a[+] arr_a, a[+] arr_b)                                          \
+a[+] (++)( a[+] arr_a, a[+] arr_b)                                          \
 {                                                                           \
   new_shp = _modarray_AxVxS_( shape( arr_a),                                \
                               [0],                                          \
@@ -189,7 +189,7 @@ a[*] (++)( a[+] arr_a, a[+] arr_b)                                          \
 
 #define REVERSE( a)                                                         \
 inline                                                                      \
-a[*] (reverse)( a[+] arr_a)                                                 \
+a[+] (reverse)( a[+] arr_a)                                                 \
 {                                                                           \
   maxidx0 = _sub_SxS_( _sel_VxA_( [0], shape( arr_a)), 1);                  \
   res = with {                                                              \
@@ -202,7 +202,7 @@ a[*] (reverse)( a[+] arr_a)                                                 \
 
 #define SHIFT_S( a)                                                           \
 inline                                                                        \
-a[*] shift (int dimension, int count, a boundary, a[+] A)                     \
+a[+] shift (int dimension, int count, a boundary, a[+] A)                     \
 {                                                                             \
   if (count ScalarArith::== 0) {                                              \
     result = A;                                                               \
@@ -234,7 +234,7 @@ a[*] shift (int dimension, int count, a boundary, a[+] A)                     \
 
 #define SHIFT_V( a)                                                \
 inline                                                             \
-a[*] shift (int[.] counts, a boundary, a[+] A)                     \
+a[+] shift (int[.] counts, a boundary, a[+] A)                     \
 {                                                                  \
                                                                    \
   for( i=0;                                                        \
@@ -300,7 +300,7 @@ a[+] rotate (int dimension, int count, a[+] A)                             \
 
 #define ROTATE_V( a)                                                   \
 inline                                                                 \
-a[*] rotate (int[.] counts,  a[+] A)                                   \
+a[+] rotate (int[.] counts,  a[+] A)                                   \
 {                                                                      \
   int offset;                                                          \
                                                                        \
