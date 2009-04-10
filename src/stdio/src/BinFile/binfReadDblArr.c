@@ -5,8 +5,8 @@
 
 #include "BinFile.h"
 
-#define array_nt (array, (AUD, (NHD, (NUQ, ))))
-#define ret_nt   (ret,   (AUD, (NHD, (NUQ, ))))
+#define array_nt (array, T_OLD((AUD, (NHD, (NUQ, )))))
+#define ret_nt   (ret,   T_OLD((AUD, (NHD, (NUQ, )))))
 
 void SACbinfReadDoubleArray( SAC_ND_PARAM_out( array_nt, double), int fd, int dim, int *shp)
 {

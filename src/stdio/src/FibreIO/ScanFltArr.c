@@ -7,8 +7,8 @@
 #include "FibreScan.tab.h"
 
 
-#define array_nt (array, (AUD, (NHD, (NUQ, ))))
-#define ret_nt   (ret,   (AUD, (NHD, (NUQ, ))))
+#define array_nt (array, T_OLD((AUD, (NHD, (NUQ, )))))
+#define ret_nt   (ret,   T_OLD((AUD, (NHD, (NUQ, )))))
 
 void FibreScanFloatArray( SAC_ND_PARAM_out( array_nt, float),
                           FILE *stream,

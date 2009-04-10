@@ -6,10 +6,10 @@
 #include "List.h"
 
 
-#define res_nt    (res,    (SCL, (HID, (NUQ,))))
-#define elemsA_nt (elemsA, (SCL, (HID, (NUQ,))))
-#define elemsB_nt (elemsB, (SCL, (HID, (NUQ,))))
-#define new_nt    (new,    (SCL, (HID, (NUQ,))))
+#define res_nt    (res,    T_OLD((SCL, (HID, (NUQ,)))))
+#define elemsA_nt (elemsA, T_OLD((SCL, (HID, (NUQ,)))))
+#define elemsB_nt (elemsB, T_OLD((SCL, (HID, (NUQ,)))))
+#define new_nt    (new,    T_OLD((SCL, (HID, (NUQ,)))))
 
 void SAC_List_append( SAC_ND_PARAM_out( res_nt, list *),
              SAC_ND_PARAM_in( elemsA_nt, list *),

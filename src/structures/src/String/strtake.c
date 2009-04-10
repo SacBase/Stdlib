@@ -8,8 +8,8 @@
 
 /*****************************************************************/
 
-#define new_nt (new, (SCL, (HID, (NUQ,))))
-#define old_nt (old, (SCL, (HID, (NUQ,))))
+#define new_nt (new, T_OLD((SCL, (HID, (NUQ,)))))
+#define old_nt (old, T_OLD((SCL, (HID, (NUQ,)))))
 
 void strtake( SAC_ND_PARAM_out( new_nt, string),
               SAC_ND_PARAM_in( old_nt, string),

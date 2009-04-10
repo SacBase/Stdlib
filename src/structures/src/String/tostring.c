@@ -8,8 +8,8 @@
 
 /*****************************************************************/
 
-#define str_nt (str, (SCL, (HID, (NUQ,))))
-#define ar_nt  (ar, (AUD, (NHD, (NUQ,))))
+#define str_nt (str, T_OLD((SCL, (HID, (NUQ,)))))
+#define ar_nt  (ar, T_OLD((AUD, (NHD, (NUQ,)))))
 
 void to_string( SAC_ND_PARAM_out( str_nt, string),
                 SAC_ND_PARAM_in( ar_nt, char),
