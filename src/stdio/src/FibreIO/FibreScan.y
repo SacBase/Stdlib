@@ -58,7 +58,7 @@ static int elems_left[MAXDIM];
 /*
  * Make sure, the stack of the generated parser is big enough!
  */
-#define YYMAXDEPTH 10000
+#define YYMAXDEPTH 100000
 
 %}
 
@@ -131,13 +131,14 @@ int_array: SQBR_L desc COLON
            }
          ;
 
-ints: NUM
-      { if( elems_left[given_dim]-- == 0) {
+ints: ints NUM
+      { 
+        if( elems_left[given_dim]-- == 0) {
           yyerror("FIBRE: more array elements than specified!");
           return(1);
         }
-        intarray[array_ptr++]=$1;
-      } ints
+        intarray[array_ptr++]= $2;
+      } 
       | /* empty */
       ;
 
@@ -181,13 +182,16 @@ flt_array: SQBR_L desc COLON
            }
          ;
 
-flts: FLOAT
-      { if( elems_left[given_dim]-- == 0) {
+flts: flts FLOAT
+      { 
+        printf("elems_left[given_dim] = %i, array_ptr = %i, num = %f\n",
+        elems_left[given_dim], array_ptr, $2);
+        if( elems_left[given_dim]-- == 0) {
           yyerror("FIBRE: more array elements than specified!");
           return(1);
         }
-        floatarray[array_ptr++]=$1;
-      } flts
+        floatarray[array_ptr++]=$2;
+      } 
       | /* empty */
       ;
 
@@ -231,13 +235,13 @@ dbl_array: SQBR_L desc COLON
            }
          ;
 
-dbls: DOUBLE
+dbls: dbls DOUBLE
       { if( elems_left[given_dim]-- == 0) {
           yyerror("FIBRE: more array elements than specified!");
           return(1);
         }
-        doublearray[array_ptr++]=$1;
-      } dbls
+        doublearray[array_ptr++]=$2;
+      } 
     | /* empty */
     ;
 
