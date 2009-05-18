@@ -28,7 +28,7 @@ void FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
   int i;
   
   INDENT(stream, indent);
-  fprintf(stream, "[ 0,%d:\n", *shp - 1);
+  fprintf(stream, "[ 1,%d:\n", *shp);
     
   if (dim==1)
   {
