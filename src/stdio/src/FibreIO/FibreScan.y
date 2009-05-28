@@ -250,7 +250,11 @@ desc: NUM COMMA NUM
           yyerror( "FIBRE: array of lower dimensionality expected!");
           return(1);
         }
-        if( *given_shp != $3) {
+        if ($1 != 0) {
+          yyerror( "FIBRE: Array indexing must start with 0!");
+          return(1);
+        }
+        if( *given_shp != $3 + 1) {
           yyerror( "FIBRE: shape does not match specification!");
           return(1);
         }
@@ -264,5 +268,5 @@ desc: NUM COMMA NUM
 
 void yyerror( char *errname)
 {
-  fprintf( stderr, "%d: %s at '%s`\n", linenum, errname, yytext);
+  fprintf( stderr, "line %d: \"%s\" : %s\n", linenum, yytext, errname);
 }
