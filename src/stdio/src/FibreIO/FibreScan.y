@@ -21,6 +21,9 @@ int *given_shp;
 static int array_ptr;
 static int elems_left[MAXDIM];
 
+static void yywarn( char *msg);
+ 
+
 %}
 
 
@@ -83,7 +86,7 @@ bool: TTRUE {$$ = 1;}
 
 int_arrays: int_array
             { if( elems_left[given_dim]-- == 0) {
-                yyerror("FIBRE: more sub-arrays than specified!");
+                yyerror("more sub-arrays than specified!");
 #ifdef MUST_REFERENCE_YYLABELS
                 /*
                  * The follwing command is a veeeeeeery ugly trick to avoid warnings
@@ -100,26 +103,26 @@ int_arrays: int_array
             int_arrays
           | int_array
             { if( elems_left[given_dim]-- == 0) {
-                yyerror("FIBRE: more sub-arrays than specified!");
+                yyerror("more sub-arrays than specified!");
               }
             }
           ;
 
 int_array: SQBR_L desc COLON
            { if( given_dim != 0) {
-               yyerror("FIBRE: array of higher dimensionality expected!");
+               yyerror("array of higher dimensionality expected!");
              }
            }
            ints SQBR_R
            { if( elems_left[given_dim] != 0) {
-               yyerror("FIBRE: fewer array elements than specified!");
+               yyerror("fewer array elements than specified!");
              }
              given_dim++;
              given_shp--;
            }
          | SQBR_L desc COLON int_arrays SQBR_R
            { if( elems_left[given_dim] != 0) {
-               yyerror("FIBRE: fewer sub-arrays than specified!");
+               yyerror("fewer sub-arrays than specified!");
              }
              given_dim++;
              given_shp--;
@@ -129,7 +132,7 @@ int_array: SQBR_L desc COLON
 ints: ints NUM
       { 
         if( elems_left[given_dim]-- == 0) {
-          yyerror("FIBRE: more array elements than specified!");
+          yyerror("more array elements than specified!");
         }
         intarray[array_ptr++]= $2;
       } 
@@ -139,32 +142,32 @@ ints: ints NUM
 
 flt_arrays: flt_array
             { if( elems_left[given_dim]-- == 0) {
-                yyerror("FIBRE: more sub-arrays than specified!");
+                yyerror("more sub-arrays than specified!");
               }
             }
             flt_arrays
           | flt_array
             { if( elems_left[given_dim]-- == 0) {
-                yyerror("FIBRE: more sub-arrays than specified!");
+                yyerror("more sub-arrays than specified!");
               }
             }
           ;
 
 flt_array: SQBR_L desc COLON
            { if( given_dim != 0) {
-               yyerror("FIBRE: array of higher dimensionality expected!");
+               yyerror("array of higher dimensionality expected!");
              }
            }
            flts SQBR_R
            { if( elems_left[given_dim] != 0) {
-               yyerror("FIBRE: fewer array elements than specified!");
+               yyerror("fewer array elements than specified!");
              }
              given_dim++;
              given_shp--;
            }
          | SQBR_L desc COLON flt_arrays SQBR_R
            { if( elems_left[given_dim] != 0) {
-               yyerror("FIBRE: fewer sub-arrays than specified!");
+               yyerror("fewer sub-arrays than specified!");
              }
              given_dim++;
              given_shp--;
@@ -176,7 +179,7 @@ flts: flts FLOAT
         printf("elems_left[given_dim] = %i, array_ptr = %i, num = %f\n",
         elems_left[given_dim], array_ptr, $2);
         if( elems_left[given_dim]-- == 0) {
-          yyerror("FIBRE: more array elements than specified!");
+          yyerror("more array elements than specified!");
         }
         floatarray[array_ptr++]=$2;
       } 
@@ -186,13 +189,13 @@ flts: flts FLOAT
 
 dbl_arrays: dbl_array 
             { if( elems_left[given_dim]-- == 0) {
-                yyerror("FIBRE: more sub-arrays than specified!");
+                yyerror("more sub-arrays than specified!");
               }
             }
             dbl_arrays
           | dbl_array
             { if( elems_left[given_dim]-- == 0) {
-                yyerror("FIBRE: more sub-arrays than specified!");
+                yyerror("more sub-arrays than specified!");
                 return(1);
               }
             }
@@ -200,19 +203,19 @@ dbl_arrays: dbl_array
 
 dbl_array: SQBR_L desc COLON
            { if( given_dim != 0) {
-               yyerror("FIBRE: array of higher dimensionality expected!");
+               yyerror("array of higher dimensionality expected!");
              }
            }
            dbls SQBR_R
            { if( elems_left[given_dim] != 0) {
-               yyerror("FIBRE: fewer array elements than specified!");
+               yyerror("fewer array elements than specified!");
              }
              given_dim++;
              given_shp--;
            }
          | SQBR_L desc COLON dbl_arrays SQBR_R
            { if( elems_left[given_dim] != 0) {
-               yyerror("FIBRE: fewer sub-arrays than specified!");
+               yyerror("fewer sub-arrays than specified!");
              }
              given_dim++;
              given_shp--;
@@ -221,7 +224,7 @@ dbl_array: SQBR_L desc COLON
 
 dbls: dbls DOUBLE
       { if( elems_left[given_dim]-- == 0) {
-          yyerror("FIBRE: more array elements than specified!");
+          yyerror("more array elements than specified!");
         }
         doublearray[array_ptr++]=$2;
       } 
@@ -230,13 +233,14 @@ dbls: dbls DOUBLE
 
 desc: NUM COMMA NUM
       { if (given_dim-- == 0) {
-          yyerror( "FIBRE: array of lower dimensionality expected!");
+          yyerror( "array of lower dimensionality expected!");
         }
         if ($1 != 0) {
-          yyerror( "FIBRE: Array indexing must start with 0!");
+          yywarn( "automatic index range conversion!");
+          yywarn( "expected start index: 0.");
         }
-        if( *given_shp != $3 + 1) {
-          yyerror( "FIBRE: shape does not match specification!");
+        if( *given_shp != $3 - $1 + 1) {
+          yyerror( "shape does not match specification!");
         }
         elems_left[given_dim]=*given_shp++;
       }
@@ -246,8 +250,15 @@ desc: NUM COMMA NUM
 %%
 
 
-void yyerror( char *errname)
+void yyerror( char *msg)
 {
-  fprintf( stderr, "line %d: \"%s\" : %s\n", linenum, yytext, errname);
+  fprintf( stderr, "FIBRE error: line %d: \"%s\" : %s\n", linenum, yytext, msg);
+  fprintf( stderr, "FIBRE error: document scan terminated!\n");
   exit(1);
+}
+
+static
+void yywarn( char *msg)
+{
+  fprintf( stderr, "FIBRE warning: line %d: \"%s\" : %s\n", linenum, yytext, msg);
 }
