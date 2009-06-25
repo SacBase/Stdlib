@@ -22,16 +22,14 @@
 int linenum=1;
 int start_token;
 
-#define YY_SKIP_YYWRAP
-
-int yywrap()
-{
-  return(1);
-}
-
-#define YY_NO_UNPUT
 
 %}
+
+   /* Suppress compilation warning yyunput and input defined but not used */
+%option nounput
+%option noinput
+%option noyywrap
+
 
 %%
 
