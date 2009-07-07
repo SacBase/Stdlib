@@ -22,3 +22,6 @@ typedef struct ARRAY {
 extern array *SAC_StringArray_alloc( int dim, int size);
 extern int SAC_StringArray_index2offset( int dim, int *idx, int *shp);
 
+extern void SAC_StringArray_free( array *arr);
+extern array *SAC_StringArray_copy( array *arr);
+

@@ -1,0 +1,31 @@
+module StringArray;
+
+use String: {string};
+
+export all;
+
+external typedef stringArray;
+    #pragma linkobj "src/StringArray/free.o"
+    #pragma linkobj "src/StringArray/copy.o"
+    #pragma linkobj "src/StringArray/alloc.o"
+    #pragma freefun "SAC_StringArray_free"
+    #pragma copyfun "SAC_StringArray_copy"
+
+external stringArray modarray( stringArray labs, int[.] idx, string  str);
+    #pragma linkname "SAC_StringArray_modarray"
+    #pragma linkobj "src/StringArray/modarray.o"
+    #pragma linkobj "src/StringArray/index2offset.o"
+    #pragma refcounting [0,1,2,3]
+
+external string sel( int[.] idx, stringArray labs);
+    #pragma linkname "SAC_StringArray_sel"
+    #pragma linkobj "src/StringArray/sel.o"
+    #pragma linkobj "src/StringArray/index2offset.o"
+    #pragma refcounting [0,1,2]
+
+external stringArray genarray( int[.] shp, string s);
+    #pragma linkname "SAC_StringArray_genarray"
+    #pragma linkobj "src/StringArray/genarray.o"
+    #pragma refcounting [0,1,2]
+
+

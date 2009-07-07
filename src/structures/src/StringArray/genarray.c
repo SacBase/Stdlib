@@ -34,7 +34,7 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
     res->shp[i] = SAC_ND_READ( shp_nt, i);
   }
 
-  for( i=0; i < rav_len ; i++) {
+  for( i=0; i < size ; i++) {
     res->data[i] = SAC_ND_A_FIELD( s_nt );
     res->descs[i] = SAC_ND_A_DESC( s_nt );
     SAC_ND_INC_RC( s_nt, 1);
