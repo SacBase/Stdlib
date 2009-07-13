@@ -176,8 +176,6 @@ flt_array: SQBR_L desc COLON
 
 flts: flts FLOAT
       { 
-        printf("elems_left[given_dim] = %i, array_ptr = %i, num = %f\n",
-        elems_left[given_dim], array_ptr, $2);
         if( elems_left[given_dim]-- == 0) {
           yyerror("more array elements than specified!");
         }
