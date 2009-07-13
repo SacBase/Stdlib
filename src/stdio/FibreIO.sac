@@ -227,7 +227,7 @@ inline void FibrePrint(File &stream, float[+] arr)
 
 inline void FibrePrint(File &stream, float arr)
 {
-  File::fprintf(stream, "%f\n", arr);
+  File::fprintf(stream, "%.16f\n", arr);
 }
 
 /*****************************************************************/
@@ -240,7 +240,7 @@ inline void FibrePrint(File &stream, double[+] arr)
 
 inline void FibrePrint(File &stream, double arr)
 {
-  File::fprintf(stream, "%lf\n", arr);
+  File::fprintf(stream, "%.16f\n", arr);
 }
 
 /*****************************************************************/
@@ -267,7 +267,7 @@ inline void FibrePrint(TermFile &stream, float[+] arr)
 
 inline void FibrePrint(TermFile &stream, float arr)
 {
-  TermFile::fprintf(stream, "%f\n", arr);
+  TermFile::fprintf(stream, "%.16f\n", arr);
 }
 
 /*****************************************************************/
@@ -280,7 +280,7 @@ inline void FibrePrint(TermFile &stream, double[+] arr)
 
 inline void FibrePrint(TermFile &stream, double arr)
 {
-  TermFile::fprintf(stream, "%lf\n", arr);
+  TermFile::fprintf(stream, "%.16f\n", arr);
 }
 
 
@@ -308,7 +308,7 @@ inline void FibrePrint(float[+] arr)
 
 inline void FibrePrint(float arr)
 {
-  TermFile::fprintf(stdout, "%f\n", arr);
+  TermFile::fprintf(stdout, "%.16f\n", arr);
 }
 
 /*****************************************************************/
@@ -321,7 +321,7 @@ inline void FibrePrint(double[+] arr)
 
 inline void FibrePrint(double arr)
 {
-  TermFile::fprintf(stdout, "%lf\n", arr);
+  TermFile::fprintf(stdout, "%.16f\n", arr);
 }
 
 /*****************************************************************/
