@@ -211,6 +211,10 @@ inline void FibrePrint(File &stream, int[+] arr)
   FibrePrint(stream, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(File &stream, int arr)
+{
+  File::fprintf(stream, "%d\n", arr);
+}
 
 /*****************************************************************/
 
@@ -221,6 +225,11 @@ inline void FibrePrint(File &stream, float[+] arr)
 }
 
 
+inline void FibrePrint(File &stream, float arr)
+{
+  File::fprintf(stream, "%f\n", arr);
+}
+
 /*****************************************************************/
 
 
@@ -229,6 +238,10 @@ inline void FibrePrint(File &stream, double[+] arr)
   FibrePrint(stream, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(File &stream, double arr)
+{
+  File::fprintf(stream, "%lf\n", arr);
+}
 
 /*****************************************************************/
 /*****************************************************************/
@@ -239,6 +252,10 @@ inline void FibrePrint(TermFile &stream, int[+] arr)
   FibrePrint(stream, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(TermFile &stream, int arr)
+{
+  TermFile::fprintf(stream, "%d\n", arr);
+}
 
 /*****************************************************************/
 
@@ -248,6 +265,10 @@ inline void FibrePrint(TermFile &stream, float[+] arr)
   FibrePrint(stream, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(TermFile &stream, float arr)
+{
+  TermFile::fprintf(stream, "%f\n", arr);
+}
 
 /*****************************************************************/
 
@@ -255,6 +276,11 @@ inline void FibrePrint(TermFile &stream, float[+] arr)
 inline void FibrePrint(TermFile &stream, double[+] arr)
 {
   FibrePrint(stream, dim(arr), shape(arr), arr);
+}
+
+inline void FibrePrint(TermFile &stream, double arr)
+{
+  TermFile::fprintf(stream, "%lf\n", arr);
 }
 
 
@@ -267,6 +293,10 @@ inline void FibrePrint(int[+] arr)
   FibrePrint(stdout, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(int arr)
+{
+  TermFile::fprintf(stdout, "%d\n", arr);
+}
 
 /*****************************************************************/
 
@@ -276,6 +306,10 @@ inline void FibrePrint(float[+] arr)
   FibrePrint(stdout, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(float arr)
+{
+  TermFile::fprintf(stdout, "%f\n", arr);
+}
 
 /*****************************************************************/
 
@@ -285,6 +319,10 @@ inline void FibrePrint(double[+] arr)
   FibrePrint(stdout, dim(arr), shape(arr), arr);
 }
 
+inline void FibrePrint(double arr)
+{
+  TermFile::fprintf(stdout, "%lf\n", arr);
+}
 
 /*****************************************************************/
 /*****************************************************************/
