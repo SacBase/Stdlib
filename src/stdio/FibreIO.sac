@@ -3,6 +3,7 @@ module FibreIO;
 
 use IOresources: all;
 use Array : { shape, sel, dim };
+use String: all except {sel, shape};
 
 export all;
 
@@ -24,23 +25,19 @@ external  double FibreScanDouble( File &stream);
   #pragma linksign[0,1]
   #pragma linkobj "src/FibreIO/ScanDbl.o"
 
-external  int[+]  FibreScanIntArray( File &stream, int DIM, int[.] SHAPE);
-  /*
-   * If we use the new backend, the return value must be a complete AUD
-   * representation -> we must build a descriptor for the return value.
-   */
+external  int[*]  FibreScanIntArray( File &stream);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3,4]
+  #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanIntArr.o"
 
-external  float[+]  FibreScanFloatArray( File &stream, int DIM, int[.] SHAPE);
+external  float[*]  FibreScanFloatArray( File &stream);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3,4]
+  #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
-external  double[+]  FibreScanDoubleArray( File &stream, int DIM, int[.] SHAPE);
+external  double[*]  FibreScanDoubleArray( File &stream);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3,4]
+  #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
 /*****************************************************************
@@ -61,23 +58,39 @@ external  double FibreScanDouble( TermFile &stream);
   #pragma linksign[0,1]
   #pragma linkobj "src/FibreIO/ScanDbl.o"
 
-external  int[+]  FibreScanIntArray( TermFile &stream, int DIM, int[.] SHAPE);
-  /*
-   * If we use the new backend, the return value must be a complete AUD
-   * representation -> we must build a descriptor for the return value.
-   */
+external  int[*]  FibreScanIntArray( TermFile &stream);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3,4]
+  #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanIntArr.o"
 
-external  float[+]  FibreScanFloatArray( TermFile &stream, int DIM, int[.] SHAPE);
+
+external  float[*]  FibreScanFloatArray( TermFile &stream);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3,4]
+  #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
-external  double[+]  FibreScanDoubleArray( TermFile &stream, int DIM, int[.] SHAPE);
+external  double[*]  FibreScanDoubleArray( TermFile &stream);
   #pragma refcounting [0]
-  #pragma linksign[1,2,3,4]
+  #pragma linksign[1,2]
+  #pragma linkobj "src/FibreIO/ScanDblArr.o"
+
+/*****************************************************************
+ * FibreScan on String
+ */
+
+external  int[*]  FibreScanIntArrayStr( string stream);
+  #pragma refcounting [0]
+  #pragma linksign[1,2]
+  #pragma linkobj "src/FibreIO/ScanIntArr.o"
+
+external  float[*]  FibreScanFloatArrayStr( string stream);
+  #pragma refcounting [0]
+  #pragma linksign[1,2]
+  #pragma linkobj "src/FibreIO/ScanFltArr.o"
+
+external  double[*]  FibreScanDoubleArrayStr( string stream);
+  #pragma refcounting [0]
+  #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
 /*****************************************************************
@@ -115,89 +128,34 @@ external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, double[+] ARR
 
 
 
+
 /*****************************************************************/
 /*****************************************************************/
 
 
-int[+]  FibreScanIntArray( File &stream, int[+] shp)
+
+int[*]  FibreScanIntArray()
 {
-  return( FibreScanIntArray( stream, (shape(shp))[[0]], shp));
+  return( FibreScanIntArray( stdin));
 }
 
 
 /*****************************************************************/
 
-
-float[+]  FibreScanFloatArray( File &stream, int[+] shp)
+float[*]  FibreScanFloatArray()
 {
-  return( FibreScanFloatArray( stream, (shape(shp))[[0]], shp));
+  return( FibreScanFloatArray( stdin));
 }
 
 
+
 /*****************************************************************/
 
 
-double[+]  FibreScanDoubleArray( File &stream, int[+] shp)
+double[*]  FibreScanDoubleArray()
 {
-  return( FibreScanDoubleArray( stream, (shape(shp))[[0]], shp));
+  return( FibreScanDoubleArray( stdin));
 }
-
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-int[+]  FibreScanIntArray( TermFile &stream, int[+] shp)
-{
-  return( FibreScanIntArray( stream, (shape(shp))[[0]], shp));
-}
-
-
-/*****************************************************************/
-
-
-float[+]  FibreScanFloatArray( TermFile &stream, int[+] shp)
-{
-  return( FibreScanFloatArray( stream, (shape(shp))[[0]], shp));
-}
-
-
-/*****************************************************************/
-
-
-double[+]  FibreScanDoubleArray( TermFile &stream, int[+] shp)
-{
-  return( FibreScanDoubleArray( stream, (shape(shp))[[0]], shp));
-}
-
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-int[+]  FibreScanIntArray( int[+] shp)
-{
-  return( FibreScanIntArray( stdin, (shape(shp))[[0]], shp));
-}
-
-
-/*****************************************************************/
-
-
-float[+]  FibreScanFloatArray( int[+] shp)
-{
-  return( FibreScanFloatArray( stdin, (shape(shp))[[0]], shp));
-}
-
-
-/*****************************************************************/
-
-
-double[+]  FibreScanDoubleArray( int[+] shp)
-{
-  return( FibreScanDoubleArray( stdin, (shape(shp))[[0]], shp));
-}
-
 
 
 /*****************************************************************/

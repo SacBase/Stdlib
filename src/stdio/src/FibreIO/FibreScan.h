@@ -17,6 +17,7 @@
 #define yy_load_buffer_state FibreScan_load_buffer_state
 #define yy_switch_to_buffer FibreScan_switch_to_buffer
 #define yyin FibreScanin
+#define yy_scan_string FibreScan_scan_string
 #define yyleng FibreScanleng
 #define yylex FibreScanlex
 #define yyout FibreScanout
@@ -39,6 +40,7 @@
 extern int linenum;
 
 extern int yyparse();
+extern int yy_scan_string( char*);
 extern void yyerror(char *);
 
 extern char *yytext;
@@ -55,5 +57,8 @@ extern double *doublearray;
 extern float *floatarray;
 extern int *intarray;
 
-extern int given_dim;
-extern int *given_shp;
+extern int got_scaler;
+extern int size;
+extern int dims;
+extern int shape[ MAXDIM];
+
