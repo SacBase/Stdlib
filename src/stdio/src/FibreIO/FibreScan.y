@@ -88,15 +88,15 @@ file: PARSE_BOOL bool
     | PARSE_DOUBLE_ARRAY 
          {got_scaler = 0; mode = double_mode;} 
          parse_array 
-         {return(0)}
+         {return(0);}
     | PARSE_FLOAT_ARRAY 
          {got_scaler = 0; mode = float_mode;} 
          parse_array 
-         {return(0)}
+         {return(0);}
     | PARSE_INT_ARRAY 
          {got_scaler = 0; mode = int_mode;} 
          parse_array 
-         {return(0)}
+         {return(0);}
     ;
 
 
