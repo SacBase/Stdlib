@@ -65,6 +65,13 @@ external  void fclose(File STREAM);
      * Close the stream given by the file handle STREAM. 
      */
 
+external void fremove(string fname);
+    #pragma linkobj "src/File/rm.c"
+    #pragma effect TheFileSystem
+    /*
+     * Remove file or directory
+     */
+
 
 
   /*
