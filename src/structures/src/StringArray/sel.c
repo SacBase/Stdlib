@@ -5,7 +5,7 @@
 
 #define strout_nt (strout, T_OLD((SCL, (HID, (NUQ,)))))
 #define str_nt    (str,    T_OLD((SCL, (HID, (NUQ,)))))
-#define idx_nt    (idx,    T_OLD((AKD, (HID, (NUQ,)))))
+#define idx_nt    (idx,    T_OLD((AKD, (NHD, (NUQ,)))))
 #define arr_nt    (arr,    T_OLD((SCL, (HID, (NUQ,)))))
 
 void SAC_StringArray_sel(  SAC_ND_PARAM_out( strout_nt, char *),
@@ -15,7 +15,6 @@ void SAC_StringArray_sel(  SAC_ND_PARAM_out( strout_nt, char *),
   int offset;
   SAC_ND_DECL__DESC( str_nt, );
   char *SAC_ND_A_FIELD( str_nt );
-  int SAC_ND_A_MIRROR_SIZE( idx_nt) = SAC_ND_A_DESC_SIZE( idx_nt );
 
   offset = SAC_StringArray_index2offset( arr->dim,
                                          SAC_ND_A_FIELD(idx_nt),

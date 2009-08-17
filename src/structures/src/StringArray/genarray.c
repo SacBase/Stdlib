@@ -5,7 +5,7 @@
 
 #define resout_nt (resout, T_OLD((SCL, (HID, (NUQ,)))))
 #define res_nt    (res, T_OLD((SCL, (HID, (NUQ,)))))
-#define shp_nt    (shp, T_OLD((AKD, (HID, (NUQ,)))))
+#define shp_nt    (shp, T_OLD((AKD, (NHD, (NUQ,)))))
 #define s_nt      (s,   T_OLD((SCL, (HID, (NUQ,)))))
 
 void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
@@ -14,7 +14,6 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
 {
   SAC_ND_DECL__DESC( res_nt, );
   array *SAC_ND_A_FIELD( res_nt );
-  int SAC_ND_A_MIRROR_SIZE( shp_nt) = SAC_ND_A_DESC_SIZE( shp_nt );
   int dim, size;
   int i;
 
@@ -41,7 +40,7 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
   }
 
   SAC_ND_DEC_RC_FREE( s_nt, 1 , free );
-  SAC_ND_DEC_RC_FREE( shp_nt, 1 , );
+  SAC_ND_DEC_RC_FREE( shp_nt, 1,);
 
   SAC_ND_RET_out( resout_nt , res_nt )
 
