@@ -110,12 +110,18 @@ parse_array: {dims=0;
            ;
 
 parse_scalar: NUM 
-                {if( ! mode == int_mode) { 
-                   yyerror( "Read integer but expected a floating point number!");
-                 }
+                { if( mode == double_mode) {
+                    doublearray = (double *) SAC_MALLOC( sizeof( double));
+                    *doublearray = $1;
+                  }
+                  else if( ! mode == int_mode) { 
+                    yyerror( "Read integer but expected a floating point number!");
+                  }
+                  else {
+                    intarray = (int *) SAC_MALLOC( sizeof( int));
+                    *intarray = $1;
+                  }
                  got_scaler = 1; 
-                 intarray = (int *) SAC_MALLOC( sizeof( int));
-                 *intarray = $1;
                  dims = 0;
                  size = 1;
                 }
@@ -140,7 +146,7 @@ parse_scalar: NUM
                      break;
                    case int_mode:
                      yyerror( 
-                       "Incorrectly parsed integer where double was expected");
+                       "Incorrectly parsed double where int was expected");
                      break;
                  }
                }
@@ -231,23 +237,25 @@ elems: elems elem
     ;
 
 elem: NUM 
-      { if( ! mode == int_mode) { 
-          yyerror( "Unexpect integer read\n");
+      { if( mode == double_mode) { 
+          doublearray[ array_pos]= (double)$1;
+        }
+        else if( mode == int_mode){
+          intarray[ array_pos]=$1;
         }
         else {
-          intarray[ array_pos]=$1;
+          yyerror("Unexpected Integer read");
         }
       }
     | DOUBLE  
-      { if( ( ! mode == float_mode) &&
-            ( ! mode == double_mode)) { 
-          yyerror( "Unexpected floating point read\n");
-        }
-        if( mode == float_mode) {
+      { if( mode == float_mode) {
           floatarray[ array_pos] = (float)$1;
         }
-        if( mode == double_mode) { 
+        else if( mode == double_mode) { 
           doublearray[ array_pos] = $1;
+        }
+        else {
+          yyerror( "Unexpected floating point read\n");
         }
       }
     ;
