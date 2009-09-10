@@ -22,7 +22,7 @@
 
 
 
-void FibreWriteAll(FILE *stream, int dim, int *shp, void *arr, 
+int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr, 
                   int typeflag, int indent, int done)
 {
   int i;
@@ -67,16 +67,16 @@ void FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
       switch (typeflag)
       {
       case INT:
-        FibreWriteAll(stream, dim-1, shp+1, ((int*)arr),
-                      typeflag, indent+1, done);
+        done = FibreWriteAll(stream, dim-1, shp+1, ((int*)arr),
+                             typeflag, indent+1, done);
         break;
       case FLOAT:
-        FibreWriteAll(stream, dim-1, shp+1, ((float*)arr),
-                      typeflag, indent+1, done);
+        done = FibreWriteAll(stream, dim-1, shp+1, ((float*)arr),
+                             typeflag, indent+1, done);
         break;
       case DOUBLE:
-        FibreWriteAll(stream, dim-1, shp+1, ((double*)arr),
-                      typeflag, indent+1, done);
+        done = FibreWriteAll(stream, dim-1, shp+1, ((double*)arr),
+                             typeflag, indent+1, done);
         break;
       }    
     }
@@ -84,6 +84,8 @@ void FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
     
   INDENT(stream, indent);
   fprintf(stream, "]\n");
+  
+  return( done);
 }
 
 
@@ -93,19 +95,19 @@ void FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
 
 void FibrePrintIntArray( FILE *stream, int dim, int *shape, int *array)
 {
-  FibreWriteAll(stream, dim, shape, array, INT, 0, 0);
+  (void) FibreWriteAll(stream, dim, shape, array, INT, 0, 0);
 }
 
 
 void FibrePrintFloatArray( FILE *stream, int dim, int *shape, float *array)
 {
-  FibreWriteAll(stream, dim, shape, array, FLOAT, 0, 0);
+  (void) FibreWriteAll(stream, dim, shape, array, FLOAT, 0, 0);
 }
 
 
 void FibrePrintDoubleArray( FILE *stream, int dim, int *shape, double *array)
 {
-  FibreWriteAll(stream, dim, shape, array, DOUBLE, 0, 0);
+  (void) FibreWriteAll(stream, dim, shape, array, DOUBLE, 0, 0);
 }
 
 
