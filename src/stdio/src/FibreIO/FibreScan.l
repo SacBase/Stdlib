@@ -61,6 +61,7 @@ int start_token;
 "\n"   						{linenum++;}
 [ \t]   					{}
 "\f"    					{}
+"#".*$            {}
 
 
 
