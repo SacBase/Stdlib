@@ -1,0 +1,96 @@
+/*****************************************************************************
+ *
+ * file:   Hiding.sac
+ *
+ * description:
+ *
+ *   This module is for hiding type information of
+ *   static inputs. It is intentioned for benchmarking.
+ *
+ *   The intention is to eventually add ID primitives to the compiler that 
+ *   can hide type information. Once these are added the functions below can 
+ *   be replaced by direct calls to these primitives.
+ *
+ *****************************************************************************/
+
+module Hiding;
+
+export all;
+
+use Structures: all;
+
+/*
+ * AKV -> AKS
+ * AKS -> AKS
+ * AKD -> AKD
+ * AUD -> AUD
+ * SCALAR -> SCALAR
+ */
+#define HIDEVALUE( TYPE)                               \
+specialize TYPE[.] hideValue( TYPE[.] in);             \
+specialize TYPE[.,.] hideValue( TYPE[.,.] in);         \
+specialize TYPE[.,.,.] hideValue( TYPE[.,.,.] in);     \
+specialize TYPE[.,.,.,.] hideValue( TYPE[.,.,.,.] in); \
+TYPE[*] hideValue( TYPE[*] in)                         \
+{                                                      \
+  return( in);                                         \
+}                             
+HIDEVALUE( int)
+HIDEVALUE( char)
+HIDEVALUE( float)
+HIDEVALUE( double)
+HIDEVALUE( bool)
+
+/*
+ * AKV -> AKD
+ * AKS -> AKD
+ * AKD -> AKD
+ * AUD -> AUD
+ * SCALAR -> SCALAR
+ */
+#define HIDESHAPE( TYPE)                               \
+specialize TYPE[.] hideShape( TYPE[.] in);             \
+specialize TYPE[.,.] hideShape( TYPE[.,.] in);         \
+specialize TYPE[.,.,.] hideShape( TYPE[.,.,.] in);     \
+specialize TYPE[.,.,.,.] hideShape( TYPE[.,.,.,.] in); \
+TYPE[*] hideShape( TYPE[*] in)                         \
+{                                                      \
+  if( hideValue( true)) {                              \
+    retval = in;                                       \
+  }                                                    \
+  else {                                               \
+    retval = in ++ in;                                 \
+  }                                                    \
+  return( retval);                                     \
+}
+HIDESHAPE( int)
+HIDESHAPE( char)
+HIDESHAPE( float)
+HIDESHAPE( double)
+HIDESHAPE( bool)
+
+/*
+ * AKV -> AUD
+ * AKS -> AUD
+ * AKD -> AUD
+ * AUD -> AUD
+ * SCALAR -> AUD
+ */
+#define HIDEDIMENSIONALITY( TYPE)                      \
+TYPE[*] hideDimensionality( TYPE[*] in)                \
+{                                                      \
+  if( hideValue( true)) {                              \
+    retval = in;                                       \
+  }                                                    \
+  else {                                               \
+    retval = [in];                                     \
+  }                                                    \
+  return( retval);                                     \
+}
+HIDEDIMENSIONALITY( int)
+HIDEDIMENSIONALITY( char)
+HIDEDIMENSIONALITY( float)
+HIDEDIMENSIONALITY( double)
+HIDEDIMENSIONALITY( bool)
+
+
