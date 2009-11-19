@@ -53,9 +53,11 @@ extern int boolval;
 extern int intval;
 extern float floatval;
 extern double doubleval;
+extern char *stringval;
 extern double *doublearray;
 extern float *floatarray;
 extern int *intarray;
+extern char **stringarray;
 
 extern int got_scaler;
 extern int size;

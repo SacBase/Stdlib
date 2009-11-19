@@ -12,22 +12,25 @@ enum READMODE {
   int_mode,
   float_mode,
   double_mode,
+  string_mode,
 };
 
-int boolval;
-int intval;
-float floatval;
-double doubleval;
-double *doublearray;
-float *floatarray;
-int *intarray;
+int     boolval;
+int     intval;
+float   floatval;
+double  doubleval;
+char    *stringval;
+double  *doublearray;
+float   *floatarray;
+int     *intarray;
+char    **stringarray;
 
 int i;
 int shape[ MAXDIM];
 int dim_pos;
 enum READMODE mode;
 
-int got_scaler;
+int got_scalar;
 int size_fixed;
 int dims;
 int size;
@@ -42,20 +45,22 @@ static int elems_left[MAXDIM];
          char            cchar;
          float           cfloat;
          double          cdbl;
+         char*           cstr;
          double*         cdbl_ptr;
          float*          cflt_ptr;
          int*            cint_ptr;
+         char**          cstr_ptr;
        }
 
 
-%token PARSE_BOOL PARSE_INT PARSE_FLOAT PARSE_DOUBLE
-       PARSE_DOUBLE_ARRAY PARSE_INT_ARRAY PARSE_FLOAT_ARRAY
+%token PARSE_BOOL PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING
+       PARSE_DOUBLE_ARRAY PARSE_INT_ARRAY PARSE_FLOAT_ARRAY PARSE_STRING_ARRAY
 %token SQBR_L SQBR_R COLON COMMA TTRUE TFALSE
 %token <cint> NUM
 %token <cfloat> FLOAT
-%token <cdbl> DOUBLE
-%token <cchar> CHAR
-
+%token <cdbl>   DOUBLE
+%token <cchar>  CHAR
+%token <cstr>   STRING
 
 %type <cbool> bool
 %type <cint_ptr> array
@@ -83,18 +88,24 @@ file: PARSE_BOOL bool
          {intval = $2; return(0);} 
     | PARSE_FLOAT FLOAT 
          {floatval = $2; return(0);}
+    | PARSE_STRING STRING 
+         {stringval = $2; return(0);}
     | PARSE_DOUBLE DOUBLE 
          {doubleval = $2; return(0);}
     | PARSE_DOUBLE_ARRAY 
-         {got_scaler = 0; mode = double_mode;} 
+         {got_scalar = 0; mode = double_mode;} 
          parse_array 
          {return(0);}
     | PARSE_FLOAT_ARRAY 
-         {got_scaler = 0; mode = float_mode;} 
+         {got_scalar = 0; mode = float_mode;} 
          parse_array 
          {return(0);}
     | PARSE_INT_ARRAY 
-         {got_scaler = 0; mode = int_mode;} 
+         {got_scalar = 0; mode = int_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_STRING_ARRAY 
+         {got_scalar = 0; mode = string_mode;} 
          parse_array 
          {return(0);}
     ;
@@ -121,7 +132,7 @@ parse_scalar: NUM
                     intarray = (int *) SAC_MALLOC( sizeof( int));
                     *intarray = $1;
                   }
-                 got_scaler = 1; 
+                 got_scalar = 1; 
                  dims = 0;
                  size = 1;
                 }
@@ -130,7 +141,7 @@ parse_scalar: NUM
                      ( ! mode == double_mode)) { 
                    yyerror( "Unexpected floating point read!\n");
                  }
-                 got_scaler = 1; 
+                 got_scalar = 1; 
                  switch( mode) {
                    case float_mode:
                      floatarray = (float *) SAC_MALLOC( sizeof( float));
@@ -148,8 +159,38 @@ parse_scalar: NUM
                      yyerror( 
                        "Incorrectly parsed double where int was expected");
                      break;
+                   case string_mode:
+                     yyerror( 
+                       "Incorrectly parsed double where string was expected");
+                     break;
                  }
                }
+              | STRING
+                { if( ! mode == string_mode)  {
+                   yyerror( "Unexpected string read!\n");
+                  }
+                  got_scalar = 1;
+                  switch( mode) {
+                    case string_mode:
+                      stringarray = (char **) SAC_MALLOC( sizeof( char*));
+                      stringarray[0] = (char*)$1;
+                      dims = 0;
+                      size = 1;
+                      break;
+                   case int_mode:
+                     yyerror( 
+                       "Incorrectly parsed string where int was expected");
+                     break;
+                   case double_mode:
+                     yyerror( 
+                       "Incorrectly parsed string where double was expected");
+                     break;
+                   case float_mode:
+                     yyerror( 
+                       "Incorrectly parsed string where float was expected");
+                     break;
+                  }
+                }
 
 bool: TTRUE {$$ = 1;}
     | TFALSE {$$ = 0;}
@@ -204,6 +245,9 @@ array: SQBR_L desc COLON
              case double_mode:
                doublearray = (double *) SAC_MALLOC( size * sizeof( double));
                break;
+             case string_mode:
+               stringarray = (char **) SAC_MALLOC( size * sizeof( char*));
+               break;
            }
          }
          else {
@@ -256,6 +300,14 @@ elem: NUM
         }
         else {
           yyerror( "Unexpected floating point read\n");
+        }
+      }
+    | STRING  
+      { if( mode == string_mode) {
+          stringarray[ array_pos] = $1;
+        }
+        else {
+          yyerror( "Unexpected string read\n");
         }
       }
     ;

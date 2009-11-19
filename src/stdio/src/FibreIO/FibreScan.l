@@ -18,6 +18,11 @@
                               *m='E';\
                           }\
                          yylval.cdbl=atof(yytext); return(token)
+#define RETURNstr(token)  {\
+                               yytext[ strlen( yytext) - 1] = '\0';\
+                               yylval.cstr = strdup( &yytext[1]);\
+                               return(token);\
+                           }
 
 int linenum=1;
 int start_token;
@@ -56,6 +61,7 @@ int start_token;
 [+-]?[0-9]+[.]([0-9]+)?([dD][+-]?[0-9]+)?	{ RETURNdbl(DOUBLE); }
 [+-]?[0-9]+[.]?[eE][+-]?[0-9]+			      { RETURNdbl(DOUBLE); }
 [+-]?[0-9]+[.]([0-9]+)?([eE][+-]?[0-9]+)?	{ RETURNdbl(DOUBLE); }
+\"([^"\n]|(\\\"))*\"                      { RETURNstr(STRING); }
 
 
 "\n"   						{linenum++;}

@@ -6,11 +6,12 @@
 #include <stdio.h>
 #include <string.h>
 
-
+#include "../../../../modules/structures/src/StringArray/StringArray.h"
 
 #define INT    1
 #define FLOAT  2
 #define DOUBLE 3
+#define STRING 4
 
 
 #define INDENT(stream, ind)                     \
@@ -56,6 +57,10 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         }
         fprintf(stream, "%e\n", ((double*)arr)[done + i]);
         break;
+      case STRING:
+        INDENT(stream, indent+1);
+        fprintf(stream, "%s\n", ((array*)arr)->data[done + i]);
+        break;
       }    
     }
     done+=*shp;
@@ -76,6 +81,10 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         break;
       case DOUBLE:
         done = FibreWriteAll(stream, dim-1, shp+1, ((double*)arr),
+                             typeflag, indent+1, done);
+        break;
+      case STRING:
+        done = FibreWriteAll(stream, dim-1, shp+1, ((array*)arr),
                              typeflag, indent+1, done);
         break;
       }    
@@ -110,7 +119,9 @@ void FibrePrintDoubleArray( FILE *stream, int dim, int *shape, double *array)
   (void) FibreWriteAll(stream, dim, shape, array, DOUBLE, 0, 0);
 }
 
-
-
+void FibrePrintStringArray( FILE *stream, int dim, int *shape, array *array)
+{
+  (void) FibreWriteAll(stream, dim, shape, array, STRING, 0, 0);
+}
 
 

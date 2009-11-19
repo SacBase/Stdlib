@@ -28,4 +28,13 @@ external stringArray genarray( int[.] shp, string s);
     #pragma linkobj "src/StringArray/genarray.o"
     #pragma refcounting [0,1,2]
 
+external int dim( stringArray s);
+    #pragma linkname "SAC_StringArray_dim"
+    #pragma linkobj "src/StringArray/dim.o"
+    #pragma refcounting [0,1]
+
+external int[.] shape( stringArray s);
+    #pragma linkname "SAC_StringArray_shape"
+    #pragma linkobj "src/StringArray/shape.o"
+    #pragma refcounting [0,1]
 

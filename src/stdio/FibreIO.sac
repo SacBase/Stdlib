@@ -3,7 +3,8 @@ module FibreIO;
 
 use IOresources: all;
 use Array : { shape, sel, dim };
-use String: all except {sel, shape};
+use String: all except {sel, shape, modarray};
+use StringArray: all except {sel, shape, dim}; 
 
 export all;
 
@@ -40,6 +41,11 @@ external  double[*]  FibreScanDoubleArray( File &stream);
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
+external stringArray  FibreScanStringArray( File &stream);
+  #pragma refcounting [0]
+  #pragma linksign[1,2]
+  #pragma linkobj "src/FibreIO/ScanStringArr.o"
+
 /*****************************************************************
  * FibreScan on TermFile
  */
@@ -74,6 +80,11 @@ external  double[*]  FibreScanDoubleArray( TermFile &stream);
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
+external  stringArray  FibreScanStringArray( TermFile &stream);
+  #pragma refcounting [0]
+  #pragma linksign[1,2]
+  #pragma linkobj "src/FibreIO/ScanStringArr.o"
+
 /*****************************************************************
  * FibreScan on String
  */
@@ -93,6 +104,11 @@ external  double[*]  FibreScanDoubleArrayStr( string stream);
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
+external  stringArray  FibreScanStringArrayStr( string stream);
+  #pragma refcounting [0]
+  #pragma linksign[1,2]
+  #pragma linkobj "src/FibreIO/ScanStringArr.o"
+
 /*****************************************************************
  * FibrePrint on File
  */
@@ -109,6 +125,9 @@ external void FibrePrint( File &stream, int DIM, int[+] SHAPE, double[+] ARRAY);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
+external void FibrePrint( File &stream, int DIM, int[+] SHAPE, stringArray ARRAY);
+  #pragma linkname "FibrePrintStringArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
 
 /*****************************************************************
  * FibrePrint on TermFile
@@ -126,6 +145,9 @@ external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, double[+] ARR
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
+external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, stringArray ARRAY);
+  #pragma linkname "FibrePrintStringArray"
+  #pragma linkobj "src/FibreIO/FibrePrint.o"
 
 
 
@@ -157,6 +179,10 @@ double[*]  FibreScanDoubleArray()
   return( FibreScanDoubleArray( stdin));
 }
 
+stringArray FibreScanStringArray()
+{
+  return( FibreScanStringArray( stdin));
+}
 
 /*****************************************************************/
 /*****************************************************************/
@@ -202,6 +228,16 @@ inline void FibrePrint(File &stream, double arr)
 }
 
 /*****************************************************************/
+
+
+inline void FibrePrint(File &stream, stringArray arr)
+{
+  FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
+}
+
+
+
+/*****************************************************************/
 /*****************************************************************/
 
 
@@ -239,6 +275,14 @@ inline void FibrePrint(TermFile &stream, double[+] arr)
 inline void FibrePrint(TermFile &stream, double arr)
 {
   TermFile::fprintf(stream, "%.16f\n", arr);
+}
+
+/*****************************************************************/
+
+
+inline void FibrePrint(TermFile &stream, stringArray arr)
+{
+  FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
 
@@ -281,6 +325,16 @@ inline void FibrePrint(double arr)
 {
   TermFile::fprintf(stdout, "%.16f\n", arr);
 }
+
+/*****************************************************************/
+
+
+inline void FibrePrint( stringArray arr)
+{
+  FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
+}
+
+
 
 /*****************************************************************/
 /*****************************************************************/
