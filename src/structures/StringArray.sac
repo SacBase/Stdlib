@@ -1,8 +1,9 @@
 module StringArray;
 
-use String: {string};
+use Array: {*,all};
+import String: all;
 
-export all;
+export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA};
 
 external typedef stringArray;
     #pragma linkobj "src/StringArray/free.o"
@@ -17,16 +18,13 @@ external stringArray modarray( stringArray labs, int[.] idx, string  str);
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2,3]
 
-external string sel( int[.] idx, stringArray labs);
+external stringArray sel( int[.] idx, stringArray labs);
     #pragma linkname "SAC_StringArray_sel"
     #pragma linkobj "src/StringArray/sel.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2]
 
-external stringArray genarray( int[.] shp, string s);
-    #pragma linkname "SAC_StringArray_genarray"
-    #pragma linkobj "src/StringArray/genarray.o"
-    #pragma refcounting [0,1,2]
+external string tos( stringArray a);
 
 external int dim( stringArray s);
     #pragma linkname "SAC_StringArray_dim"
@@ -37,4 +35,65 @@ external int[.] shape( stringArray s);
     #pragma linkname "SAC_StringArray_shape"
     #pragma linkobj "src/StringArray/shape.o"
     #pragma refcounting [0,1]
+
+
+external stringArray genarray( int[.] shp, string s);
+    #pragma linkname "SAC_StringArray_genarray"
+    #pragma linkobj "src/StringArray/genarray.o"
+    #pragma refcounting [0,1,2]
+
+inline
+bool eq_SxS ( stringArray a, stringArray b)
+{
+  return( tos( a) == tos( b));
+}
+
+inline
+bool[*] eq_SxA( stringArray a, stringArray b)
+{
+  res = with {
+          ( 0* shape(b) <= iv < shape(b)) : tos( a) == tos( b[iv]);
+        } : genarray( shape( b), true);
+  return( res);
+}
+
+inline
+bool[*] eq_AxS( stringArray a, stringArray b)
+{
+  res = with {
+          ( 0* shape(a) <= iv < shape(a)) : tos( a[iv]) == tos( b);
+        } : genarray( shape( a), true);
+  return( res);
+}
+
+inline
+bool[*] eq_AxA( stringArray a, stringArray b)
+{
+  res = with {
+          ( 0* shape(b) <= iv < shape(b)) : tos( a[iv]) == tos( b[iv]);
+        } : genarray( shape( b), true);
+  return( res);
+}
+
+inline
+bool[*] (==)( stringArray a, stringArray b)
+{
+  if( dim(a) == 0) {
+    if( dim( b) == 0 ) {
+      res = eq_SxS( a, b);
+    } else {
+      res = eq_SxA( a, b);
+    }
+  } else {
+    if( dim(b) == 0) {
+      res = eq_AxS( a, b);
+    } else if( all( shape( a) == shape(b))) {
+      res = eq_AxA( a, b);
+    } else {
+      RuntimeError::error( 1, "(==) applied to arrays of different shape!");
+      res = false;
+    }
+  }
+  return( res);
+}
 
