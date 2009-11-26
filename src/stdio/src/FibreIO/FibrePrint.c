@@ -59,7 +59,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         break;
       case STRING:
         INDENT(stream, indent+1);
-        fprintf(stream, "%s\n", ((array*)arr)->data[done + i]);
+        fprintf(stream, "\"%s\"\n", ((array*)arr)->data[done + i]);
         break;
       }    
     }
