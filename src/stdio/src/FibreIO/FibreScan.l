@@ -50,18 +50,19 @@ int start_token;
      }
 %}
 
-"["                             		      { return(SQBR_L); }
-"]"                             		      { return(SQBR_R); }
-":"                             		      { return(COLON); }
-","                             		      { return(COMMA); }
-"true"                          		      { return(TTRUE); }
-"false"                         		      { return(TFALSE); }
-[+-]?[0-9]+             			            { RETURNnum(NUM); }
-[+-]?[0-9]+[.]?[dD][+-]?[0-9]+			      { RETURNdbl(DOUBLE); }
-[+-]?[0-9]+[.]([0-9]+)?([dD][+-]?[0-9]+)?	{ RETURNdbl(DOUBLE); }
-[+-]?[0-9]+[.]?[eE][+-]?[0-9]+			      { RETURNdbl(DOUBLE); }
-[+-]?[0-9]+[.]([0-9]+)?([eE][+-]?[0-9]+)?	{ RETURNdbl(DOUBLE); }
-\"([^"\n]|(\\\"))*\"                      { RETURNstr(STRING); }
+"["                             		{ return(SQBR_L);    }
+"]"                             		{ return(SQBR_R);    }
+":"                             		{ return(COLON);     }
+","                             		{ return(COMMA);     }
+"true"                          		{ return(TTRUE);     }
+"false"                         		{ return(TFALSE);    }
+
+[+-]?[0-9]+[.]([0-9]+)?([dD]([+-]?[0-9]+)?)?	{ RETURNdbl(DOUBLE); }
+[+-]?[0-9]+[.]([0-9]+)?([eE]([+-]?[0-9]+)?)?	{ RETURNdbl(DOUBLE); }
+[+-]?[0-9]+[.]?[dD]([+-]?[0-9]+)?		{ RETURNdbl(DOUBLE); }
+[+-]?[0-9]+[.]?[eE]([+-]?[0-9]+)?		{ RETURNdbl(DOUBLE); }
+\"([^"\n]|(\\\"))*\"                            { RETURNstr(STRING); }
+[+-]?[0-9]+             			{ RETURNnum(NUM);    }
 
 
 "\n"   						{linenum++;}
