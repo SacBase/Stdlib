@@ -18,7 +18,7 @@ external stringArray modarray( stringArray labs, int[.] idx, string  str);
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2,3]
 
-external stringArray sel( int[.] idx, stringArray labs);
+external string sel( int[.] idx, stringArray labs);
     #pragma linkname "SAC_StringArray_sel"
     #pragma linkobj "src/StringArray/sel.o"
     #pragma linkobj "src/StringArray/index2offset.o"
@@ -52,7 +52,7 @@ inline
 bool[*] eq_SxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : tos( a) String::== tos( b[iv]);
+          ( 0* shape(b) <= iv < shape(b)) : tos( a) String::== b[iv];
         } : genarray( shape( b), true);
   return( res);
 }
@@ -61,7 +61,7 @@ inline
 bool[*] eq_AxS( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(a) <= iv < shape(a)) : tos( a[iv]) String::== tos( b);
+          ( 0* shape(a) <= iv < shape(a)) : a[iv] String::== tos( b);
         } : genarray( shape( a), true);
   return( res);
 }
@@ -70,7 +70,7 @@ inline
 bool[*] eq_AxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : tos( a[iv]) String::== tos( b[iv]);
+          ( 0* shape(b) <= iv < shape(b)) : a[iv] String::== b[iv];
         } : genarray( shape( b), true);
   return( res);
 }
