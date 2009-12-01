@@ -3,8 +3,8 @@ module FibreIO;
 
 use IOresources: all;
 use Array : { shape, sel, dim };
-use String: all except {sel, shape, modarray};
-use StringArray: all except {sel, shape, dim}; 
+use String : {string};
+use StringArray : {stringArray};
 
 export all;
 
@@ -329,7 +329,7 @@ inline void FibrePrint(double arr)
 /*****************************************************************/
 
 
-inline void FibrePrint( stringArray arr)
+inline void FibrePrint( StringArray::stringArray arr)
 {
   FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
 }

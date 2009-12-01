@@ -1,7 +1,7 @@
 module StringArray;
 
-use Array: {*,all};
-import String: all;
+use String : {string};
+use Array : {*,all};
 
 export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA};
 
@@ -45,14 +45,14 @@ external stringArray genarray( int[.] shp, string s);
 inline
 bool eq_SxS ( stringArray a, stringArray b)
 {
-  return( tos( a) == tos( b));
+  return( tos( a) String::== tos( b));
 }
 
 inline
 bool[*] eq_SxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : tos( a) == tos( b[iv]);
+          ( 0* shape(b) <= iv < shape(b)) : tos( a) String::== tos( b[iv]);
         } : genarray( shape( b), true);
   return( res);
 }
@@ -61,7 +61,7 @@ inline
 bool[*] eq_AxS( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(a) <= iv < shape(a)) : tos( a[iv]) == tos( b);
+          ( 0* shape(a) <= iv < shape(a)) : tos( a[iv]) String::== tos( b);
         } : genarray( shape( a), true);
   return( res);
 }
@@ -70,7 +70,7 @@ inline
 bool[*] eq_AxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : tos( a[iv]) == tos( b[iv]);
+          ( 0* shape(b) <= iv < shape(b)) : tos( a[iv]) String::== tos( b[iv]);
         } : genarray( shape( b), true);
   return( res);
 }
@@ -78,16 +78,16 @@ bool[*] eq_AxA( stringArray a, stringArray b)
 inline
 bool[*] (==)( stringArray a, stringArray b)
 {
-  if( dim(a) == 0) {
-    if( dim( b) == 0 ) {
+  if( dim(a) ScalarArith::== 0) {
+    if( dim( b) ScalarArith::== 0 ) {
       res = eq_SxS( a, b);
     } else {
       res = eq_SxA( a, b);
     }
   } else {
-    if( dim(b) == 0) {
+    if( dim(b) ScalarArith::== 0) {
       res = eq_AxS( a, b);
-    } else if( all( shape( a) == shape(b))) {
+    } else if( all( shape( a) Array::== shape(b))) {
       res = eq_AxA( a, b);
     } else {
       RuntimeError::error( 1, "(==) applied to arrays of different shape!");
