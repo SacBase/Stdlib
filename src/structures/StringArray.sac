@@ -12,19 +12,47 @@ external typedef stringArray;
     #pragma freefun "SAC_StringArray_free"
     #pragma copyfun "SAC_StringArray_copy"
 
-external stringArray modarray( stringArray labs, int[.] idx, string  str);
+external stringArray modarray_VxAxS( stringArray labs, int[.] idx, string  str);
     #pragma linkname "SAC_StringArray_modarray"
     #pragma linkobj "src/StringArray/modarray.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2,3]
 
-external string sel( int[.] idx, stringArray labs);
+stringArray modarray( stringArray array, int[.] idx, stringArray val)
+{
+  if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
+    /* check dim( val) == 0! */
+    res = modarray_VxAxS( array, idx, sel_VxA( [], val));
+  } else {
+    res = array;
+    /** horrid for-loop missing which uses modarray_VxAxS */
+  }
+  return( res);
+}
+
+external string sel_VxA( int[.] idx, stringArray labs);
     #pragma linkname "SAC_StringArray_sel"
     #pragma linkobj "src/StringArray/sel.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2]
 
-external string tos( stringArray a);
+stringArray sel( int[.] idx, stringArray array)
+{
+  if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
+    res = genarray( [], sel_VxA( idx, array));
+  } else {
+    res_shp = _drop_SxV_( Array::sel( [0], Array::shape( idx)), shape( array));
+    res = genarray( res_shp, "");
+    /** horrid for-loop missing which uses modarray_VxAxS */
+  }
+  return( res);
+}
+
+string tos( stringArray a)
+{
+  /* check dim( a) == 0 */
+  return( sel_VxA( [], a));
+}
 
 external int dim( stringArray s);
     #pragma linkname "SAC_StringArray_dim"
@@ -52,7 +80,7 @@ inline
 bool[*] eq_SxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : tos( a) String::== b[iv];
+          ( 0* shape(b) <= iv < shape(b)) : tos( a) String::== sel_VxA( iv, b);
         } : genarray( shape( b), true);
   return( res);
 }
@@ -61,7 +89,7 @@ inline
 bool[*] eq_AxS( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(a) <= iv < shape(a)) : a[iv] String::== tos( b);
+          ( 0* shape(a) <= iv < shape(a)) : sel_VxA( iv, a) String::== tos( b);
         } : genarray( shape( a), true);
   return( res);
 }
@@ -70,7 +98,7 @@ inline
 bool[*] eq_AxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : a[iv] String::== b[iv];
+          ( 0* shape(b) <= iv < shape(b)) : sel_VxA( iv, a) String::== sel_VxA( iv, b);
         } : genarray( shape( b), true);
   return( res);
 }
