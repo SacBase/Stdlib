@@ -14,7 +14,7 @@ void SAC_StringArray_shape( SAC_ND_PARAM_out( shp_nt, int),
 
   SAC_ND_ALLOC__DESC( res_nt, 1);
 
-  SAC_ND_A_DESC_SHAPE( res_nt, 0) = 1;
+  SAC_ND_A_DESC_SHAPE( res_nt, 0) = s->dim;
 
   SAC_ND_A_RC( res_nt) = 1;
   SAC_ND_A_DESC_SIZE( res_nt) = SAC_ND_A_DESC_SHAPE( res_nt, 0);
