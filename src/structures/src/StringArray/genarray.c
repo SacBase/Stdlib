@@ -17,7 +17,7 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
   int dim, size;
   int i;
 
-  SAC_ND_ALLOC__DESC( res_nt, 0);
+  SAC_ND_ALLOC__DESC( res_nt, SAC_ND_A_DESC_SIZE( shp_nt));
   SAC_ND_SET__RC( res_nt, 1);
 
 

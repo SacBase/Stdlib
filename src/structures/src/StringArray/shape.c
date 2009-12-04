@@ -18,7 +18,13 @@ void SAC_StringArray_shape( SAC_ND_PARAM_out( shp_nt, int),
 
   SAC_ND_A_RC( res_nt) = 1;
   SAC_ND_A_DESC_SIZE( res_nt) = SAC_ND_A_DESC_SHAPE( res_nt, 0);
-  SAC_ND_A_FIELD( res_nt) = SAC_MALLOC( s->dim * sizeof( int));
+  if( s->dim == 0) {
+    SAC_ND_A_FIELD( res_nt) = SAC_MALLOC( 1);
+  }
+  else {
+    SAC_ND_A_FIELD( res_nt) = SAC_MALLOC( s->dim * sizeof( int));
+  }
+
   for( i=0; i<s->dim; i++) {
     SAC_ND_A_FIELD( res_nt)[i] = s->shp[i];
   }
