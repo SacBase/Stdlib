@@ -2,18 +2,8 @@ module StringArray;
 
 use String : {string};
 use Array : {*,all};
-/*export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies, 
-                   modarray_AxVxS, sel_VxA, stringArrayCreator};*/
-export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies, 
-                   modarray_AxVxS, sel_VxA};
 
-/*
- * You can create a new stringArray using:
- *   genarray( shp, to_stringArray( "default string")
- *   
- * Modarray and sel work as usual and return stringarrays. Use to_string to 
- * get a string back out of a scalar stringarray.
- */
+export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA};
 
 external typedef stringArray;
     #pragma linkobj "src/StringArray/free.o"
@@ -22,7 +12,7 @@ external typedef stringArray;
     #pragma freefun "SAC_StringArray_free"
     #pragma copyfun "SAC_StringArray_copy"
 
-external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
+external stringArray modarray_VxAxS( stringArray labs, int[.] idx, string  str);
     #pragma linkname "SAC_StringArray_modarray"
     #pragma linkobj "src/StringArray/modarray.o"
     #pragma linkobj "src/StringArray/index2offset.o"
@@ -31,37 +21,11 @@ external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
 stringArray modarray( stringArray array, int[.] idx, stringArray val)
 {
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
-    if( Array::!=( dim( val), 0)) {
-      RuntimeError::error( 1, 
-          "Attempt to use StringArray::modarray to replace scalar subarray with non-scalar");
-    }
-    res = modarray_AxVxS( array, idx, sel_VxA( [], val));
-  } 
-  else if( Array::sel( [0], Array::shape( idx)) Array::< dim( array)) {
-    if( Array::any( 
-          shape( val) Array::!= Array::drop( [Array::sel( [0], Array::shape( idx))], 
-                                             shape(array)))) {
-      RuntimeError::error( 1, 
-          "Attempt to use StringArray::modarray to replace subarray with an array of a different shape");
-    }
-    val_shp = Array::drop( [Array::sel( [0], Array::shape( idx))], 
-                           shape( array));
-    indicies = getIndicies( val_shp);
+    /* check dim( val) == 0! */
+    res = modarray_VxAxS( array, idx, sel_VxA( [], val));
+  } else {
     res = array;
-    ub = Array::sel( [0], Array::shape(indicies));
-    i=0;
-    while( i Array::< ub) {
-       /*  <---- Falls over inh here somewhere  */
-      selection = Array::sel( [i], indicies);
-      modarrayidx = idx Array::++ selection;
-      modArrVal = sel_VxA( Array::sel( [i], indicies), val);
-      res = modarray_AxVxS( res, modarrayidx, modArrVal);
-      i = i Array::+ 1;
-    }
-  }
-  else {
-    res = array;
-    RuntimeError::error( 1, "Overlarge index vector passed to stringArray::modarray");
+    /** horrid for-loop missing which uses modarray_VxAxS */
   }
   return( res);
 }
@@ -75,44 +39,19 @@ external string sel_VxA( int[.] idx, stringArray labs);
 stringArray sel( int[.] idx, stringArray array)
 {
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
-    res = genarray( [], to_stringArray( sel_VxA( idx, array)));
-  } 
-  else if( Array::sel( [0], Array::shape( idx)) Array::< dim( array)) {
-    idx_len = Array::sel( [0], Array::shape( idx));
-    res_shp = Array::drop( [ idx_len ], shape( array));
-    if( Array::sel( [0], res_shp) Array::== 0) {
-      RuntimeError::error( 1, "res_shape is [0]");
-    }
-    res = genarray( res_shp, to_stringArray( ""));
-
-    indicies = getIndicies( shape( res));
-    for( i=0 ; i Array::< Array::sel( [0], Array::shape(indicies)); i = i Array::+ 1) {
-      res = modarray( res, Array::sel( [i], indicies), 
-                      sel( idx Array::++ Array::sel( [i], indicies), array));
-    }
-  }
-  else {
-    res = array;
-    RuntimeError::error( 1, 
-        "Attempt to select into a stringArray with an index vector longer than the stringArray's dimensionality");
+    res = genarray( [], sel_VxA( idx, array));
+  } else {
+    res_shp = _drop_SxV_( Array::sel( [0], Array::shape( idx)), shape( array));
+    res = genarray( res_shp, "");
+    /** horrid for-loop missing which uses modarray_VxAxS */
   }
   return( res);
 }
 
-string to_string( stringArray a)
+string tos( stringArray a)
 {
-  /*
-  if( dim( a) Array::!= 0) {
-    RuntimeError::error( 1,
-        "to_string passed non-scalar stringArray");
-  }
-  */
+  /* check dim( a) == 0 */
   return( sel_VxA( [], a));
-}
-
-stringArray to_stringArray( string s)
-{
-  return( stringArrayCreator( [], s));
 }
 
 external int dim( stringArray s);
@@ -126,33 +65,22 @@ external int[.] shape( stringArray s);
     #pragma refcounting [0,1]
 
 
-external stringArray stringArrayCreator( int[.] shp, string s);
+external stringArray genarray( int[.] shp, string s);
     #pragma linkname "SAC_StringArray_genarray"
     #pragma linkobj "src/StringArray/genarray.o"
     #pragma refcounting [0,1,2]
 
-stringArray genarray( int[.] shp, stringArray s)
-{
-  new_shp = shp Array::++ shape( s);
-  res = stringArrayCreator( new_shp, "");
-  indicies = getIndicies( shp);
-  for( i=0 ; i Array::< Array::sel( [0], Array::shape( indicies)) ; i = i Array::+ 1) {
-    res = modarray( res, Array::sel( [i], indicies), s);
-  }
-  return( res);
-}
-
 inline
 bool eq_SxS ( stringArray a, stringArray b)
 {
-  return( to_string( a) String::== to_string( b));
+  return( tos( a) String::== tos( b));
 }
 
 inline
 bool[*] eq_SxA( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(b) <= iv < shape(b)) : to_string( a) String::== sel_VxA( iv, b);
+          ( 0* shape(b) <= iv < shape(b)) : tos( a) String::== sel_VxA( iv, b);
         } : genarray( shape( b), true);
   return( res);
 }
@@ -161,7 +89,7 @@ inline
 bool[*] eq_AxS( stringArray a, stringArray b)
 {
   res = with {
-          ( 0* shape(a) <= iv < shape(a)) : sel_VxA( iv, a) String::== to_string( b);
+          ( 0* shape(a) <= iv < shape(a)) : sel_VxA( iv, a) String::== tos( b);
         } : genarray( shape( a), true);
   return( res);
 }
@@ -196,51 +124,4 @@ bool[*] (==)( stringArray a, stringArray b)
   }
   return( res);
 }
-/*
-int[.,.] getIndicies( int[.] shp)
-{
-  iota_shp = Array::iota( shp);
-  return( 
-    Array::reshape( [ Array::prod( Array::take( [ Array::dim( Array::iota( shp)) Array::- 1 ], Array::shape( iota_shp))), 
-                      Array::sel( [0], Array::reverse( Array::shape( shp))) ], 
-                    iota_shp));
-}
-*/
-inline
-int[.,.] getIndicies( int[.] shp)
-{
-    iota_shp = Array::iota( shp);
-      return(
-              Array::reshape( [ Array::prod( Array::take( [ Array::dim( Array::iota( shp)) Array::- 1 ], Array::shape( iota_shp))),
-                                      Array::sel( [0], Array::reverse( Array::shape( shp))) ],
-                                                          iota_shp));
-}
 
-/* wrong result
-int[.,.] getIndicies( int[.] shp)
-{
-  return( 
-    Array::reshape( [ Array::prod( Array::drop( [0 Array::- 1], Array::iota( shp))), 
-                      Array::sel( [0], Array::shape( shp)) ], 
-                    Array::iota( shp)));
-}
-*/
-
-
-stringArray modLoop( int[.] shp, stringArray array, 
-                     int[.] indexPrefix, stringArray val)
-{
-  indicies = getIndicies( shp);
-  ub = Array::sel( [0], Array::shape(indicies));
-  i = 0;
-  while( i Array::< ub) {
-      /* <---- Falls over inh here somewhere   */
-    selection = Array::sel( [i], indicies);
-    RuntimeError::error( 1, "hhhj");
-    modarrayidx = indexPrefix Array::++ selection;
-    modArrVal = sel_VxA( Array::sel( [i], indicies), val);
-    array = modarray_AxVxS( array, modarrayidx, modArrVal);
-    i = i Array::+ 1;
-  }
-  return( array);
-}
