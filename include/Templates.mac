@@ -18,6 +18,7 @@
  ******************************************************************************/
 
 #define BUILT_IN( fun)    \
+fun( byte)                 \
 fun( int)                 \
 fun( float)               \
 fun( double)              \
@@ -26,6 +27,7 @@ fun( char)
 
 
 #define NUM( fun)         \
+fun( byte)                \
 fun( int)                 \
 fun( float)               \
 fun( double)
