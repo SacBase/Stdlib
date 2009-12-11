@@ -24,7 +24,11 @@ void SAC_StringArray_sel(  SAC_ND_PARAM_out( strout_nt, char *),
   SAC_ND_A_DESC( str_nt) = arr->descs[offset];
   SAC_ND_INC_RC( str_nt, 1);
 
-  SAC_ND_DEC_RC_FREE( idx_nt, 1 , );
+  /* DSR: Removing the line below makes StringArray usable for now
+   * but we need to investigate why this works.
+   * See bug 616 for details.
+   */
+  /*SAC_ND_DEC_RC_FREE( idx_nt, 1 , );*/
   SAC_ND_DEC_RC_FREE( arr_nt, 1 , SAC_StringArray_free );
 
   SAC_ND_RET_out( strout_nt , str_nt )

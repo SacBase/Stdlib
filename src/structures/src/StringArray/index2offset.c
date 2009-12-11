@@ -5,12 +5,15 @@
 
 int SAC_StringArray_index2offset( int dim, int *idx, int *shp)
 {
-  int i, offset;
+  int i, offset, size;
 
-  offset = idx[0];
-  for( i=1; i< dim; i++) {
-    offset = (offset * shp[i]) + idx[i];
+  offset = 0;
+  size = 1;
+  for( i=dim - 1; i >= 0; i--) {
+    offset += size * idx[i];
+    size *= shp[i];
   }
+
   return( offset);
 }
 
