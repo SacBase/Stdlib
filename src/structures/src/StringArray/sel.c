@@ -29,7 +29,7 @@ void SAC_StringArray_sel(  SAC_ND_PARAM_out( strout_nt, char *),
    * See bug 616 for details.
    */
   /*SAC_ND_DEC_RC_FREE( idx_nt, 1 , );*/
-  SAC_ND_DEC_RC_FREE( arr_nt, 1 , SAC_StringArray_free );
+  /*SAC_ND_DEC_RC_FREE( arr_nt, 1 , SAC_StringArray_free );*/
 
   SAC_ND_RET_out( strout_nt , str_nt )
 }
