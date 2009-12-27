@@ -33,7 +33,33 @@ inline int toi( bool b)
   return( res);
 }
 
-inline bool tob( int i)
+inline bool to_bool( bool i){
+  return( i);
+}
+
+inline bool to_bool( byte i)
+{ 
+ if ( _eq_SxS_(1b,i) )
+	res = true;
+ else if ( _eq_SxS_(0b,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( short i)
+{ 
+ if ( _eq_SxS_(1s,i) )
+	res = true;
+ else if ( _eq_SxS_(0s,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( int i)
 { 
  if ( _eq_SxS_(1,i) )
 	res = true;
@@ -43,8 +69,85 @@ inline bool tob( int i)
 	res = false; /* Should be domain error!! */
  return( res);
 }
+
+inline bool to_bool( long i)
+{ 
+ if ( _eq_SxS_(1l,i) )
+	res = true;
+ else if ( _eq_SxS_(0l,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( longlong i)
+{ 
+ if ( _eq_SxS_(1ll,i) )
+	res = true;
+ else if ( _eq_SxS_(0ll,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( ubyte i)
+{ 
+ if ( _eq_SxS_(1ub,i) )
+	res = true;
+ else if ( _eq_SxS_(0ub,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( ushort i)
+{ 
+ if ( _eq_SxS_(1us,i) )
+	res = true;
+ else if ( _eq_SxS_(0us,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( uint i)
+{ 
+ if ( _eq_SxS_(1ui,i) )
+	res = true;
+ else if ( _eq_SxS_(0ui,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( ulong i)
+{ 
+ if ( _eq_SxS_(1ul,i) )
+	res = true;
+ else if ( _eq_SxS_(0ul,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
+
+inline bool to_bool( ulonglong i)
+{ 
+ if ( _eq_SxS_(1ull,i) )
+	res = true;
+ else if ( _eq_SxS_(0ull,i))
+	res = false;
+ else
+	res = false; /* Should be domain error!! */
+ return( res);
+}
 	
-inline bool tob( float i)
+inline bool to_bool( float i)
 { 
  if ( _eq_SxS_(1f,i) )
 	res = true;
@@ -55,7 +158,7 @@ inline bool tob( float i)
  return( res);
 }
 
-inline bool tob( double i)
+inline bool to_bool( double i)
 { 
  if ( _eq_SxS_(1.0,i) )
 	res = true;

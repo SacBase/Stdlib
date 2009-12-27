@@ -13,11 +13,20 @@
 #include "sac.h"
 
 
-#define INT    1
-#define FLOAT  2
-#define DOUBLE 3
-#define CHAR   4
-#define BOOL   5
+#define INT    		1
+#define FLOAT  		2
+#define DOUBLE 		3
+#define CHAR   		4
+#define BOOL   		5
+#define BYTE    	6
+#define SHORT    	7
+#define LONG    	8
+#define LONGLONG    	9
+#define UBYTE    	10
+#define USHORT    	11
+#define UINT   		12
+#define ULONG    	13
+#define ULONGLONG    	14
 
 
 typedef char* string;
@@ -70,8 +79,35 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
       case BOOL:
         fprintf(stream, format , ((int *)a)[0]);
         break;
+      case BYTE:
+        fprintf(stream, format , ((char *)a)[0]);
+        break;
+      case SHORT:
+        fprintf(stream, format , ((short *)a)[0]);
+        break;
       case INT:
         fprintf(stream, format , ((int *)a)[0]);
+        break;
+      case LONG:
+        fprintf(stream, format , ((long *)a)[0]);
+        break;
+      case LONGLONG:
+        fprintf(stream, format , ((long long *)a)[0]);
+        break;
+      case UBYTE:
+        fprintf(stream, format , ((unsigned char *)a)[0]);
+        break;
+      case USHORT:
+        fprintf(stream, format , ((unsigned short *)a)[0]);
+        break;
+      case UINT:
+        fprintf(stream, format , ((unsigned int *)a)[0]);
+        break;
+      case ULONG:
+        fprintf(stream, format , ((unsigned long *)a)[0]);
+        break;
+      case ULONGLONG:
+        fprintf(stream, format , ((unsigned long long *)a)[0]);
         break;
       case FLOAT:
         fprintf(stream, format, ((float *)a)[0]);
@@ -111,19 +147,60 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
         while (index[n]<shp[dim-1]) {
           switch(typeflag) {
           case BOOL:
-            fprintf(stream, format , ((int *)a)[Index2Offset(dim,shp,index)]);
+            fprintf(stream, format , 
+	    	((int *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case BYTE:
+            fprintf(stream, format , 
+	    	((char *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case SHORT:
+            fprintf(stream, format , 
+	    	((short *)a)[Index2Offset(dim,shp,index)]);
             break;
           case INT:
-            fprintf(stream, format , ((int *)a)[Index2Offset(dim,shp,index)]);
+            fprintf(stream, format , 
+	    	((int *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case LONG:
+            fprintf(stream, format , 
+	    	((long *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case LONGLONG:
+            fprintf(stream, format , 
+	    	((long long *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case UBYTE:
+            fprintf(stream, format , 
+	    	((unsigned char *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case USHORT:
+            fprintf(stream, format , 
+	    	((unsigned short *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case UINT:
+            fprintf(stream, format , 
+	    	((unsigned int *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case ULONG:
+            fprintf(stream, format , 
+	    	((unsigned long *)a)[Index2Offset(dim,shp,index)]);
+            break;
+          case ULONGLONG:
+            fprintf(stream, format , 
+	    	((unsigned long long *)a)[Index2Offset(dim,shp,index)]);
             break;
           case FLOAT:
-            fprintf(stream, format, ((float *)a)[Index2Offset(dim,shp,index)]);
+            fprintf(stream, format, 
+	    	((float *)a)[Index2Offset(dim,shp,index)]);
             break;
           case DOUBLE:
-            fprintf(stream, format, ((double *)a)[Index2Offset(dim,shp,index)]);
+            fprintf(stream, format, 
+	    	((double *)a)[Index2Offset(dim,shp,index)]);
             break;
           case CHAR:
-            fprintf(stream, format, ((char *)a)[Index2Offset(dim,shp,index)]);
+            fprintf(stream, format, 
+	    	((char *)a)[Index2Offset(dim,shp,index)]);
             break;
           }
           index[n]++;
@@ -162,27 +239,86 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
 }
 
-void ARRAYIO__PrintBoolArray( FILE *stream, int dim, int * shp, bool * a)
+void ARRAYIO__PrintBoolArray( FILE *stream, int dim, int * shp, 
+	bool * a)
 {
   PrintArr(stream, BOOL, "%2i ", dim, shp, a);
 }
 
-void ARRAYIO__PrintDoubleArray( FILE *stream, int dim, int * shp, double * a)
+void ARRAYIO__PrintDoubleArray( FILE *stream, int dim, int * shp, 
+	double * a)
 {
   PrintArr(stream, DOUBLE, "%e ", dim, shp, a);
 }
 
-void ARRAYIO__PrintFloatArray( FILE *stream, int dim, int * shp, float * a)
+void ARRAYIO__PrintFloatArray( FILE *stream, int dim, int * shp, 
+	float * a)
 {
   PrintArr(stream, FLOAT, "%4f ", dim, shp, a);
 }
 
-void ARRAYIO__PrintIntArray( FILE *stream, int dim, int * shp, int * a)
+void ARRAYIO__PrintByteArray( FILE *stream, int dim, int * shp, 
+	char * a)
+{
+  PrintArr(stream, BYTE, "%2hd ", dim, shp, a);
+}
+
+void ARRAYIO__PrintShortArray( FILE *stream, int dim, int * shp, 
+	short * a)
+{
+  PrintArr(stream, SHORT, "%2hd ", dim, shp, a);
+}
+
+void ARRAYIO__PrintIntArray( FILE *stream, int dim, int * shp, 
+	int * a)
 {
   PrintArr(stream, INT, "%2i ", dim, shp, a);
 }
 
-void ARRAYIO__PrintCharArray( FILE *stream, int dim, int * shp, char * a)
+void ARRAYIO__PrintLongArray( FILE *stream, int dim, int * shp, 
+	long * a)
+{
+  PrintArr(stream, LONG, "%2ld ", dim, shp, a);
+}
+
+void ARRAYIO__PrintLonglongArray( FILE *stream, int dim, int * shp, 
+	long long * a)
+{
+  PrintArr(stream, LONGLONG, "%2lld ", dim, shp, a);
+}
+
+void ARRAYIO__PrintUbyteArray( FILE *stream, int dim, int * shp, 
+	unsigned char * a)
+{
+  PrintArr(stream, UBYTE, "%2hu ", dim, shp, a);
+}
+
+void ARRAYIO__PrintUshortArray( FILE *stream, int dim, int * shp, 
+	unsigned short * a)
+{
+  PrintArr(stream, USHORT, "%2hu ", dim, shp, a);
+}
+
+void ARRAYIO__PrintUintArray( FILE *stream, int dim, int * shp, 
+	unsigned int * a)
+{
+  PrintArr(stream, UINT, "%2u ", dim, shp, a);
+}
+
+void ARRAYIO__PrintUlongArray( FILE *stream, int dim, int * shp, 
+	unsigned long * a)
+{
+  PrintArr(stream, ULONG, "%2lu ", dim, shp, a);
+}
+
+void ARRAYIO__PrintUlonglongArray( FILE *stream, int dim, int * shp, 
+	unsigned long long * a)
+{
+  PrintArr(stream, ULONGLONG, "%2llu ", dim, shp, a);
+}
+
+void ARRAYIO__PrintCharArray( FILE *stream, int dim, int * shp, 
+	char * a)
 {
   PrintArr(stream, CHAR, "%c", dim, shp, a);
 }

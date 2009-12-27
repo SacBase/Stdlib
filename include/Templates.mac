@@ -18,8 +18,16 @@
  ******************************************************************************/
 
 #define BUILT_IN( fun)    \
-fun( byte)                 \
+fun( byte)                \
+fun( short)               \
 fun( int)                 \
+fun( long)                \
+fun( longlong)            \
+fun( ubyte)               \
+fun( ushort)              \
+fun( uint)                \
+fun( ulong)               \
+fun( ulonglong)           \
 fun( float)               \
 fun( double)              \
 fun( bool)                \
@@ -28,7 +36,15 @@ fun( char)
 
 #define NUM( fun)         \
 fun( byte)                \
+fun( short)               \
 fun( int)                 \
+fun( long)                \
+fun( longlong)            \
+fun( ubyte)               \
+fun( ushort)              \
+fun( uint)                \
+fun( ulong)               \
+fun( ulonglong)           \
 fun( float)               \
 fun( double)
 

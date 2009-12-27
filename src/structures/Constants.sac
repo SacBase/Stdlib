@@ -2,6 +2,22 @@ module Constants;
 
 export all;
 
+external byte     minbyte();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external byte     maxbyte();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external short     minshort();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external short     maxshort();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
 external int     minint();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minint.o"
@@ -9,6 +25,62 @@ external int     minint();
 external int     maxint();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/maxint.o"
+
+external long     minlong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external long     maxlong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external longlong     minlonglong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external longlong     maxlonglong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ubyte     minubyte();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ubyte     maxubyte();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ushort     minushort();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ushort     maxushort();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external uint     minuint();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external uint     maxuint();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ulong     minulong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ulong     maxulong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ulonglong     minulonglong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ulonglong     maxulonglong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
 
 external float   minfloat();
     #pragma linksign[0]
