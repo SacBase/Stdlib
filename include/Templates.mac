@@ -17,6 +17,8 @@
  *
  ******************************************************************************/
 
+#ifdef SANTANU
+
 #define BUILT_IN( fun)    \
 fun( byte)                \
 fun( short)               \
@@ -47,6 +49,23 @@ fun( ulong)               \
 fun( ulonglong)           \
 fun( float)               \
 fun( double)
+
+#else
+
+#define BUILT_IN( fun)    \
+fun( int)                 \
+fun( float)               \
+fun( double)              \
+fun( bool)                \
+fun( char)
+
+
+#define NUM( fun)         \
+fun( int)                 \
+fun( float)               \
+fun( double)
+
+#endif
 
 #define CHAR( fun)	  \
 fun( char)
