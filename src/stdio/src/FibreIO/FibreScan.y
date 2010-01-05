@@ -9,20 +9,47 @@ extern char yytext[];
 
 
 enum READMODE {
+  byte_mode,
+  short_mode,
   int_mode,
+  long_mode,
+  longlong_mode,
+  ubyte_mode,
+  ushort_mode,
+  uint_mode,
+  ulong_mode,
+  ulonglong_mode,
   float_mode,
   double_mode,
   string_mode,
 };
 
 int     boolval;
+char    byteval;
+short   shortval;
 int     intval;
+long    longval;
+long long    longlongval;
+unsigned char    ubyteval;
+unsigned short   ushortval;
+unsigned int     uintval;
+unsigned long    ulongval;
+unsigned long long    ulonglongval;
 float   floatval;
 double  doubleval;
 char    *stringval;
 double  *doublearray;
 float   *floatarray;
+char    *bytearray;
+short   *shortarray;
 int     *intarray;
+long    *longarray;
+long long    *longlongarray;
+unsigned char    *ubytearray;
+unsigned short   *ushortarray;
+unsigned int     *uintarray;
+unsigned long    *ulongarray;
+unsigned long long    *ulonglongarray;
 char    **stringarray;
 
 int i;
@@ -40,7 +67,16 @@ static int elems_left[MAXDIM];
 %}
 
 
-%union { int             cint;
+%union { char            cbyte;
+         short           cshort;
+         int             cint;
+         long            clong;
+         long long       clonglong;
+         unsigned char   cubyte;
+         unsigned short  cushort;
+         unsigned int    cuint;
+         unsigned long   culong;
+         unsigned long long culonglong;
          int             cbool;
          char            cchar;
          float           cfloat;
@@ -48,15 +84,39 @@ static int elems_left[MAXDIM];
          char*           cstr;
          double*         cdbl_ptr;
          float*          cflt_ptr;
+         char*           cbyte_ptr;
+         short*          cshort_ptr;
          int*            cint_ptr;
+         long*           clong_ptr;
+         long long*      clonglong_ptr;
+         unsigned char*  cubyte_ptr;
+         unsigned short* cushort_ptr;
+         unsigned int*   cuint_ptr;
+         unsigned long*  culong_ptr;
+         unsigned long long* culonglong_ptr;
          char**          cstr_ptr;
        }
 
 
-%token PARSE_BOOL PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING
-       PARSE_DOUBLE_ARRAY PARSE_INT_ARRAY PARSE_FLOAT_ARRAY PARSE_STRING_ARRAY
+%token PARSE_BOOL PARSE_FLOAT PARSE_DOUBLE PARSE_STRING
+       PARSE_BYTE PARSE_SHORT PARSE_INT PARSE_LONG PARSE_LONGLONG
+       PARSE_UBYTE PARSE_USHORT PARSE_UINT PARSE_ULONG PARSE_ULONGLONG
+       PARSE_DOUBLE_ARRAY PARSE_FLOAT_ARRAY PARSE_STRING_ARRAY
+       PARSE_BYTE_ARRAY PARSE_SHORT_ARRAY PARSE_INT_ARRAY PARSE_LONG_ARRAY
+       PARSE_LONGLONG_ARRAY PARSE_UBYTE_ARRAY PARSE_USHORT_ARRAY 
+       PARSE_UINT_ARRAY PARSE_ULONG_ARRAY PARSE_ULONGLONG_ARRAY
 %token SQBR_L SQBR_R COLON COMMA TTRUE TFALSE
-%token <cint> NUM
+%token <cbyte>  NUMBYTE
+%token <cshort> NUMSHORT
+%token <cint>   NUM
+%token <cint>   NUMINT
+%token <clong>  NUMLONG
+%token <clonglong> NUMLONGLONG
+%token <cubyte>  NUMUBYTE
+%token <cushort> NUMUSHORT
+%token <cuint>   NUMUINT
+%token <culong>  NUMULONG
+%token <culonglong> NUMULONGLONG
 %token <cfloat> FLOAT
 %token <cdbl>   DOUBLE
 %token <cchar>  CHAR
@@ -84,8 +144,26 @@ static int elems_left[MAXDIM];
 
 file: PARSE_BOOL bool 
          {boolval = $2; return(0);}
+    | PARSE_BYTE  NUMBYTE 
+         {byteval = $2; return(0);} 
+    | PARSE_SHORT  NUMSHORT 
+         {shortval = $2; return(0);} 
     | PARSE_INT  NUM 
          {intval = $2; return(0);} 
+    | PARSE_LONG  NUMLONG 
+         {longval = $2; return(0);} 
+    | PARSE_LONGLONG  NUMLONGLONG 
+         {longlongval = $2; return(0);} 
+    | PARSE_UBYTE  NUMUBYTE 
+         {ubyteval = $2; return(0);} 
+    | PARSE_USHORT  NUMUSHORT 
+         {ushortval = $2; return(0);} 
+    | PARSE_UINT  NUMUINT 
+         {uintval = $2; return(0);} 
+    | PARSE_ULONG  NUMULONG 
+         {ulongval = $2; return(0);} 
+    | PARSE_ULONGLONG  NUMULONGLONG 
+         {ulonglongval = $2; return(0);} 
     | PARSE_FLOAT FLOAT 
          {floatval = $2; return(0);}
     | PARSE_STRING STRING 
@@ -100,8 +178,44 @@ file: PARSE_BOOL bool
          {got_scalar = 0; mode = float_mode;} 
          parse_array 
          {return(0);}
+    | PARSE_BYTE_ARRAY 
+         {got_scalar = 0; mode = byte_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_SHORT_ARRAY 
+         {got_scalar = 0; mode = short_mode;} 
+         parse_array 
+         {return(0);}
     | PARSE_INT_ARRAY 
          {got_scalar = 0; mode = int_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_LONG_ARRAY 
+         {got_scalar = 0; mode = long_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_LONGLONG_ARRAY 
+         {got_scalar = 0; mode = longlong_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_UBYTE_ARRAY 
+         {got_scalar = 0; mode = ubyte_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_USHORT_ARRAY 
+         {got_scalar = 0; mode = ushort_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_UINT_ARRAY 
+         {got_scalar = 0; mode = uint_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_ULONG_ARRAY 
+         {got_scalar = 0; mode = ulong_mode;} 
+         parse_array 
+         {return(0);}
+    | PARSE_ULONGLONG_ARRAY 
+         {got_scalar = 0; mode = ulonglong_mode;} 
          parse_array 
          {return(0);}
     | PARSE_STRING_ARRAY 
@@ -136,6 +250,120 @@ parse_scalar: NUM
                  dims = 0;
                  size = 1;
                 }
+            | NUMBYTE
+                { if( ! mode == byte_mode) { 
+                    yyerror( "byte numeric expected!");
+                  }
+                  else {
+                    bytearray = (char *) SAC_MALLOC( sizeof( char));
+                    *bytearray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMSHORT
+                { if( ! mode == short_mode) { 
+                    yyerror( "short numeric expected!");
+                  }
+                  else {
+                    shortarray = (short *) SAC_MALLOC( sizeof( short));
+                    *shortarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMLONG
+                { if( ! mode == long_mode) { 
+                    yyerror( "long numeric expected!");
+                  }
+                  else {
+                    longarray = (long *) SAC_MALLOC( sizeof( long));
+                    *longarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMLONGLONG
+                { if( ! mode == longlong_mode) { 
+                    yyerror( "longlong numeric expected!");
+                  }
+                  else {
+                    longlongarray = 
+		    (long long*) SAC_MALLOC( sizeof( long long));
+                    *longlongarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMUBYTE
+                { if( ! mode == ubyte_mode) { 
+                    yyerror( "ubyte numeric expected!");
+                  }
+                  else {
+                    ubytearray = 
+		    (unsigned char *) SAC_MALLOC( sizeof( unsigned char));
+                    *ubytearray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMUSHORT
+                { if( ! mode == ushort_mode) { 
+                    yyerror( "ushort numeric expected!");
+                  }
+                  else {
+                    ushortarray = 
+		    (unsigned short *) SAC_MALLOC( sizeof( unsigned short));
+                    *ushortarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMUINT
+                { if( ! mode == uint_mode) { 
+                    yyerror( "uint numeric expected!");
+                  }
+                  else {
+                    uintarray = 
+		    (unsigned int *) SAC_MALLOC( sizeof( unsigned int));
+                    *uintarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMULONG
+                { if( ! mode == ulong_mode) { 
+                    yyerror( "ulong numeric expected!");
+                  }
+                  else {
+                    ulongarray = 
+		    (unsigned long *) SAC_MALLOC( sizeof( unsigned long));
+                    *ulongarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
+            | NUMULONGLONG
+                { if( ! mode == ulonglong_mode) { 
+                    yyerror( "ulonglong numeric expected!");
+                  }
+                  else {
+                    ulonglongarray = (unsigned long long*) 
+		    SAC_MALLOC( sizeof( unsigned long long));
+                    *ulonglongarray = $1;
+                  }
+                 got_scalar = 1; 
+                 dims = 0;
+                 size = 1;
+                }
             | DOUBLE
                 {if( ( ! mode == float_mode) &&
                      ( ! mode == double_mode)) { 
@@ -163,6 +391,10 @@ parse_scalar: NUM
                      yyerror( 
                        "Incorrectly parsed double where string was expected");
                      break;
+                   default:
+                     yyerror( 
+                       "Incorrectly parsed double where numeric was expected");
+                     break;
                  }
                }
               | STRING
@@ -188,6 +420,10 @@ parse_scalar: NUM
                    case float_mode:
                      yyerror( 
                        "Incorrectly parsed string where float was expected");
+                     break;
+                   default:
+                     yyerror( 
+                       "Incorrectly parsed double where numeric was expected");
                      break;
                   }
                 }
@@ -236,8 +472,41 @@ array: SQBR_L desc COLON
              size *= shape[ i];
            }
            switch( mode) {
+             case byte_mode:
+               bytearray = (char *) SAC_MALLOC( size * sizeof( char));
+               break;
+             case short_mode:
+               shortarray = (short *) SAC_MALLOC( size * sizeof( short));
+               break;
              case int_mode:
                intarray = (int *) SAC_MALLOC( size * sizeof( int));
+               break;
+             case long_mode:
+               longarray = (long *) SAC_MALLOC( size * sizeof( long));
+               break;
+             case longlong_mode:
+               longlongarray = (long long *) 
+	       SAC_MALLOC( size * sizeof( long long));
+               break;
+             case ubyte_mode:
+               ubytearray = (unsigned char *) 
+	       SAC_MALLOC( size * sizeof( unsigned char));
+               break;
+             case ushort_mode:
+               ushortarray = (unsigned short *) 
+	       SAC_MALLOC( size * sizeof( unsigned short));
+               break;
+             case uint_mode:
+               uintarray = (unsigned int *) 
+	       SAC_MALLOC( size * sizeof( unsigned int));
+               break;
+             case ulong_mode:
+               ulongarray = (unsigned long *) 
+	       SAC_MALLOC( size * sizeof( unsigned long));
+               break;
+             case ulonglong_mode:
+               ulonglongarray = (unsigned long long *) 
+	       SAC_MALLOC( size * sizeof( unsigned long long));
                break;
              case float_mode:
                floatarray = (float *) SAC_MALLOC( size * sizeof( float));
@@ -291,6 +560,78 @@ elem: NUM
           yyerror("Unexpected Integer read");
         }
       }
+    | NUMBYTE
+	{ if( ! mode == byte_mode) { 
+	    yyerror( "byte array element expected!");
+	  }
+	  else {
+	    bytearray[ array_pos]=$1;
+	  }
+	}
+    | NUMSHORT
+	{ if( ! mode == short_mode) { 
+	    yyerror( "short array element expected!");
+	  }
+	  else {
+	    shortarray[ array_pos]=$1;
+	  }
+	}
+    | NUMLONG
+	{ if( ! mode == long_mode) { 
+	    yyerror( "long array element expected!");
+	  }
+	  else {
+	    longarray[ array_pos]=$1;
+	  }
+	}
+    | NUMLONGLONG
+	{ if( ! mode == longlong_mode) { 
+	    yyerror( "longlong array element expected!");
+	  }
+	  else {
+	    longlongarray[ array_pos]=$1;
+	  }
+	}
+    | NUMUBYTE
+	{ if( ! mode == ubyte_mode) { 
+	    yyerror( "ubyte array element expected!");
+	  }
+	  else {
+	    ubytearray[ array_pos]=$1;
+	  }
+	}
+    | NUMUSHORT
+	{ if( ! mode == ushort_mode) { 
+	    yyerror( "ushort array element expected!");
+	  }
+	  else {
+	    ushortarray[ array_pos]=$1;
+	  }
+	}
+    | NUMUINT
+	{ if( ! mode == uint_mode) { 
+	    yyerror( "uint array element expected!");
+	  }
+	  else {
+	    uintarray[ array_pos]=$1;
+	  }
+	}
+    | NUMULONG
+	{ if( ! mode == ulong_mode) { 
+	    yyerror( "ulong array element expected!");
+	  }
+	  else {
+	    ulongarray[ array_pos]=$1;
+	  }
+	}
+    | NUMULONGLONG
+	{ if( ! mode == ulonglong_mode) { 
+	    yyerror( "ulonglong array element expected!");
+	  }
+	  else {
+	    ulonglongarray[ array_pos]=$1;
+	  }
+	}
     | DOUBLE  
       { if( mode == float_mode) {
           floatarray[ array_pos] = (float)$1;
