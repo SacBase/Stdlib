@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <strings.h>
-#include <error.h>
+#include <errno.h>
 
 #define yylval FibreScanlval
 
