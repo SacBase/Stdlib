@@ -14,11 +14,11 @@ void SAC_StringArray_free( array *arr)
   for( i=0; i<arr->size; i++) {
     SAC_ND_A_DESC( subs_nt) = arr->descs[i];
     SAC_ND_A_FIELD( subs_nt) = arr->data[i];
-    /*SAC_ND_DEC_RC_FREE( subs_nt, 1 , free );*/
+    SAC_ND_DEC_RC_FREE( subs_nt, 1 , free );
   }
-  /*free( arr->shp);*/
-  /*free( arr->data);*/
-  /*free( arr->descs);*/
-  /*free( arr);*/
+  free( arr->shp);
+  free( arr->data);
+  free( arr->descs);
+  free( arr);
 }
 

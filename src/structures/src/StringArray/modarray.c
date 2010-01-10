@@ -30,11 +30,11 @@ void SAC_StringArray_modarray( SAC_ND_PARAM_out( arrout_nt, array *),
 
   SAC_ND_A_FIELD( str_nt) = arr->data[offset];
   SAC_ND_A_DESC( str_nt) = arr->descs[offset];
-  /*SAC_ND_DEC_RC_FREE( str_nt, 1, free);*/
+  SAC_ND_DEC_RC_FREE( str_nt, 1, free);
   arr->data[offset] = SAC_ND_A_FIELD( val_nt);
   arr->descs[offset] = SAC_ND_A_DESC( val_nt);
 
-  /*SAC_ND_DEC_RC_FREE( idx_nt, 1 , );*/
+  SAC_ND_DEC_RC_FREE( idx_nt, 1 , );
 
   SAC_ND_RET_out( arrout_nt , arr_nt )
 }

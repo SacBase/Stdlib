@@ -38,8 +38,8 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
     SAC_ND_INC_RC( s_nt, 1);
   }
 
-  /*SAC_ND_DEC_RC_FREE( s_nt, 1 , free );*/
-  /*SAC_ND_DEC_RC_FREE( shp_nt, 1,);*/
+  SAC_ND_DEC_RC_FREE( s_nt, 1 , free );
+  SAC_ND_DEC_RC_FREE( shp_nt, 1,);
 
   SAC_ND_RET_out( resout_nt , res_nt )
 

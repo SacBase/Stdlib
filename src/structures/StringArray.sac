@@ -28,10 +28,17 @@ external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
 
 stringArray modarray( stringArray array, int[.] idx, stringArray val)
 {
+  if( ( Array::any( idx Array::>= shape( array))) || 
+      ( Array::any( idx Array::< ( 0 Array::* shape( array))))) {
+    RuntimeError::error( 1, 
+        "Index out of bounds in call to stringArray::modarray");
+  }
+
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
     if( Array::!=( dim( val), 0)) {
       RuntimeError::error( 1, 
-          "Attempt to use StringArray::modarray to replace scalar subarray with non-scalar");
+          "Attempt to use StringArray::modarray to replace scalar subarray "
+          "with non-scalar");
     }
     res = modarray_AxVxS( array, idx, sel_VxA( [], val));
   } 
@@ -40,7 +47,8 @@ stringArray modarray( stringArray array, int[.] idx, stringArray val)
           shape( val) Array::!= Array::drop( [Array::sel( [0], Array::shape( idx))], 
                                              shape(array)))) {
       RuntimeError::error( 1, 
-          "Attempt to use StringArray::modarray to replace subarray with an array of a different shape");
+          "Attempt to use StringArray::modarray to replace subarray with an "
+          "array of a different shape");
     }
     val_shp = Array::drop( [Array::sel( [0], Array::shape( idx))], 
                            shape( array));
@@ -56,7 +64,8 @@ stringArray modarray( stringArray array, int[.] idx, stringArray val)
   }
   else {
     res = array;
-    RuntimeError::error( 1, "Overlarge index vector passed to stringArray::modarray");
+    RuntimeError::error( 1, 
+        "Overlarge index vector passed to stringArray::modarray");
   }
   return( res);
 }
@@ -69,6 +78,12 @@ external string sel_VxA( int[.] idx, stringArray labs);
 
 stringArray sel( int[.] idx, stringArray array)
 {
+  if( ( Array::any( idx Array::>= shape( array))) || 
+      ( Array::any( idx Array::< ( 0 Array::* shape( array))))) {
+    RuntimeError::error( 1, 
+        "Index out of bounds in call to stringArray::sel");
+  }
+
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
     res = to_stringArray( sel_VxA( idx, array));
   } 
@@ -190,7 +205,6 @@ bool[*] (==)( stringArray a, stringArray b)
   return( res);
 }
 
-inline
 int[.,.] getIndicies( int[.] shp)
 {
     iota_shp = Array::iota( shp);
@@ -198,5 +212,104 @@ int[.,.] getIndicies( int[.] shp)
        Array::reshape( [ Array::prod( Array::take( [ Array::dim( Array::iota( shp)) Array::- 1 ], Array::shape( iota_shp))),
                                       Array::sel( [0], Array::reverse( Array::shape( shp))) ],
                        iota_shp));
+}
+
+/* I'd love to name this funcion ++ but if I do then when I use Structures,
+ * ++ on integers can no longer be found.
+ * N.b. The specific error is:
+ *   No definition found for a function "Structures::++" that accepts an
+ *   argument of type "int[0]{}" as parameter no 1. Full argument types
+ *   are "( int[0]{}, int[.])".
+ */ 
+stringArray concatStringArrays( stringArray m1, stringArray m2)
+{
+  if( dim( m1) Array::== 0) {
+    RuntimeError::error( 1, 
+        "Cannot concat stringArrays since argument 1 is a scalar");
+  }
+  if( dim( m2) Array::== 0) {
+    RuntimeError::error( 1, 
+        "Cannot concat stringArrays since argument 2 is a scalar");
+  }
+  if( dim( m1) Array::!= dim( m2)) {
+    RuntimeError::error( 1, 
+        "Cannot concat stringArrays with differing dimensions");
+  }
+  m1InnerShape = Array::drop( [1] , shape( m1));
+  m2InnerShape = Array::drop( [1] , shape( m2));
+  if( Array::any( m1InnerShape Array::!= m2InnerShape)) {
+    RuntimeError::error( 1, 
+        "Attempt to concat non-matching shapes when trying to concat "
+        "two stringArrays");
+  }
+  m1Len = Array::sel( [0], shape( m1));
+  m2Len = Array::sel( [0], shape( m2));
+  resShape = [ m1Len Array::+ m2Len] Array::++ m1InnerShape;
+  res = genarray( resShape, to_stringArray( ""));
+  for( i=0 ; i Array::< m1Len ; i = i Array::+ 1) {
+    res = modarray( res, [i], sel( [i], m1));
+  }
+  for( j=0 ; j Array::< m2Len ; j = j Array::+ 1) {
+    res = modarray( res, [i Array::+ j], sel( [j], m2));
+  }
+  return( res); 
+}
+
+/*
+ * Returns true if needle exists in haystack
+ */
+bool in( string needle, stringArray haystack)
+{
+  res = with {
+          (0 Array::* shape( haystack) <= iv < shape( haystack)) : 
+            to_string( sel( iv, haystack)) String::== needle;
+        } : genarray( shape( haystack), false);
+  res = Array::any( res);
+
+  /*
+   * I'd prefer to use this code! 
+   * res = any( { iv -> to_string( haystack[iv]) == needle});
+   */
+
+  return( res);
+}
+
+/*
+ * Returns the index into haystack for the string needle.
+ * N.b. before calling this function call in to ensure that the needle you are
+ * searching for really is in the haystack!
+ */
+int[.] indexOf( string needle, stringArray haystack)
+{
+  /*
+   * This code would be a lot nicer if I could scrap the with loops and use the
+   * set notation in comments but depsite this working when I tried it in
+   * UnibenchInput it fails at compile time when I try it here saying:
+   *   No shape information found for index scalar 'i'.
+   */
+
+  indicies = getIndicies( shape( haystack));
+  /*res = { [i] -> ( to_string( sel( Array::sel( [i], indicies), haystack)) String::== needle ?
+                             Array::sel( [i], indicies) :
+                             0 Array::* Array::sel( [i], indicies))};*/
+
+  res = with {
+          ( [0] <= [i] < [Array::sel( [0], Array::shape( indicies))]) :
+            ( to_string( sel( Array::sel( [i], indicies), haystack)) String::== needle ?
+                             Array::sel( [i], indicies) :
+                             0 Array::* Array::sel( [i], indicies));
+        } : modarray( indicies);
+
+
+
+  res = Array::transpose( res);
+  /*res = { [i] -> Array::sum( Array::sel( [i], res))};*/
+
+  res = with {
+          ( [0] <= iv < [ Array::sel( [0], Array::shape( res))]) :
+            Array::sum( Array::sel( iv, res));
+        } : genarray( [Array::sel( [0], Array::shape( res))], 0);
+
+  return( res);
 }
 
