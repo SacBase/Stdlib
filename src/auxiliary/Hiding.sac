@@ -17,7 +17,7 @@ module Hiding;
 
 export all;
 
-use Structures: all;
+use Array: all;
 
 /*
  * AKV -> AKS
@@ -41,6 +41,8 @@ HIDEVALUE( float)
 HIDEVALUE( double)
 HIDEVALUE( bool)
 
+#define muTC 1
+#if SAC_BACKEND != muTC
 /*
  * AKV -> AKD
  * AKS -> AKD
@@ -93,4 +95,5 @@ HIDEDIMENSIONALITY( float)
 HIDEDIMENSIONALITY( double)
 HIDEDIMENSIONALITY( bool)
 
-
+#endif
+#undef muTC

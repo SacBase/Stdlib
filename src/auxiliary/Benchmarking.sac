@@ -1,0 +1,22 @@
+/* Interface module
+ * 
+ * void start( Interval& interval);
+ * void end( Interval& interval);
+ * void benchThis();
+ * void printResult( Interval& interval);
+ * void benchThis();
+ * Interval getInterval( string interval_name, int interval_number);
+ * Interval getInterval( int interval_number);
+ * Interval getInterval( int interval_number);
+ * void destroyInterval( Interval interval);
+ */
+
+module Benchmarking;
+
+#define muTC 1
+#if SAC_BACKEND == muTC
+import MutcBenchmarking: all;
+#else
+#endif
+
+export all;
