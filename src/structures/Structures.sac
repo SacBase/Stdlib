@@ -4,9 +4,7 @@ import Array        : all;
 import Char         : all;
 import Bits         : all;
 import String       : all;
-#ifdef HAVE_ARRAY_OF_STRINGS
 import StringArray  : all;
-#endif
 import Complex      : all;
 import List         : all;
 import Color8       : all;

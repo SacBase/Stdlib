@@ -4,9 +4,7 @@ module FibreIO;
 use IOresources: all;
 use Array : { shape, sel, dim };
 use String : {string};
-#ifdef HAVE_ARRAYS_OF_STRINGS
 use StringArray : {stringArray};
-#endif
 
 export all;
 
@@ -43,12 +41,10 @@ external  double[*]  FibreScanDoubleArray( File &stream);
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-#ifdef HAVE_ARRAYS_OF_STRING
 external stringArray  FibreScanStringArray( File &stream);
   #pragma refcounting [0]
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanStringArr.o"
-#endif
 
 /*****************************************************************
  * FibreScan on TermFile
@@ -84,12 +80,10 @@ external  double[*]  FibreScanDoubleArray( TermFile &stream);
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-#ifdef HAVE_ARRAYS_OF_STRINGS
 external  stringArray  FibreScanStringArray( TermFile &stream);
   #pragma refcounting [0]
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanStringArr.o"
-#endif
 
 /*****************************************************************
  * FibreScan on String
@@ -110,12 +104,10 @@ external  double[*]  FibreScanDoubleArrayStr( string stream);
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-#ifdef HAVE_ARRAYS_OF_STRING
 external  stringArray  FibreScanStringArrayStr( string stream);
   #pragma refcounting [0]
   #pragma linksign[1,2]
   #pragma linkobj "src/FibreIO/ScanStringArr.o"
-#endif
 
 /*****************************************************************
  * FibrePrint on File
@@ -133,11 +125,9 @@ external void FibrePrint( File &stream, int DIM, int[+] SHAPE, double[+] ARRAY);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-#ifdef HAVE_ARRAY_OF_STRING
 external void FibrePrint( File &stream, int DIM, int[+] SHAPE, stringArray ARRAY);
   #pragma linkname "FibrePrintStringArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
-#endif
 
 /*****************************************************************
  * FibrePrint on TermFile
@@ -155,11 +145,9 @@ external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, double[+] ARR
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-#ifdef HAVE_ARRAY_OF_STRING
 external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, stringArray ARRAY);
   #pragma linkname "FibrePrintStringArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
-#endif
 
 
 
@@ -181,12 +169,10 @@ double[*]  FibreScanDoubleArray()
   return( FibreScanDoubleArray( stdin));
 }
 
-#ifdef HAVE_ARRAY_OF_STRING
 stringArray FibreScanStringArray()
 {
   return( FibreScanStringArray( stdin));
 }
-#endif
 
 /*****************************************************************/
 
@@ -224,12 +210,10 @@ inline void FibrePrint(File &stream, double arr)
 }
 
 
-#ifdef HAVE_ARRAY_OF_STRING
 inline void FibrePrint(File &stream, stringArray arr)
 {
   FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
-#endif
 
 
 
@@ -269,12 +253,10 @@ inline void FibrePrint(TermFile &stream, double arr)
 }
 
 
-#ifdef HAVE_ARRAY_OF_STRING
 inline void FibrePrint(TermFile &stream, stringArray arr)
 {
   FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
-#endif
 
 
 /*****************************************************************/
@@ -312,12 +294,10 @@ inline void FibrePrint(double arr)
 }
 
 
-#ifdef HAVE_ARRAY_OF_STRING
 inline void FibrePrint( StringArray::stringArray arr)
 {
   FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
-#endif
 
 #define HASH #
 #define PRINTME(x) x
