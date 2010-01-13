@@ -13,10 +13,14 @@
 
 module Benchmarking;
 
+export all;
+
 #define muTC 1
 #if SAC_BACKEND == muTC
 import MutcBenchmarking: all;
 #else
-#endif
 
-export all;
+void benchThis(){
+}
+
+#endif

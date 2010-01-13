@@ -33,6 +33,7 @@ specialize TYPE[.,.,.] hideValue( TYPE[.,.,.] in);     \
 specialize TYPE[.,.,.,.] hideValue( TYPE[.,.,.,.] in); \
 TYPE[*] hideValue( TYPE[*] in)                         \
 {                                                      \
+  Benchmarking::benchThis();                           \
   return( in);                                         \
 }                             
 HIDEVALUE( int)
@@ -57,6 +58,7 @@ specialize TYPE[.,.,.] hideShape( TYPE[.,.,.] in);     \
 specialize TYPE[.,.,.,.] hideShape( TYPE[.,.,.,.] in); \
 TYPE[*] hideShape( TYPE[*] in)                         \
 {                                                      \
+  Benchmarking::benchThis();                           \
   if( hideValue( true)) {                              \
     retval = in;                                       \
   }                                                    \
@@ -81,6 +83,7 @@ HIDESHAPE( bool)
 #define HIDEDIMENSIONALITY( TYPE)                      \
 TYPE[*] hideDimensionality( TYPE[*] in)                \
 {                                                      \
+  Benchmarking::benchThis();                           \
   if( hideValue( true)) {                              \
     retval = in;                                       \
   }                                                    \
