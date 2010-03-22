@@ -95,6 +95,10 @@ external double log10(double X);
     #pragma linksign [0,1]
     /* Base-ten logarithm of X.  */
 
+external double log2(double X);
+    #pragma linksign [0,1]
+    /* Base-two logarithm of X.  */
+
 external double expm1(double X);
     #pragma linksign [0,1]
     /* Return exp(X) - 1.  */
@@ -322,6 +326,12 @@ external double hypot(double X, double Y);
     return(tof(log10(tod(X))));
   }
     /* Base-ten logarithm of X.  */
+
+  inline float log2(float X)
+  {
+    return(tof(log2(tod(X))));
+  }
+    /* Base-two logarithm of X.  */
 
   inline float expm1(float X)
   {

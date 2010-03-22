@@ -132,12 +132,16 @@ inline complex polar(double MAG)
 }
 
     
-inline double norm(complex CPX)
+inline double normSq(complex CPX)
 {
   return(  ((:double[2])CPX)[[0]] ScalarArith::* ((:double[2])CPX)[[0]] 
          ScalarArith::+ ((:double[2])CPX)[[1]] ScalarArith::* ((:double[2])CPX)[[1]]);
 }
 
+inline double norm( complex CPX)
+{
+  return( Math::sqrt( normSq( CPX)));
+}
 
 inline double arg(complex CPX)
 {
