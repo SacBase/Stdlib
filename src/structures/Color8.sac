@@ -93,6 +93,57 @@ inline color[256] genAlternatingClut( color c1, color c2)
   return( res);
 }
 
+/*
+ * h_in is the hue in degrees [0:360]
+ * s_in is the saturation in % [0:100]
+ * b_in is the brightness in % [0:100]
+ */
+color Hsb2Rgb( int h_in , int s_in, int b_in )
+{
+  col = black( );
+
+  if ( b_in == 0 )
+    col = black( );
+  else if ( b_in == 100 && s_in == 0 )
+    col = white( );
+  else if ( s_in == 0 )
+    col = newColor( b_in, b_in, b_in );
+  else
+  {
+    h = tod( h_in ) / 60d;
+    s = tod( s_in ) / 100d;
+    b = tod( b_in ) / 100d;
+
+    i = toi( h ) % 6; 
+    f = h - tod( i );
+
+    if ( ( i % 2 ) == 0 )
+      f = 1d - f;
+
+    m = b * ( 1d - s );
+    n = b * ( 1d - s * f );
+
+    b = toi( b * 255d );
+    m = toi( m * 255d );
+    n = toi( n * 255d );
+
+    if ( 0 == i )
+      col = newColor( b, n, m );
+    else if ( 1 == i )
+      col = newColor( n, b, m );
+    else if ( 2 == i )
+      col = newColor( m, b, n );
+    else if ( 3 == i )
+      col = newColor( m, n, b );
+    else if ( 4 == i )
+      col = newColor( n, m, b );
+    else if ( 5 == i )
+      col = newColor( b, m, n );
+  }
+
+  return( col );
+}
+
 inline color[*] sel( int idx, color[*] clut)
 {
   return( clut[[idx]]);
