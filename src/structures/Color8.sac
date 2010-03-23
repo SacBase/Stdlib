@@ -98,7 +98,7 @@ inline color[256] genAlternatingClut( color c1, color c2)
  * s_in is the saturation in % [0:100]
  * b_in is the brightness in % [0:100]
  */
-color Hsb2Rgb( int h_in , int s_in, int b_in )
+inline color Hsb2Rgb( int h_in , int s_in, int b_in )
 {
   col = black( );
 
@@ -144,7 +144,7 @@ color Hsb2Rgb( int h_in , int s_in, int b_in )
   return( col );
 }
 
-color[*] Hsb2Rgb( int[*] h_in, int s_in, int b_in)
+inline color[*] Hsb2Rgb( int[*] h_in, int s_in, int b_in)
 {
   res = with {
           ( . <= iv <= .) : Hsb2Rgb( h_in[iv], s_in, b_in);
@@ -154,7 +154,7 @@ color[*] Hsb2Rgb( int[*] h_in, int s_in, int b_in)
 }
 
 
-color[*] Hsb2Rgb( int[*] h_in, int[*] s_in, int[*] b_in)
+inline color[*] Hsb2Rgb( int[*] h_in, int[*] s_in, int[*] b_in)
 {
   res = with {
           ( . <= iv <= .) : Hsb2Rgb( h_in[iv], s_in[iv], b_in[iv]);
