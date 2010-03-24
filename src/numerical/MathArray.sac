@@ -94,6 +94,7 @@ template(arg1, double, double)
  *****************************************************************************/
 
 ALL_TYPES_1( OP_A_TEMPLATE, log)
+ALL_TYPES_1( OP_A_TEMPLATE, log2)
 ALL_TYPES_1( OP_A_TEMPLATE, log10)
 ALL_TYPES_1( OP_A_TEMPLATE, exp)
 ALL_TYPES_1( OP_A_TEMPLATE, fabs)

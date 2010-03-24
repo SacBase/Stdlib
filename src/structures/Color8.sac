@@ -46,6 +46,16 @@ inline color newColor( int x, int y, int z)
   return( newColor( [x,y,z]));
 }
 
+inline int[3] toi( color c)
+{
+  return( (:int[3]) c);
+}
+
+inline int[*] toi( color[*] c)
+{
+  return( (:int[*]) c);
+}
+
 inline color[256] Weights2Clut( double[256] w, color c1, color c2)
 {
   return( (: color[256]) toi( { iv -> w[iv] * tod((:int[3]) c1) } 
