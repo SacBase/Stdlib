@@ -1,6 +1,6 @@
 module Color8;
 
-use Array: all except { sel, shape, dim, toi};
+use Array: all except { sel, shape, dim, reshape, toi};
 import Array: { sel };
 use MathArray : all;
 export all except { Weights2Clut, genSteps };
@@ -194,5 +194,11 @@ inline
 int[.] shape( color[*] a)
 {
   return( _drop_SxV_( -1, Array::shape((:int[*])a)) );
+}
+
+inline
+color[*] reshape( int[.] shp, color[*] a)
+{
+  return(  (:color[*])_reshape_VxA_( shp ++ [3], (:int[*])a) );
 }
 
