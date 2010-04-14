@@ -1,0 +1,7 @@
+module TimeStamp;
+
+export all;
+
+external void timeStamp( );
+    #pragma effect World::TheWorld
+    #pragma linkobj  "src/TimeStamp/TimeStamp.o"
