@@ -1,0 +1,335 @@
+/* C99 Benchmarking Module 
+ *
+ * Measures Intervals in seconds as doubles.
+ *
+ * Use getInterval to construct a benchmarking interval object and start and
+ * end to measure each interval. Take care when start and stop are evaluated
+ * since this will affect the windows that is measured. The function benchThis 
+ * simply affects the benchmarking object and can be used in inhibit code 
+ * movement. The function printResult dumps the measurement information in a 
+ * unibench friendly format.
+ *
+ * When benchmarking funtions the pragma "noinline" should be specified after
+ * the function body to inhibit any inlining optimisations.
+ */
+class C99Benchmarking;
+external classtype;
+
+use Interval: all;
+use String: {string, sprintf,+};
+use Array: all except {+};
+use RTClock: {gettime};
+use StdIO: all;
+
+export { Interval, start, end, benchThis, printResult, 
+         getInterval, destroyInterval};
+
+objdef C99Benchmarking TheBenchmarkObject = create_TheBenchmarkObject( );
+
+Interval getInterval( string interval_name, int interval_number) {
+  return( _getInterval( interval_name, interval_number));
+}
+
+external C99Benchmarking create_TheBenchmarkObject( );
+#pragma effect World::TheWorld
+#pragma linkname "benchCreate"
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [1]
+
+external Interval _getInterval( string interval_name, int interval_number);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkname "benchGetInterval_si"
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [0,1,2]
+
+Interval getInterval( string interval_name) {
+    return(_getInterval( interval_name));
+}
+
+external Interval _getInterval( string interval_name);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkname "benchGetInterval_s"
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [0,1]
+ 
+
+Interval getInterval( int interval_number) {
+  return(_getInterval( interval_number));
+ }
+
+external Interval _getInterval( int interval_number);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkname "benchGetInterval_i"
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [0,1]
+
+void start( Interval& interval)
+{
+  secs, usecs = gettime();
+  time = tod( secs);
+  time += tod( usecs) / 1000000000d;
+  benchStart( interval, time); 
+}
+
+void end( Interval& interval)
+{
+  secs, usecs = gettime();
+  time = tod( secs);
+  time += tod( usecs) / 1000000000d;
+  benchEnd( interval, time); 
+}
+
+external void benchStart( Interval& interval, double timestamp);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkobj "src/C99Benchmarking/bench.o"
+
+external void benchEnd( Interval& interval, double timestamp);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkobj "src/C99Benchmarking/bench.o"
+
+external double benchRes( Interval& interval);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [0,1]
+
+external int benchNum( Interval& interval);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [0,1]
+
+external string benchName( Interval& interval);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [0,1]
+
+void printResult( Interval& int1)
+{
+  names = StringArray::genarray( [1], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  printResults( names, 
+                [ benchRes( int1)]);
+}
+
+void printResult( Interval& int1, Interval& int2)
+{
+  names = StringArray::genarray( [2], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  names = StringArray::modarray( 
+                names, [1], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int2)) + 
+                                " " + 
+                                benchName( int2)));
+  printResults( names, 
+                [ benchRes( int1), benchRes( int2)]);
+}
+
+void printResult( Interval& int1, Interval& int2, Interval& int3)
+{
+  names = StringArray::genarray( [3], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  names = StringArray::modarray( 
+                names, [1], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int2)) + 
+                                " " + 
+                                benchName( int2)));
+  names = StringArray::modarray( 
+                names, [2], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int3)) + 
+                                " " + 
+                                benchName( int3)));
+  printResults( names, 
+                [ benchRes( int1), benchRes( int2), benchRes( int3)]);
+}
+
+void printResult( Interval& int1, Interval& int2, Interval& int3, 
+                  Interval& int4)
+{
+  names = StringArray::genarray( [4], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  names = StringArray::modarray( 
+                names, [1], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int2)) + 
+                                " " + 
+                                benchName( int2)));
+  names = StringArray::modarray( 
+                names, [2], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int3)) + 
+                                " " + 
+                                benchName( int3)));
+  names = StringArray::modarray( 
+                names, [3], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int4)) + 
+                                " " + 
+                                benchName( int4)));
+  printResults( names, 
+                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                  benchRes( int3), benchRes( int4)]);
+}
+
+void printResult( Interval& int1, Interval& int2, Interval& int3, 
+                  Interval& int4, Interval& int5)
+{
+  names = StringArray::genarray( [5], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  names = StringArray::modarray( 
+                names, [1], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int2)) + 
+                                " " + 
+                                benchName( int2)));
+  names = StringArray::modarray( 
+                names, [2], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int3)) + 
+                                " " + 
+                                benchName( int3)));
+  names = StringArray::modarray( 
+                names, [3], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int4)) + 
+                                " " + 
+                                benchName( int4)));
+  names = StringArray::modarray( 
+                names, [4], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int5)) + 
+                                " " + 
+                                benchName( int5)));
+  printResults( names, 
+                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                  benchRes( int3), benchRes( int4), benchRes( int5)]);
+}
+
+void printResult( Interval& int1, Interval& int2, Interval& int3, 
+                  Interval& int4, Interval& int5, Interval& int6)
+{
+  names = StringArray::genarray( [6], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  names = StringArray::modarray( 
+                names, [1], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int2)) + 
+                                " " + 
+                                benchName( int2)));
+  names = StringArray::modarray( 
+                names, [2], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int3)) + 
+                                " " + 
+                                benchName( int3)));
+  names = StringArray::modarray( 
+                names, [3], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int4)) + 
+                                " " + 
+                                benchName( int4)));
+  names = StringArray::modarray( 
+                names, [4], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int5)) + 
+                                " " + 
+                                benchName( int5)));
+  names = StringArray::modarray( 
+                names, [5], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int6)) + 
+                                " " + 
+                                benchName( int6)));
+  printResults( names, 
+                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                  benchRes( int3), benchRes( int4), benchRes( int5), 
+                  benchRes( int6)]);
+}
+
+void printResult( Interval& int1, Interval& int2, Interval& int3, 
+                  Interval& int4, Interval& int5, Interval& int6, 
+                  Interval& int7)
+{
+  names = StringArray::genarray( [7], StringArray::to_stringArray( ""));
+  names = StringArray::modarray( 
+                names, [0], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int1)) + 
+                                " " + 
+                                benchName( int1)));
+  names = StringArray::modarray( 
+                names, [1], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int2)) + 
+                                " " + 
+                                benchName( int2)));
+  names = StringArray::modarray( 
+                names, [2], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int3)) + 
+                                " " + 
+                                benchName( int3)));
+  names = StringArray::modarray( 
+                names, [3], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int4)) + 
+                                " " + 
+                                benchName( int4)));
+  names = StringArray::modarray( 
+                names, [4], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int5)) + 
+                                " " + 
+                                benchName( int5)));
+  names = StringArray::modarray( 
+                names, [5], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int6)) + 
+                                " " + 
+                                benchName( int6)));
+  names = StringArray::modarray( 
+                names, [6], 
+                StringArray::to_stringArray( sprintf( "%d", benchNum( int7)) + 
+                                " " + 
+                                benchName( int7)));
+  printResults( names, 
+                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                  benchRes( int3), benchRes( int4), benchRes( int5), 
+                  benchRes( int6), benchRes( int7)]);
+}
+
+void printResults( StringArray::stringArray names, double[.] results)
+{
+  printf( "### begin intervals\n");
+  FibrePrint( results);
+  printf( "### begin intervals\n");
+  printf( "### begin descriptions\n");
+  FibrePrint( names);
+  printf( "### end descriptions\n");
+}
+
+/*
+ * This function simply affects TheBenchmarkObject and nothing else.
+ * Use it to inhibit code movement. The most common use for benchThis
+ * is to call it within a function body of a function body that should be
+ * evaluated after a call to start and before a call to end.
+ */
+external void benchThis();
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkobj "src/C99Benchmarking/bench.o"
+
+void destroyInterval( Interval interval)
+{
+  benchDestroyInterval( interval);
+}
+
+external void benchDestroyInterval( Interval interval);
+#pragma effect C99Benchmarking::TheBenchmarkObject
+#pragma linkname "benchDestroyInterval"
+#pragma linkobj "src/C99Benchmarking/bench.o"
+#pragma linksign [1]
+

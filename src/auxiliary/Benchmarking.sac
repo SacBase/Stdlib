@@ -15,8 +15,10 @@ module Benchmarking;
 
 export all;
 
+#if SAC_BACKEND == c99
+import C99Benchmarking: all;
+#elif SAC_BACKEND == muTC
 #define muTC 1
-#if SAC_BACKEND == muTC
 import MutcBenchmarking: all;
 #else
 
