@@ -4,12 +4,18 @@
  *
  * description:
  *
- *   This module is for hiding type information of
- *   static inputs. It is intentioned for benchmarking.
+ *   This module is for hiding type information.
+ *   It is commonly used for static inputs and is intentioned for benchmarking.
  *
- *   The intention is to eventually add ID primitives to the compiler that 
- *   can hide type information. Once these are added the functions below can 
- *   be replaced by direct calls to these primitives.
+ *   Some functions take a single argument and hide the value, shape or 
+ *   dimensionality information of the input. Others in addition take an
+ *   integer. This allows for calls to inlined kernel functions in a loop 
+ *   where where the call must be repeated N times for benchmarking.
+ *   Here is an example:
+ *      for( i=0 ; i < N ; i}}) {
+ *        res[[i]] = kernel( hideValue( ip1, i), hideValue( ip2, i), ...);
+ *      }
+ *   The above code computes kernel N times even if kernel is inlined.
  *
  *****************************************************************************/
 
@@ -26,24 +32,23 @@ use Array: all;
  * AUD -> AUD
  * SCALAR -> SCALAR
  */
-#define HIDEVALUE( TYPE)                               \
-specialize TYPE[.] hideValue( TYPE[.] in);             \
-specialize TYPE[.,.] hideValue( TYPE[.,.] in);         \
-specialize TYPE[.,.,.] hideValue( TYPE[.,.,.] in);     \
-specialize TYPE[.,.,.,.] hideValue( TYPE[.,.,.,.] in); \
-TYPE[*] hideValue( TYPE[*] in)                         \
-{                                                      \
-  Benchmarking::benchThis();                           \
-  return( in);                                         \
-}                             
+#define HIDEVALUE( TYPE)                                  \
+inline                                                    \
+TYPE[*] hideValue( TYPE[*] in)                            \
+{                                                         \
+  return( _hideValue_SxA_( 0, in));                       \
+}                                                         \
+inline                                                    \
+TYPE[*] hideValue( int i, TYPE[*] in)                     \
+{                                                         \
+  return( _hideValue_SxA_( i, in));                       \
+}                                                         
 HIDEVALUE( int)
 HIDEVALUE( char)
 HIDEVALUE( float)
 HIDEVALUE( double)
 HIDEVALUE( bool)
 
-#define muTC 1
-#if SAC_BACKEND != muTC
 /*
  * AKV -> AKD
  * AKS -> AKD
@@ -52,20 +57,15 @@ HIDEVALUE( bool)
  * SCALAR -> SCALAR
  */
 #define HIDESHAPE( TYPE)                               \
-specialize TYPE[.] hideShape( TYPE[.] in);             \
-specialize TYPE[.,.] hideShape( TYPE[.,.] in);         \
-specialize TYPE[.,.,.] hideShape( TYPE[.,.,.] in);     \
-specialize TYPE[.,.,.,.] hideShape( TYPE[.,.,.,.] in); \
+inline                                                 \
 TYPE[*] hideShape( TYPE[*] in)                         \
 {                                                      \
-  Benchmarking::benchThis();                           \
-  if( hideValue( true)) {                              \
-    retval = in;                                       \
-  }                                                    \
-  else {                                               \
-    retval = in ++ in;                                 \
-  }                                                    \
-  return( retval);                                     \
+  return( _hideShape_SxA_( 0, in));                    \
+}                                                      \
+inline                                                 \
+TYPE[*] hideShape( int i, TYPE[*] in)                  \
+{                                                      \
+  return( _hideShape_SxA_( i, in));                    \
 }
 HIDESHAPE( int)
 HIDESHAPE( char)
@@ -81,16 +81,15 @@ HIDESHAPE( bool)
  * SCALAR -> AUD
  */
 #define HIDEDIMENSIONALITY( TYPE)                      \
+inline                                                 \
 TYPE[*] hideDimensionality( TYPE[*] in)                \
 {                                                      \
-  Benchmarking::benchThis();                           \
-  if( hideValue( true)) {                              \
-    retval = in;                                       \
-  }                                                    \
-  else {                                               \
-    retval = [in];                                     \
-  }                                                    \
-  return( retval);                                     \
+  return( _hideDim_SxA_( 0, in));                      \
+}                                                      \
+inline                                                 \
+TYPE[*] hideDimensionality( int i, TYPE[*] in)         \
+{                                                      \
+  return( _hideDim_SxA_( i, in));                      \
 }
 HIDEDIMENSIONALITY( int)
 HIDEDIMENSIONALITY( char)
@@ -98,5 +97,3 @@ HIDEDIMENSIONALITY( float)
 HIDEDIMENSIONALITY( double)
 HIDEDIMENSIONALITY( bool)
 
-#endif
-#undef muTC
