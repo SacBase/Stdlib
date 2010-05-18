@@ -1,0 +1,76 @@
+/** <!-- ****************************************************************** -->
+ * @file Counter.sac
+ *
+ * @brief A simple class to maintain a global counter
+ *
+ * @date $Id$
+ ******************************************************************************/
+class Counter;
+
+classtype int;
+
+use ScalarArith : {+};
+
+export all;
+
+/** <!-- ****************************************************************** -->
+ * @brief Creates a new counter with initial value 0.
+ * 
+ * @return created counter object
+ ******************************************************************************/
+Counter newCounter()
+{
+  return( to_Counter( 0));
+}
+
+/** <!-- ****************************************************************** -->
+ * @brief Creates a new counter with initial value v.
+ * 
+ * @param v initial value for new counter
+ * 
+ * @return created counter object
+ ******************************************************************************/
+Counter newCounter( int v)
+{
+  return( to_Counter( v));
+}
+
+/** <!-- ****************************************************************** -->
+ * @brief Returns the current value of the counter
+ * 
+ * @param cnt counter object
+ * 
+ * @return counter object's value
+ ******************************************************************************/
+int valueOf( Counter &cnt)
+{
+  val = from_Counter( cnt);
+  cnt = to_Counter( val);
+  return( val);
+}
+
+/** <!-- ****************************************************************** -->
+ * @brief Increments the counter by one.
+ * 
+ * @param cnt the counter object to update
+ ******************************************************************************/
+void increment( Counter &cnt)
+{
+  val = from_Counter( cnt);
+  cnt = to_Counter( val + 1);
+}
+
+/** <!-- ****************************************************************** -->
+ * @brief Returns the current value of the counter object and
+ *        increments the counter object by one
+ * 
+ * @param cnt counter object to inspect and modify
+ * 
+ * @return value of counter object before updating
+ ******************************************************************************/
+int next( Counter &cnt)
+{
+  val = valueOf( cnt);
+  increment( cnt);
+  return( val);
+}
