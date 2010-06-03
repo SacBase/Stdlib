@@ -211,7 +211,37 @@ external string tos(bool B);
     #pragma linkobj "src/String/btos.o"
     /*  Convert boolean into string.  */
 
+inline string indent( int indent, string str)
+{
+  while ( indent > 0){
+    str = strcat( "  ", str);
+  }
+  return( str);
+}
 
+#define TOS( type)                                              \
+inline string tos( type[+] in)                                  \
+{                                                               \
+  return( tos( in, 0));                                         \
+}                                                               \
+inline string tos( type in, int indent)                         \
+{                                                               \
+  return( indent( indent, tos( in)));                           \
+}                                                               \
+inline string tos( type[+] in, int indent)                      \
+{                                                               \
+  result = "[\n";                                               \
+  for ( i=0; i < shape( in)[0]; i++){                           \
+    result = strcat( result, tos( in[i], indent+1));            \
+  }                                                             \
+  result = strcat( result, indent( indent, "]\n"));             \
+  return( result);                                              \
+}                                                               \
+
+TOS( int)
+TOS( float)
+TOS( double)
+TOS( bool)
 
 
 inline string to_string(char[.] arr)
