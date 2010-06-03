@@ -45,8 +45,8 @@ stringArray drop( int[.] v, stringArray array)
   res = genarray(new_shp, to_stringArray(""));
   indicies = getIndicies( new_shp);
   for ( i=0; i < _sel_VxA_( [0], Array::shape(indicies)); i++){
-    res[ indicies[ i]] = array[ _add_VxV_( offset, 
-                                           _sel_VxA_( [i], indicies))];
+    res[ Array::sel( [i], indicies)] = 
+      array[ _add_VxV_( offset, Array::sel( [i], indicies))];
   }
   
   return( res);
