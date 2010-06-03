@@ -1,9 +1,9 @@
 module StringArray;
 
 use String : {string};
-use Array : {*,all};
+use Array : {*,all,-,abs,<,>=,+,zero};
 export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies, 
-                   modarray_AxVxS, sel_VxA, stringArrayCreator};
+    modarray_AxVxS, sel_VxA, stringArrayCreator, drop};
 
 /*
  * You can create a new stringArray using:
@@ -25,6 +25,42 @@ external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
     #pragma linkobj "src/StringArray/modarray.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2,3]
+
+stringArray drop( int[.] v, stringArray array)
+{
+  vext = _cat_VxV_( v,                                                         
+                    Array::genarray( [dim( array) - 
+                                      _sel_VxA_( [0], _shape_A_( v))], 
+                              0));  
+  new_shp = _sub_VxV_( shape( array), abs( vext)); 
+
+  new_shp = where( new_shp < 0, 0, new_shp);
+  offset = where( vext < 0, 0, vext);
+  offset = where( offset >= shape( array), 0, offset);
+
+  /*  res = with {                                                   
+  ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);
+  } : genarray( new_shp, zero(array));         */
+
+  res = genarray(new_shp, to_stringArray(""));
+  indicies = getIndicies( new_shp);
+  for ( i=0; i < _sel_VxA_( [0], Array::shape(indicies)); i++){
+    res[ indicies[ i]] = array[ _add_VxV_( offset, 
+                                           _sel_VxA_( [i], indicies))];
+  }
+  
+  return( res);
+}
+
+inline
+int[+] where( bool[+] p, int A, int[+] B)
+{
+  res = with {
+  ( . <= iv <= . ) : _sel_VxA_( iv, p) ? A : _sel_VxA_( iv, B);
+  } : genarray( _shape_A_(p), zero(B) );
+
+  return( res);
+}
 
 stringArray modarray( stringArray array, int[.] idx, stringArray val)
 {
@@ -289,9 +325,10 @@ int[.] indexOf( string needle, stringArray haystack)
    */
 
   indicies = getIndicies( shape( haystack));
-  /*res = { [i] -> ( to_string( sel( Array::sel( [i], indicies), haystack)) String::== needle ?
-                             Array::sel( [i], indicies) :
-                             0 Array::* Array::sel( [i], indicies))};*/
+  /*res = { [i] -> ( to_string( sel( Array::sel( [i], indicies),
+                             haystack)) String::== needle ?
+                             Array::sel( [i], indicies) : 0 Array::*
+                             Array::sel( [i], indicies))};*/
 
   res = with {
           ( [0] <= [i] < [Array::sel( [0], Array::shape( indicies))]) :
