@@ -4,7 +4,7 @@ import Char: all;
 import ScalarArith: {&,!=,==,+,>=,>,<=,<};
 import ArrayBasics: {shape,sel};
 
-export all;
+export all except {indent};
 
 external typedef string;
     #pragma freefun "free"
