@@ -16,14 +16,10 @@ module Benchmarking;
 export all;
 
 
-#define muTC 1
-#define c99  2
-#if SAC_BACKEND == c99
+#ifdef SAC_BACKEND_C99 
 import C99Benchmarking: all;
-#elif SAC_BACKEND == muTC
+#endif /* SAC_BACKEND_C99 */
+
+#ifdef SAC_BACKEND_MUTC
 import MutcBenchmarking: all;
-#else
-#error Benchmarking.sac unsupported on this backend
-#endif
-#undef muTC
-#undef c99
+#endif /* SAC_BACKEND_MUTC */

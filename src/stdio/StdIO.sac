@@ -1,9 +1,8 @@
 module StdIO;
 
-#define muTC 1
-#if SAC_BACKEND == muTC
+#ifdef SAC_BACKEND_MUTC 
 import MutcIO:    all;
-#else
+#else /* SAC_BACKEND_MUTC */
 import File:      all;
 import TermFile:  all;
 import BinFile:   all;
@@ -13,8 +12,8 @@ import ArrayIO:   all;
 import FibreIO:   all;
 import ListIO:    all;
 import ComplexIO: all;
-#endif
-#undef muTC
+#endif /* SAC_BACKEND_MUTC */
+
 export all;
 
 
