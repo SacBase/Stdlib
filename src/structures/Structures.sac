@@ -3,7 +3,9 @@ module Structures;
 import Array        : all;
 import Char         : all;
 import Bits         : all;
+#ifndef SAC_BACKEND_MUTC
 import String       : all;
+#endif /* SAC_BACKEND_MUTC */
 import Complex      : all;
 import List         : all;
 import Color8       : all;
