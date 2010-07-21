@@ -299,6 +299,11 @@ inline void FibrePrint( StringArray::stringArray arr)
   FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
+inline void FibrePrint( string scaler)
+{
+  TermFile::printf("%s", scaler);
+}
+
 #define HASH #
 #define PRINTME(x) x
 #define QUOTEME(x) #x
