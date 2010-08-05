@@ -239,86 +239,143 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
 }
 
-void ARRAYIO__PrintBoolArray( FILE *stream, int dim, int * shp, 
-	bool * a)
+void ARRAYIO__PrintBoolArray( FILE *stream, int dim, int * shp,	bool * a)
 {
   PrintArr(stream, BOOL, "%2i ", dim, shp, a);
 }
 
-void ARRAYIO__PrintDoubleArray( FILE *stream, int dim, int * shp, 
-	double * a)
+void ARRAYIO__PrintDoubleArray( FILE *stream, int dim, int * shp, double * a)
 {
   PrintArr(stream, DOUBLE, "%e ", dim, shp, a);
 }
 
-void ARRAYIO__PrintFloatArray( FILE *stream, int dim, int * shp, 
-	float * a)
+void ARRAYIO__PrintFloatArray( FILE *stream, int dim, int * shp, float * a)
 {
   PrintArr(stream, FLOAT, "%4f ", dim, shp, a);
 }
 
-void ARRAYIO__PrintByteArray( FILE *stream, int dim, int * shp, 
-	char * a)
+void ARRAYIO__PrintByteArray( FILE *stream, int dim, int * shp, char * a)
 {
   PrintArr(stream, BYTE, "%2hd ", dim, shp, a);
 }
 
-void ARRAYIO__PrintShortArray( FILE *stream, int dim, int * shp, 
-	short * a)
+void ARRAYIO__PrintShortArray( FILE *stream, int dim, int * shp, short * a)
 {
   PrintArr(stream, SHORT, "%2hd ", dim, shp, a);
 }
 
-void ARRAYIO__PrintIntArray( FILE *stream, int dim, int * shp, 
-	int * a)
+void ARRAYIO__PrintIntArray( FILE *stream, int dim, int * shp, int * a)
 {
   PrintArr(stream, INT, "%2i ", dim, shp, a);
 }
 
-void ARRAYIO__PrintLongArray( FILE *stream, int dim, int * shp, 
-	long * a)
+void ARRAYIO__PrintLongArray( FILE *stream, int dim, int * shp,	long * a)
 {
   PrintArr(stream, LONG, "%2ld ", dim, shp, a);
 }
 
-void ARRAYIO__PrintLonglongArray( FILE *stream, int dim, int * shp, 
-	long long * a)
+void ARRAYIO__PrintLonglongArray( FILE *stream, int dim, int * shp, long long * a)
 {
   PrintArr(stream, LONGLONG, "%2lld ", dim, shp, a);
 }
 
-void ARRAYIO__PrintUbyteArray( FILE *stream, int dim, int * shp, 
-	unsigned char * a)
+void ARRAYIO__PrintUbyteArray( FILE *stream, int dim, int * shp, unsigned char * a)
 {
   PrintArr(stream, UBYTE, "%2hu ", dim, shp, a);
 }
 
-void ARRAYIO__PrintUshortArray( FILE *stream, int dim, int * shp, 
-	unsigned short * a)
+void ARRAYIO__PrintUshortArray( FILE *stream, int dim, int * shp,	unsigned short * a)
 {
   PrintArr(stream, USHORT, "%2hu ", dim, shp, a);
 }
 
-void ARRAYIO__PrintUintArray( FILE *stream, int dim, int * shp, 
-	unsigned int * a)
+void ARRAYIO__PrintUintArray( FILE *stream, int dim, int * shp, unsigned int * a)
 {
   PrintArr(stream, UINT, "%2u ", dim, shp, a);
 }
 
-void ARRAYIO__PrintUlongArray( FILE *stream, int dim, int * shp, 
-	unsigned long * a)
+void ARRAYIO__PrintUlongArray( FILE *stream, int dim, int * shp, unsigned long * a)
 {
   PrintArr(stream, ULONG, "%2lu ", dim, shp, a);
 }
 
-void ARRAYIO__PrintUlonglongArray( FILE *stream, int dim, int * shp, 
-	unsigned long long * a)
+void ARRAYIO__PrintUlonglongArray( FILE *stream, int dim, int * shp, unsigned long long * a)
 {
   PrintArr(stream, ULONGLONG, "%2llu ", dim, shp, a);
 }
 
-void ARRAYIO__PrintCharArray( FILE *stream, int dim, int * shp, 
-	char * a)
+void ARRAYIO__PrintCharArray( FILE *stream, int dim, int * shp,	char * a)
 {
   PrintArr(stream, CHAR, "%c", dim, shp, a);
+}
+
+/* Functions which prints using user-defined format */
+void ARRAYIO__PrintBoolArrayFormat( FILE *stream, string format, int dim, int * shp, bool * a)
+{
+  PrintArr(stream, BOOL, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintDoubleArrayFormat( FILE *stream, string format, int dim, int * shp, double * a)
+{
+  PrintArr(stream, DOUBLE, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintFloatArrayFormat( FILE *stream, string format, int dim, int * shp, float * a)
+{
+  PrintArr(stream, FLOAT, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintByteArrayFormat( FILE *stream, string format, int dim, int * shp, char * a)
+{
+  PrintArr(stream, BYTE, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintShortArrayFormat( FILE *stream, string format, int dim, int * shp, short * a)
+{
+  PrintArr(stream, SHORT, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintIntArrayFormat( FILE *stream, string format, int dim, int * shp,	int * a)
+{
+  PrintArr(stream, INT, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintLongArrayFormat( FILE *stream, string format, int dim, int * shp, long * a)
+{
+  PrintArr(stream, LONG, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintLonglongArrayFormat( FILE *stream, string format, int dim, int * shp, long long * a)
+{
+  PrintArr(stream, LONGLONG, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintUbyteArrayFormat( FILE *stream, string format, int dim, int * shp, unsigned char * a)
+{
+  PrintArr(stream, UBYTE, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintUshortArrayFormat( FILE *stream, string format, int dim, int * shp, unsigned short * a)
+{
+  PrintArr(stream, USHORT, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintUintArrayFormat( FILE *stream, string format, int dim, int * shp, unsigned int * a)
+{
+  PrintArr(stream, UINT, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintUlongArrayFormat( FILE *stream, string format, int dim, int * shp, unsigned long * a)
+{
+  PrintArr(stream, ULONG, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintUlonglongArrayFormat( FILE *stream, string format, int dim, int * shp, unsigned long long * a)
+{
+  PrintArr(stream, ULONGLONG, format, dim, shp, a);
+}
+
+void ARRAYIO__PrintCharArrayFormat( FILE *stream, string format, int dim, int * shp, char * a)
+{
+  PrintArr(stream, CHAR, format, dim, shp, a);
 }
