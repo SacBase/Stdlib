@@ -1,0 +1,24 @@
+module PPM;
+
+use Color8: {color, shape, sel, toi};
+use StdIO: all;
+use ScalarArith: all except {toi};
+
+export all;
+
+void printPPM( color[.,.] img)
+{
+  printf( "P3\n");
+  printf( "%d %d\n", shape(img)[0], shape(img)[1]);
+  printf( "%d\n", 255); 
+  for ( i=0; i<shape(img)[0]; i++){
+    for ( j=0; j<shape(img)[1]; j++){
+      color = toi( img[i,j]);
+      for ( k=0; k<3; k++){
+        printf( "%d ", color[k]);
+      }
+    }
+    printf( "\n");
+  }
+  printf( "\n");
+}
