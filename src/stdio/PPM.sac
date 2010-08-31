@@ -1,11 +1,13 @@
 module PPM;
 
-use Color8: {color, shape, sel, toi};
+use Color8: {color, sel, toi, white, newColor, shape};
 use StdIO: all;
 use ScalarArith: all except {toi};
+use ArrayBasics: {modarray};
 
 export all;
 
+inline
 void printPPM( color[.,.] img)
 {
   printf( "P3\n");
@@ -21,4 +23,52 @@ void printPPM( color[.,.] img)
     printf( "\n");
   }
   printf( "\n");
+}
+
+/*
+ * Return [0,0] array if could not read
+ */
+inline
+color[.,.] readPPM()
+{
+  int shape1;
+  int shape2;
+  int max;
+  int col;
+
+  res0 = scanf( "P3");
+  res1, shape1 = scanf( "%d");
+  res2, shape2 = scanf( "%d");
+
+  res3, max = scanf( "%d");
+
+  if (( res0 + res1 + res2 + res3 + max) ==
+      (    0 +    1 +    1 +    1 + 255)){
+    img = with{}:genarray( [shape1, shape2], [0,0,0]);
+  } else {
+    img = with{}:genarray( [0,0], [0,0,0]);
+  }
+
+  fail = false;
+
+  for ( i=0; i< ArrayBasics::shape(img)[0]; i++){
+    for ( j=0; j< ArrayBasics::shape(img)[1]; j++){
+      for ( k=0; k<3; k++){
+        res, col = scanf( "%d");
+        if ( res != 1){ 
+          fail = true;
+          i = ArrayBasics::shape(img)[0];
+          j = ArrayBasics::shape(img)[1];
+          k = 3;
+        }
+        img[i,j,k] = col;
+      }
+    }
+  }
+
+  if ( fail){
+    img = with{}:genarray( [0,0], [0,0,0]);
+  }
+
+  return( (:color[.,.])img);
 }
