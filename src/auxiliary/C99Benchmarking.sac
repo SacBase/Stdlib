@@ -178,7 +178,7 @@ void printResult( Interval& int1, Interval& int2, Interval& int3,
                                 " " + 
                                 benchName( int4)));
   printResults( names, 
-                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                [ benchRes( int1), benchRes( int2), 
                   benchRes( int3), benchRes( int4)]);
 }
 
@@ -212,7 +212,7 @@ void printResult( Interval& int1, Interval& int2, Interval& int3,
                                 " " + 
                                 benchName( int5)));
   printResults( names, 
-                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                [ benchRes( int1), benchRes( int2),
                   benchRes( int3), benchRes( int4), benchRes( int5)]);
 }
 
@@ -251,7 +251,7 @@ void printResult( Interval& int1, Interval& int2, Interval& int3,
                                 " " + 
                                 benchName( int6)));
   printResults( names, 
-                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                [ benchRes( int1), benchRes( int2),
                   benchRes( int3), benchRes( int4), benchRes( int5), 
                   benchRes( int6)]);
 }
@@ -297,7 +297,7 @@ void printResult( Interval& int1, Interval& int2, Interval& int3,
                                 " " + 
                                 benchName( int7)));
   printResults( names, 
-                [ benchRes( int1), benchRes( int2), benchRes( int3), 
+                [ benchRes( int1), benchRes( int2), 
                   benchRes( int3), benchRes( int4), benchRes( int5), 
                   benchRes( int6), benchRes( int7)]);
 }
