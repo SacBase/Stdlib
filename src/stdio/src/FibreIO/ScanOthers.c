@@ -10,8 +10,7 @@
 returntype FibreScan##alias( FILE *stream)		\
 {							\
   start_token = PARSE_##token;				\
-  yyin = stream;					\
-  FibreScanparse();					\
+  doScan( stream);                                     \
   return( typename##val);				\
 }
 

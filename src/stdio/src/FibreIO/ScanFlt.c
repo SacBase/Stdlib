@@ -9,9 +9,8 @@
 
 float FibreScanFloat( FILE *stream)
 {
-  yyin = stream;
   start_token = PARSE_FLOAT;
-  FibreScanparse();
+  doScan( stream);
   return( floatval);
 }
 

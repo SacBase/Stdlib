@@ -8,6 +8,7 @@
 #define yylval FibreScanlval
 
 #include "FibreScan.tab.h"
+extern int FibreScanparse();
 
 
 #define RETURNnum(token) yylval.cint=atoi(yytext); return(token)
@@ -27,6 +28,9 @@
                                return(token);\
                            }
 
+#define YY_USER_ACTION num_chars += yyleng;
+
+int num_chars; /* Stores the number of chars read for returned tokens */
 int linenum=1;
 int start_token;
 
@@ -190,3 +194,13 @@ int start_token;
 
 %%
 
+void doScan( FILE *stream)
+{
+  int pos;
+  pos = ftell( stream);
+  num_chars = 0;
+  yyin = stream;
+  FibreScanparse();
+  fseek( stream, pos+num_chars, SEEK_SET);
+  FibreScanrestart( stream);
+}

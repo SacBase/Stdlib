@@ -27,8 +27,7 @@ void FibreScanStringArray( SAC_ND_PARAM_out( resout_nt, array *), FILE *stream)
 
   
   start_token = PARSE_STRING_ARRAY;
-  yyin = stream;
-  FibreScanparse();
+  doScan( stream);
   
   size = 1;
   for( i=0; i < dims; i++) {

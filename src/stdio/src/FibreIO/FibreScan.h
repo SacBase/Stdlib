@@ -42,12 +42,14 @@ extern int linenum;
 extern int yyparse();
 extern int yy_scan_string( char*);
 extern void yyerror(char *);
+extern int FibreScanparse();
 
 extern char *yytext;
 
 extern FILE *yyin;
 extern int start_token;
 extern int FibreScanlex();
+extern void doScan( FILE *stream);
 
 extern int boolval;
 extern char byteval;

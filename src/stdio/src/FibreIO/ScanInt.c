@@ -10,8 +10,7 @@
 int FibreScanInt( FILE *stream)
 {
   start_token = PARSE_INT;
-  yyin = stream;
-  FibreScanparse();
+  doScan( stream);
   return( intval);
 }
 

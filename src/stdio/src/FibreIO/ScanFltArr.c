@@ -16,8 +16,7 @@ void FibreScanFloatArray( SAC_ND_PARAM_out( array_nt, float), FILE *stream)
   SAC_ND_DECL__DESC( ret_nt, )
   int i;
   start_token = PARSE_FLOAT_ARRAY;
-  yyin = stream;
-  FibreScanparse();
+  doScan( stream);
   int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;
   SAC_ND_ALLOC__DESC( ret_nt, dims)
   SAC_ND_SET__RC( ret_nt, 1)

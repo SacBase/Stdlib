@@ -9,9 +9,8 @@
 
 char *FibreScanString( FILE *stream)
 {
-  yyin = stream;
   start_token = PARSE_STRING;
-  FibreScanparse();
+  doScan( stream);
   return( stringval);
 }
 

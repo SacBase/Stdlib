@@ -9,9 +9,8 @@
 
 double FibreScanDouble( FILE *stream)
 {
-  yyin = stream;
   start_token = PARSE_DOUBLE;
-  FibreScanparse();
+  doScan( stream);
   return( doubleval);
 }
 
