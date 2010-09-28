@@ -197,7 +197,17 @@ int start_token;
 void doScan( FILE *stream)
 {
   int pos;
+  errno = 0;
   pos = ftell( stream);
+  /* Check if the stream is seekable */
+  rewind( stream);
+  if(errno!=0) {
+    fprintf(stderr, 
+      "The fibre scanner only supports seekable streams. "
+      "Try reading the fibre input via a file.\n");
+    exit(-1);
+  }
+  fseek( stream, pos, SEEK_SET);
   num_chars = 0;
   yyin = stream;
   FibreScanparse();
