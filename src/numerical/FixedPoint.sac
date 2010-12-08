@@ -1,0 +1,144 @@
+module FixedPoint;
+
+use SaCMath: all;
+
+export all;
+
+#define FORALL_POINTS( fun)                                                 \
+  fun(  0)                                                                  \
+  fun(  1)                                                                  \
+  fun(  2)                                                                  \
+  fun(  3)                                                                  \
+  fun(  4)                                                                  \
+  fun(  5)                                                                  \
+  fun(  6)                                                                  \
+  fun(  7)                                                                  \
+  fun(  8)                                                                  \
+  fun(  9)                                                                  \
+  fun( 10)                                                                  \
+  fun( 11)                                                                  \
+  fun( 12)                                                                  \
+  fun( 13)                                                                  \
+  fun( 14)                                                                  \
+  fun( 15)                                                                  \
+  fun( 16)                                                                  \
+  fun( 17)                                                                  \
+  fun( 18)                                                                  \
+  fun( 19)                                                                  \
+  fun( 20)                                                                  \
+  fun( 21)                                                                  \
+  fun( 22)                                                                  \
+  fun( 23)                                                                  \
+  fun( 24)                                                                  \
+  fun( 25)                                                                  \
+  fun( 26)                                                                  \
+  fun( 27)                                                                  \
+  fun( 28)                                                                  \
+  fun( 29)                                                                  \
+  fun( 30)                                                                  \
+  fun( 31)                                                                  \
+  fun( 32)                                                                  
+
+#define TYPE( name)                                                         \
+  fixedpoint_ ## name
+
+#define TYPEDEF( num)                                                       \
+  typedef int TYPE( num);
+                                                                            
+#define ADD( num)                                                           \
+  inline TYPE( num) (+)( TYPE( num) a, TYPE( num) b)                        \
+  {                                                                         \
+    return( (:TYPE( num)) _add_SxS_( (:int)a, (:int)b) );                   \
+  }                                                                         
+
+#define SUB( num)                                                           \
+  inline TYPE( num) (-)( TYPE( num) a, TYPE( num) b)                        \
+  {                                                                         \
+    return( (:TYPE( num)) _sub_SxS_( (:int)a, (:int)b) );                   \
+  }                                                                         
+
+#define DIV( num)                                                           \
+  inline TYPE( num) (/)( TYPE( num) a, TYPE( num) b)                        \
+  {                                                                         \
+    unnorm = _div_SxS_( (:int)a, (:int)b);                                  \
+    return( (:TYPE( num)) _mul_SxS_( unnorm, pow2( num)));                  \
+  }                                                                         
+
+#define MUL( num)                                                           \
+  inline TYPE( num) (*)( TYPE( num) a, TYPE( num) b)                        \
+  {                                                                         \
+    unnorm = _mul_SxS_( (:int)a, (:int)b);                                  \
+    return( (:TYPE( num)) _div_SxS_( unnorm, pow2( num) ));                 \
+  }                                                                         
+
+#define TO_INT( num)                                                        \
+  inline int to_int( TYPE( num) a)                                          \
+  {                                                                         \
+    return( _div_SxS_( ( (:int)a), pow2( num)));                            \
+  }                                                                         
+                                                                            
+#define TO_RAW( num)                                                        \
+  inline int to_raw( TYPE( num) a)                                          \
+  {                                                                         \
+    return( (:int)a);                                                       \
+  }                                                                         
+
+#define TO_TYPE_CAT( a, b) TO_TYPE_CAT_( a, b)
+#define TO_TYPE_CAT_( a, b) a##b                                              
+#define TO_TYPE( num)                                                       \
+  inline TYPE( num) TO_TYPE_CAT( to_, TYPE( num))( int a)                   \
+  {                                                                         \
+    return( (:TYPE( num)) _mul_SxS_(a, pow2( num)));                        \
+  }                                                                         
+
+#define TO_PAIR( num)                                                       \
+  inline int[2] to_int2( TYPE( num) a)                                      \
+  {                                                                         \
+    whole = to_int( a);                                                     \
+    part  = _mod_SxS_( (:int)a, pow2( num));                                \
+    return( [whole, part]);                                                 \
+  }
+
+#define FRACTION( num)                                                      \
+  inline int fraction( TYPE( num) a)                                        \
+  {                                                                         \
+    return( pow2(num));                                                     \
+  }                                                                         
+                                                                            
+#define ARRAY_BIN( num, fun, z, ta, tb, tc)                                 \
+  inline tc[+] fun( ta[+] a, tb[+] b)                                       \
+  {                                                                         \
+    return( with {                                                          \
+      ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a),            \
+                             (:tb[*])_sel_VxA_( iv, (:int[*])b));           \
+      } : genarray( _shape_A_( (:int[*])a), z));                            \
+  }
+
+#define ARRAY_MON( num, fun, z, ta, tb)                                     \
+  inline tb[+] fun( ta[+] a)                                                \
+  {                                                                         \
+    return( with {                                                          \
+      ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a));           \
+      } : genarray( _shape_A_( (:int[*])a), z));                            \
+  }
+
+#define ARRAY_FUNS( num)                                                    \
+  ARRAY_BIN( num, +, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
+  ARRAY_BIN( num, -, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
+  ARRAY_BIN( num, *, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
+  ARRAY_BIN( num, /, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
+  ARRAY_MON( num, to_int, 0, TYPE( num), int)                               \
+  ARRAY_MON( num, to_raw, 0, TYPE( num), int)                               \
+  ARRAY_MON( num, TO_TYPE_CAT( to_, TYPE( num)), (:TYPE( num)) 0, int, TYPE( num))
+
+FORALL_POINTS( TYPEDEF)
+FORALL_POINTS( ADD)
+FORALL_POINTS( SUB)
+FORALL_POINTS( DIV)
+FORALL_POINTS( MUL)
+FORALL_POINTS( TO_INT)
+FORALL_POINTS( TO_RAW)
+FORALL_POINTS( TO_TYPE)
+FORALL_POINTS( TO_PAIR)
+FORALL_POINTS( ARRAY_FUNS)
+FORALL_POINTS( FRACTION)
