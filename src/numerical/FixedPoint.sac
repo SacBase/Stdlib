@@ -74,7 +74,8 @@ export all;
 #define TO_INT( num)                                                        \
   inline int to_int( TYPE( num) a)                                          \
   {                                                                         \
-    return( _div_SxS_( ( (:int)a), pow2( num)));                            \
+    ans = _eq_SxS_( 0, pow2( num)) ? (:int)a: _div_SxS_( ( (:int)a), pow2( num)); \
+    return( ans);                                                           \
   }                                                                         
                                                                             
 #define TO_RAW( num)                                                        \
