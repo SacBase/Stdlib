@@ -11,7 +11,7 @@ inline
 void printPPM( color[.,.] img)
 {
   printf( "P3\n");
-  printf( "%d %d\n", shape(img)[0], shape(img)[1]);
+  printf( "%d %d\n", shape(img)[1], shape(img)[0]);
   printf( "%d\n", 255); 
   for ( i=0; i<shape(img)[0]; i++){
     for ( j=0; j<shape(img)[1]; j++){
@@ -24,6 +24,7 @@ void printPPM( color[.,.] img)
   }
   printf( "\n");
 }
+
 
 /*
  * Return [0,0] array if could not read
@@ -44,7 +45,7 @@ color[.,.] readPPM()
 
   if (( res0 + res1 + res2 + res3 + max) ==
       (    0 +    1 +    1 +    1 + 255)){
-    img = with{}:genarray( [shape1, shape2], [0,0,0]);
+    img = with{}:genarray( [shape2, shape1], [0,0,0]);
   } else {
     img = with{}:genarray( [0,0], [0,0,0]);
   }
