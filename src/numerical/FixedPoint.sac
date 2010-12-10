@@ -1,3 +1,6 @@
+/* WARNING: This module is untested and should be considered a work in
+ *          progress */
+
 module FixedPoint;
 
 use SaCMath: all;
