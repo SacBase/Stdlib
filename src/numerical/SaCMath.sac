@@ -4,7 +4,6 @@ export all;
 
 inline int pow2( int a){
   res = [ 
-               0,
                1,
                2,
                4,
@@ -55,42 +54,41 @@ inline int pow2( int a){
 inline int log2( int a){
   res = _sub_SxS_(0,1);
   
-  if      ( _le_SxS_( a,          0)) { res = _sub_SxS_(0,1);}
-  else if ( _le_SxS_( a,          1)) { res =              0;}
-  else if ( _le_SxS_( a,          2)) { res =              1;}
-  else if ( _le_SxS_( a,          4)) { res =              2;}
-  else if ( _le_SxS_( a,          8)) { res =              3;}
-  else if ( _le_SxS_( a,         16)) { res =              4;}
-  else if ( _le_SxS_( a,         32)) { res =              5;}
-  else if ( _le_SxS_( a,         64)) { res =              6;}
-  else if ( _le_SxS_( a,        128)) { res =              7;}
-  else if ( _le_SxS_( a,        256)) { res =              8;}
-  else if ( _le_SxS_( a,        512)) { res =              9;}
-  else if ( _le_SxS_( a,       1024)) { res =             10;}
-  else if ( _le_SxS_( a,       2048)) { res =             11;}
-  else if ( _le_SxS_( a,       4096)) { res =             12;}
-  else if ( _le_SxS_( a,       8192)) { res =             13;}
-  else if ( _le_SxS_( a,      16394)) { res =             14;}
-  else if ( _le_SxS_( a,      32784)) { res =             15;}
-  else if ( _le_SxS_( a,      65568)) { res =             16;}
-  else if ( _le_SxS_( a,      13136)) { res =             17;}
-  else if ( _le_SxS_( a,      26272)) { res =             18;}
-  else if ( _le_SxS_( a,      52544)) { res =             19;}
-  else if ( _le_SxS_( a,     105088)) { res =             20;}
-  else if ( _le_SxS_( a,     210176)) { res =             21;}
-  else if ( _le_SxS_( a,     420352)) { res =             22;}
-  else if ( _le_SxS_( a,     840704)) { res =             23;}
-  else if ( _le_SxS_( a,    1681408)) { res =             24;}
-  else if ( _le_SxS_( a,    3362816)) { res =             25;}
-  else if ( _le_SxS_( a,    6725632)) { res =             26;}
-  else if ( _le_SxS_( a,   13451264)) { res =             27;}
-  else if ( _le_SxS_( a,   26902528)) { res =             28;}
-  else if ( _le_SxS_( a,   53805056)) { res =             29;}
-  else if ( _le_SxS_( a,  107610112)) { res =             30;}
-  else if ( _le_SxS_( a,  215220224)) { res =             31;}
-  else if ( _le_SxS_( a,  430440448)) { res =             32;}
-  else if ( _le_SxS_( a,  860880896)) { res =             33;}
-  else if ( _le_SxS_( a, 1721761792)) { res =             34;}
+  if      ( _lt_SxS_( a,          1)) { res = _sub_SxS_(0,1);}
+  else if ( _lt_SxS_( a,          2)) { res =              0;}
+  else if ( _lt_SxS_( a,          4)) { res =              1;}
+  else if ( _lt_SxS_( a,          8)) { res =              2;}
+  else if ( _lt_SxS_( a,         16)) { res =              3;}
+  else if ( _lt_SxS_( a,         32)) { res =              4;}
+  else if ( _lt_SxS_( a,         64)) { res =              5;}
+  else if ( _lt_SxS_( a,        128)) { res =              6;}
+  else if ( _lt_SxS_( a,        256)) { res =              7;}
+  else if ( _lt_SxS_( a,        512)) { res =              8;}
+  else if ( _lt_SxS_( a,       1024)) { res =              9;}
+  else if ( _lt_SxS_( a,       2048)) { res =             10;}
+  else if ( _lt_SxS_( a,       4096)) { res =             11;}
+  else if ( _lt_SxS_( a,       8192)) { res =             12;}
+  else if ( _lt_SxS_( a,      16394)) { res =             13;}
+  else if ( _lt_SxS_( a,      32784)) { res =             14;}
+  else if ( _lt_SxS_( a,      65568)) { res =             15;}
+  else if ( _lt_SxS_( a,      13136)) { res =             16;}
+  else if ( _lt_SxS_( a,      26272)) { res =             17;}
+  else if ( _lt_SxS_( a,      52544)) { res =             18;}
+  else if ( _lt_SxS_( a,     105088)) { res =             19;}
+  else if ( _lt_SxS_( a,     210176)) { res =             20;}
+  else if ( _lt_SxS_( a,     420352)) { res =             21;}
+  else if ( _lt_SxS_( a,     840704)) { res =             22;}
+  else if ( _lt_SxS_( a,    1681408)) { res =             23;}
+  else if ( _lt_SxS_( a,    3362816)) { res =             24;}
+  else if ( _lt_SxS_( a,    6725632)) { res =             25;}
+  else if ( _lt_SxS_( a,   13451264)) { res =             26;}
+  else if ( _lt_SxS_( a,   26902528)) { res =             27;}
+  else if ( _lt_SxS_( a,   53805056)) { res =             28;}
+  else if ( _lt_SxS_( a,  107610112)) { res =             29;}
+  else if ( _lt_SxS_( a,  215220224)) { res =             30;}
+  else if ( _lt_SxS_( a,  430440448)) { res =             31;}
+  else if ( _lt_SxS_( a,  860880896)) { res =             32;}
+  else if ( _lt_SxS_( a, 1721761792)) { res =             33;}
   else                                { res = _sub_SxS_(0,1);}
 
   return( res);
