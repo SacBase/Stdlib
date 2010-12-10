@@ -176,6 +176,13 @@ inline void print(complex c, int mode, int prec)
 /*****************************************************************/
 /*****************************************************************/
 
+#define BUG197FIXED
+
+/*
+ * According to Bugzilla bug #197 has been fixed in revision 14584.
+ * Hence, I try to reactivate this here.
+ */
+
 #ifdef BUG197FIXED
 
 inline bool, complex fscancomplex(File &stream)
