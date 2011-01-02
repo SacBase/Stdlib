@@ -32,6 +32,22 @@ inline color blue()
   return( (:color)[0,0,255]);
 }
 
+inline int red( color col)
+{
+  return( ((:int[3]) col)[0] );
+}
+
+inline int green( color col)
+{
+  return( ((:int[3]) col)[1] );
+}
+
+inline int blue( color col)
+{
+  return( ((:int[3]) col)[2] );
+}
+
+
 inline color newColor( int[3] col)
 {
   min_col = [0, 0, 0];
