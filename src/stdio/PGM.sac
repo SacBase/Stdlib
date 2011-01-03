@@ -1,0 +1,68 @@
+module PGM;
+
+use StdIO: all;
+use ScalarArith: all;
+use ArrayBasics: all;
+
+export all;
+
+void printPGM( int[.,.] img)
+{
+  printf( "P2\n");
+  printf( "%d %d\n", shape(img)[1], shape(img)[0]);
+  printf( "%d\n", 255); 
+  for ( i=0; i<shape(img)[0]; i++) {
+    for ( j=0; j<shape(img)[1]; j++) {
+      printf( "%d ", img[i,j]);
+    }
+    printf( "\n");
+  }
+  printf( "\n");
+}
+
+
+/*
+ * Return [0,0] array if could not read
+ */
+
+int[.,.] readPGM()
+{
+  int shape1;
+  int shape2;
+  int max;
+  int grey;
+
+  res0 = scanf( "P2");
+  res1, shape1 = scanf( "%d");
+  res2, shape2 = scanf( "%d");
+
+  res3, max = scanf( "%d");
+
+  if (( res0 + res1 + res2 + res3 + max) !=
+      (    0 +    1 +    1 +    1 + 255)) {
+    shape1 = 0;
+    shape2 = 0;
+  } 
+
+  img = with{}:genarray( [shape2, shape1], 0);
+
+  fail = false;
+
+  for ( i=0; i<shape2; i++){
+    for ( j=0; j<shape1; j++){
+      res, grey = scanf( "%d");
+      if (res == 1){ 
+        img[i,j] = grey;
+      }
+      else {
+        fail = true;
+      }
+    }
+  }
+
+  if (fail) {
+    img = with{}:genarray( [0,0], 0);
+  }
+
+  return( img);
+}
