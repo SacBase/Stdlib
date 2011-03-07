@@ -7,40 +7,75 @@ use SaCMath: all;
 
 export all;
 
-#define FORALL_POINTS( fun)                                                 \
-  fun(  0)                                                                  \
-  fun(  1)                                                                  \
-  fun(  2)                                                                  \
-  fun(  3)                                                                  \
-  fun(  4)                                                                  \
-  fun(  5)                                                                  \
-  fun(  6)                                                                  \
-  fun(  7)                                                                  \
-  fun(  8)                                                                  \
-  fun(  9)                                                                  \
-  fun( 10)                                                                  \
-  fun( 11)                                                                  \
-  fun( 12)                                                                  \
-  fun( 13)                                                                  \
-  fun( 14)                                                                  \
-  fun( 15)                                                                  \
-  fun( 16)                                                                  \
-  fun( 17)                                                                  \
-  fun( 18)                                                                  \
-  fun( 19)                                                                  \
-  fun( 20)                                                                  \
-  fun( 21)                                                                  \
-  fun( 22)                                                                  \
-  fun( 23)                                                                  \
-  fun( 24)                                                                  \
-  fun( 25)                                                                  \
-  fun( 26)                                                                  \
-  fun( 27)                                                                  \
-  fun( 28)                                                                  \
-  fun( 29)                                                                  \
-  fun( 30)                                                                  \
-  fun( 31)                                                                  \
-  fun( 32)                                                                  
+#define FORALL_POINTS2( fun, ...)                                           \
+  fun(  0, ## __VA_ARGS__)                                                  \
+  fun(  1, ## __VA_ARGS__)                                                  \
+  fun(  2, ## __VA_ARGS__)                                                  \
+  fun(  3, ## __VA_ARGS__)                                                  \
+  fun(  4, ## __VA_ARGS__)                                                  \
+  fun(  5, ## __VA_ARGS__)                                                  \
+  fun(  6, ## __VA_ARGS__)                                                  \
+  fun(  7, ## __VA_ARGS__)                                                  \
+  fun(  8, ## __VA_ARGS__)                                                  \
+  fun(  9, ## __VA_ARGS__)                                                  \
+  fun( 10, ## __VA_ARGS__)                                                  \
+  fun( 11, ## __VA_ARGS__)                                                  \
+  fun( 12, ## __VA_ARGS__)                                                  \
+  fun( 13, ## __VA_ARGS__)                                                  \
+  fun( 14, ## __VA_ARGS__)                                                  \
+  fun( 15, ## __VA_ARGS__)                                                  \
+  fun( 16, ## __VA_ARGS__)                                                  \
+  fun( 17, ## __VA_ARGS__)                                                  \
+  fun( 18, ## __VA_ARGS__)                                                  \
+  fun( 19, ## __VA_ARGS__)                                                  \
+  fun( 20, ## __VA_ARGS__)                                                  \
+  fun( 21, ## __VA_ARGS__)                                                  \
+  fun( 22, ## __VA_ARGS__)                                                  \
+  fun( 23, ## __VA_ARGS__)                                                  \
+  fun( 24, ## __VA_ARGS__)                                                  \
+  fun( 25, ## __VA_ARGS__)                                                  \
+  fun( 26, ## __VA_ARGS__)                                                  \
+  fun( 27, ## __VA_ARGS__)                                                  \
+  fun( 28, ## __VA_ARGS__)                                                  \
+  fun( 29, ## __VA_ARGS__)                                                  \
+  fun( 30, ## __VA_ARGS__)                                                  \
+  fun( 31, ## __VA_ARGS__)                                                  \
+  fun( 32, ## __VA_ARGS__)                                                  
+
+#define FORALL_POINTS( fun, ...)                                            \
+  fun(  0, ## __VA_ARGS__)                                                  \
+  fun(  1, ## __VA_ARGS__)                                                  \
+  fun(  2, ## __VA_ARGS__)                                                  \
+  fun(  3, ## __VA_ARGS__)                                                  \
+  fun(  4, ## __VA_ARGS__)                                                  \
+  fun(  5, ## __VA_ARGS__)                                                  \
+  fun(  6, ## __VA_ARGS__)                                                  \
+  fun(  7, ## __VA_ARGS__)                                                  \
+  fun(  8, ## __VA_ARGS__)                                                  \
+  fun(  9, ## __VA_ARGS__)                                                  \
+  fun( 10, ## __VA_ARGS__)                                                  \
+  fun( 11, ## __VA_ARGS__)                                                  \
+  fun( 12, ## __VA_ARGS__)                                                  \
+  fun( 13, ## __VA_ARGS__)                                                  \
+  fun( 14, ## __VA_ARGS__)                                                  \
+  fun( 15, ## __VA_ARGS__)                                                  \
+  fun( 16, ## __VA_ARGS__)                                                  \
+  fun( 17, ## __VA_ARGS__)                                                  \
+  fun( 18, ## __VA_ARGS__)                                                  \
+  fun( 19, ## __VA_ARGS__)                                                  \
+  fun( 20, ## __VA_ARGS__)                                                  \
+  fun( 21, ## __VA_ARGS__)                                                  \
+  fun( 22, ## __VA_ARGS__)                                                  \
+  fun( 23, ## __VA_ARGS__)                                                  \
+  fun( 24, ## __VA_ARGS__)                                                  \
+  fun( 25, ## __VA_ARGS__)                                                  \
+  fun( 26, ## __VA_ARGS__)                                                  \
+  fun( 27, ## __VA_ARGS__)                                                  \
+  fun( 28, ## __VA_ARGS__)                                                  \
+  fun( 29, ## __VA_ARGS__)                                                  \
+  fun( 30, ## __VA_ARGS__)                                                  \
+  fun( 31, ## __VA_ARGS__)                                                  \
+  fun( 32, ## __VA_ARGS__)                                                  
 
 #define TYPE( name)                                                         \
   fixedpoint_ ## name
@@ -52,56 +87,57 @@ export all;
   inline TYPE( num) (+)( TYPE( num) a, TYPE( num) b)                        \
   {                                                                         \
     return( (:TYPE( num)) _add_SxS_( (:int)a, (:int)b) );                   \
-  }                                                                         
+  }                                                                         \
+  ARRAY_BIN( +, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
 
 #define SUB( num)                                                           \
   inline TYPE( num) (-)( TYPE( num) a, TYPE( num) b)                        \
   {                                                                         \
     return( (:TYPE( num)) _sub_SxS_( (:int)a, (:int)b) );                   \
-  }                                                                         
+  }                                                                         \
+  ARRAY_BIN( -, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
 
 #define DIV( num)                                                           \
   inline TYPE( num) (/)( TYPE( num) a, TYPE( num) b)                        \
   {                                                                         \
-    unnorm = _div_SxS_( (:int)a, (:int)b);                                  \
-    return( (:TYPE( num)) _mul_SxS_( unnorm, pow2( num)));                  \
-  }                                                                         
+    res = _div_SxS_( _mul_SxS_( (:int)a, pow2( num)), (:int)b);             \
+    return( (:TYPE( num)) res);                                             \
+  }                                                                         \
+  ARRAY_BIN( /, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
 
 #define MUL( num)                                                           \
   inline TYPE( num) (*)( TYPE( num) a, TYPE( num) b)                        \
   {                                                                         \
     unnorm = _mul_SxS_( (:int)a, (:int)b);                                  \
     return( (:TYPE( num)) _div_SxS_( unnorm, pow2( num) ));                 \
-  }                                                                         
+  }                                                                         \
+  ARRAY_BIN( *, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
 
 #define TO_INT( num)                                                        \
   inline int to_int( TYPE( num) a)                                          \
   {                                                                         \
-    ans = _eq_SxS_( 0, pow2( num)) ? (:int)a: _div_SxS_( ( (:int)a), pow2( num)); \
+    ans =                                                                   \
+      _eq_SxS_( 0,                                                          \
+                pow2( num)) ? (:int)a: _div_SxS_( ( (:int)a), pow2( num));  \
     return( ans);                                                           \
-  }                                                                         
+  }                                                                         \
+  ARRAY_MON( to_int, 0, TYPE( num), int)                                    \
                                                                             
 #define TO_RAW( num)                                                        \
   inline int to_raw( TYPE( num) a)                                          \
   {                                                                         \
     return( (:int)a);                                                       \
-  }                                                                         
+  }                                                                         \
+  ARRAY_MON( to_raw, 0, TYPE( num), int)                                     
 
-#define TO_TYPE_CAT( a, b) TO_TYPE_CAT_( a, b)
-#define TO_TYPE_CAT_( a, b) a##b                                              
-#define TO_TYPE( num)                                                       \
-  inline TYPE( num) TO_TYPE_CAT( to_, TYPE( num))( int a)                   \
-  {                                                                         \
-    return( (:TYPE( num)) _mul_SxS_(a, pow2( num)));                        \
-  }                                                                         
-
-#define TO_PAIR( num)                                                       \
+#define TO_INT2( num)                                                       \
   inline int[2] to_int2( TYPE( num) a)                                      \
   {                                                                         \
     whole = to_int( a);                                                     \
     part  = _mod_SxS_( (:int)a, pow2( num));                                \
     return( [whole, part]);                                                 \
-  }
+  }                                                                         \
+  ARRAY_MON( to_int2, ([0,0]), TYPE( num), int)                             \
 
 #define FRACTION( num)                                                      \
   inline int fraction( TYPE( num) a)                                        \
@@ -109,16 +145,28 @@ export all;
     return( pow2(num));                                                     \
   }                                                                         
                                                                             
-#define ARRAY_BIN( num, fun, z, ta, tb, tc)                                 \
+#define ARRAY_BIN( fun, z, ta, tb, tc)                                      \
   inline tc[+] fun( ta[+] a, tb[+] b)                                       \
   {                                                                         \
     return( with {                                                          \
       ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a),            \
                              (:tb[*])_sel_VxA_( iv, (:int[*])b));           \
       } : genarray( _shape_A_( (:int[*])a), z));                            \
+  }                                                                         \
+  inline tc[+] fun( ta[+] a, tb b)                                          \
+  {                                                                         \
+    return( with {                                                          \
+      ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a), b);        \
+      } : genarray( _shape_A_( (:int[*])a), z));                            \
+  }                                                                         \
+  inline tc[+] fun( ta a, tb[+] b)                                          \
+  {                                                                         \
+    return( with {                                                          \
+      ( . <= iv <= .) : fun( a, (:tb[*])_sel_VxA_( iv, (:int[*])b));        \
+      } : genarray( _shape_A_( (:int[*])b), z));                            \
   }
 
-#define ARRAY_MON( num, fun, z, ta, tb)                                     \
+#define ARRAY_MON( fun, z, ta, tb)                                          \
   inline tb[+] fun( ta[+] a)                                                \
   {                                                                         \
     return( with {                                                          \
@@ -126,14 +174,17 @@ export all;
       } : genarray( _shape_A_( (:int[*])a), z));                            \
   }
 
-#define ARRAY_FUNS( num)                                                    \
-  ARRAY_BIN( num, +, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
-  ARRAY_BIN( num, -, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
-  ARRAY_BIN( num, *, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
-  ARRAY_BIN( num, /, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))   \
-  ARRAY_MON( num, to_int, 0, TYPE( num), int)                               \
-  ARRAY_MON( num, to_raw, 0, TYPE( num), int)                               \
-  ARRAY_MON( num, TO_TYPE_CAT( to_, TYPE( num)), (:TYPE( num)) 0, int, TYPE( num))
+#define TO_TYPE_CAT( a, b) TO_TYPE_CAT_( a, b)
+#define TO_TYPE_CAT_( a, b) a##b                                              
+#define TO_TYPE( num, from)                                                 \
+  inline TYPE( num) TO_TYPE_CAT( to_, TYPE( num))( from a)                  \
+  {                                                                         \
+    return( (:TYPE( num)) _mul_SxS_(to_int( a), pow2( num)));               \
+  }                                                                         \
+  ARRAY_MON( TO_TYPE_CAT( to_, TYPE( num)), (:TYPE( num)) 0, from, TYPE( num)) 
+
+#define CROSS_PRODUCT( num)                                                 \
+  FORALL_POINTS2( TO_TYPE, TYPE( num))                                       
 
 FORALL_POINTS( TYPEDEF)
 FORALL_POINTS( ADD)
@@ -142,7 +193,13 @@ FORALL_POINTS( DIV)
 FORALL_POINTS( MUL)
 FORALL_POINTS( TO_INT)
 FORALL_POINTS( TO_RAW)
-FORALL_POINTS( TO_TYPE)
-FORALL_POINTS( TO_PAIR)
-FORALL_POINTS( ARRAY_FUNS)
+FORALL_POINTS( TO_TYPE, int)
+FORALL_POINTS( CROSS_PRODUCT)
+FORALL_POINTS( TO_INT2)
 FORALL_POINTS( FRACTION)
+
+inline int to_int( int a)
+{
+  return( a);
+}
+
