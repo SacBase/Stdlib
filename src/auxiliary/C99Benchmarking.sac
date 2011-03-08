@@ -15,7 +15,7 @@
 class C99Benchmarking;
 external classtype;
 
-use Interval: all;
+import Interval: all;
 use String: {string, sprintf,+};
 use Array: all except {+};
 use RTClock: {gettime};
