@@ -55,15 +55,82 @@ export all;
   }                                                                         \
   ARRAY_BIN( *, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
 
+#define COMP( num, sim, name)                                               \
+  inline bool (sim)( TYPE( num) a, TYPE( num) b)                            \
+  {                                                                         \
+    res = _ ## name ## _SxS_( (:int)a, (:int)b);                            \
+    return( res);                                                           \
+  }                                                                         \
+  ARRAY_BIN( sim, false, TYPE( num), TYPE( num), bool)                      \
+
+#define SQ( a) a * a
+#define CB( a) a * a * a
+
+#define BINARY_SEARCH( num, name, function)                       \
+  inline TYPE( num) name( TYPE( num) arg)                         \
+  {                                                               \
+    res = (:TYPE(num)) 1;                                         \
+    two = TO_TYPE_CAT( to_, TYPE( num))(2);                       \
+    i=0;                                                          \
+                                                                  \
+    /* Find the largest power of 2 a such that a^2 < arg */       \
+    if ( function( res) < arg){                                   \
+      do {                                                        \
+        res *= two;                                               \
+        i = _add_SxS_( i, 1);                                     \
+      } while ( function( res) < arg);                            \
+    }                                                             \
+                                                                  \
+    delta = res / two;                                            \
+                                                                  \
+    while ( _gt_SxS_( i, 0)){                                     \
+      i = _add_SxS_( i, 0);                                       \
+      if ( function( ( res + delta)) < arg){                      \
+        res += delta;                                             \
+        delta /= two;                                             \
+      }                                                           \
+    }                                                             \
+    return( res);                                                 \
+  }                                                               \
+  ARRAY_MON( name, (:TYPE( num)) 0, TYPE( num), TYPE( num))   
+
 #define TO_INT( num)                                                        \
   inline int to_int( TYPE( num) a)                                          \
+  {                                                                         \
+    ans = trunc( a);                                                        \
+    return( ans);                                                           \
+  }                                                                         \
+  ARRAY_MON( to_int, 0, TYPE( num), int)                                    \
+
+#define CEIL( num)                                      \
+  inline int ceil( TYPE( num) a)                        \
+  {                                                     \
+    ans = trunc( a +                                    \
+                 TO_TYPE_CAT( to_, TYPE( num))( 1) /    \
+                 TO_TYPE_CAT( to_, TYPE( num))( 2));    \
+    return( ans);                                       \
+  }                                                     \
+  ARRAY_MON( ceil, 0, TYPE( num), int)
+
+#define FLOOR( num)                                     \
+  inline int floor( TYPE( num) a)                       \
+  {                                                     \
+    ans = trunc( a -                                    \
+                 TO_TYPE_CAT( to_, TYPE( num))( 1) /    \
+                 TO_TYPE_CAT( to_, TYPE( num))( 2));    \
+    return( ans);                                       \
+  }                                                     \
+  ARRAY_MON( floor, 0, TYPE( num), int)
+
+#define TRUNC( num)                                                         \
+  inline int trunc( TYPE( num) a)                                           \
   {                                                                         \
     ans =                                                                   \
       _eq_SxS_( 0,                                                          \
                 pow2( num)) ? (:int)a: _div_SxS_( ( (:int)a), pow2( num));  \
     return( ans);                                                           \
   }                                                                         \
-  ARRAY_MON( to_int, 0, TYPE( num), int)                                    \
+  ARRAY_MON( trunc, 0, TYPE( num), int)                                     \
                                                                             
 #define TO_RAW( num)                                                        \
   inline int to_raw( TYPE( num) a)                                          \
@@ -129,10 +196,25 @@ export all;
   FORALL_POINTS2( TO_TYPE, TYPE( num))                                       
 
 FORALL_POINTS( TYPEDEF)
+
 FORALL_POINTS( ADD)
 FORALL_POINTS( SUB)
 FORALL_POINTS( DIV)
 FORALL_POINTS( MUL)
+
+FORALL_POINTS( BINARY_SEARCH, sqrt, SQ)
+FORALL_POINTS( BINARY_SEARCH, cbrt, CB)
+
+FORALL_POINTS( TRUNC)
+FORALL_POINTS( FLOOR)
+FORALL_POINTS( CEIL)
+
+FORALL_POINTS( COMP,  <, lt)
+FORALL_POINTS( COMP,  >, gt)
+FORALL_POINTS( COMP, ==, eq)
+FORALL_POINTS( COMP, <=, le)
+FORALL_POINTS( COMP, >=, ge)
+
 FORALL_POINTS( TO_INT)
 FORALL_POINTS( TO_RAW)
 FORALL_POINTS( TO_TYPE, int)
