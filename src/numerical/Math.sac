@@ -79,6 +79,10 @@ external double exp(double X);
     #pragma linksign [0,1]
     /* Exponentional function of X.  */
 
+external float expf(float X);
+    #pragma linksign [0,1]
+    /* Exponentional function of X.  */
+
 external double, int frexp(double X);
     #pragma linksign [0,2,1]
     /* Break X into a normalized fraction and an integral power of 2.  */
@@ -297,7 +301,7 @@ external double hypot(double X, double Y);
 
   inline float exp(float X)
   {
-    return(tof(exp(tod(X))));
+    return(expf(X));
   }
     /* Exponentional function of X.  */
 
