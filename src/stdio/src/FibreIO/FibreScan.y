@@ -134,7 +134,7 @@ static int elems_left[MAXDIM];
 /*
  * Make sure, the stack of the generated parser is big enough!
  */
-#define YYMAXDEPTH 100000
+#define YYMAXDEPTH 1000000
 
 %}
 
