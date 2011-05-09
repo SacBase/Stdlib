@@ -1,5 +1,9 @@
 module String;
 
+#ifdef SAC_BACKEND_MUTC
+import MutcString: all;
+export all;
+#else
 import Char: all;
 import ScalarArith: {&,!=,==,+,>=,>,<=,<};
 import ArrayBasics: {shape,sel};
@@ -346,8 +350,4 @@ inline  string convert (string S)               \
 CONVERT_STRING(tolower)
 CONVERT_STRING(toupper)
 
-
-
-
-
-
+#endif
