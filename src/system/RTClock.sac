@@ -2,8 +2,10 @@ module RTClock;
 
 #include "../../config/config.h"
 
+
 export all;
 
+external typedef timespec;
 /*
  * returns the current time ( seconds, nanoseconds) of the
  * realtime OS clock. If available, the process specific 
@@ -13,6 +15,22 @@ external int, int gettime();
   #pragma linksign [1,2]
   #pragma linkobj "src/RTClock/gettime.o"
   #pragma linkname "SAC_RTCLOCK_gettime"
+#ifdef NEED_LIBRT
+  #pragma linkwith "rt"
+#endif
+
+external timespec gettime_timespec();
+  #pragma linksign [1]
+  #pragma linkobj "src/RTClock/gettime.o"
+  #pragma linkname "SAC_RTCLOCK_gettime_timespec"
+#ifdef NEED_LIBRT
+  #pragma linkwith "rt"
+#endif
+
+external double difftime( timespec t1, timespec t2);
+  #pragma linksign [0,1,2]
+  #pragma linkobj "src/RTClock/gettime.o"
+  #pragma linkname "SAC_RTCLOCK_difftime"
 #ifdef NEED_LIBRT
   #pragma linkwith "rt"
 #endif
