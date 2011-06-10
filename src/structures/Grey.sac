@@ -1,0 +1,53 @@
+module Grey;
+
+use Array: {min, max} ;
+
+export all;
+
+typedef int grey;
+
+inline grey newGrey( int g)
+{
+  g = max(min(g, 255), 0);
+
+  return( (:grey)g);
+}
+
+inline int[*] toi( grey g)
+{
+  return( (:int[*]) g);
+}
+
+inline grey[*] sel( int[.] idx, grey[*] a)
+{
+  res = Array::sel( idx, ((:int[*])a));
+  return( (:grey[*])res);
+}
+
+inline int dim( grey[*] a)
+{
+  return( Array::dim((:int[*])a) );
+}
+
+inline int[.] shape( grey[*] a)
+{
+  return( Array::shape((:int[*])a) );
+}
+
+inline grey[*] reshape( int[.] shp, grey[*] a)
+{
+  return(  (:grey[*])_reshape_VxA_( shp, (:int[*])a) );
+}
+
+inline grey + (grey g1, grey g2)
+{
+  ret = newGrey( toi( g1) ScalarArith::+ toi( g2));
+  return( ret);
+}
+
+inline grey - (grey g1, grey g2)
+{
+  ret = newGrey( toi( g1) ScalarArith::- toi( g2));
+  return( ret);
+}
+

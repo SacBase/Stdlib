@@ -1,0 +1,18 @@
+module GreyIO;
+
+
+/*****************************************************************/
+
+
+use IOresources: all;
+use Grey: { grey };
+import ArrayIO: { print };
+import ScalarIO: { print };
+
+export all;
+
+inline void print( grey[*] c)
+{
+  print( (:int[*]) c);
+}
+

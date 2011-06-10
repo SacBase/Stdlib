@@ -8,6 +8,7 @@ import Complex      : all;
 #ifndef SAC_BACKEND_MUTC
 import List         : all;
 import Color8       : all;
+import Grey         : all;
 #endif /* SAC_BACKEND_MUTC */
 
 export all;
