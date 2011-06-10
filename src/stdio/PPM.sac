@@ -1,11 +1,8 @@
 module PPM;
 
-use Color8: {color, sel, toi, white, newColor, shape};
-use StdIO: all;
-use ScalarArith: all except {toi};
-use ArrayBasics: {modarray};
-
-use String: {string};
+use Color8: { color, shape };
+use String: { string };
+use ScalarArith: { == };
 
 export {readPPM, printPPM};
 

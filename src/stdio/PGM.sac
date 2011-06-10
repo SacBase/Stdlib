@@ -1,17 +1,18 @@
 module PGM;
 
-use ArrayBasics: {shape};
+use Grey: {grey, shape};
 use String: {string};
+use ScalarArith: { == };
 
 export {readPGM, printPGM};
 
-external int[.,.] readArray( string name );
+external grey[.,.] readArray( string name );
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PGM/pgm2array.o"
 #pragma linkname "SAC_PGM_pgm2array"
 #pragma refcounting[0]
 
-external void writeArray( string name, int[.,.] image, int[2] shape, int ascii);
+external void writeArray( string name, grey[.,.] image, int[2] shape, int ascii);
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PGM/array2pgm.o"
 #pragma linkname "SAC_PGM_array2pgm"
@@ -20,7 +21,7 @@ external void writeArray( string name, int[.,.] image, int[2] shape, int ascii);
  * Read PGM image from file
  */
 inline
-int[.,.] readPGM(string name) 
+grey[.,.] readPGM(string name) 
 {
   ret = readArray( name);
   return (ret);
@@ -30,7 +31,7 @@ int[.,.] readPGM(string name)
  * Backwards compatibility, read from stdin
  */
 inline
-int[.,.] readPGM() 
+grey[.,.] readPGM() 
 {
   ret = readArray( "stdin");
   return (ret);
@@ -40,7 +41,7 @@ int[.,.] readPGM()
  * Backwards compatibility, write ascii data to stdout
  */
 inline
-void printPGM( int[.,.] img)
+void printPGM( grey[.,.] img)
 {
   writeArray( "stdout", img, shape(img), 1);
 }
@@ -50,9 +51,9 @@ void printPGM( int[.,.] img)
  * One can choose for ascii or binary output
  */
 inline
-void printPGM( int[.,.] img, string name, bool binary)
+void printPGM( grey[.,.] img, string name, bool binary)
 {
-  if ( binary) {
+  if ( binary == true) {
     writeArray( name, img, shape(img), 0);
   } else {
     writeArray( name, img, shape(img), 1);
