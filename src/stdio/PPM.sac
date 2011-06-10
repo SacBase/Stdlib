@@ -5,71 +5,46 @@ use StdIO: all;
 use ScalarArith: all except {toi};
 use ArrayBasics: {modarray};
 
-export all;
+use String: {string};
+
+export {readPPM, printPPM};
+
+external color[.,.] readArray( string name );
+#pragma effect FileSystem::TheFileSystem
+#pragma linkobj "src/PPM/ppm2array.o"
+#pragma linkname "SAC_PPM_ppm2array"
+#pragma refcounting[0]
+
+external void writeArray( string name, color[.,.] image, int[2] shape, int ascii);
+#pragma effect FileSystem::TheFileSystem
+#pragma linkobj "src/PPM/array2ppm.o"
+#pragma linkname "SAC_PPM_array2ppm"
 
 inline
 void printPPM( color[.,.] img)
 {
-  printf( "P3\n");
-  printf( "%d %d\n", shape(img)[1], shape(img)[0]);
-  printf( "%d\n", 255); 
-  for ( i=0; i<shape(img)[0]; i++){
-    for ( j=0; j<shape(img)[1]; j++){
-      color = toi( img[i,j]);
-      for ( k=0; k<3; k++){
-        printf( "%d ", color[k]);
-      }
-    }
-    printf( "\n");
-  }
-  printf( "\n");
+  writeArray( "stdout", img, shape(img), 1);
 }
 
+inline
+void printPPM( color[.,.] img, string name, bool binary)
+{
+  if ( binary == true) {
+    writeArray( name, img, shape(img), 0);
+  } else {
+    writeArray( name, img, shape(img), 1);
+  }
+}
 
-/*
- * Return [0,0] array if could not read
- */
 inline
 color[.,.] readPPM()
 {
-  int shape1;
-  int shape2;
-  int max;
-  int col;
-
-  res0 = scanf( "P3");
-  res1, shape1 = scanf( "%d");
-  res2, shape2 = scanf( "%d");
-
-  res3, max = scanf( "%d");
-
-  if (( res0 + res1 + res2 + res3 + max) ==
-      (    0 +    1 +    1 +    1 + 255)){
-    img = with{}:genarray( [shape2, shape1], [0,0,0]);
-  } else {
-    img = with{}:genarray( [0,0], [0,0,0]);
-  }
-
-  fail = false;
-
-  for ( i=0; i< ArrayBasics::shape(img)[0]; i++){
-    for ( j=0; j< ArrayBasics::shape(img)[1]; j++){
-      for ( k=0; k<3; k++){
-        res, col = scanf( "%d");
-        if ( res != 1){ 
-          fail = true;
-          i = ArrayBasics::shape(img)[0];
-          j = ArrayBasics::shape(img)[1];
-          k = 3;
-        }
-        img[i,j,k] = col;
-      }
-    }
-  }
-
-  if ( fail){
-    img = with{}:genarray( [0,0], [0,0,0]);
-  }
-
-  return( (:color[.,.])img);
+  return ( readArray( "stdin"));
 }
+
+inline
+color[.,.] readPPM( string name)
+{
+  return ( readArray( name));
+}
+

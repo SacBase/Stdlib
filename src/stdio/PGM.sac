@@ -1,68 +1,61 @@
 module PGM;
 
-use StdIO: all;
-use ScalarArith: all;
-use ArrayBasics: all;
+use ArrayBasics: {shape};
+use String: {string};
 
-export all;
+export {readPGM, printPGM};
 
-void printPGM( int[.,.] img)
-{
-  printf( "P2\n");
-  printf( "%d %d\n", shape(img)[1], shape(img)[0]);
-  printf( "%d\n", 255); 
-  for ( i=0; i<shape(img)[0]; i++) {
-    for ( j=0; j<shape(img)[1]; j++) {
-      printf( "%d ", img[i,j]);
-    }
-    printf( "\n");
-  }
-  printf( "\n");
-}
+external int[.,.] readArray( string name );
+#pragma effect FileSystem::TheFileSystem
+#pragma linkobj "src/PGM/pgm2array.o"
+#pragma linkname "SAC_PGM_pgm2array"
+#pragma refcounting[0]
 
+external void writeArray( string name, int[.,.] image, int[2] shape, int ascii);
+#pragma effect FileSystem::TheFileSystem
+#pragma linkobj "src/PGM/array2pgm.o"
+#pragma linkname "SAC_PGM_array2pgm"
 
 /*
- * Return [0,0] array if could not read
+ * Read PGM image from file
  */
-
-int[.,.] readPGM()
+inline
+int[.,.] readPGM(string name) 
 {
-  int shape1;
-  int shape2;
-  int max;
-  int grey;
-
-  res0 = scanf( "P2");
-  res1, shape1 = scanf( "%d");
-  res2, shape2 = scanf( "%d");
-
-  res3, max = scanf( "%d");
-
-  if (( res0 + res1 + res2 + res3 + max) !=
-      (    0 +    1 +    1 +    1 + 255)) {
-    shape1 = 0;
-    shape2 = 0;
-  } 
-
-  img = with{}:genarray( [shape2, shape1], 0);
-
-  fail = false;
-
-  for ( i=0; i<shape2; i++){
-    for ( j=0; j<shape1; j++){
-      res, grey = scanf( "%d");
-      if (res == 1){ 
-        img[i,j] = grey;
-      }
-      else {
-        fail = true;
-      }
-    }
-  }
-
-  if (fail) {
-    img = with{}:genarray( [0,0], 0);
-  }
-
-  return( img);
+  ret = readArray( name);
+  return (ret);
 }
+
+/*
+ * Backwards compatibility, read from stdin
+ */
+inline
+int[.,.] readPGM() 
+{
+  ret = readArray( "stdin");
+  return (ret);
+}
+
+/*
+ * Backwards compatibility, write ascii data to stdout
+ */
+inline
+void printPGM( int[.,.] img)
+{
+  writeArray( "stdout", img, shape(img), 1);
+}
+
+/*
+ * Write PGM image to file.
+ * One can choose for ascii or binary output
+ */
+inline
+void printPGM( int[.,.] img, string name, bool binary)
+{
+  if ( binary) {
+    writeArray( name, img, shape(img), 0);
+  } else {
+    writeArray( name, img, shape(img), 1);
+  }
+}
+

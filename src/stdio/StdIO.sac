@@ -12,6 +12,7 @@ import ArrayIO:   all;
 import FibreIO:   all;
 import ListIO:    all;
 import ComplexIO: all;
+import Color8IO:  all;
 #endif /* SAC_BACKEND_MUTC */
 
 export all;
