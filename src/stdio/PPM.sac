@@ -1,47 +1,73 @@
 module PPM;
 
-use Color8: { color, shape };
-use String: { string };
-use ScalarArith: { == };
+use Color8:       { color, shape };
+use File:         { File, fopen, fclose };
+use RuntimeError: { error };
+use ScalarArith:  { == };
+use String:       { string };
+use TermFile:     { TermFile, stdin, stdout };
 
 export {readPPM, printPPM};
 
-external color[.,.] readArray( string name );
+external color[.,.] readStream( TermFile &stream );
+#pragma effect Terminal::TheTerminal
+#pragma linkobj "src/PPM/ppm2array.o"
+#pragma linkname "SAC_PPM_ppm2array"
+#pragma refcounting[0]
+
+external color[.,.] readStream( File &stream );
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PPM/ppm2array.o"
 #pragma linkname "SAC_PPM_ppm2array"
 #pragma refcounting[0]
 
-external void writeArray( string name, color[.,.] image, int[2] shape, int ascii);
+external void writeStream( TermFile &stream , color[.,.] image, int[2] shape, bool binary);
+#pragma effect Terminal::TheTerminal
+#pragma linkobj "src/PPM/array2ppm.o"
+#pragma linkname "SAC_PPM_array2ppm"
+
+external void writeStream( File &stream , color[.,.] image, int[2] shape, bool binary);
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PPM/array2ppm.o"
 #pragma linkname "SAC_PPM_array2ppm"
 
 inline
-void printPPM( color[.,.] img)
-{
-  writeArray( "stdout", img, shape(img), 1);
-}
-
-inline
-void printPPM( color[.,.] img, string name, bool binary)
-{
-  if ( binary == true) {
-    writeArray( name, img, shape(img), 0);
-  } else {
-    writeArray( name, img, shape(img), 1);
-  }
-}
-
-inline
 color[.,.] readPPM()
 {
-  return ( readArray( "stdin"));
+  ret = readStream( stdin);
+  return( ret);
 }
 
 inline
 color[.,.] readPPM( string name)
 {
-  return ( readArray( name));
+  err, fp = fopen( name, "r");
+  if ( SysErr::fail(err) == true) {
+    error( (:int)err, "Error occured when trying to open file %s for reading",
+           name);
+  }
+
+  ret = readStream( fp);
+  fclose( fp);
+  return( ret);
+}
+
+inline
+void printPPM( color[.,.] img)
+{
+  writeStream( stdout, img, shape(img), false);
+}
+
+inline
+void printPPM( color[.,.] img, string name, bool binary)
+{
+  err, fp = fopen( name, "w+");
+  if ( SysErr::fail(err) == true) {
+    error( (:int)err, "Error occured when trying to open file %s for writing",
+           name);
+  }
+
+  writeStream( fp, img, shape(img), binary);
+  fclose( fp);
 }
 

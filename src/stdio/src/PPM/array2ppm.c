@@ -8,32 +8,19 @@
 typedef char* string;
 
 #define array_nt  (array, T_OLD((AKD, (NHD, (NUQ, )))))
-#define string_nt (str,   T_OLD((SCL, (HID, (NUQ, )))))
-#define shape_nt  (shape, T_OLD((AKS, (NHD, (NUQ, )))))
-#define ascii_nt  (ascii, T_OLD((SCL, (HID, (NUQ, )))))
 
-#define MAXLINE 80
-
-void SAC_PPM_array2ppm( SAC_ND_PARAM_in_nodesc( string_nt, string),
+void SAC_PPM_array2ppm( FILE *fp,
                         SAC_ND_PARAM_in_nodesc( array_nt, int),
-                        SAC_ND_PARAM_in_nodesc( shape_nt, int),
-                        SAC_ND_PARAM_in_nodesc( ascii_nt, int))
+                        int shape[2],
+                        bool binary)
 {
-  FILE *fp;
-
-  int w = SAC_ND_A_FIELD( shape_nt)[1];
-  int h = SAC_ND_A_FIELD( shape_nt)[0];
-
-  if ( strncmp( NT_NAME( string_nt), "stdout", 6) == 0) {
-    fp = stdout;
-  } else {
-    fp = fopen( NT_NAME( string_nt), "w+");
-  }
+  const int w = shape[1];
+  const int h = shape[0];
 
   /*
    * ASCII output
    */
-  if ( NT_NAME( ascii_nt) == 1) {
+  if ( binary == false) {
     fprintf(fp, "P3\n");
 
     fprintf(fp, "%d %d\n", w, h);
@@ -65,10 +52,6 @@ void SAC_PPM_array2ppm( SAC_ND_PARAM_in_nodesc( string_nt, string),
     for(int i = 0; i < h * w * 3; i++) {
       fprintf(fp, "%c", SAC_ND_A_FIELD(array_nt)[i]);
     }
-  }
-
-  if (fp != stdout) {
-    fclose(fp);
   }
 }
          

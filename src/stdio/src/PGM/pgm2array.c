@@ -9,7 +9,6 @@ typedef char* string;
 
 #define array_nt  (array, T_OLD((AKD, (NHD, (NUQ, )))))
 #define ret_nt    (ret,   T_OLD((AKD, (NHD, (NUQ, )))))
-#define string_nt (str,   T_OLD((SCL, (HID, (NUQ, )))))
 
 #define MAXLINE 80
 
@@ -17,9 +16,8 @@ typedef char* string;
  * Read a pgm (ascii or binary) image.
  */
 void SAC_PGM_pgm2array( SAC_ND_PARAM_out( array_nt, int),
-                        SAC_ND_PARAM_in_nodesc( string_nt, string))
+                        FILE *fp)
 {
-  FILE *fp;
   char line[MAXLINE];
   int w;
   int h;
@@ -28,19 +26,6 @@ void SAC_PGM_pgm2array( SAC_ND_PARAM_out( array_nt, int),
   unsigned int c;
   bool binary;
   bool comment;
-
-  /*
-   * Check if we are reading from stdin
-   */
-  if ( strncmp( NT_NAME( string_nt), "stdin", 5) == 0) {
-    fp = stdin;
-  } else {
-    fp = fopen( NT_NAME( string_nt), "r");
-  }
-
-  if (fp == NULL) {
-    SAC_RuntimeError( "Failed to open PGM image file '%s'", NT_NAME( string_nt));
-  }
 
   /*
    * Check for a valid header
@@ -131,10 +116,6 @@ void SAC_PGM_pgm2array( SAC_ND_PARAM_out( array_nt, int),
       }
       data[i] = c * (255/max);
     }
-  }
-
-  if (fp != stdin) {
-    fclose(fp);
   }
 
   /*

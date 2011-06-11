@@ -1,18 +1,32 @@
 module PGM;
 
-use Grey: {grey, shape};
-use String: {string};
-use ScalarArith: { == };
+use File:         { File, fopen, fclose };
+use Grey:         { grey, shape };
+use RuntimeError: { error };
+use ScalarArith:  { == };
+use String:       { string };
+use TermFile:     { TermFile, stdin, stdout };
 
 export {readPGM, printPGM};
 
-external grey[.,.] readArray( string name );
+external grey[.,.] readStream( TermFile &stream );
+#pragma effect Terminal::TheTerminal
+#pragma linkobj "src/PGM/pgm2array.o"
+#pragma linkname "SAC_PGM_pgm2array"
+#pragma refcounting[0]
+
+external grey[.,.] readStream( File &stream );
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PGM/pgm2array.o"
 #pragma linkname "SAC_PGM_pgm2array"
 #pragma refcounting[0]
 
-external void writeArray( string name, grey[.,.] image, int[2] shape, int ascii);
+external void writeStream( TermFile &stream, grey[.,.] image, int[2] shape, bool binary);
+#pragma effect Terminal::TheTerminal
+#pragma linkobj "src/PGM/array2pgm.o"
+#pragma linkname "SAC_PGM_array2pgm"
+
+external void writeStream( File &stream, grey[.,.] image, int[2] shape, bool binary);
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PGM/array2pgm.o"
 #pragma linkname "SAC_PGM_array2pgm"
@@ -21,42 +35,51 @@ external void writeArray( string name, grey[.,.] image, int[2] shape, int ascii)
  * Read PGM image from file
  */
 inline
-grey[.,.] readPGM(string name) 
+grey[.,.] readPGM( string name) 
 {
-  ret = readArray( name);
-  return (ret);
+  err, fp = fopen( name, "r");
+  if ( SysErr::fail(err) == true) {
+    error( (:int)err, "Error occured when trying to open file %s for reading", 
+           name);
+  }
+
+  ret = readStream( fp);
+  fclose( fp);
+  return( ret);
 }
 
 /*
- * Backwards compatibility, read from stdin
+ * Read a PGM image from stdin
  */
 inline
 grey[.,.] readPGM() 
 {
-  ret = readArray( "stdin");
-  return (ret);
+  ret = readStream( stdin);
+  return( ret);
 }
 
 /*
- * Backwards compatibility, write ascii data to stdout
+ * Write PGM in ascii format to stdout
  */
 inline
 void printPGM( grey[.,.] img)
 {
-  writeArray( "stdout", img, shape(img), 1);
+  writeStream( stdout, img, shape(img), false);
 }
 
 /*
- * Write PGM image to file.
- * One can choose for ascii or binary output
+ * Write PGM image to file
  */
 inline
 void printPGM( grey[.,.] img, string name, bool binary)
 {
-  if ( binary == true) {
-    writeArray( name, img, shape(img), 0);
-  } else {
-    writeArray( name, img, shape(img), 1);
+  err, fp = fopen( name, "w+");
+  if ( SysErr::fail(err) == true) {
+    error( (:int)err, "Error occured when trying to open file %s for writing",
+           name);
   }
+
+  writeStream( fp, img, shape(img), binary);
+  fclose( fp);
 }
 
