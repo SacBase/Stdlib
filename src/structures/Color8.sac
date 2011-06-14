@@ -1,8 +1,9 @@
 module Color8;
 
-use Array: all except { sel, shape, dim, reshape, toi};
+import Array: all except { sel, shape, dim, reshape, toi};
 import Array: { sel };
-use MathArray : all;
+import MathArray : all;
+import ScalarArith : all;
 export all except { Weights2Clut, genSteps };
 
 typedef int[3] color;
@@ -218,3 +219,60 @@ color[*] reshape( int[.] shp, color[*] a)
   return(  (:color[*])_reshape_VxA_( shp ++ [3], (:int[*])a) );
 }
 
+
+
+inline
+color (+) (color a, color b)
+{
+  return( newColor( red(a)   + red(b),
+                    green(a) + green(b),
+                    blue(a)  + blue(b)));
+}
+
+inline
+color[*] (+) (color[*] a, color[*] b)
+{
+  res = with{
+          ( . <= iv <= . ) : a[iv] + b[iv];
+        } : genarray( shape( a), black()); 
+
+  return( res);
+}
+
+
+inline
+color (-) (color a, color b)
+{
+  return( newColor( red(a)   - red(b),
+                    green(a) - green(b),
+                    blue(a)  - blue(b)));
+}
+
+inline
+color[*] (-) (color[*] a, color[*] b)
+{
+  res = with{
+          ( . <= iv <= . ) : a[iv] -  b[iv];
+        } : genarray( shape( a), white()); 
+
+  return( res);
+}
+
+
+inline
+color (*) (color c, double x)
+{
+  return( newColor( toi( tod( red(   c)) * x),
+                    toi( tod( green( c)) * x),
+                    toi( tod( blue(  c)) * x)));
+}
+
+inline
+color[*] (*) (color[*] c, double x)
+{
+  res = with{
+          ( . <= iv <= . ) : c[iv] * x;
+        } : genarray( shape( c), white()); 
+
+  return( res);
+}
