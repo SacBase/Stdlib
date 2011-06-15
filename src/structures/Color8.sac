@@ -73,6 +73,16 @@ inline int[*] toi( color[*] c)
   return( (:int[*]) c);
 }
 
+inline double[3] tod( color c)
+{
+  return( tod( (:int[3]) c));
+}
+
+inline double[*] tod( color[*] c)
+{
+  return( tod( (:int[*]) c));
+}
+
 inline color[256] Weights2Clut( double[256] w, color c1, color c2)
 {
   return( (: color[256]) Array::toi( { iv -> w[iv] * tod((:int[3]) c1) } 

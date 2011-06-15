@@ -1,6 +1,7 @@
 module Grey;
 
 use Array: {min, max} ;
+import ScalarArith: {tod, toi} ;
 
 export all;
 
@@ -13,9 +14,22 @@ inline grey newGrey( int g)
   return( (:grey)g);
 }
 
+inline grey newGrey( double g)
+{
+  i = toi( g);
+  i = max(min(i, 255), 0);
+
+  return( (:grey)i);
+}
+
 inline int[*] toi( grey g)
 {
   return( (:int[*]) g);
+}
+
+inline double[*] tod( grey g)
+{
+  return( tod( (:int[*]) g));
 }
 
 inline grey[*] sel( int[.] idx, grey[*] a)
