@@ -1,9 +1,8 @@
 module Color8;
 
-import Array: all except { sel, shape, dim, reshape, toi};
-import Array: { sel };
-import MathArray : all;
-import ScalarArith : all;
+use Array: all except { *, -, +, reshape, dim, shape, sel, tod, toi};
+import Array: { *, -, +, reshape, dim, shape, sel, tod, toi};
+use MathArray: all;
 export all except { Weights2Clut, genSteps };
 
 typedef int[3] color;
@@ -85,7 +84,7 @@ inline double[*] tod( color[*] c)
 
 inline color[256] Weights2Clut( double[256] w, color c1, color c2)
 {
-  return( (: color[256]) Array::toi( { iv -> w[iv] * tod((:int[3]) c1) } 
+  return( (: color[256]) toi( { iv -> w[iv] * tod((:int[3]) c1) } 
                                + { iv -> (1d - w[iv]) * tod((:int[3]) c2) } ));
 }
 
@@ -151,7 +150,7 @@ inline color Hsb2Rgb( int h_in , int s_in, int b_in )
     s = tod( s_in ) / 100d;
     b = tod( b_in ) / 100d;
 
-    i = Array::toi( h ) % 6; 
+    i = toi( h ) % 6; 
     f = h - tod( i );
 
     if ( ( i % 2 ) == 0 )
@@ -160,9 +159,9 @@ inline color Hsb2Rgb( int h_in , int s_in, int b_in )
     m = b * ( 1d - s );
     n = b * ( 1d - s * f );
 
-    b = Array::toi( b * 255d );
-    m = Array::toi( m * 255d );
-    n = Array::toi( n * 255d );
+    b = toi( b * 255d );
+    m = toi( m * 255d );
+    n = toi( n * 255d );
 
     if ( 0 == i )
       col = newColor( b, n, m );
@@ -185,7 +184,7 @@ inline color[*] Hsb2Rgb( int[*] h_in, int s_in, int b_in)
 {
   res = with {
           ( . <= iv <= .) : Hsb2Rgb( h_in[iv], s_in, b_in);
-        } : genarray( Array::shape( h_in), black());
+        } : genarray( shape( h_in), black());
 
   return( res);
 }
@@ -195,7 +194,7 @@ inline color[*] Hsb2Rgb( int[*] h_in, int[*] s_in, int[*] b_in)
 {
   res = with {
           ( . <= iv <= .) : Hsb2Rgb( h_in[iv], s_in[iv], b_in[iv]);
-        } : genarray( Array::shape( h_in), black());
+        } : genarray( shape( h_in), black());
 
   return( res);
 }
@@ -207,20 +206,20 @@ inline color[*] sel( int idx, color[*] clut)
 
 inline color[*] sel( int[.] idx, color[*] a)
 {
-  res = Array::sel( idx, ((:int[*])a));
+  res = sel( idx, ((:int[*])a));
   return( (:color[*])res);
 }
 
 inline
 int dim( color[*] a)
 {
-  return( Array::dim((:int[*])a) - 1 );
+  return( dim((:int[*])a) - 1 );
 }
 
 inline
 int[.] shape( color[*] a)
 {
-  return( _drop_SxV_( -1, Array::shape((:int[*])a)) );
+  return( _drop_SxV_( -1, shape((:int[*])a)) );
 }
 
 inline
