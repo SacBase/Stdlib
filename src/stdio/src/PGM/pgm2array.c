@@ -104,6 +104,7 @@ void SAC_PGM_pgm2array( SAC_ND_PARAM_out( array_nt, int),
    */
   if (binary == true) {
     for (int i = 0; i < h*w; i++) {
+      c = 0;
       if(fread(&c, 1, 1, fp) != 1) {
         SAC_RuntimeError( "Unexpected end of file" );
       }
