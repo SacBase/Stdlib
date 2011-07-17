@@ -20,7 +20,6 @@ external classtype;
 import Interval: all;
 use String: {string, sprintf,+};
 use Array: all except {+};
-use RTClock: {gettime};
 use StdIO: all;
 
 export { Interval, start, end, benchThis, printResult, 
@@ -80,6 +79,14 @@ void end( Interval& interval)
   time += tod( usecs) / 1000000000d;
   benchEnd( interval, time); 
 }
+
+external int, int gettime();
+  #pragma linksign [1,2]
+  #pragma linkobj "src/C99Benchmarking/bench.o"
+  #pragma linkname "SAC_C99Benchmarking_gettime"
+#ifdef NEED_LIBRT
+  #pragma linkwith "rt"
+#endif
 
 external void benchStart( Interval& interval, double timestamp);
 #pragma effect C99Benchmarking::TheBenchmarkObject

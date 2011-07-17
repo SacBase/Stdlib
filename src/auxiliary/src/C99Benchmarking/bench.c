@@ -1,14 +1,22 @@
-#include "stdarg.h"
-#include "sac.h"
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200112L
+#endif
+
+#include <stdarg.h>
 #include <string.h>
+#include <time.h>
+
+#include "sac.h"
+
 
 struct bench {                                                   
   int                num; 
   char *             name;
   double             startSec;
   double             stopSec;
-};                                                                       
-                                                                         
+};
+                                                             
+
 void benchStart( struct bench *interval, double time) 
 {                                                            
   interval->startSec = time;

@@ -1,37 +1,29 @@
-module RTClock;
+class RTClock;
 
-#include "../../config/config.h"
+external classtype;
 
+export {TheRTClock,touch,gettime};
 
-export all;
+objdef RTClock TheRTClock = createTheRTClock();
 
-external typedef timespec;
-/*
- * returns the current time ( seconds, nanoseconds) of the
- * realtime OS clock. If available, the process specific 
- * clock is used.
- */
+external RTClock createTheRTClock( );
+#pragma effect World::TheWorld
+#pragma linkname "SAC_RTClock_createTheRTClock"
+#pragma linkobj "src/RTClock/rtclock.o"
+#pragma linksign [1]
+#ifdef NEED_LIBRT
+#pragma linkwith "rt"
+#endif
+
+external void touch( RTClock &rtclock);
+#pragma linkname "SAC_RTClock_touch"
+#pragma linkobj "src/RTClock/rtclock.o"
+
 external int, int gettime();
-  #pragma linksign [1,2]
-  #pragma linkobj "src/RTClock/gettime.o"
-  #pragma linkname "SAC_RTCLOCK_gettime"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+#pragma effect  RTClock::TheRTClock  
+#pragma linkname "SAC_RTClock_gettime"
+#pragma linkobj "src/RTClock/rtclock.o"
+#pragma linksign [1,2]
 
-external timespec gettime_timespec();
-  #pragma linksign [1]
-  #pragma linkobj "src/RTClock/gettime.o"
-  #pragma linkname "SAC_RTCLOCK_gettime_timespec"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
 
-external double difftime( timespec t1, timespec t2);
-  #pragma linksign [0,1,2]
-  #pragma linkobj "src/RTClock/gettime.o"
-  #pragma linkname "SAC_RTCLOCK_difftime"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
 
