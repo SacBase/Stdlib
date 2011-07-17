@@ -4,7 +4,13 @@
  * Description:
  *
  * This module implements access to the system real time clock, more precisely
- * it provides functions to create, start, stop and inquire real clock timers.
+ * it provides functions to create, start, stop, reset and inquire real clock timers.
+ *
+ * As a special feature timers can be 'stacked', i.e. a timer can repeatedly be
+ * started without effect, the timer just continues to run. It then requires the
+ * same number of stops to effectively stop. This feature is meant as a preparatory
+ * step towards automatically inserting timer calls into the code by the compiler,
+ * where we need to take recursive functions into account.
  */
 
 
@@ -18,9 +24,8 @@ struct rtimer
 {
   struct timespec elapsed;
   struct timespec started;
-  bool active;
+  int instance;
 };
-
   
 
 void SAC_RTimer_createRTimer( struct rtimer **ts)
@@ -30,7 +35,7 @@ void SAC_RTimer_createRTimer( struct rtimer **ts)
   (*ts)->elapsed.tv_nsec = 0;
   (*ts)->started.tv_sec = 0;
   (*ts)->started.tv_nsec = 0;
-  (*ts)->active = false;
+  (*ts)->instance = 0;
 }
 
 void SAC_RTimer_destroyRTimer( struct rtimer *ts)
@@ -38,12 +43,11 @@ void SAC_RTimer_destroyRTimer( struct rtimer *ts)
   SAC_FREE( ts);
 }
 
-
 void SAC_RTimer_startRTimer( struct rtimer *timer)
 {
-  if (!timer->active) {
+  if (timer->instance == 0) {
     clock_gettime( CLOCK_REALTIME, &(timer->started));
-    timer->active = true;
+    timer->instance += 1;
   }
 }
 
@@ -51,7 +55,7 @@ void SAC_RTimer_stopRTimer( struct rtimer *timer)
 {
   struct timespec now;
   
-  if (timer->active) {
+  if (timer->instance == 1) {
     clock_gettime( CLOCK_REALTIME, &now);
     if (now.tv_nsec > timer->started.tv_nsec) {
       timer->elapsed.tv_sec += now.tv_sec - timer->started.tv_sec;
@@ -61,13 +65,16 @@ void SAC_RTimer_stopRTimer( struct rtimer *timer)
       timer->elapsed.tv_sec += (now.tv_sec - timer->started.tv_sec) - 1;
       timer->elapsed.tv_nsec += 1000000000L - timer->started.tv_nsec + now.tv_nsec;
     }
-    timer->active = 0;
+    timer->instance = 0;
+  }
+  else if (timer->instance > 1) {
+    timer->instance -= 1;
   }
 }
 
 void SAC_RTimer_resetRTimer( struct rtimer *timer)
 {
-  if (!timer->active) {
+  if (timer->instance == 0) {
     timer->elapsed.tv_sec = 0;
     timer->elapsed.tv_nsec = 0;
   }
@@ -84,7 +91,7 @@ double SAC_RTimer_getRTimerDbl( struct rtimer *timer)
 {
   double res;
   
-  res = (double) timer->elapsed.tv_sec + ((double) timer->elapsed.tv_nsec) / 1000000000.0;
+  res = ((double) timer->elapsed.tv_sec) + ((double) timer->elapsed.tv_nsec) / 1000000000.0;
   
   return res;
 }
