@@ -14,7 +14,6 @@
  */
 
 
-#define _POSIX_C_SOURCE  199309L
 
 #include <time.h>
 #include "sac.h"
