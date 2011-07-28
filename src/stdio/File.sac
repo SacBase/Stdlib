@@ -60,7 +60,9 @@ syserr, File tmpfile()
      */
 
 external  void fclose(File STREAM);
+    #pragma linkobj "src/File/fclose.o"
     #pragma effect TheFileSystem
+    #pragma linkname "SACfclose"
     /*
      * Close the stream given by the file handle STREAM. 
      */

@@ -59,7 +59,9 @@ external string strncat(string S1, string S2, int N);
     /* Concatenate string S1 and the first N characters of string S2. */
     
 external int strcmp(string S1, string S2);
+    #pragma linkname "SACstrcmp"
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcmp.o"
     /* Compare strings S1 and S2.
        Result is negative if S1 < S2, positive if S1 > S2 
        and zero if S1 == S2. */
