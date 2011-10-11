@@ -124,6 +124,10 @@ external double pow(double X, double Y);
     #pragma linksign [0,1,2]
     /* Return X to the Y power.  */
 
+external float powf(float X, float Y);
+    #pragma linksign [0,1,2]
+    /* Return X to the Y power.  */
+
 external double sqrt(double X);
     #pragma linksign [0,1]
     /* Return the square root of X.  */
@@ -363,7 +367,7 @@ external double hypot(double X, double Y);
 
   inline float pow(float X, float Y)
   {
-    return(tof(pow(tod(X), tod(Y))));
+    return(powf(X, Y));
   }
     /* Return X to the Y power.  */
 
