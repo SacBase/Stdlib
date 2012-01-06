@@ -81,7 +81,9 @@ MAP_BIN_##ext( +, _add_SxS_, a, a)      \
 MAP_BIN_##ext( -, _sub_SxS_, a, a)      \
 MAP_BIN_##ext( *, _mul_SxS_, a, a)      \
 MAP_BIN_##ext( /, _div_SxS_, a, a)      \
-MAP_MON_##ext( -, _neg_S_, a, a)      \
+MAP_BIN_##ext(  min, _min_SxS_, a, a)   \
+MAP_BIN_##ext(  max, _max_SxS_, a, a)   \
+MAP_MON_##ext( -, _neg_S_, a, a)        \
 MAP_MON_##ext( abs, _abs_S_, a, a)
 
 
