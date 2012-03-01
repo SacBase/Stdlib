@@ -11,16 +11,9 @@
 /*****************************************************************/
 
 
-void SACfclose(FILE **stream)
+void SACfclose(FILE *stream)
 {
-  int error=-1;
-  
-  error=fclose(*stream);
-  
-  if (error!=0)
-  {
-	 error=errno;
-  }
+  fclose(stream);
 }
 
 
