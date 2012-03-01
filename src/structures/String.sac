@@ -147,6 +147,13 @@ external int strspn(string S, string ACCEPT);
     /* Return the length of the initial segment of S which
        consists entirely of characters in ACCEPT.  */
 
+external string, string strtok(string S, string SEP);
+    #pragma linkname "SACstrtok"
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strtok.o"
+    /* split string S into a token and the remainder string
+       using the characters from SEP as delimiters. */
+
 
 external int, string strtoi(string S, int BASE);
     #pragma linkname "SACstrtoi"
