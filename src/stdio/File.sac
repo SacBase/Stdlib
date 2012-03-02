@@ -101,6 +101,10 @@ external  void ungetc(char C, File &STREAM);
      * is overwritten.
      */
 
+external  void fputs(string S, File &STREAM);
+    /*
+     * Write string S to stream.
+     */
 
 
 

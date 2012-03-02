@@ -73,6 +73,18 @@ external char  getc();
      * be stdin.
      */
 
+external  void fputs(string S, TermFile &STREAM);
+    #pragma effect TheTerminal
+    /*
+     * Write string S to stream.
+     */
+
+external  void puts(string S);
+    #pragma effect TheTerminal
+    /*
+     * Write string S and a newline to stdout.
+     */
+
 
 external void ungetc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
