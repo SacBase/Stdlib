@@ -147,12 +147,20 @@ external int strspn(string S, string ACCEPT);
     /* Return the length of the initial segment of S which
        consists entirely of characters in ACCEPT.  */
 
+external int strstr(string HAYSTACK, string NEEDLE);
+    #pragma linksign [0,1,2]
+    /* Find the first occurrence of the string NEEDLE in the
+       string HAYSTACK. Return the index to this occurrence.
+       If NEEDLE could not be found then return -1.  */
+
 external string, string strtok(string S, string SEP);
     #pragma linkname "SACstrtok"
     #pragma linksign [0,1,2,3]
     #pragma linkobj "src/String/strtok.o"
-    /* split string S into a token and the remainder string
-       using the characters from SEP as delimiters. */
+    /* Split string S into a token and the remainder string
+       using the characters from SEP as delimiters. If S starts
+       with characters from SEP then these are skipped until
+       a character not in SEP is found. */
 
 
 external int, string strtoi(string S, int BASE);
