@@ -103,6 +103,16 @@ external bool, syserr islnk(string PATHNAME);
      */
 
 
+external ulonglong, syserr filesize(string PATHNAME);
+    #pragma effect TheFileSystem
+    #pragma linkname "SACfilesize"
+    #pragma linkobj  "src/FileSystem/testfile.o"
+    #pragma linksign [0,1,2]
+    /*
+     * Return the size of the filesystem object in bytes.
+     */
+
+
 
   /* 
    *  Functions for dealing with directories.
