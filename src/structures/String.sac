@@ -148,7 +148,9 @@ external int strspn(string S, string ACCEPT);
        consists entirely of characters in ACCEPT.  */
 
 external int strstr(string HAYSTACK, string NEEDLE);
+    #pragma linkname "SACstrstr"
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strstr.o"
     /* Find the first occurrence of the string NEEDLE in the
        string HAYSTACK. Return the index to this occurrence.
        If NEEDLE could not be found then return -1.  */
