@@ -225,11 +225,13 @@ external time, string strptime(string S, string FORMAT);
     #pragma linksign [0,1,2,3]
     /*
      * Complementary function to strftime(),
-     * converts the string S into a time value concerning the format
+     * convert the string S into a time value concerning the format
      * string FORMAT. Similar conversion specifiers may be applied as
      * with the strftime() function (see C documentation for details).
      * The resulting string contains the remainder of S not scanned
-     * by strptime().
+     * by strptime(). If strptime() fails to match all of the format
+     * string an error occurs, the returned remainder string is empty,
+     * and the returned time is 0.
      */
 
 
