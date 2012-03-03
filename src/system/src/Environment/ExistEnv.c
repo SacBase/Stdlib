@@ -5,8 +5,5 @@
 
 int ExistEnv(char *envvar)
 {
-  return(getenv(envvar) == NULL);
+  return (getenv(envvar) != NULL);
 }
-
-
-
