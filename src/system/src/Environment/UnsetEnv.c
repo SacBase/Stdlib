@@ -5,12 +5,11 @@
 
 void UnsetEnv(char *envvar)
 {
-  static char buffer[100];
-  
-  strcpy(buffer, envvar);
-  strcat(buffer, "=");
-      
-  putenv(buffer);
+#if HAVE_UNSETENV
+  unsetenv(envvar);
+#else
+  putenv(envvar);
+#endif
 }
 
 
