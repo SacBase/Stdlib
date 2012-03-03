@@ -57,8 +57,19 @@ external void UnsetEnv(string ENVVAR);
      * Clear the environment variable ENVVAR from the current environment.
      */
 
+external int EnvCount();
+    #pragma effect TheEnvironment
+    #pragma linksign [0]
+    #pragma linkobj  "src/Environment/Environ.o"
+    /*
+     * Return the number of environment variables.
+     */
 
-
-
-
+external string IndexEnv(int N);
+    #pragma effect TheEnvironment
+    #pragma linksign [0,1]
+    #pragma linkobj  "src/Environment/Environ.o"
+    /*
+     * Return the N'th environment variable.
+     */
 
