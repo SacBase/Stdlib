@@ -217,6 +217,7 @@ external string strftime(int LEN, string FORMAT, time T);
      * Convert the time T into a string of maximum length LEN
      * concerning the format string FORMAT. Special time oriented
      * conversion specifiers may be used (see C documentation).
+     * If an error occurs the returned string is empty.
      */
 
 external time, string strptime(string S, string FORMAT); 
