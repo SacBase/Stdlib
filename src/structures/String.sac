@@ -164,6 +164,30 @@ external string, string strtok(string S, string SEP);
        with characters from SEP then these are skipped until
        a character not in SEP is found. */
 
+external string chomp(string S);
+    #pragma linkname "SACchomp"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove trailing line terminators from S. */
+
+external string rtrim(string S);
+    #pragma linkname "SACrtrim"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove trailing whitespace from S. */
+
+external string ltrim(string S);
+    #pragma linkname "SACltrim"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove leading whitespace from S. */
+
+external string trim(string S);
+    #pragma linkname "SACtrim"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove leading and trailing whitespace from S. */
+
 
 external int, string strtoi(string S, int BASE);
     #pragma linkname "SACstrtoi"
