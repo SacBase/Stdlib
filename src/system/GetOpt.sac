@@ -1,0 +1,89 @@
+/*
+ * Provide getopt(3) functionality for SAC.
+ * See the getopt(3) manual page for details.
+ * You only need getopt(), optarg() and optEND(),
+ * the rest is standardization effort.
+ */
+
+module GetOpt;
+
+use String:      { string };
+use CommandLine: { TheCommandLine };
+
+export all;
+
+external char getopt(string opts);
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "getopt_sac"
+    #pragma linksign [0,1]
+    /*
+     * Return the next command line option using the options given in 'opts'.
+     * If the option requires an argument then this is available by optarg().
+     * If no more options are available then getopt returns optEND().
+     * See the manual page for getopt(3) for more details.
+     */
+
+external char optEND();
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "optEND"
+    #pragma linksign [0]
+    /*
+     * Return the option character that is used to signal end-of-options.
+     */
+
+external string optarg();
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "get_optarg"
+    #pragma linksign [0]
+    /*
+     * Retrieve the argument to the current option.
+     * If the option doesn't require an argument then this is empty.
+     */
+
+external char optopt();
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "get_optopt"
+    #pragma linksign [0]
+    /*
+     * Retrieve the last option value.
+     */
+
+external int optind();
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "get_optind"
+    #pragma linksign [0]
+    /*
+     * Return the current index into argv.
+     */
+
+external void optind(int set);
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "set_optind"
+    #pragma linksign [1]
+    /*
+     * Set or reset the current option index into argv.
+     */
+
+external bool opterr();
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "get_opterr"
+    #pragma linksign [0]
+    /*
+     * Query if option error reporting is enabled.
+     */
+
+external void opterr(bool set);
+    #pragma effect TheCommandLine
+    #pragma linkobj "src/GetOpt/getopt.o"
+    #pragma linkname "set_opterr"
+    #pragma linksign [1]
+    /*
+     * Enable/disable option error reporting.
+     */
+
