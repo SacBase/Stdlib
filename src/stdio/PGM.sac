@@ -1,85 +1,51 @@
 module PGM;
 
-use File:         { File, fopen, fclose };
-use Grey:         { grey, shape };
-use RuntimeError: { error };
-use ScalarArith:  { == };
-use String:       { string };
-use TermFile:     { TermFile, stdin, stdout };
+use String: { string };
+use ArrayBasics: { shape };
 
-export {readPGM, printPGM};
+export { readPGM, writePGM };
 
-external grey[.,.] readStream( TermFile &stream );
-#pragma effect Terminal::TheTerminal
-#pragma linkobj "src/PGM/pgm2array.o"
-#pragma linkname "SAC_PGM_pgm2array"
-#pragma refcounting[0]
+external int[.,.], int readPGM( string fn );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "read_pgm"
+    #pragma refcounting[0]
+    /*
+     * Read a PGM image from file 'fn'.
+     * Return:
+     *     - the data as a two dimensional int array
+     *     - the maximum pixel value in the range [1, 65535].
+     *       Often the maximum pixel value is 255, but not always.
+     */
 
-external grey[.,.] readStream( File &stream );
-#pragma effect FileSystem::TheFileSystem
-#pragma linkobj "src/PGM/pgm2array.o"
-#pragma linkname "SAC_PGM_pgm2array"
-#pragma refcounting[0]
 
-external void writeStream( TermFile &stream, grey[.,.] image, int[2] shape, bool binary);
-#pragma effect Terminal::TheTerminal
-#pragma linkobj "src/PGM/array2pgm.o"
-#pragma linkname "SAC_PGM_array2pgm"
+external void writePGM(int[.,.] image, int[2] shape, bool binary, string name);
+    #pragma effect   FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/array2pgm.o"
+    #pragma linkname "write_pgm"
+    /*
+     * Write an image to file using the PGM image format.
+     * The parameter 'shape' gives the dimensions.
+     * The parameter 'binary' specifies binary mode if true, else text mode.
+     * The parameter 'name' gives the filename.
+     */
 
-external void writeStream( File &stream, grey[.,.] image, int[2] shape, bool binary);
-#pragma effect FileSystem::TheFileSystem
-#pragma linkobj "src/PGM/array2pgm.o"
-#pragma linkname "SAC_PGM_array2pgm"
-
-/*
- * Read PGM image from file
- */
-inline
-grey[.,.] readPGM( string name) 
-{
-  err, fp = fopen( name, "r");
-  if ( SysErr::fail(err) == true) {
-    error( (:int)err, "Error occured when trying to open file %s for reading", 
-           name);
-  }
-
-  ret = readStream( fp);
-  fclose( fp);
-  return( ret);
-}
 
 /*
- * Read a PGM image from stdin
+ * Write an image to file in the PGM format.
  */
-inline
-grey[.,.] readPGM() 
+inline void writePGM(int[.,.] img, bool binary, string filename)
 {
-  ret = readStream( stdin);
-  return( ret);
+    writePGM(img, shape(img), binary, filename);
 }
+
 
 /*
- * Write PGM in ascii format to stdout
+ * Write an image to file in the binary PGM format.
  */
-inline
-void printPGM( grey[.,.] img)
+inline void writePGM(int[.,.] img, string filename)
 {
-  writeStream( stdout, img, shape(img), false);
+    writePGM(img, shape(img), true, filename);
 }
 
-/*
- * Write PGM image to file
- */
-inline
-void printPGM( grey[.,.] img, string name, bool binary)
-{
-  err, fp = fopen( name, "w+");
-  if ( SysErr::fail(err) == true) {
-    error( (:int)err, "Error occured when trying to open file %s for writing",
-           name);
-  }
-
-  writeStream( fp, img, shape(img), binary);
-  fclose( fp);
-}
 
