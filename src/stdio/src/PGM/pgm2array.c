@@ -23,15 +23,15 @@ void read_pgm(SAC_ND_PARAM_out(array_nt, int), int *maxval, char *fn)
 {
   SAC_ND_DECL__DATA(ret_nt, int,)
   SAC_ND_DECL__DESC(ret_nt,)
+  const int num_dims = 2;
   int width = 0;
   int height = 0;
   int *intarray = read_pgm_int(fn, &width, &height, maxval);
-  int num_dims = 2;
-
   int SAC_ND_A_MIRROR_DIM(ret_nt) = num_dims;
 
   SAC_ND_ALLOC__DESC(ret_nt, num_dims)
-  SAC_ND_SET__RC(ret_nt, 1) SAC_ND_A_DESC_SHAPE(ret_nt, 0) = height;
+  SAC_ND_SET__RC(ret_nt, 1)
+  SAC_ND_A_DESC_SHAPE(ret_nt, 0) = height;
   SAC_ND_A_DESC_SHAPE(ret_nt, 1) = width;
   SAC_ND_A_DESC_SIZE(ret_nt) = width * height;
   SAC_ND_A_FIELD(ret_nt) = intarray;
@@ -78,11 +78,7 @@ void read_pgm(SAC_ND_PARAM_out(array_nt, int), int *maxval, char *fn)
  */
 #define skip()                                 \
         if (c != '#' && !isspace(c)) {         \
-          if (c == EOF) {                      \
-            goto eof;                          \
-          } else {                             \
-            goto bad;                          \
-          }                                    \
+          goto bad;                            \
         } else do {                            \
           if (c == '#') {                      \
             comment();                         \
