@@ -44,9 +44,10 @@ void write_pgm(SAC_ND_PARAM_in_nodesc(array_nt, int),
   int min = PGM_MAX_VAL;
   int max = PGM_MIN_VAL;
   int maxval;
+  int i;
   FILE *fp;
 
-  for (int i = 0; i < pixelcount; ++i)
+  for (i = 0; i < pixelcount; ++i)
   {
     if (min > int_array[i])
     {
@@ -83,14 +84,14 @@ void write_pgm(SAC_ND_PARAM_in_nodesc(array_nt, int),
   {
     if (maxval <= PGM_MAX_BYTE_VAL)
     {
-      for (int i = 0; i < pixelcount; ++i)
+      for (i = 0; i < pixelcount; ++i)
       {
         myput(int_array[i], fp);
       }
     }
     else
     {
-      for (int i = 0; i < pixelcount; ++i)
+      for (i = 0; i < pixelcount; ++i)
       {
         unsigned char a = (unsigned char) (int_array[i] >> 8);
         unsigned char b = (unsigned char) (int_array[i] & 0xFF);
@@ -104,7 +105,7 @@ void write_pgm(SAC_ND_PARAM_in_nodesc(array_nt, int),
   {
     int col = 0;
 
-    for (int i = 0; i < pixelcount; ++i)
+    for (i = 0; i < pixelcount; ++i)
     {
       unsigned char rep[20];
       int dig = 0;

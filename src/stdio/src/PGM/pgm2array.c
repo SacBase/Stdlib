@@ -21,7 +21,9 @@ static int *read_pgm_int(char *fn, int *width_ptr, int *height_ptr,
 
 void read_pgm(SAC_ND_PARAM_out(array_nt, int), int *maxval, char *fn)
 {
-  SAC_ND_DECL__DATA(ret_nt, int,) SAC_ND_DECL__DESC(ret_nt,) int width = 0;
+  SAC_ND_DECL__DATA(ret_nt, int,)
+  SAC_ND_DECL__DESC(ret_nt,)
+  int width = 0;
   int height = 0;
   int *intarray = read_pgm_int(fn, &width, &height, maxval);
   int num_dims = 2;
@@ -29,11 +31,12 @@ void read_pgm(SAC_ND_PARAM_out(array_nt, int), int *maxval, char *fn)
   int SAC_ND_A_MIRROR_DIM(ret_nt) = num_dims;
 
   SAC_ND_ALLOC__DESC(ret_nt, num_dims)
-    SAC_ND_SET__RC(ret_nt, 1) SAC_ND_A_DESC_SHAPE(ret_nt, 0) = height;
+  SAC_ND_SET__RC(ret_nt, 1) SAC_ND_A_DESC_SHAPE(ret_nt, 0) = height;
   SAC_ND_A_DESC_SHAPE(ret_nt, 1) = width;
   SAC_ND_A_DESC_SIZE(ret_nt) = width * height;
   SAC_ND_A_FIELD(ret_nt) = intarray;
-SAC_ND_RET_out(array_nt, ret_nt)}
+  SAC_ND_RET_out(array_nt, ret_nt)
+}
 
 #undef array_nt
 #undef ret_nt
@@ -111,6 +114,7 @@ static int *read_pgm_int(char *fn,
   FILE *fp;
   size_t width = 0, height = 0, pixelcount = 0;
   unsigned maxval = 0, val = 0;
+  size_t i;
   int hdr[2];
   /* 'c' is used by the macros to store the next input character. */
   int c;
@@ -158,7 +162,7 @@ static int *read_pgm_int(char *fn,
 
   if (hdr[1] == '2')
   {
-    for (size_t i = 0; i < pixelcount; ++i)
+    for (i = 0; i < pixelcount; ++i)
     {
       skip();
       num(val);
@@ -167,26 +171,24 @@ static int *read_pgm_int(char *fn,
   }
   else if (hdr[1] == '5')
   {
+    /* maxval may be followed by comments. */
     if (c == '#') {
       comment();
     }
+    /* exactly one space character separates the header from the data. */
     if (!isspace(c)) {
-      if (c == EOF) {
-        goto eof;
-      } else {
-        goto bad;
-      }
+      goto bad;
     }
     if (maxval <= MAX_PGM_BYTE_VAL)
     {
-      for (size_t i = 0; i < pixelcount; ++i)
+      for (i = 0; i < pixelcount; ++i)
       {
         data[i] = myget(fp);
       }
     }
     else
     {
-      for (size_t i = 0; i < pixelcount; ++i)
+      for (i = 0; i < pixelcount; ++i)
       {
         int b1 = myget(fp);
         int b2 = myget(fp);
