@@ -142,17 +142,17 @@ int   SAC_PGM_height( PGM* pgm) { return pgm->height; }
 int   SAC_PGM_maxval( PGM* pgm) { return pgm->maxval; }
 FILE* SAC_PGM_stream( PGM* pgm) { return pgm->fp; }
 
-static int *SAC_PGM_read_data( PGM* pgm);
+static int *SAC_PGM_read_data_low( PGM* pgm);
 
 #define array_nt (array, T_OLD((AUD, (NHD, (NUQ, )))))
 #define ret_nt   (ret,   T_OLD((AUD, (NHD, (NUQ, )))))
 
-void SAC_PGM_load_data( SAC_ND_PARAM_out(array_nt, int), PGM* pgm)
+void SAC_PGM_read_data( SAC_ND_PARAM_out(array_nt, int), PGM* pgm)
 {
   SAC_ND_DECL__DATA(ret_nt, int,)
   SAC_ND_DECL__DESC(ret_nt,)
   const int num_dims = 2;
-  int *intarray = SAC_PGM_read_data( pgm);
+  int *intarray = SAC_PGM_read_data_low( pgm);
   int SAC_ND_A_MIRROR_DIM(ret_nt) = num_dims;
 
   SAC_ND_ALLOC__DESC(ret_nt, num_dims)
@@ -167,7 +167,7 @@ void SAC_PGM_load_data( SAC_ND_PARAM_out(array_nt, int), PGM* pgm)
 #undef array_nt
 #undef ret_nt
 
-static int* SAC_PGM_read_data( PGM* pgm)
+static int* SAC_PGM_read_data_low( PGM* pgm)
 {
   size_t pixelcount = pgm->width * pgm->height;
   size_t i;

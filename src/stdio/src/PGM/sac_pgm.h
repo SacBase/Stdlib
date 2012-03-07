@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
@@ -24,22 +23,22 @@ typedef struct PGM {
 } PGM;
 
 /* The PGM 'maxval' for 8-bit images. */
-#define PGM_MAX_BYTE_VAL        255
+#define PGM_MAX_BYTE_VAL       255
 
 /* The PGM 'maxval' for 16-bit images. */
-#define PGM_MAX_VAL             65535
+#define PGM_MAX_VAL            65535
 
 /* The lowest/blackest pixel value. */
-#define PGM_MIN_VAL             0
+#define PGM_MIN_VAL            0
 
 /* The second character in a PGM header for binary images. */
-#define PGM_BINARY              '5'
+#define PGM_BINARY             '5'
 
 /* The second character in a PGM header for text mode images. */
-#define PGM_TEXT                '2'
+#define PGM_TEXT               '2'
 
 /* The maximum allowed line length in a PGM file according to specification. */
-#define PGM_MAX_LINE_SIZE       70
+#define PGM_MAX_LINE_SIZE      70
 
 /*
  * Because we access the file single-threaded it is more
@@ -49,15 +48,15 @@ typedef struct PGM {
  * by the current system.
  */
 #if defined(_IO_getc_unlocked)
-#define myget(f)      _IO_getc_unlocked(f)
+#define myget(f)       _IO_getc_unlocked(f)
 #else
-#define myget(f)      getc(f)
+#define myget(f)       getc(f)
 #endif
 
 #if defined(_IO_putc_unlocked)
-#define myput(c,f)      _IO_putc_unlocked(c,f)
+#define myput(c,f)     _IO_putc_unlocked(c,f)
 #else
-#define myput(c,f)      putc(c,f)
+#define myput(c,f)     putc(c,f)
 #endif
 
 

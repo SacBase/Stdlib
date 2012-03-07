@@ -16,7 +16,7 @@ int[.,.], int readPGM( string filename )
 {
   pgm = openPGM( filename );
   maxval = PGMmaxval( pgm );
-  data = PGMdata( pgm );
+  data = readPGMdata( pgm );
   fp = PGMstream( pgm );
   freePGM( pgm );
   fclose( fp );
@@ -36,7 +36,7 @@ int[.,.], int readPGM( File stream )
 {
   pgm = parsePGM( stream );
   maxval = PGMmaxval( pgm );
-  data = PGMdata( pgm );
+  data = readPGMdata( pgm );
   freePGM( pgm );
   return (data, maxval);
 }
@@ -108,10 +108,10 @@ external int PGMmaxval( PGM& pgm );
      * Extract the maximum possible pixel value of the PGM image.
      */
 
-external int[.,.] PGMdata( PGM& pgm );
+external int[.,.] readPGMdata( PGM& pgm );
     #pragma effect    FileSystem::TheFileSystem
     #pragma linkobj  "src/PGM/pgm2array.o"
-    #pragma linkname "SAC_PGM_load_data"
+    #pragma linkname "SAC_PGM_read_data"
     #pragma refcounting [0]
     /*
      * Read the pixel data from file and return it as an image.
@@ -135,18 +135,18 @@ external PGM newPGM( int [2] shape, int maxval, bool binary, File& fp);
      * Allocate a new PGM structure for writing.
      */
 
-external void createPGM( PGM& pgm);
+external void writePGMheader( PGM& pgm);
     #pragma effect    FileSystem::TheFileSystem
     #pragma linkobj  "src/PGM/array2pgm.o"
-    #pragma linkname "SAC_PGM_create"
+    #pragma linkname "SAC_PGM_write_header"
     /*
      * Write a new PGM header to file.
      */
 
-external void PGMdata( int[.,.] data, PGM& pgm );
+external void writePGMdata( int[.,.] data, PGM& pgm );
     #pragma effect    FileSystem::TheFileSystem
     #pragma linkobj  "src/PGM/array2pgm.o"
-    #pragma linkname "SAC_PGM_store_data"
+    #pragma linkname "SAC_PGM_write_data"
     #pragma linksign [1, 2]
     /*
      * Write the PGM data to file.
@@ -161,8 +161,8 @@ void writePGM( int[.,.] image, int[2] shape, int maxval,
            name);
   }
   pgm = newPGM( shape, maxval, binary, fp );
-  createPGM( pgm );
-  PGMdata( image, pgm );
+  writePGMheader( pgm );
+  writePGMdata( image, pgm );
   freePGM( pgm );
   fclose(fp);
 }
@@ -178,8 +178,8 @@ void writePGM( int[.,.] image, int[2] shape, int maxval,
                bool binary, File stream )
 {
   pgm = newPGM( shape, maxval, binary, stream );
-  createPGM( pgm );
-  PGMdata( image, pgm );
+  writePGMheader( pgm );
+  writePGMdata( image, pgm );
   freePGM( pgm );
 }
     /*
