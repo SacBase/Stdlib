@@ -1,21 +1,109 @@
-module PGM;
+class PGM;
 
-use String: { string };
-use ArrayBasics: { shape };
+external classtype;
 
-export { readPGM, writePGM };
+use String:       { string };
+use ArrayBasics:  { shape };
+use File:         { File, fopen, fclose };
+use SysErr:       { fail };
+use RuntimeError: { error };
+use ScalarArith:  { == };
 
-external int[.,.], int readPGM( string fn );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
-    #pragma linkname "read_pgm"
-    #pragma refcounting[0]
+export all;
+
+int[.,.], int readPGM( string filename )
+{
+  pgm = openPGM( filename );
+  maxval = PGMmaxval( pgm );
+  data = PGMdata( pgm );
+  fp = PGMstream( pgm );
+  closePGM( pgm );
+  fclose( fp );
+  return (data, maxval);
+}
     /*
-     * Read a PGM image from file 'fn'.
+     * Read a PGM image from file 'filename'.
      * Return:
      *     - the data as a two dimensional int array
      *     - the maximum pixel value in the range [1, 65535].
-     *       Often the maximum pixel value is 255, but not always.
+     *       Usually the maximum pixel value is 255,
+     *       but for 16-bit images it is 65535.
+     *       In very rare cases it has another value.
+     */
+
+PGM openPGM( string fn )
+{
+  err, fp = fopen( fn, "rb");
+  if (fail(err) == true) {
+    error( (:int)err, "openPGM: Failed to open file %s for reading",
+           fn);
+  }
+  return openPGMstream( fp);
+}
+    /*
+     * Open a PGM file using filename 'fn' and read the PGM header.
+     */
+
+external PGM openPGMstream( File& fp );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_open"
+    #pragma linksign [0,1]
+    /*
+     * Read the PGM header from an open file stream.
+     */
+
+external void closePGM( PGM& pgm );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_close"
+    /*
+     * Free the internal PGM data structure.
+     */
+
+external int PGMwidth( PGM& pgm );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_width"
+    #pragma linksign [0,1]
+    /*
+     * Extract the width of the PGM image.
+     */
+
+external int PGMheight( PGM& pgm );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_height"
+    #pragma linksign [0,1]
+    /*
+     * Extract the height of the PGM image.
+     */
+
+external int PGMmaxval( PGM& pgm );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_maxval"
+    #pragma linksign [0,1]
+    /*
+     * Extract the maximum possible pixel value of the PGM image.
+     */
+
+external int[.,.] PGMdata( PGM& pgm );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_data"
+    #pragma refcounting [0]
+    /*
+     * Read the pixel data from file and return it as an image.
+     */
+
+external File PGMstream( PGM& pgm );
+    #pragma effect    FileSystem::TheFileSystem
+    #pragma linkobj  "src/PGM/pgm2array.o"
+    #pragma linkname "SAC_PGM_stream"
+    #pragma linksign [0,1]
+    /*
+     * Extract the file pointer from the PGM data structure.
      */
 
 
