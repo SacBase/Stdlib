@@ -9,38 +9,7 @@
  * dimensions which exceed a 32-bit address space.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <ctype.h>
-#include <limits.h>
-
-#include "sac.h"
-
-typedef struct PGM {
-  size_t width, height, maxval;
-  int kind;
-  long pos;
-  FILE *fp;
-} PGM;
-
-#define MAX_PGM_BYTE_VAL        255
-#define MAX_PGM_VAL             65535
-#define PGM_BINARY              '5'
-#define PGM_TEXT                '2'
-
-/*
- * Because we access the file single-threaded
- * it is more efficient to use an unlocked version of getc.
- * We could also use the function 'getc_unlocked', but we
- * cannot easily detect whether this is supported by the current system.
- */
-#if defined(_IO_getc_unlocked)
-#define myget(f)      _IO_getc_unlocked(f)
-#else
-#define myget(f)      getc(f)
-#endif
+#include "sac_pgm.h"
 
 /*
  * We use macros next(), comment() skip() and num(n) 
@@ -105,11 +74,12 @@ typedef struct PGM {
 /*
  * Read a PGM header at the current file position.
  */
-PGM* SAC_PGM_open( FILE* fp)
+PGM* SAC_PGM_parse( FILE* fp)
 {
   PGM* pgm = (PGM *) SAC_MALLOC( sizeof(PGM));
-  size_t width = 0, height = 0;
-  unsigned maxval = 0;
+  size_t width = 0;
+  size_t height = 0;
+  size_t maxval = 0;
   int hdr[2];
   /* 'c' is used by the macros to store the next input character. */
   int c;
@@ -118,7 +88,7 @@ PGM* SAC_PGM_open( FILE* fp)
   hdr[1] = myget(fp);
   if (hdr[0] != 'P' || (hdr[1] != PGM_TEXT && hdr[1] != PGM_BINARY))
   {
-    SAC_RuntimeError("read_pgm: File is not in PGM format");
+    SAC_RuntimeError("SAC_PGM_parse: File is not in PGM format");
     goto done;
   }
 
@@ -131,7 +101,7 @@ PGM* SAC_PGM_open( FILE* fp)
   num(maxval);
 
   if (ungetc(c, fp) == EOF) {
-    SAC_RuntimeError("SAC_PGM_open: Failed to ungetc.");
+    SAC_RuntimeError("SAC_PGM_parse: Failed to ungetc.");
     goto done;
   }
 
@@ -146,19 +116,19 @@ done:
 
 bad:
   if (c != EOF && !ferror(fp) && !feof(fp)) {
-    SAC_RuntimeError("SAC_PGM_open: Invalid PGM header.");
+    SAC_RuntimeError("SAC_PGM_parse: Invalid PGM header.");
     goto done;
   }
   if (ferror(fp)) {
-    SAC_RuntimeError("SAC_PGM_open: Errors while reading PGM header.");
+    SAC_RuntimeError("SAC_PGM_parse: Errors while reading PGM header.");
     goto done;
   }
   SAC_RuntimeError(
-    "SAC_PGM_open: Premature end-of-file while reading PGM header.");
+    "SAC_PGM_parse: Premature end-of-file while reading PGM header.");
   goto done;
 }
 
-void SAC_PGM_close( PGM* pgm)
+void SAC_PGM_free( PGM* pgm)
 {
   pgm->width = 0;
   pgm->height = 0;
@@ -167,9 +137,9 @@ void SAC_PGM_close( PGM* pgm)
   SAC_FREE( pgm);
 }
 
-int SAC_PGM_width( PGM* pgm) { return pgm->width; }
-int SAC_PGM_height( PGM* pgm) { return pgm->height; }
-int SAC_PGM_maxval( PGM* pgm) { return pgm->maxval; }
+int   SAC_PGM_width( PGM* pgm)  { return pgm->width; }
+int   SAC_PGM_height( PGM* pgm) { return pgm->height; }
+int   SAC_PGM_maxval( PGM* pgm) { return pgm->maxval; }
 FILE* SAC_PGM_stream( PGM* pgm) { return pgm->fp; }
 
 static int *SAC_PGM_read_data( PGM* pgm);
@@ -177,7 +147,7 @@ static int *SAC_PGM_read_data( PGM* pgm);
 #define array_nt (array, T_OLD((AUD, (NHD, (NUQ, )))))
 #define ret_nt   (ret,   T_OLD((AUD, (NHD, (NUQ, )))))
 
-void SAC_PGM_data( SAC_ND_PARAM_out(array_nt, int), PGM* pgm)
+void SAC_PGM_load_data( SAC_ND_PARAM_out(array_nt, int), PGM* pgm)
 {
   SAC_ND_DECL__DATA(ret_nt, int,)
   SAC_ND_DECL__DESC(ret_nt,)
@@ -208,9 +178,11 @@ static int* SAC_PGM_read_data( PGM* pgm)
   FILE* fp = pgm->fp;
 
   /* Verify that the header makes some sense. */
-  if (pgm->width == 0 || pgm->height == 0 || pgm->maxval > MAX_PGM_VAL)
+  if (pgm->width == 0 || pgm->height == 0 ||
+      pgm->maxval < 1 || pgm->maxval > PGM_MAX_VAL)
   {
-    SAC_RuntimeError("SAC_PGM_read_data: File has invalid PGM header");
+    SAC_RuntimeError("SAC_PGM_read_data: Invalid PGM header (%zu, %zu, %zu)",
+                     pgm->width, pgm->height, pgm->maxval);
     goto done;
   }
 
@@ -256,7 +228,7 @@ static int* SAC_PGM_read_data( PGM* pgm)
     if (!isspace(c)) {
       goto bad;
     }
-    if (pgm->maxval <= MAX_PGM_BYTE_VAL)
+    if (pgm->maxval <= PGM_MAX_BYTE_VAL)
     {
       for (i = 0; i < pixelcount; ++i)
       {
@@ -279,7 +251,7 @@ static int* SAC_PGM_read_data( PGM* pgm)
   if (ferror(fp)) {
     goto err;
   }
-  if (feof(fp) && (pgm->kind != PGM_TEXT || val > MAX_PGM_VAL)) {
+  if (feof(fp) && (pgm->kind != PGM_TEXT || val > PGM_MAX_VAL)) {
     goto eof;
   }
 

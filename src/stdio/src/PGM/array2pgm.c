@@ -7,97 +7,76 @@
  * Detect and report all errors.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include "sac.h"
+#include "sac_pgm.h"
 
-typedef char *string;
+PGM* SAC_PGM_new( const int shape[2], const int maxval,
+                  const bool binary, FILE* fp)
+{
+  PGM* pgm = (PGM *) SAC_MALLOC( sizeof(PGM));
+  pgm->width = shape[1];
+  pgm->height = shape[0];
+  pgm->maxval = maxval;
+  pgm->kind = (binary) ? PGM_BINARY : PGM_TEXT;
+  pgm->fp = fp;
+  pgm->pos = 0L;
+  return pgm;
+}
 
-#define PGM_MAX_VAL      65535
-#define PGM_MIN_VAL      0
-#define PGM_MAX_BYTE_VAL 255
-#define PGM_LINE         70
+void SAC_PGM_create( PGM* pgm)
+{
+  if (pgm->width == 0 || pgm->height == 0 ||
+      pgm->maxval < 1 || pgm->maxval > PGM_MAX_VAL)
+  {
+    SAC_RuntimeError("SAC_PGM_create: Invalid PGM image dimensions (%zu, %zu, %zu).",
+                     pgm->width, pgm->height, pgm->maxval);
+  }
+  fprintf( pgm->fp,
+           "P%c\n"
+           "%zu %zu\n"
+           "%zu\n",
+           pgm->kind,
+           pgm->width,
+           pgm->height,
+           pgm->maxval);
+}
 
 #define array_nt  (array, T_OLD((AUD, (NHD, (NUQ, )))))
-#define string_nt (str,   T_OLD((SCL, (HID, (NUQ, )))))
 
-#if defined(_IO_putc_unlocked)
-#define myput(c,f)      _IO_putc_unlocked(c,f)
-#else
-#define myput(c,f)      putc(c,f)
-#endif
-
-void write_pgm(SAC_ND_PARAM_in_nodesc(array_nt, int),
-               const int shape[2],
-               const bool binary, SAC_ND_PARAM_in_nodesc(string_nt, string))
+void SAC_PGM_store_data( SAC_ND_PARAM_in_nodesc(array_nt, int),
+                         PGM* pgm)
 {
-  const char *filename = NT_NAME(string_nt);
-  const int height = shape[0];
-  const int width = shape[1];
   int *restrict int_array = SAC_ND_A_FIELD(array_nt);
-  const int pixelcount = height * width;
-  int min = PGM_MAX_VAL;
-  int max = PGM_MIN_VAL;
-  int maxval;
-  int i;
-  FILE *fp;
+  const size_t pixelcount = pgm->height * pgm->width;
+  size_t i = 0;
 
-  for (i = 0; i < pixelcount; ++i)
+  if (pgm->kind == PGM_BINARY)
   {
-    if (min > int_array[i])
-    {
-      min = int_array[i];
-    }
-    if (max < int_array[i])
-    {
-      max = int_array[i];
-    }
-  }
-  if (min < PGM_MIN_VAL)
-  {
-    SAC_RuntimeError("write_pgm: Image minimum %d is less than %d for %s\n",
-                     min, PGM_MIN_VAL, filename);
-  }
-  if (max > PGM_MAX_VAL)
-  {
-    SAC_RuntimeError("write_pgm: Image maximum %d is more than %d for %s\n",
-                     max, PGM_MAX_VAL, filename);
-  }
-
-  maxval = (max <= PGM_MAX_BYTE_VAL) ? PGM_MAX_BYTE_VAL : PGM_MAX_VAL;
-
-  fp = fopen(filename, "wb");
-  if (fp == NULL)
-  {
-    SAC_RuntimeError("write_pgm: Could not open %s for writing: %s",
-                     filename, strerror(errno));
-  }
-
-  fprintf(fp, "P%c\n%d %d\n%d\n", binary ? '5' : '2', width, height, maxval);
-
-  if (binary)
-  {
-    if (maxval <= PGM_MAX_BYTE_VAL)
+    if (pgm->maxval <= PGM_MAX_BYTE_VAL)
     {
       for (i = 0; i < pixelcount; ++i)
       {
-        myput(int_array[i], fp);
+        unsigned char b = (unsigned char) (int_array[i] & 0xFF);
+
+        if ((unsigned) int_array[i] > pgm->maxval) {
+          goto bad;
+        }
+
+        myput(b, pgm->fp);
       }
     }
     else
     {
       for (i = 0; i < pixelcount; ++i)
       {
-        unsigned char a = (unsigned char) (int_array[i] >> 8);
+        unsigned char a = (unsigned char) ((int_array[i] >> 8) & 0xFF);
         unsigned char b = (unsigned char) (int_array[i] & 0xFF);
 
-        myput(a, fp);
-        myput(b, fp);
+        if ((unsigned) int_array[i] > pgm->maxval) {
+          goto bad;
+        }
+
+        myput(a, pgm->fp);
+        myput(b, pgm->fp);
       }
     }
   }
@@ -111,40 +90,51 @@ void write_pgm(SAC_ND_PARAM_in_nodesc(array_nt, int),
       int dig = 0;
       int num = int_array[i];
 
+      if ((unsigned) num > pgm->maxval) {
+        goto bad;
+      }
+
       while (num >= 10)
       {
         rep[dig++] = '0' + (num % 10);
         num /= 10;
       }
       rep[dig++] = '0' + num;
-      if (col + dig >= PGM_LINE)
+      if (col + dig >= PGM_MAX_LINE_SIZE)
       {
-        myput('\n', fp);
+        myput('\n', pgm->fp);
         col = 0;
       }
       else if (i)
       {
-        myput(' ', fp);
+        myput(' ', pgm->fp);
         ++col;
       }
       col += dig;
       while (--dig >= 0)
       {
-        myput(rep[dig], fp);
+        myput(rep[dig], pgm->fp);
       }
     }
     if (col)
     {
-      myput('\n', fp);
+      myput('\n', pgm->fp);
     }
   }
 
-  if (ferror(fp))
+bad:
+  if (i < pixelcount) {
+    SAC_RuntimeError("SAC_PGM_store_data: Invalid pixel %d at index [%zu,%zu].",
+                     int_array[i],
+                     (size_t) i % pgm->width,
+                     (size_t) i / pgm->width);
+  }
+  else if (ferror(pgm->fp))
   {
-    SAC_RuntimeError("write_pgm: Errors while writing to %s: %s",
-                     filename, strerror(errno));
+    SAC_RuntimeError("SAC_PGM_store_data: Errors while writing to file: %s",
+                     strerror(errno));
   }
 
-  fclose(fp);
+  fflush(pgm->fp);
 }
 
