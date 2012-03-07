@@ -18,7 +18,7 @@ PGM* SAC_PGM_new( const int shape[2], const int maxval,
   pgm->maxval = maxval;
   pgm->kind = (binary) ? PGM_BINARY : PGM_TEXT;
   pgm->fp = fp;
-  pgm->pos = 0L;
+  pgm->pos = ftell( fp );
   return pgm;
 }
 
@@ -27,7 +27,7 @@ void SAC_PGM_create( PGM* pgm)
   if (pgm->width == 0 || pgm->height == 0 ||
       pgm->maxval < 1 || pgm->maxval > PGM_MAX_VAL)
   {
-    SAC_RuntimeError("SAC_PGM_create: Invalid PGM image dimensions (%zu, %zu, %zu).",
+    SAC_RuntimeError( "SAC_PGM_create: Invalid PGM image dimensions (%zu, %zu, %zu).",
                      pgm->width, pgm->height, pgm->maxval);
   }
   fprintf( pgm->fp,
@@ -38,6 +38,7 @@ void SAC_PGM_create( PGM* pgm)
            pgm->width,
            pgm->height,
            pgm->maxval);
+  fflush( pgm->fp);
 }
 
 #define array_nt  (array, T_OLD((AUD, (NHD, (NUQ, )))))
@@ -123,18 +124,17 @@ void SAC_PGM_store_data( SAC_ND_PARAM_in_nodesc(array_nt, int),
   }
 
 bad:
-  if (i < pixelcount) {
-    SAC_RuntimeError("SAC_PGM_store_data: Invalid pixel %d at index [%zu,%zu].",
-                     int_array[i],
-                     (size_t) i % pgm->width,
-                     (size_t) i / pgm->width);
+  if (i < pixelcount && (unsigned) int_array[i] > pgm->maxval) {
+    SAC_RuntimeError( "SAC_PGM_store_data: Invalid pixel %d at index [%zu,%zu].",
+                      int_array[i],
+                      (size_t) i % pgm->width,
+                      (size_t) i / pgm->width);
   }
-  else if (ferror(pgm->fp))
+  else if (ferror( pgm->fp) || (fflush( pgm->fp), ferror( pgm->fp)))
   {
-    SAC_RuntimeError("SAC_PGM_store_data: Errors while writing to file: %s",
-                     strerror(errno));
+    SAC_RuntimeError( "SAC_PGM_store_data: Errors while writing to file: %s",
+                      strerror(errno));
   }
 
-  fflush(pgm->fp);
 }
 

@@ -8,8 +8,6 @@
 #include <errno.h>
 #include <ctype.h>
 #include <limits.h>
-#include <fcntl.h>
-#include <unistd.h>
 
 #include "sac.h"
 
