@@ -345,21 +345,13 @@ COMPARE_STRINGS(>=)
 #define TEST_STRING(pred)                       \
 inline  bool pred(string S)                     \
 {                                               \
-  i=0;                                          \
-  result = true;                                \
-  c = S[[i]];                                   \
-                                                \
-  while (result & (c != '\0')) {                \
-    if (pred(c)) {                              \
-      i += 1;                                   \
-      c = S[[i]];                               \
-    }                                           \
-    else {                                      \
-      result = false;                           \
-    }                                           \
+  len = strlen(S);                              \
+  result = false;                               \
+  for (i = 0; i < len && result; ++i) {         \
+    c = S[[i]];                                 \
+    result = pred(c);                           \
   }                                             \
-                                                \
-  return(result);                               \
+  return result;                                \
 }
 
 
@@ -376,21 +368,24 @@ TEST_STRING(isgraph)
 TEST_STRING(iscntrl)
 
 
-#define CONVERT_STRING(convert)                 \
+#define CONVERT_STRING(pred, convert)           \
 inline  string convert (string S)               \
 {                                               \
-  s=S;                                          \
-                                                \
-  for (i=0; s[[i]] != '\0'; i++)                \
+  s = S;                                        \
+  len = strlen(s);                              \
+  for (i = 0; i < len; ++i)                     \
   {                                             \
-    s[[i]]=convert(s[[i]]);                     \
+    c = s[[i]];                                 \
+    if (pred(c))                                \
+    {                                           \
+      s = strmod(s, i, convert(c));             \
+    }                                           \
   }                                             \
-                                                \
-  return(s);                                    \
+  return s;                                     \
 }
 
 
-CONVERT_STRING(tolower)
-CONVERT_STRING(toupper)
+CONVERT_STRING(isupper, tolower)
+CONVERT_STRING(islower, toupper)
 
 #endif
