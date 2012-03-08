@@ -1,0 +1,45 @@
+module Process;
+
+use FileSystem: { TheFileSystem };
+use File:   { File };
+use String: {string};
+use SysErr: {syserr};
+
+export all;
+
+  /*
+   *  Functions to open and close processes.
+   */
+
+
+external  syserr, File popen(string COMMAND, string MODE);
+    #pragma linkobj "src/Process/process.o"
+    #pragma effect TheFileSystem
+    #pragma linkname "SACpopen"
+    #pragma linksign [0,1,2,3]
+    /*
+     * Open the process COMMAND in mode MODE. The modes supported are identical
+     * to the C version of this function. An error condition and a process
+     * handle are returned. You should inspect the error condition before
+     * using the process handle. The process handle must be closed by pclose.
+     */
+
+
+external  void pclose(File STREAM);
+    #pragma effect TheFileSystem
+    /*
+     * Close the process stream given by the process handle STREAM. 
+     */
+
+
+external  int system(string COMMAND);
+    #pragma effect TheFileSystem
+    #pragma linksign [0,1]
+    /*
+     * Execute COMMAND by calling:  /bin/sh -c COMMAND
+     * and wait until the command has completed execution.
+     * The exit status is -1 on error.
+     * This function is identical to the one from the C library.
+     */
+
+
