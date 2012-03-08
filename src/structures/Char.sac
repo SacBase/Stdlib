@@ -4,36 +4,62 @@ use ArrayBasics: {shape, sel};
 export all;
 
 external bool isalpha  (char C);
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisalpha"
 external bool isupper  (char C);
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisupper"
 external bool islower  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACislower"
 external bool isdigit  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisdigit"
 external bool isxdigit (char C);
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisxdigit"
 external bool isspace  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisspace"
 external bool ispunct  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACispunct"
 external bool isalnum  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisalnum"
 external bool isprint  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisprint"
 external bool isgraph  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisgraph"
 external bool iscntrl  (char C); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACiscntrl"
 
     /* The above functions test characters of being in a specific range,
        e.g. in the range of digits, letters, or lower case letters. */
 
 
 external bool isascii (int N); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACisascii"
 external char toascii (int N); 
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACtoascii"
 
     /* These functions test an integer value for being in the range of the
        ASCII character set or convert an integer value into an ASCII
@@ -41,9 +67,13 @@ external char toascii (int N);
 
 
 external char tolower (char C);
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACtolower"
 external char toupper (char C);
-    #pragma linkobj "src/Char/Char.o"
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/ctype.o"
+    #pragma linkname "SACtoupper"
 
     /* These functions convert upper case letters into lower case letters
        and vice versa. */
