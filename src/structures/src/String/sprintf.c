@@ -4,6 +4,14 @@
 
 
 #include "StringC.h"
+#include <limits.h>
+
+/* Allow for long path names and URLs with long parameters. */
+#if defined(PATH_MAX) && PATH_MAX >= 2048
+#define BUFFER_SIZE     PATH_MAX
+#else
+#define BUFFER_SIZE     2048
+#endif
 
 
 /*****************************************************************/
@@ -11,7 +19,7 @@
 string SACsprintf( string format, ...)
 {
   va_list arg_p;
-  char buffer[2048];
+  char buffer[BUFFER_SIZE];
   int n;
   string new;
 
@@ -30,9 +38,10 @@ string SACsprintf( string format, ...)
       strcpy( new, buffer);
   }
   else {
-      buffer[0] = '\0';
+      new = (string) SAC_MALLOC( 1);
+      new[0] = '\0';
   }
-  
+
   return( new);
 }
 
