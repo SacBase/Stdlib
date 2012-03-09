@@ -72,6 +72,18 @@ external int strncmp(string S1, string S2, int N);
        Result is negative if S1 < S2, positive if S1 > S2 
        and zero if S1 == S2. */
 
+external int strcasecmp(string S1, string S2);
+    #pragma linksign [0,1,2]
+    /* Compare strings S1 and S2 while ignoring upper/lower case.
+       Result is negative if S1 < S2 alphabetically, positive if S1 > S2
+       and zero if S1 == S2, all modulo case. */
+
+external int strncasecmp(string S1, string S2, int N);
+    #pragma linksign [0,1,2,3]
+    /* Compare the first N characters of strings S1 and S2 ignoring case.
+       Result is negative if S1 < S2 alphabetically, positive if S1 > S2
+       and zero if S1 == S2, all modulo case. */
+
 external int strlen(string S);
     #pragma linksign[ 0,1]
     #pragma linkname "SACstrlen"
