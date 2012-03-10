@@ -2,7 +2,6 @@ class File;
 
 external classtype;
 
-use World: { TheWorld };
 use FileSystem: { TheFileSystem };
 use String: {string};
 use SysErr: {syserr};
