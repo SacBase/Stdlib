@@ -1,0 +1,72 @@
+class Dir;
+
+external classtype;
+
+use SysErr : { syserr };
+use String : { string };
+use FileSystem : { TheFileSystem };
+
+export all;
+
+external  syserr, Dir opendir( string NAME);
+    #pragma effect TheFileSystem
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/Dir/opendir.o"
+    #pragma linkname "SACopendir"
+    /*
+     * Open a directory stream using the directory NAME.
+     * An error condition and a directory handle are returned.
+     * You should inspect the error condition using
+     * either SysErr::fail(.) or SysErr::clear(.)
+     * before using the directory handle.
+     */
+
+external  void closedir( Dir& DIR);
+    #pragma effect TheFileSystem
+    #pragma linksign [1]
+    #pragma linkobj "src/Dir/closedir.o"
+    #pragma linkname "SACclosedir"
+    /*
+     * Close the directory stream DIR.
+     */
+
+external  string readdir( Dir& DIR);
+    #pragma effect TheFileSystem
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Dir/readdir.o"
+    #pragma linkname "SACreaddir"
+    /*
+     * Read the next entry from the directory stream DIR.
+     * Entries for "." and ".." are skipped automatically.
+     * When the end of the directory stream is encountered
+     * an empty string is returned.
+     */
+
+external  void rewinddir( Dir& DIR);
+    #pragma effect TheFileSystem
+    #pragma linksign [1]
+    #pragma linkobj "src/Dir/rewinddir.o"
+    #pragma linkname "SACrewinddir"
+    /*
+     * Reposition the directory stream DIR to the beginning.
+     */
+
+external  long telldir( Dir& DIR);
+    #pragma effect TheFileSystem
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Dir/telldir.o"
+    #pragma linkname "SACtelldir"
+    /*
+     * Return the current position of the directory stream DIR.
+     * On error -1 is returned.
+     */
+
+external  void seekdir( Dir& DIR, long POS);
+    #pragma effect TheFileSystem
+    #pragma linksign [1,2]
+    #pragma linkobj "src/Dir/seekdir.o"
+    #pragma linkname "SACseekdir"
+    /*
+     * Reposition the directory stream DIR to POS.
+     */
+
