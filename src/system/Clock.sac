@@ -236,6 +236,13 @@ external time, string strptime(string S, string FORMAT);
      */
 
 
-
+external  void sleep(int SECONDS);
+    #pragma effect World::TheWorld
+    #pragma linkname "SACsleep"
+    #pragma linkobj  "src/Clock/sleep.o"
+    #pragma linksign [1]
+    /*
+     * Make the calling thread sleep until SECONDS seconds have elapsed.
+     */
 
 

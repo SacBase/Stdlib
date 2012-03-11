@@ -43,10 +43,3 @@ external  int system(string COMMAND);
      */
 
 
-external  void sleep(int SECONDS);
-    #pragma effect TheFileSystem
-    /*
-     * sleep() makes the calling thread sleep until SECONDS seconds
-     * have elapsed or a signal arrives which is not ignored. 
-     */
-
