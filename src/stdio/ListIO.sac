@@ -9,6 +9,7 @@ use List: all;
 use String: { string, to_string};
 use ScalarIO : { scanint };
 use ScalarArith : all;
+use TermFile : {TermFile};
 
 export all;
 

@@ -8,6 +8,7 @@ use IOresources: all;
 use String: { string, to_string};
 use Complex: { complex, imag, real, toc};
 use ScalarArith : { == };
+use TermFile : {TermFile};
 
 export all;
 
@@ -187,15 +188,15 @@ inline void print(complex c, int mode, int prec)
 
 inline bool, complex fscancomplex(File &stream)
 {
-  double real;
-  double imag;
+  double re;
+  double im;
 
-  real=0.0d;
-  imag=0.0d;
+  re=0.0d;
+  im=0.0d;
 
-  success, real, imag=File::fscanf(stream, "(%lf,%lf)");
+  success, re, im=File::fscanf(stream, "(%lf,%lf)");
   
-  return(success==2, toc(real, imag));
+  return(success==2, toc(re, im));
 }
 
 
@@ -204,30 +205,30 @@ inline bool, complex fscancomplex(File &stream)
 
 inline bool, complex fscancomplex(File &stream, int mode)
 {
-  double real;
-  double imag;
+  double re;
+  double im;
 
-  real=0.0d;
-  imag=0.0d;
+  re=0.0d;
+  im=0.0d;
 
   if (mode==2)
   {
-    success, real, imag=File::fscanf(stream, "%lf %lf");
+    success, re, im=File::fscanf(stream, "%lf %lf");
   }
   else
   {
     if (mode==1)
     {
-      success, real, imag=File::fscanf(stream, "%lf+%lfi");
+      success, re, im=File::fscanf(stream, "%lf+%lfi");
     }
     else
     {
-      success, real, imag=File::fscanf(stream, "(%lf,%lf)");
+      success, re, im=File::fscanf(stream, "(%lf,%lf)");
     }
   }
 
   
-  return(success==2, toc(real, imag));
+  return(success==2, toc(re, im));
 }
 
 
@@ -237,15 +238,15 @@ inline bool, complex fscancomplex(File &stream, int mode)
 
 inline bool, complex fscancomplex(TermFile &stream)
 {
-  double real;
-  double imag;
+  double re;
+  double im;
 
-  real=0.0d;
-  imag=0.0d;
+  re=0.0d;
+  im=0.0d;
 
-  success, real, imag=TermFile::fscanf(stream, "(%lf,%lf)");
+  success, re, im=TermFile::fscanf(stream, "(%lf,%lf)");
   
-  return(success==2, toc(real, imag));
+  return(success==2, toc(re, im));
 }
 
 
@@ -254,30 +255,30 @@ inline bool, complex fscancomplex(TermFile &stream)
 
 inline bool, complex fscancomplex(TermFile &stream, int mode)
 {
-  double real;
-  double imag;
+  double re;
+  double im;
 
-  real=0.0d;
-  imag=0.0d;
+  re=0.0d;
+  im=0.0d;
 
   if (mode==2)
   {
-    success, real, imag=TermFile::fscanf(stream, "%lf %lf");
+    success, re, im=TermFile::fscanf(stream, "%lf %lf");
   }
   else
   {
     if (mode==1)
     {
-      success, real, imag=TermFile::fscanf(stream, "%lf+%lfi");
+      success, re, im=TermFile::fscanf(stream, "%lf+%lfi");
     }
     else
     {
-      success, real, imag=TermFile::fscanf(stream, "(%lf,%lf)");
+      success, re, im=TermFile::fscanf(stream, "(%lf,%lf)");
     }
   }
 
   
-  return(success==2, toc(real, imag));
+  return(success==2, toc(re, im));
 }
 
 
@@ -287,15 +288,15 @@ inline bool, complex fscancomplex(TermFile &stream, int mode)
 
 inline bool, complex scancomplex()
 {
-  double real;
-  double imag;
+  double re;
+  double im;
 
-  real=0.0d;
-  imag=0.0d;
+  re=0.0d;
+  im=0.0d;
 
-  success, real, imag=TermFile::scanf("(%lf,%lf)");
+  success, re, im=TermFile::scanf("(%lf,%lf)");
   
-  return(success==2, toc(real, imag));
+  return(success==2, toc(re, im));
 }
 
 
@@ -304,30 +305,30 @@ inline bool, complex scancomplex()
 
 inline bool, complex scancomplex(int mode)
 {
-  double real;
-  double imag;
+  double re;
+  double im;
 
-  real=0.0d;
-  imag=0.0d;
+  re=0.0d;
+  im=0.0d;
 
   if (mode==2)
   {
-    success, real, imag=TermFile::scanf("%lf %lf");
+    success, re, im=TermFile::scanf("%lf %lf");
   }
   else
   {
     if (mode==1)
     {
-      success, real, imag=TermFile::scanf("%lf+%lfi");
+      success, re, im=TermFile::scanf("%lf+%lfi");
     }
     else
     {
-      success, real, imag=TermFile::scanf("(%lf,%lf)");
+      success, re, im=TermFile::scanf("(%lf,%lf)");
     }
   }
 
   
-  return(success==2, toc(real, imag));
+  return(success==2, toc(re, im));
 }
 
 #endif /* BUG197FIXED */

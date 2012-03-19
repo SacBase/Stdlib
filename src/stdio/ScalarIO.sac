@@ -5,6 +5,7 @@ use IOresources: all;
 use String : { string, to_string, strlen };
 use ScalarArith : all;
 use ArrayFormat: all;
+use TermFile: {TermFile};
 
 export all;
 

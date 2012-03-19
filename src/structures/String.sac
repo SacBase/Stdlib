@@ -5,7 +5,7 @@ import MutcString: all;
 export all;
 #else
 import Char: all;
-import ScalarArith: {&,!=,==,+,>=,>,<=,<};
+import ScalarArith: {&,!=,==,+,>=,>,<=,<,++};
 import ArrayBasics: {shape,sel};
 
 export all except {indent};

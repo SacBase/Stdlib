@@ -5,6 +5,7 @@ use IOresources: all;
 use Array : { shape, sel, dim };
 use String : {string};
 use StringArray : {stringArray};
+use TermFile : {TermFile};
 
 export all;
 

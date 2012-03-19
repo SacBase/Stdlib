@@ -61,9 +61,9 @@ inline complex conj(complex X)
 
 inline complex abs(complex X)
 {
-  real = Math::sqrt(((:double[2])X)[[0]] ScalarArith::* ((:double[2])X)[[0]]
+  r = Math::sqrt(((:double[2])X)[[0]] ScalarArith::* ((:double[2])X)[[0]]
            ScalarArith::+ ((:double[2])X)[[1]] ScalarArith::* ((:double[2])X)[[1]]);
-  return( (:complex[*])[real, 0d]);
+  return( (:complex[*])[r, 0d]);
 }
 
 

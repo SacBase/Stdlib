@@ -1,7 +1,7 @@
 module StringArray;
 
 use String : {string};
-use Array : {*,all,-,abs,<,>=,+,zero};
+use Array : {*,all,-,abs,<,>=,+,zero,++};
 export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies, 
     modarray_AxVxS, sel_VxA, stringArrayCreator, drop};
 

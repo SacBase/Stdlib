@@ -21,12 +21,12 @@ external color[.,.] readStream( File &stream );
 #pragma linkname "SAC_PPM_ppm2array"
 #pragma refcounting[0]
 
-external void writeStream( TermFile &stream , color[.,.] image, int[2] shape, bool binary);
+external void writeStream( TermFile &stream , color[.,.] image, int[2] shp, bool binary);
 #pragma effect Terminal::TheTerminal
 #pragma linkobj "src/PPM/array2ppm.o"
 #pragma linkname "SAC_PPM_array2ppm"
 
-external void writeStream( File &stream , color[.,.] image, int[2] shape, bool binary);
+external void writeStream( File &stream , color[.,.] image, int[2] shp, bool binary);
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PPM/array2ppm.o"
 #pragma linkname "SAC_PPM_array2ppm"
