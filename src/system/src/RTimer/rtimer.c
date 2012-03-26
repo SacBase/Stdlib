@@ -18,6 +18,11 @@
 #include <time.h>
 #include "sac.h"
 
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 
 struct rtimer 
 {
@@ -26,6 +31,24 @@ struct rtimer
   int instance;
 };
   
+
+void current_utc_time(struct timespec *ts) {
+
+#ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
+  clock_serv_t cclock;
+  mach_timespec_t mts;
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  clock_get_time(cclock, &mts);
+  mach_port_deallocate(mach_task_self(), cclock);
+  ts->tv_sec = mts.tv_sec;
+  ts->tv_nsec = mts.tv_nsec;
+#else
+  clock_gettime(CLOCK_REALTIME, ts);
+#endif
+
+}
+
+
 
 void SAC_RTimer_createRTimer( struct rtimer **ts)
 {
@@ -45,7 +68,7 @@ void SAC_RTimer_destroyRTimer( struct rtimer *ts)
 void SAC_RTimer_startRTimer( struct rtimer *timer)
 {
   if (timer->instance == 0) {
-    clock_gettime( CLOCK_REALTIME, &(timer->started));
+    current_utc_time(&(timer->started));
     timer->instance += 1;
   }
 }
@@ -55,7 +78,7 @@ void SAC_RTimer_stopRTimer( struct rtimer *timer)
   struct timespec now;
   
   if (timer->instance == 1) {
-    clock_gettime( CLOCK_REALTIME, &now);
+    current_utc_time(&now);
     if (now.tv_nsec > timer->started.tv_nsec) {
       timer->elapsed.tv_sec += now.tv_sec - timer->started.tv_sec;
       timer->elapsed.tv_nsec += now.tv_nsec - timer->started.tv_nsec;
