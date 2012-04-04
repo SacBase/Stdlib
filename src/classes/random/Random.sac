@@ -74,7 +74,7 @@ complex prandom(complex lb, complex rt)
 {
   rlb, tlb = ptod(lb);
   rrt, trt = ptod(rt);
-  return(prandom(rlb ScalarArith::min rrt, rlb ScalarArith::max rrt, trt, tlb));
+  return prandom (ScalarArith::min (rlb, rrt), ScalarArith::max (rlb, rrt), trt, tlb);
 }
 
 int[*] random( int[.] shp, int MIN, int MAX)
