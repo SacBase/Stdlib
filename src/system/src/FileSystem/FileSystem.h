@@ -14,7 +14,11 @@
 
 #include "sac.h"
 
-
-
-
+/* 
+ * Cygwin fix to ensure P_tmpdir is defined as "/tmp" 
+ * without this the stdlib build will die here.
+ */
+#ifdef __CYGWIN__
+#define P_tmpdir 		"/tmp"
+#endif
 
