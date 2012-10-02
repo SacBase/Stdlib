@@ -245,9 +245,12 @@ int[.,.] getIndicies( int[.] shp)
 {
     iota_shp = Array::iota( shp);
     return(
-       Array::reshape( [ Array::prod( Array::take( [ Array::dim( Array::iota( shp)) Array::- 1 ], Array::shape( iota_shp))),
-                                      Array::sel( [0], Array::reverse( Array::shape( shp))) ],
-                       iota_shp));
+       Array::reshape(
+         [ Array::prod(
+             Array::take( [ Array::dim( Array::iota( shp)) Array::- 1 ],
+                          Array::shape( iota_shp))),
+             Array::sel( [0], Array::reverse( Array::shape( shp))) ],
+         iota_shp));
 }
 
 /* I'd love to name this funcion ++ but if I do then when I use Structures,
