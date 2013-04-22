@@ -1,0 +1,330 @@
+module ScalarArith;
+
+export all;
+
+#include "Templates.mac"
+
+inline int
+++ (int a)
+{
+  return _add_SxS_ (a, 1);
+}
+
+inline int
+-- (int a)
+{
+  return _sub_SxS_ (a, 1);
+}
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a> zero( <a>[*] Array)
+ *
+ *   @brief  yields a scalar zero of the element type of its argument.
+ *
+ ******************************************************************************/
+
+#define ZERO( a, za)  \
+inline                \
+a zero( a[*] A)       \
+{                     \
+  return( za);        \
+}
+
+ZERO( byte, 0b)
+ZERO( short, 0s)
+ZERO( int, 0)
+ZERO( long, 0l)
+ZERO( longlong, 0ll)
+ZERO( ubyte, 0ub)
+ZERO( ushort, 0us)
+ZERO( uint, 0ui)
+ZERO( ulong, 0ul)
+ZERO( ulonglong, 0ull)
+ZERO( double, 0d)
+ZERO( float, 0f)
+ZERO( char, ' ')
+ZERO( bool, false)
+
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a> one( <a>[*] Array)
+ *
+ *   @brief  yields a scalar one of the element type of its argument.
+ *
+ ******************************************************************************/
+
+#define ONE( a, za)  \
+inline               \
+a one( a[*] A)       \
+{                    \
+  return( za);       \
+}
+
+ONE( byte, 1b)
+ONE( short, 1s)
+ONE( int, 1)
+ONE( long, 1l)
+ONE( longlong, 1ll)
+ONE( ubyte, 1ub)
+ONE( ushort, 1us)
+ONE( uint, 1ui)
+ONE( ulong, 1ul)
+ONE( ulonglong, 1ull)
+ONE( double, 1d) 
+ONE( float, 1f)
+ONE( char, ' ')
+ONE( bool, true)
+
+
+
+
+
+/** <!--********************************************************************-->
+ *
+ * Macros for encapsulating binary and monary prfs:
+ * Calls of these are created when using the macros provided in "Templates.mac"
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS...
+ *
+ ******************************************************************************/
+
+#define MAP_BIN_SxS( name, op, a, b)  \
+inline                                \
+b (name)(a A, a B)                    \
+{                                     \
+  return( op( A, B));                 \
+}
+
+#define MAP_MON_SxS( name, op, a, b)  \
+inline                                \
+b (name)(a A)                         \
+{                                     \
+  return( op( A));                    \
+}
+
+
+
+/** <!--********************************************************************-->
+ *
+ * AriOPS on scalars (see Templates.mac for details)
+ *
+ ******************************************************************************/
+
+#define ARI_OPS_S( a)                  \
+MAP_ARI_OPS( SxS, a)
+
+NUM(  ARI_OPS_S)
+
+MAP_INT_OPS( SxS)
+
+
+/** <!--********************************************************************-->
+ *
+ * RelOPS on scalars (see Templates.mac for details)
+ *
+ ******************************************************************************/
+
+#define REL_OPS_S( a)                   \
+MAP_REL_OPS( SxS, a)
+
+BUILT_IN(  REL_OPS_S)
+
+
+/** <!--********************************************************************-->
+ *
+ * LogOPS on scalars (see Templates.mac for details)
+ *
+ ******************************************************************************/
+
+MAP_LOG_OPS( SxS)
+
+
+/** <!--********************************************************************-->
+ *
+ * ConvOPS on scalars (see Templates.mac for details)
+ *
+ ******************************************************************************/
+/* no _tobool_S_??? Why not? Ditto _toc_S_ */
+/*
+MAP_MON_SxS(tobool, _tobool_S_, int, bool)
+MAP_MON_SxS(tobool, _tobool_S_, byte, bool)
+MAP_MON_SxS(tobool, _tobool_S_, float, bool)
+MAP_MON_SxS(tobool, _tobool_S_, double, bool)
+MAP_MON_SxS(tobool, _tobool_S_, char, bool)
+
+MAP_MON_SxS(toc, _toc_S_, bool, char)
+MAP_MON_SxS(toc, _toc_S_, byte, char)
+MAP_MON_SxS(toc, _toc_S_, int, char)
+MAP_MON_SxS(toc, _toc_S_, float, char)
+MAP_MON_SxS(toc, _toc_S_, double, char)
+*/
+
+MAP_MON_SxS(tob, _tob_S_, bool, byte)
+MAP_MON_SxS(tob, _tob_S_, char, byte)
+MAP_MON_SxS(tob, _tob_S_, short, byte)
+MAP_MON_SxS(tob, _tob_S_, int, byte)
+MAP_MON_SxS(tob, _tob_S_, long, byte)
+MAP_MON_SxS(tob, _tob_S_, longlong, byte)
+MAP_MON_SxS(tob, _tob_S_, ubyte, byte)
+MAP_MON_SxS(tob, _tob_S_, ushort, byte)
+MAP_MON_SxS(tob, _tob_S_, uint, byte)
+MAP_MON_SxS(tob, _tob_S_, ulong, byte)
+MAP_MON_SxS(tob, _tob_S_, ulonglong, byte)
+MAP_MON_SxS(tob, _tob_S_, float, byte)
+MAP_MON_SxS(tob, _tob_S_, double, byte)
+
+MAP_MON_SxS(tosh, _tos_S_, bool, short)
+MAP_MON_SxS(tosh, _tos_S_, char, short)
+MAP_MON_SxS(tosh, _tos_S_, byte, short)
+MAP_MON_SxS(tosh, _tos_S_, int, short)
+MAP_MON_SxS(tosh, _tos_S_, long, short)
+MAP_MON_SxS(tosh, _tos_S_, longlong, short)
+MAP_MON_SxS(tosh, _tos_S_, ubyte, short)
+MAP_MON_SxS(tosh, _tos_S_, ushort, short)
+MAP_MON_SxS(tosh, _tos_S_, uint, short)
+MAP_MON_SxS(tosh, _tos_S_, ulong, short)
+MAP_MON_SxS(tosh, _tos_S_, ulonglong, short)
+MAP_MON_SxS(tosh, _tos_S_, float, short)
+MAP_MON_SxS(tosh, _tos_S_, double, short)
+
+MAP_MON_SxS(toi, _toi_S_, bool, int)
+MAP_MON_SxS(toi, _toi_S_, byte, int)
+MAP_MON_SxS(toi, _toi_S_, short, int)
+MAP_MON_SxS(toi, _toi_S_, long, int)
+MAP_MON_SxS(toi, _toi_S_, longlong, int)
+MAP_MON_SxS(toi, _toi_S_, ubyte, int)
+MAP_MON_SxS(toi, _toi_S_, ushort, int)
+MAP_MON_SxS(toi, _toi_S_, uint, int)
+MAP_MON_SxS(toi, _toi_S_, ulong, int)
+MAP_MON_SxS(toi, _toi_S_, ulonglong, int)
+MAP_MON_SxS(toi, _toi_S_, float, int)
+MAP_MON_SxS(toi, _toi_S_, double, int)
+MAP_MON_SxS(toi, _toi_S_, char, int)
+
+MAP_MON_SxS(tol, _tol_S_, bool, long)
+MAP_MON_SxS(tol, _tol_S_, char, long)
+MAP_MON_SxS(tol, _tol_S_, byte, long)
+MAP_MON_SxS(tol, _tol_S_, short, long)
+MAP_MON_SxS(tol, _tol_S_, int, long)
+MAP_MON_SxS(tol, _tol_S_, longlong, long)
+MAP_MON_SxS(tol, _tol_S_, ubyte, long)
+MAP_MON_SxS(tol, _tol_S_, ushort, long)
+MAP_MON_SxS(tol, _tol_S_, uint, long)
+MAP_MON_SxS(tol, _tol_S_, ulong, long)
+MAP_MON_SxS(tol, _tol_S_, ulonglong, long)
+MAP_MON_SxS(tol, _tol_S_, float, long)
+MAP_MON_SxS(tol, _tol_S_, double, long)
+
+MAP_MON_SxS(toll, _toll_S_, bool, longlong)
+MAP_MON_SxS(toll, _toll_S_, char, longlong)
+MAP_MON_SxS(toll, _toll_S_, byte, longlong)
+MAP_MON_SxS(toll, _toll_S_, short, longlong)
+MAP_MON_SxS(toll, _toll_S_, int, longlong)
+MAP_MON_SxS(toll, _toll_S_, long, longlong)
+MAP_MON_SxS(toll, _toll_S_, ubyte, longlong)
+MAP_MON_SxS(toll, _toll_S_, ushort, longlong)
+MAP_MON_SxS(toll, _toll_S_, uint, longlong)
+MAP_MON_SxS(toll, _toll_S_, ulong, longlong)
+MAP_MON_SxS(toll, _toll_S_, ulonglong, longlong)
+MAP_MON_SxS(toll, _toll_S_, float, longlong)
+MAP_MON_SxS(toll, _toll_S_, double, longlong)
+
+MAP_MON_SxS(toub, _toub_S_, bool, ubyte)
+MAP_MON_SxS(toub, _toub_S_, char, ubyte)
+MAP_MON_SxS(toub, _toub_S_, byte, ubyte)
+MAP_MON_SxS(toub, _toub_S_, short, ubyte)
+MAP_MON_SxS(toub, _toub_S_, int, ubyte)
+MAP_MON_SxS(toub, _toub_S_, long, ubyte)
+MAP_MON_SxS(toub, _toub_S_, longlong, ubyte)
+MAP_MON_SxS(toub, _toub_S_, ushort, ubyte)
+MAP_MON_SxS(toub, _toub_S_, uint, ubyte)
+MAP_MON_SxS(toub, _toub_S_, ulong, ubyte)
+MAP_MON_SxS(toub, _toub_S_, ulonglong, ubyte)
+MAP_MON_SxS(toub, _toub_S_, float, ubyte)
+MAP_MON_SxS(toub, _toub_S_, double, ubyte)
+
+MAP_MON_SxS(tous, _tous_S_, bool, ushort)
+MAP_MON_SxS(tous, _tous_S_, char, ushort)
+MAP_MON_SxS(tous, _tous_S_, byte, ushort)
+MAP_MON_SxS(tous, _tous_S_, short, ushort)
+MAP_MON_SxS(tous, _tous_S_, int, ushort)
+MAP_MON_SxS(tous, _tous_S_, long, ushort)
+MAP_MON_SxS(tous, _tous_S_, longlong, ushort)
+MAP_MON_SxS(tous, _tous_S_, ubyte, ushort)
+MAP_MON_SxS(tous, _tous_S_, uint, ushort)
+MAP_MON_SxS(tous, _tous_S_, ulong, ushort)
+MAP_MON_SxS(tous, _tous_S_, ulonglong, ushort)
+MAP_MON_SxS(tous, _tous_S_, float, ushort)
+MAP_MON_SxS(tous, _tous_S_, double, ushort)
+
+MAP_MON_SxS(toui, _toui_S_, bool, uint)
+MAP_MON_SxS(toui, _toui_S_, char, uint)
+MAP_MON_SxS(toui, _toui_S_, byte, uint)
+MAP_MON_SxS(toui, _toui_S_, short, uint)
+MAP_MON_SxS(toui, _toui_S_, int, uint)
+MAP_MON_SxS(toui, _toui_S_, long, uint)
+MAP_MON_SxS(toui, _toui_S_, longlong, uint)
+MAP_MON_SxS(toui, _toui_S_, ubyte, uint)
+MAP_MON_SxS(toui, _toui_S_, ushort, uint)
+MAP_MON_SxS(toui, _toui_S_, ulong, uint)
+MAP_MON_SxS(toui, _toui_S_, ulonglong, uint)
+MAP_MON_SxS(toui, _toui_S_, float, uint)
+MAP_MON_SxS(toui, _toui_S_, double, uint)
+
+MAP_MON_SxS(toul, _toul_S_, bool, ulong)
+MAP_MON_SxS(toul, _toul_S_, char, ulong)
+MAP_MON_SxS(toul, _toul_S_, byte, ulong)
+MAP_MON_SxS(toul, _toul_S_, short, ulong)
+MAP_MON_SxS(toul, _toul_S_, int, ulong)
+MAP_MON_SxS(toul, _toul_S_, long, ulong)
+MAP_MON_SxS(toul, _toul_S_, longlong, ulong)
+MAP_MON_SxS(toul, _toul_S_, ubyte, ulong)
+MAP_MON_SxS(toul, _toul_S_, ushort, ulong)
+MAP_MON_SxS(toul, _toul_S_, uint, ulong)
+MAP_MON_SxS(toul, _toul_S_, ulonglong, ulong)
+MAP_MON_SxS(toul, _toul_S_, float, ulong)
+MAP_MON_SxS(toul, _toul_S_, double, ulong)
+
+MAP_MON_SxS(toull, _toull_S_, bool, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, char, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, byte, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, short, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, int, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, long, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, longlong, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, ubyte, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, ushort, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, uint, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, ulong, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, float, ulonglong)
+MAP_MON_SxS(toull, _toull_S_, double, ulonglong)
+
+MAP_MON_SxS(tof, _tof_S_, bool, float)
+MAP_MON_SxS(tof, _tof_S_, byte, float)
+MAP_MON_SxS(tof, _tof_S_, short, float)
+MAP_MON_SxS(tof, _tof_S_, int, float)
+MAP_MON_SxS(tof, _tof_S_, long, float)
+MAP_MON_SxS(tof, _tof_S_, longlong, float)
+MAP_MON_SxS(tof, _tof_S_, ubyte, float)
+MAP_MON_SxS(tof, _tof_S_, ushort, float)
+MAP_MON_SxS(tof, _tof_S_, uint, float)
+MAP_MON_SxS(tof, _tof_S_, ulong, float)
+MAP_MON_SxS(tof, _tof_S_, ulonglong, float)
+MAP_MON_SxS(tof, _tof_S_, double, float)
+MAP_MON_SxS(tof, _tof_S_, char, float)
+
+MAP_MON_SxS(tod, _tod_S_, bool, double)
+MAP_MON_SxS(tod, _tod_S_, byte, double)
+MAP_MON_SxS(tod, _tod_S_, short, double)
+MAP_MON_SxS(tod, _tod_S_, int, double)
+MAP_MON_SxS(tod, _tod_S_, long, double)
+MAP_MON_SxS(tod, _tod_S_, longlong, double)
+MAP_MON_SxS(tod, _tod_S_, ubyte, double)
+MAP_MON_SxS(tod, _tod_S_, ushort, double)
+MAP_MON_SxS(tod, _tod_S_, uint, double)
+MAP_MON_SxS(tod, _tod_S_, ulong, double)
+MAP_MON_SxS(tod, _tod_S_, ulonglong, double)
+MAP_MON_SxS(tod, _tod_S_, float, double)
+MAP_MON_SxS(tod, _tod_S_, char, double)
+

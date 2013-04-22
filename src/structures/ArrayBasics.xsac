@@ -1,0 +1,241 @@
+module ArrayBasics;
+
+use ScalarArith: {zero};
+export all;
+
+#include "Templates.mac"
+
+/** <!--********************************************************************-->
+ *
+ * @fn  int dim( <a>[*] Array)
+ *
+ *   @brief  yields an array's dimensionality (rank).
+ *
+ ******************************************************************************/
+
+#define DIM( a)                   \
+inline                            \
+int dim( a[*] array)              \
+{                                 \
+  return( _dim_A_( array));       \
+}
+
+BUILT_IN( DIM)
+
+
+/** <!--********************************************************************-->
+ *
+ * @fn  int[.] shape( <a>[*] Array)
+ *
+ *   @brief  yields an array's shape vector.
+ *
+ ******************************************************************************/
+
+
+#define SHAPE( a)                \
+inline                           \
+int[.] shape( a[*] array)        \
+{                                \
+  return( _shape_A_( array));    \
+}
+
+BUILT_IN( SHAPE)
+
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a>[*] reshape( int[.] shp, <a>[*] Array)
+ *
+ *   @brief  creates a new array with identical data vector but new shape,
+ *           provided the length of the data vector matches the product of
+ *           the new shape vector.
+ *
+ ******************************************************************************/
+
+#define RESHAPE( a)                          \
+inline                                       \
+a[*] reshape( int[.] shp, a[*] A)            \
+{                                            \
+  return( _reshape_VxA_( shp, A));           \
+}
+
+BUILT_IN( RESHAPE)
+
+#ifdef RBE
+/** <!--********************************************************************-->
+ *
+ * @fn  bool IsSameShape( int[.] shapea, int[.] shapeb)
+ *
+ *   @brief  Predicate for ensuring shape vectors match
+ ******************************************************************************/
+
+inline bool IsSameShape( int[.] sa, int[.] sb)
+{
+  if ( _eq_( _sel_( [0], _shape_( sa)), _sel_( [0],  _shape_( sb)))) {
+  	res = true; 
+  	for (i=0;  _lt_(i, _sel_([0], _shape_( sa))); 
+		   i = _add_SxS_(i,1)){
+		sx = _sel_( [i], _shape_( sa));
+		sy = _sel_( [i], _shape_( sb));
+		res = _and_( res, _eq_( sx, sy));
+	}
+  } else {
+	res = false;
+  }
+  return( res);
+}
+
+/** <!--********************************************************************-->
+ *
+ * @fn  int xrhoshape( int[.] ShapeVector)
+ *
+ *   @brief  Computes the product of a shape vector
+ *           The important thing that is MISSING(!!!) here is check for
+ *           overflow. For example:
+ *           	- last-axis reduce genarray([256,256,256,256,0],0)
+ *           	- genarray((genarray([32],2), 1)
+ *
+ *           This is where security bugs start!
+ ******************************************************************************/
+
+inline int xrhoshape( int[.] S)
+{
+  res = 1; /* Can't figure out how to make fold work here... */
+  for(i=0;  _lt_(i, _shape_(S)[0]); i = _add_SxS_(i,1)){
+	res = _mul_SxS_(res,S[[i]]);
+ }
+  return( res);
+}
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a>[.] ravel( <a>[*] Array)
+ *
+ *   @brief  creates a vector with identical data vector to original array
+ *
+ ******************************************************************************/
+
+#define RAVEL( a)                              \
+inline                                         \
+a[.] ravel( a[*] A)		               \
+{                                              \
+  return( _reshape_([xrhoshape(_shape_(A))], A));  \
+}
+
+BUILT_IN( RAVEL)
+
+#endif
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a>[*] sel( int[.] idx, <a>[*] Array)
+ *
+ *   @brief  selects the subarray of Array at position idx, provided
+ *           shape( idx)[[0]] <= dim( Array)    holds.
+ *
+ ******************************************************************************/
+
+#define SEL_VxA( a)                                                      \
+inline                                                                   \
+a[*] sel( int[.] idx, a[*] array)                                        \
+{                                                                        \
+  new_shape = _drop_SxV_( _sel_VxA_( [0], _shape_A_(idx)),               \
+                          _shape_A_(array));                             \
+  res = with {                                                           \
+          ( . <= iv <= . ) {                                             \
+            new_idx = _cat_VxV_( idx, iv);                               \
+          } : _sel_VxA_(new_idx, array);                                 \
+        } : genarray( new_shape, zero(array) );                          \
+  return( res);                                                          \
+}
+
+BUILT_IN( SEL_VxA)
+
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a>[*] sel( int idx, <a>[*] Array)
+ * 
+ *   @brief  generalizes selections for scalar indices.
+ *
+ ******************************************************************************/
+
+#define SEL_SxA( a)             \
+inline                          \
+a[*] sel( int idx, a[*] A)      \
+{                               \
+  return( sel( [idx], A));      \
+}
+
+BUILT_IN( SEL_SxA)
+
+
+/** <!--********************************************************************-->
+ *
+ * @fn  <a>[*] modarray( <a>[*] Array, int[.] idx, <a> val)
+ * 
+ *   @brief  modifies the element of Array at position idx, provided 
+ *           shape( idx)[[0]] == dim( Array) holds.
+ *
+ ******************************************************************************/
+#define GENARRAY( a)                               \
+inline                                             \
+a[*] genarray( int[.] shp, a[*] val)               \
+{                                                  \
+  res = with {                                     \
+          ( . <= iv <= . ) : val;                  \
+        } : genarray( shp, val );                  \
+  return( res);                                    \
+}
+
+#define MODARRAY_AxVxS( a)                         \
+inline                                             \
+a[*] modarray( a[*] array, int[.] v, a[] val)      \
+{                                                  \
+  return( _modarray_AxVxS_( array, v, val));       \
+}
+        
+#define MODARRAY_AxVxA( a)                         \
+inline                                             \
+a[*] modarray( a[*] array, int[.] v, a[+] val)     \
+{                                                  \
+  res = with {                                     \
+          ( v <= iv <= v ) : val;                  \
+        } : modarray( array );                     \
+  return( res);                                    \
+}
+
+#define MODARRAY_AxSxX( a)                         \
+inline                                             \
+a[*] modarray( a[*] array, int v, a[*] val)        \
+{                                                  \
+  return( modarray( array, [v], val));             \
+}
+
+
+
+#define MODARRAY( a)  \
+  MODARRAY_AxVxS( a)  \
+  MODARRAY_AxSxX( a)  \
+  MODARRAY_AxVxA( a)
+
+BUILT_IN( GENARRAY)
+BUILT_IN( MODARRAY)
+
+inline
+int[*] iota( int[.] shp)
+{
+  res = with {
+          ( . <= iv <= . ) : iv;
+        } : genarray( shp, _mul_SxV_( 0, shp));
+  return( res);
+}
+
+inline
+int[*] iota( int shp)
+{
+  res = with {
+          ( . <= [i] <= . ) : i;
+        } : genarray( [shp], 0 );
+  return( res);
+}

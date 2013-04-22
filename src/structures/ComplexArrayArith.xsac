@@ -1,0 +1,35 @@
+module ComplexArrayArith;
+
+import ComplexBasics:all;
+import ComplexScalarArith: all;
+import ComplexArrayBasics: {shape,sel};
+export all;
+
+#include "UDTtemplates.mac"
+
+
+/********************************************************************************
+ *
+ * Array-Extensions for binary monary ops
+ *
+ * Calls of these are created when using the macros provided in "Templates.mac"
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS...
+ *
+ * NB: These could be defined in a way, that they are applicable to ALL (not
+ *     just built-in) types! All that would have to be done is using "sel"
+ *     and "+" etc. instead of _sel_ and _add_SxS_.
+ *     However, this is not done here for efficiency reasons. Using the
+ *     more general version, e.g., would cause inlining problems (->dkr)...
+ *
+ ********************************************************************************/
+
+ARI_OPS_A( complex)
+
+/** <!--********************************************************************-->
+ *
+ * RelOPS on arrays (see Templates.mac for details)
+ *
+ ******************************************************************************/
+
+REL_OPS_A( complex)
+

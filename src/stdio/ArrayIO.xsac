@@ -1,0 +1,106 @@
+module ArrayIO;
+
+
+use IOresources: all;
+/*use ArrayBasics : all;*/
+use ArrayFormat: all;
+use Structures: all;
+use TermFile: {TermFile};
+
+export { print, fprint, show};
+
+#include "../../modules/structures/Templates.mac"
+
+#define HASH #
+#define PRINTME(x) x
+#define QUOTEME(x) #x
+
+#define LINKSPECS(actualtype, typename)                                       \
+external void printarray(File &stream, int d, int[.] s, actualtype[*] a);     \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+external void printarray(TermFile &stream, int d, int[.] s, actualtype[*] a); \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+external void printarray(File &stream, string fmt,                            \
+                         int d, int[.] s, actualtype[*] a);                   \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+external void printarray(TermFile &stream, string fmt, int d,                 \
+                         int[.] s, actualtype[*] a);                          \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               
+
+LINKSPECS (bool, Bool)
+LINKSPECS (byte, Byte)
+LINKSPECS (short, Short)
+LINKSPECS (int, Int)
+LINKSPECS (long, Long)
+LINKSPECS (longlong, Longlong)
+LINKSPECS (ubyte, Ubyte)
+LINKSPECS (ushort, Ushort)
+LINKSPECS (uint, Uint)
+LINKSPECS (ulong, Ulong)
+LINKSPECS (ulonglong, Ulonglong)
+LINKSPECS (float, Float)
+LINKSPECS (double, Double)
+LINKSPECS (char, Char)
+
+external void showarray(File &stream, int d, int[.] s, char[*] a);
+    #pragma linkname "ARRAYIO__ShowCharArray"
+    #pragma linkobj "src/ArrayIO/ShowArray.o"
+
+external void showarray(TermFile &stream, int d, int[.] s, char[*] a);
+    #pragma linkname "ARRAYIO__ShowCharArray"
+    #pragma linkobj "src/ArrayIO/ShowArray.o"
+
+#define PRINT(actualtype)                                               \
+inline void fprint(File &stream, actualtype[+] arr)                     \
+{                                                                       \
+  printarray(stream, dim(arr), shape(arr), arr);                        \
+}                                                                       \
+                                                                        \
+inline void fprint(TermFile &stream, actualtype[+] arr)                 \
+{                                                                       \
+  printarray(stream, dim(arr), shape(arr), arr);                        \
+}                                                                       \
+                                                                        \
+inline void print(actualtype[+] arr)                                    \
+{                                                                       \
+  printarray(stdout, dim(arr), shape(arr), arr);                        \
+}                                                                       \
+                                                                        \
+                                                                        \
+                                                                        \
+inline void fprint(File &stream, string fmt, actualtype[+] arr)         \
+{                                                                       \
+  printarray(stream, fmt, dim(arr), shape(arr), arr);                   \
+}                                                                       \
+                                                                        \
+inline void fprint(TermFile &stream, string fmt, actualtype[+] arr)     \
+{                                                                       \
+  printarray(stream, fmt, dim(arr), shape(arr), arr);                   \
+}                                                                       \
+                                                                        \
+inline void print(string fmt, actualtype[+] arr)                        \
+{                                                                       \
+  printarray(stdout, fmt, dim(arr), shape(arr), arr);                   \
+}                                                                       \
+
+
+#define SHOW(actualtype)                                                \
+inline void show(actualtype[+] arr)                                     \
+{                                                                       \
+  carr=format( arr);                                                    \
+  showarray(stdout, dim(carr), shape(carr), carr);                      \
+}                                                                       
+
+
+BUILT_IN( PRINT)
+/*BUILT_IN( SHOW)*/
+
+SHOW( int)                 
+SHOW( float)               
+SHOW( double)              
+SHOW( bool)                
+SHOW( char)

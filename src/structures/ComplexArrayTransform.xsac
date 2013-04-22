@@ -1,0 +1,41 @@
+module ComplexArrayTransform;
+
+use ComplexArrayBasics: {dim,shape,sel};
+
+/* FIXME XXX ACHTUNG ACHTUNG!!!!
+
+   The order of the symbols we include make a difference.  */
+import ComplexBasics: {zero, complex};
+
+export all;
+
+#include "UDTtemplates.mac"
+
+
+
+/********************************************************************************
+ *
+ * Structural OPS
+ *
+ ********************************************************************************/
+
+TAKE( complex)
+
+DROP( complex)
+
+complex
+sum(complex[*] in)
+{
+	return(with{(0 ArrayArith::* shape(in) <= iv <= shape(in)) : in[iv];} : fold( ComplexArrayArith::+, ComplexBasics::toc(0,0) ));
+}
+
+TILE( complex)
+
+CAT( complex)
+
+REVERSE( complex)
+
+SHIFT( complex)
+
+ROTATE( complex)
+
