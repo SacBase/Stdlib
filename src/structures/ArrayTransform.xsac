@@ -41,6 +41,18 @@ int[.] Min( int[.] x, int[.] y)
 }
 
 inline 
+int Max( int x, int y)
+{ /* Function to perform max_VxS_( x, y), but written to 
+   * let the optimizers simplify the arguments.
+   */
+
+  dif  = _sub_SxS_( x, y);
+  p = _ge_SxS_( dif, 0);
+  z = _mask_SxSxS_( p, x, y);
+  return(z);
+}
+
+inline 
 int[.] Max( int[.] x, int y)
 { /* Function to perform max_VxS_( x, y), but written to 
    * let the optimizers simplify the arguments.
@@ -140,6 +152,33 @@ a[+] (++)( a[+] arr_a, a[+] arr_b)                                          \
 }
 
 BUILT_IN( CAT)
+
+// Last-axis catenate
+// We assume that x and y are the same shape, except 
+// perhaps along the last axis.
+
+
+#define CATENATE( a)                                                        \
+inline                                                                      \
+a[+] catenate( a[+] x, a[+] y)                                              \
+{                                                                           \
+  axis = _dim_A_( x) - 1;                                                   \
+  colsx = _shape_A_(x) [ axis];                                             \
+  colsy = _shape_A_(y) [ axis];                                             \
+  shpz = _modarray_AxVxS_( _shape_A_( x), [ axis], colsx + colsy);          \
+  offset = _mul_SxV_( 0, _shape_A_( x));                                    \
+  offset = _modarray_AxVxS_( offset, [ axis], colsx);                       \
+  z = with {                                                                \
+       ( 0 *_shape_A_(x) <= iv < _shape_A_( x)) : x[ iv];                   \
+     } : genarray(shpz, zero( x));                                          \
+  z = with {                                                                \
+       ( offset <= iv < shpz) : y[ iv - offset];                            \
+     } : modarray( z);                                                      \
+                                                                            \
+ return( z);                                                                \
+}
+
+BUILT_IN( CATENATE)
 
 /*----------------------------------------------------------------------------*/
 
@@ -481,3 +520,94 @@ bool match( a[+] arr_a, a[+] arr_b)					\
 
 BUILT_IN( MATCH)
 
+
+
+
+/********************************************************************************
+ *
+ * mask() has the same semantics as where(), but it does not use WLs.
+ * 
+ * These versions are defined on scalars/vectors only, but they could
+ * be extended to higher-order arrays via a WL.
+ *
+ * Unlike where(), they compute both legs of the "conditional",
+ * which may be a feature or a bug, depending on your point of view.
+ *
+ ********************************************************************************/
+
+#define MASK_SxSxS( a)                                                    \
+inline                                                                    \
+a mask( bool p, a A, a B)                                                 \
+{                                                                         \
+  res = _mask_SxSxS_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_SxSxV( a)                                                    \
+inline                                                                    \
+a[.] mask( bool p, a A, a[.] B)                                           \
+{                                                                         \
+  res = _mask_SxSxV_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_SxVxS( a)                                                    \
+inline                                                                    \
+a[.] mask( bool p, a[.] A, a B)                                           \
+{                                                                         \
+  res = _mask_SxVxS_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_SxVxV( a)                                                    \
+inline                                                                    \
+a[.] mask( bool p, a[.] A, a[.] B)                                        \
+{                                                                         \
+  res = _mask_SxVxV_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_VxSxS( a)                                                    \
+inline                                                                    \
+a[.] mask( bool[.] p, a A, a B)                                           \
+{                                                                         \
+  res = _mask_VxSxS_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_VxSxV( a)                                                    \
+inline                                                                    \
+a[.] mask( bool[.] p, a A, a[.] B)                                        \
+{                                                                         \
+  res = _mask_VxSxV_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_VxVxS( a)                                                    \
+inline                                                                    \
+a[.] mask( bool[.] p, a[.] A, a B)                                        \
+{                                                                         \
+  res = _mask_VxVxS_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK_VxVxV( a)                                                    \
+inline                                                                    \
+a[.] mask( bool[.] p, a[.] A, a[.] B)                                     \
+{                                                                         \
+  res = _mask_VxVxV_( p, A, B);                                           \
+  return( res);                                                           \
+}                                                                         \
+
+#define MASK( a)                            \
+MASK_SxSxS( a)                              \
+MASK_SxSxV( a)                              \
+MASK_SxVxS( a)                              \
+MASK_SxVxV( a)                              \
+MASK_VxSxV( a)                              \
+MASK_VxVxS( a)                              \
+MASK_VxVxV( a)                              \
+
+/* MASK_VxSxS( a) FIXME in ct_prf.c */
+
+BUILT_IN( MASK)
