@@ -157,7 +157,6 @@ BUILT_IN( CAT)
 // We assume that x and y are the same shape, except 
 // perhaps along the last axis.
 
-
 #define CATENATE( a)                                                        \
 inline                                                                      \
 a[+] catenate( a[+] x, a[+] y)                                              \
