@@ -74,6 +74,12 @@ int[.] minsl1(int[.,.] y)
   return(z);
 }
 
+char[.] PadWithBlanks( int[1] wid, char[.] el)
+{  /* SAC does not have overtake, so this does the job */
+  z = take( wid, el ++ genarray( wid, ' '));
+  return( z);
+}
+
 char[.] alignrow(char[.,.] fry, int[1] iv, int[.] widths, int[.] lodp,
                         int[.] lodpmax, int zcols)
 { /* Align one row of a floating-point matrix */
@@ -86,7 +92,7 @@ char[.] alignrow(char[.,.] fry, int[1] iv, int[.] widths, int[.] lodp,
         sc = lodp[[fi]] -lodpmax[[ci]]; /* Shift count to align decimal */
         sefe = thcharsto([' ',' '], fry[[fi]]);
         sz = sefe + abs(sc);
-        zit = take([sz],rotate([-sc],fry[[fi]]));
+        zit = PadWithBlanks([sz],rotate([-sc],fry[[fi]]));
         z, junk = thrnAppend(z, zci, zit);
         zci = zci + widths[ci] + 1;
         }
@@ -122,7 +128,7 @@ char[.] ScalarFormatter(double y, int precision)
         show(tochar("ScalarFormatter expected shorter result"));
         show(shpz); print(precision+7);
  }
- z = take([precision + 7], z); /* Avoid strange bugs in calls from WLs */
+ z = PadWithBlanks([precision + 7], z); /* Avoid strange bugs in calls from WLs */
  return(z, shpz)
 #endif // FORMATWIDTH
 }
@@ -141,7 +147,7 @@ char[.], int ScalarFormatterPad(double y, int precision)
         show(shpz); print(precision+7);
  }
 #endif
- z = take([precision + 7], z); /* Avoid strange bugs in calls from WLs */
+ z = PadWithBlanks([precision + 7], z); /* Avoid strange bugs in calls from WLs */
  return(z, shpz);
 }
 
@@ -405,7 +411,7 @@ inline char[+] format(double[+] y)
 inline char[.] format(double y, int precision)
 { /* Formatting for a double scalar */
  z = ScalarFormatter(y, precision);
- z = take ([precision + 7], z);
+ z = PadWithBlanks([precision + 7], z);
  return(z);
 }
 
@@ -422,7 +428,7 @@ char[+] format(double[+] y, int precision)
   fry = with {          /* Format each array element */
 	(. <= iv <= .) {
 		el = ScalarFormatter( ravely[iv], precision);  
-                el = take([wid], el);
+                el = PadWithBlanks([wid], el);
 	} : el;
         } : genarray( shape( ravely), defcell);
 
@@ -433,12 +439,12 @@ char[+] format(double[+] y, int precision)
         } : genarray(take([1], shape(fry)), 0);
   /* decimal point and # non-blankchars to right of decimal point */
   rodp  = with{
-        (. <= iv <= .) : thcharsto([' ',' '], reverse(drop([lodp[iv]], fry[iv])));
+        (. <= iv <= .) : thcharsto([' ',' '], drop([lodp[iv]], fry[iv]));
         } : genarray(take([1], shape(fry)), 0);
   lodpmax = maxsl1(reshape([rows,cols], lodp));
   rodpmax = maxsl1(reshape([rows,cols], rodp));
   widths = lodpmax + rodpmax;
-  zcols = sum(widths+1)-1;
+  zcols = sum(widths+2)-1; // room for decimal point and blank
   shpz = drop([-1], shape(y)) ++ [zcols];
   defcell = genarray([zcols], ' ');
 
