@@ -22,9 +22,7 @@ int Min( int x, int y)
    * let the optimizers simplify the arguments.
    */
 
-  dif  = _sub_SxS_( x, y);
-  p = _le_SxS_( dif, 0);
-  z = _mask_SxSxS_( p, x, y);
+  z = _min_SxS_( x, y);
   return(z);
 }
 
@@ -34,21 +32,17 @@ int[.] Min( int[.] x, int[.] y)
    * let the optimizers simplify the arguments.
    */
 
-  dif  = _sub_VxV_( x, y);
-  p = _le_VxS_( dif, 0);
-  z = _mask_VxVxV_( p, x, y);
+  z = _min_VxV_( x, y);
   return(z);
 }
 
 inline 
 int Max( int x, int y)
-{ /* Function to perform max_VxS_( x, y), but written to 
+{ /* Function to perform max_SxS_( x, y), but written to 
    * let the optimizers simplify the arguments.
    */
 
-  dif  = _sub_SxS_( x, y);
-  p = _ge_SxS_( dif, 0);
-  z = _mask_SxSxS_( p, x, y);
+  z = _max_SxS_( x, y);
   return(z);
 }
 
@@ -58,11 +52,37 @@ int[.] Max( int[.] x, int y)
    * let the optimizers simplify the arguments.
    */
 
-  dif  = _sub_VxS_( x, y);
-  p = _ge_VxS_( dif, 0);
-  z = _mask_VxVxS_( p, x, y);
+  z = _max_VxS_( x, y);
   return(z);
 }
+
+inline
+int NormalizeRotateCount( int count, int max_rotate)
+{
+  /* Normalizer for rotate count */
+  z = (( _eq_SxS_( 0, count)) || ( _eq_SxS_( 0, max_rotate))) ? 
+      0 : 
+      ( _gt_SxS_( count, 0)) ? _mod_SxS_( count, max_rotate) 
+          : _sub_SxS_( max_rotate, _mod_SxS_(_abs_S_( count), max_rotate));
+  z2 = _noteminval_( z, 0);
+  z3 = _notemaxval_( z2, max_rotate);
+  return(z3);
+}
+
+inline
+int signum( int y)
+{
+  if( _eq_SxS_( 0, y)) {
+    z = 0;
+  } else {
+    if( _lt_SxS_( 0, y)) {
+      z = 1;
+    } else {
+      z = _sub_SxS_( 0, 1);
+    }
+  }
+  return( z);
+} 
 
 /********************************************************************************
  *
@@ -70,21 +90,30 @@ int[.] Max( int[.] x, int y)
  *
  ********************************************************************************/
 
-/* No overtake support. This is intentional. */
+/* No overtake support. */
 
 #define TAKE( a)                                                                 \
 inline                                                                           \
 a[*] take( int[.] v, a[*] array)                                                 \
 {                                                                                \
-  vext = _cat_VxV_( v,                                                           \
-            _drop_SxV_( _sel_VxA_( [0], _shape_A_( v)), _shape_A_( array)));     \
-  avext = abs( vext);                                                            \
-  start = where( vext < 0, Max(( _sub_VxV_( avext, _shape_A_(array))), 0) , 0);  \
-  stop = where( vext < 0, avext, Min( avext, _shape_A_(array)));                 \
-  offset = where( vext < 0, _add_VxV_( _shape_A_(array), vext), 0);              \
+  shpa = _shape_A_( array);                                                      \
+  zr = _mul_VxS_( shpa, 0);                                                      \
+  offset = zr;                                                                   \
+                                                                                 \
+  /* Pad take count for Bernecky's extended take */                              \
+  vext = shpa;                                                                   \
+  /* for-loop will get unrolled */                                               \
+  for( i=0; _lt_SxS_( i, _sel_VxA_( [0], _shape_A_( v))); i= _add_SxS_( i, 1)) { \
+    el = _sel_VxA_( [i], v);                                                     \
+    shpel = _sel_VxA_( [i], shpa);                                               \
+    vext  = _idx_modarray_AxSxS_( vext,  i,  el);                                \
+    val = _mask_SxSxS_( _lt_SxS_( el, 0), _add_SxS_( shpel, el), 0);             \
+    offset = _idx_modarray_AxSxS_( offset, i, val);                              \
+  }                                                                              \
+  shpz = _abs_V_( vext);                                                         \
   res = with {                                                                   \
-          ( start <= iv < stop ) : _sel_VxA_( _add_VxV_( offset, iv), array);    \
-        } : genarray( avext, zero(array));                                       \
+          ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);          \
+        } : genarray( shpz, zero(array));                                        \
   return( res);                                                                  \
 }
 
@@ -92,21 +121,36 @@ BUILT_IN( TAKE)
 
 /*----------------------------------------------------------------------------*/
 
-/* No overdrop support. This is intentional. */
+/*
+ * No overdrop support, as it inhibits AWLF.
+ * Hence, overdrops ( e.g., drop( [10], iota( 5))) 
+ * can cause segfaults. If this is a problem, compile with -check c.
+ * We assume that people do not, in general, write code that
+ * produces overdrops.
+ *
+ */
 
 #define DROP( a)                                                                 \
 inline                                                                           \
 a[*] drop( int[.] v, a[*] array)                                                 \
 {                                                                                \
-  vext = _cat_VxV_( v,                                                           \
-           genarray( [_dim_A_( array) - _sel_VxA_( [0], _shape_A_( v))], 0));    \
-  new_shp = _sub_VxV_( _shape_A_( array), abs( vext));                           \
-  new_shp = where( new_shp < 0, 0, new_shp);					 \
-  offset = where( vext < 0, 0, vext);                                            \
-  offset = where( offset < _shape_A_( array), offset, 0);    			 \
+  shpa = _shape_A_( array);                                                      \
+  zr = _mul_VxS_( shpa, 0);                                                      \
+  offset = zr;                                                                   \
+  /* Pad drop count */                                                           \
+  vext = zr;                                                                     \
+  /* for-loop will get unrolled */                                               \
+  for( i=0; _lt_SxS_( i, _sel_VxA_( [0], _shape_A_( v))); i= _add_SxS_( i, 1)) { \
+    el     = _sel_VxA_( [i], v);                                                 \
+    shpel  = _sel_VxA_( [i], shpa);                                              \
+    vext   = _idx_modarray_AxSxS_( vext,  i,  el);                               \
+    val    = _mask_SxSxS_( _le_SxS_( el, 0), 0, el);                             \
+    offset = _idx_modarray_AxSxS_( offset, i, val);                              \
+  }                                                                              \
+  shpz = _sub_VxV_( shpa, _abs_V_( vext));                                       \
   res = with {                                                                   \
           ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);          \
-        } : genarray( new_shp, zero(array));                                     \
+        } : genarray( shpz, zero(array));                                        \
   return( res);                                                                  \
 }
 
@@ -135,15 +179,13 @@ BUILT_IN( TILE)
 inline                                                                      \
 a[+] (++)( a[+] arr_a, a[+] arr_b)                                          \
 {                                                                           \
-  new_shp = _modarray_AxVxS_( _shape_A_( arr_a),                            \
-                        [0],                                                \
+  new_shp = _idx_modarray_AxSxS_( _shape_A_( arr_a), 0,                     \
                         _add_SxS_( _sel_VxA_([0], _shape_A_( arr_a)),       \
                                    _sel_VxA_([0], _shape_A_( arr_b)) ) );   \
   res = with {                                                              \
           ( . <= iv < _shape_A_(arr_a) ) : _sel_VxA_( iv, arr_a);           \
         } : genarray( new_shp, zero(arr_a) );                               \
-  offset =  _modarray_AxVxS_( _mul_SxV_( 0, new_shp),                       \
-                        [0],                                                \
+  offset =  _idx_modarray_AxSxS_( _mul_SxV_( 0, new_shp), 0,                \
                         _sel_VxA_([0], _shape_A_( arr_a)) );                \
   res = with {                                                              \
           ( offset <= iv <= . ) : _sel_VxA_( _sub_VxV_( iv, offset), arr_b);\
@@ -164,9 +206,9 @@ a[+] catenate( a[+] x, a[+] y)                                              \
   axis = _dim_A_( x) - 1;                                                   \
   colsx = _shape_A_(x) [ axis];                                             \
   colsy = _shape_A_(y) [ axis];                                             \
-  shpz = _modarray_AxVxS_( _shape_A_( x), [ axis], colsx + colsy);          \
+  shpz = _idx_modarray_AxSxS_( _shape_A_( x), axis, colsx + colsy);         \
   offset = _mul_SxV_( 0, _shape_A_( x));                                    \
-  offset = _modarray_AxVxS_( offset, [ axis], colsx);                       \
+  offset = _idx_modarray_AxSxS_( offset, axis, colsx);                      \
   z = with {                                                                \
        ( 0 *_shape_A_(x) <= iv < _shape_A_( x)) : x[ iv];                   \
      } : genarray(shpz, zero( x));                                          \
@@ -196,6 +238,27 @@ a[+] (reverse)( a[+] arr_a)                                                 \
 
 BUILT_IN( REVERSE)
 
+/* Reverse on specified axis: 0 is leading axis, dim-1 is trailing axis */
+
+#define REVERSEAXIS( typ)                                                   \
+inline                                                                      \
+typ[+] (reverse)( int axis, typ[+] arr_a)                                   \
+{                                                                           \
+  shp = _shape_A_( arr_a);                                                  \
+  zer = _mul_VxS_( shp, 0);                                                 \
+  shpel = _sel_VxA_( [ axis], shp);                                         \
+  offset = _sub_SxS_( shpel, 1);                                            \
+  z = with {                                                                \
+         ( zer <= iv < shp) {                                               \
+            ivel = _sel_VxA_( [ axis], iv);                                 \
+            idx = _modarray_AxVxS_( iv, [ axis], _sub_SxS_( offset, ivel)); \
+         }  : _sel_VxA_( idx, arr_a);                                       \
+       } : modarray( arr_a);                                                \
+  return( z);                                                             \
+}
+
+BUILT_IN( REVERSEAXIS)
+
 /*----------------------------------------------------------------------------*/
 
 #define TRANSPOSE( a)                                                       \
@@ -217,28 +280,34 @@ BUILT_IN( TRANSPOSE)
 inline                                                                      \
 a[+] shift (int dimension, int count, a boundary, a[+] A)                   \
 {                                                                           \
-  max_shift = _sel_VxA_( [dimension], _shape_A_(A));                        \
+  shpa = _shape_A_( A);                                                     \
+  max_shift = _sel_VxA_( [dimension], shpa);                                \
+  zr = _mul_SxV_( 0, shpa);                                                 \
+  p = _ge_SxS_( count, 0);                                                  \
+  s = signum( count);                                                       \
                                                                             \
-  if (count > 0) {                                                          \
-    count = Min( count, max_shift);                                         \
-    offset = _modarray_AxVxS_( _mul_SxV_( 0, _shape_A_(A)),                 \
-                               [dimension], count);                         \
-    lb = offset;                                                            \
-    ub = _shape_A_(A);                                                      \
+  /* Prevent overshift */                                                   \
+  count = _min_SxS_( _abs_S_( count), max_shift);                           \
+  count = _mul_SxS_( s, count);                                             \
+                                                                            \
+  /* shift right */                                                         \
+  if( _ge_SxS_( count, 0)) {                                                \
+    lb = _modarray_AxVxS_( zr, [dimension], count);                         \
+    ub = shpa;                                                              \
+    offset = _modarray_AxVxS_( zr, [dimension], _neg_S_( count));           \
+                                                                            \
+  /* shift left */                                                          \
   } else {                                                                  \
-    count = _max_SxS_( count, _neg_S_(max_shift));                          \
-    offset = _modarray_AxVxS_( _mul_SxV_( 0, _shape_A_(A)),                 \
-                               [dimension], count);                         \
-    lb = _mul_SxV_( 0, _shape_A_(A));                                       \
-    ub = _add_VxV_( _shape_A_(A), offset);                                  \
+    lb = zr;                                                                \
+    disp = _modarray_AxVxS_( zr, [dimension], _neg_S_( count));             \
+    ub = _sub_VxV_( shpa, disp);                                            \
+    offset = disp;                                                          \
   }                                                                         \
                                                                             \
   result = with {                                                           \
-             ( . <= iv <= . ) : boundary;                                   \
-           } : genarray( _shape_A_(A), zero(A) );                           \
-  result = with {                                                           \
-             ( lb <= iv < ub ) : _sel_VxA_( _sub_VxV_( iv, offset), A);     \
-           } : modarray( result );                                          \
+              ( lb <= iv < ub ) : _sel_VxA_( _add_VxV_( iv, offset), A);    \
+           } : genarray( _shape_A_(A), boundary );                          \
+                                                                            \
   return(result);                                                           \
 }
 
@@ -275,19 +344,12 @@ BUILT_IN( SHIFT)
 /*
  * rotate: allows arbitrary count.
  *
+ * count>0 rotates elements toward the right, e.g.,
+ *
+ *   rotate([ 2], iota( 5))
+ * 3 4 0 1 2
+ *
  */
-inline
-int NormalizeRotateCount( int count, int max_rotate)
-{
-  /* Hand-crafted normalizer for rotate count */
-  z = (( _eq_SxS_( 0, count)) || ( _eq_SxS_( 0, max_rotate))) ? 
-      0 : 
-      ( count>0) ? _mod_SxS_(count, max_rotate) 
-                 : max_rotate - _mod_SxS_(abs(count),max_rotate);
-  z2 = _noteminval_( z, 0);
-  z3 = _notemaxval_( z2, max_rotate);
-  return(z3);
-}
 
 #define ROTATE_S( a)                                                   \
 inline                                                                 \
