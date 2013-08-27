@@ -132,6 +132,10 @@ external double sqrt(double X);
     #pragma linksign [0,1]
     /* Return the square root of X.  */
 
+external float sqrtf(float X);
+    #pragma linksign [0,1]
+    /* Return the square root of X.  */
+
 external double cbrt(double X);
     #pragma linksign [0,1]
     /* Return the cube root of X.  */
@@ -373,7 +377,7 @@ external double hypot(double X, double Y);
 
   inline float sqrt(float X)
   {
-    return(tof(sqrt(tod(X))));
+    return(sqrtf(X));
   }
     /* Return the square root of X.  */
 
