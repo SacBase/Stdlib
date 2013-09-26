@@ -13,6 +13,6 @@ export all;
 
 inline void print( grey[*] c)
 {
-  print( (:int[*]) c);
+  print( (int[*]) c);
 }
 

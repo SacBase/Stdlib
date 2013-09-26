@@ -220,7 +220,7 @@ bool[*] eq_AxA( stringArray a, stringArray b)
 }
 
 inline
-bool[*] (==)( stringArray a, stringArray b)
+bool[*] ==( stringArray a, stringArray b)
 {
   if( dim(a) ScalarArith::== 0) {
     if( dim( b) ScalarArith::== 0 ) {

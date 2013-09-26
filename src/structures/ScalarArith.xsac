@@ -91,14 +91,14 @@ ONE( bool, true)
 
 #define MAP_BIN_SxS( name, op, a, b)  \
 inline                                \
-b (name)(a A, a B)                    \
+b name(a A, a B)                      \
 {                                     \
   return( op( A, B));                 \
 }
 
 #define MAP_MON_SxS( name, op, a, b)  \
 inline                                \
-b (name)(a A)                         \
+b name(a A)                           \
 {                                     \
   return( op( A));                    \
 }

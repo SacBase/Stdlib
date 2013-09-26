@@ -12,7 +12,7 @@
 
 #define MAP_BIN_AxA( name, op, a, b)                                               \
 inline                                                                             \
-b[+] (name)( a[+] A, a[+] B)                                                       \
+b[+] name( a[+] A, a[+] B)                                                       \
 {                                                                                  \
   shp = shape( A);                                                                 \
   res = with {                                                                     \
@@ -23,7 +23,7 @@ b[+] (name)( a[+] A, a[+] B)                                                    
 
 #define MAP_BIN_AxS( name, op, a, b)                                   \
 inline                                                                 \
-b[+] (name)( a[+] A, a B)                                              \
+b[+] name( a[+] A, a B)                                              \
 {                                                                      \
   shp = shape( A);                                                     \
   res = with {                                                         \
@@ -34,7 +34,7 @@ b[+] (name)( a[+] A, a B)                                              \
 
 #define MAP_BIN_SxA( name, op, a, b)                                   \
 inline                                                                 \
-b[+] (name)( a A, a[+] B)                                              \
+b[+] name( a A, a[+] B)                                              \
 {                                                                      \
   shp = shape( B);                                                     \
   res = with {                                                         \
@@ -51,7 +51,7 @@ b[+] (name)( a A, a[+] B)                                              \
 
 #define MAP_MON_AxA( name, op, a, b)                        \
 inline                                                      \
-b[+] (name)( a[+] A)                                        \
+b[+] name( a[+] A)                                        \
 {                                                           \
   shp = shape( A);                                          \
   res = with {                                              \
@@ -166,7 +166,7 @@ a[*] tile( int[.] shp, int[.] idx, a[*] array)                            \
 
 #define CAT( a)                                                             \
 inline                                                                      \
-a[+] (++)( a[+] arr_a, a[+] arr_b)                                          \
+a[+] ++( a[+] arr_a, a[+] arr_b)                                          \
 {                                                                           \
   new_shp = _modarray_AxVxS_( shape( arr_a),                                \
                               [0],                                          \
@@ -189,7 +189,7 @@ a[+] (++)( a[+] arr_a, a[+] arr_b)                                          \
 
 #define REVERSE( a)                                                         \
 inline                                                                      \
-a[+] (reverse)( a[+] arr_a)                                                 \
+a[+] reverse( a[+] arr_a)                                                 \
 {                                                                           \
   maxidx0 = _sub_SxS_( _sel_VxA_( [0], shape( arr_a)), 1);                  \
   res = with {                                                              \
@@ -316,4 +316,3 @@ a[+] rotate (int[.] counts,  a[+] A)                                   \
 #define ROTATE( a)  \
 ROTATE_S( a)        \
 ROTATE_V( a)
-

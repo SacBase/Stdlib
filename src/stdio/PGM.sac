@@ -54,7 +54,7 @@ PGM openPGM( string name )
 {
   err, fp = fopen( name, "rb");
   if (fail(err) == true) {
-    error( (:int)err, "openPGM: Failed to open file %s for reading",
+    error( (int)err, "openPGM: Failed to open file %s for reading",
            name);
   }
   return parsePGM( fp);
@@ -157,7 +157,7 @@ void writePGM( int[.,.] image, int[2] shp, int mval,
 {
   err, fp = fopen( name, "wb");
   if (fail(err) == true) {
-    error( (:int)err, "writePGM: Failed to open file %s for reading",
+    error( (int)err, "writePGM: Failed to open file %s for reading",
            name);
   }
   pgm = newPGM( shp, mval, binary, fp );

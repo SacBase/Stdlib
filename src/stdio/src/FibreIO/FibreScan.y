@@ -5,6 +5,14 @@ extern char yytext[];
 
 #include <stdio.h>
 #include "FibreScan.h"
+/* sac.h unfortunately exports the following symbols, causing a redefinition
+ * warning when import config.h, so undefine them to silence the warnings.
+ */
+#undef ARCH
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
 #include "../../../../config/config.h"
 
 

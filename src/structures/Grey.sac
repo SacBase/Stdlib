@@ -11,7 +11,7 @@ inline grey newGrey( int g)
 {
   g = max(min(g, 255), 0);
 
-  return( (:grey)g);
+  return( (grey)g);
 }
 
 inline grey newGrey( double g)
@@ -19,38 +19,38 @@ inline grey newGrey( double g)
   i = toi( g);
   i = max(min(i, 255), 0);
 
-  return( (:grey)i);
+  return( (grey)i);
 }
 
 inline int[*] toi( grey g)
 {
-  return( (:int[*]) g);
+  return( (int[*]) g);
 }
 
 inline double[*] tod( grey g)
 {
-  return( tod( (:int[*]) g));
+  return( tod( (int[*]) g));
 }
 
 inline grey[*] sel( int[.] idx, grey[*] a)
 {
-  res = Array::sel( idx, ((:int[*])a));
-  return( (:grey[*])res);
+  res = Array::sel( idx, ((int[*])a));
+  return( (grey[*])res);
 }
 
 inline int dim( grey[*] a)
 {
-  return( Array::dim((:int[*])a) );
+  return( Array::dim((int[*])a) );
 }
 
 inline int[.] shape( grey[*] a)
 {
-  return( Array::shape((:int[*])a) );
+  return( Array::shape((int[*])a) );
 }
 
 inline grey[*] reshape( int[.] shp, grey[*] a)
 {
-  return(  (:grey[*])_reshape_VxA_( shp, (:int[*])a) );
+  return(  (grey[*])_reshape_VxA_( shp, (int[*])a) );
 }
 
 inline grey + (grey g1, grey g2)

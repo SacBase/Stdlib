@@ -48,7 +48,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
       {
       case BYTE:
         INDENT(stream, indent+1);
-        fprintf(stream, "%hd\n", ((char*)arr)[done + i]);
+        fprintf(stream, "%hhd\n", ((char*)arr)[done + i]);
         break;
       case SHORT:
         INDENT(stream, indent+1);
@@ -68,7 +68,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         break;
       case UBYTE:
         INDENT(stream, indent+1);
-        fprintf(stream, "%hu\n", ((unsigned char*)arr)[done + i]);
+        fprintf(stream, "%hhu\n", ((unsigned char*)arr)[done + i]);
         break;
       case USHORT:
         INDENT(stream, indent+1);

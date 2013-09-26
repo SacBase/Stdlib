@@ -177,7 +177,7 @@ BUILT_IN( TILE)
 
 #define CAT( a)                                                             \
 inline                                                                      \
-a[+] (++)( a[+] arr_a, a[+] arr_b)                                          \
+a[+] ++( a[+] arr_a, a[+] arr_b)                                          \
 {                                                                           \
   new_shp = _idx_modarray_AxSxS_( _shape_A_( arr_a), 0,                     \
                         _add_SxS_( _sel_VxA_([0], _shape_A_( arr_a)),       \
@@ -227,7 +227,7 @@ BUILT_IN( CATENATE)
 
 #define REVERSE( a)                                                         \
 inline                                                                      \
-a[+] (reverse)( a[+] arr_a)                                                 \
+a[+] reverse( a[+] arr_a)                                                 \
 {                                                                           \
   maxidx0 = _sub_SxS_( _sel_VxA_( [0], _shape_A_( arr_a)), 1);              \
   res = with {                                                              \
@@ -242,7 +242,7 @@ BUILT_IN( REVERSE)
 
 #define REVERSEAXIS( typ)                                                   \
 inline                                                                      \
-typ[+] (reverse)( int axis, typ[+] arr_a)                                   \
+typ[+] reverse( int axis, typ[+] arr_a)                                   \
 {                                                                           \
   shp = _shape_A_( arr_a);                                                  \
   zer = _mul_VxS_( shp, 0);                                                 \
@@ -263,7 +263,7 @@ BUILT_IN( REVERSEAXIS)
 
 #define TRANSPOSE( a)                                                       \
 inline                                                                      \
-a[+] (transpose)( a[+] arr_a)                                               \
+a[+] transpose( a[+] arr_a)                                               \
 {                                                                           \
   res = with {                                                              \
           ( . <= iv <= . ) : arr_a[ reverse( iv)];                          \

@@ -43,7 +43,7 @@ color[.,.] readPPM( string name)
 {
   err, fp = fopen( name, "r");
   if ( SysErr::fail(err) == true) {
-    error( (:int)err, "Error occured when trying to open file %s for reading",
+    error( (int)err, "Error occured when trying to open file %s for reading",
            name);
   }
 
@@ -63,7 +63,7 @@ void printPPM( color[.,.] img, string name, bool binary)
 {
   err, fp = fopen( name, "w+");
   if ( SysErr::fail(err) == true) {
-    error( (:int)err, "Error occured when trying to open file %s for writing",
+    error( (int)err, "Error occured when trying to open file %s for writing",
            name);
   }
 

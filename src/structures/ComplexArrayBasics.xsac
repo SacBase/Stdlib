@@ -55,7 +55,7 @@ double[*] normSq( complex[*] Array)
 inline
 int dim( complex[*] array)
 {
-  return( _dim_A_( (:double[*])(array)) - 1);
+  return( _dim_A_( (double[*])(array)) - 1);
 }
 
 
@@ -71,7 +71,7 @@ int dim( complex[*] array)
 inline
 int[.] shape( complex[*] array)
 {
-  return( _drop_SxV_( -1, _shape_A_( (:double[*])array)));
+  return( _drop_SxV_( -1, _shape_A_( (double[*])array)));
 }
 
 
@@ -89,7 +89,7 @@ int[.] shape( complex[*] array)
 inline
 complex[*] reshape( int[.] shp, complex[*] A)
 {
-  return( (:complex[*])_reshape_VxA_( _cat_VxV_(shp, [2]), (:double[*])A));
+  return( (complex[*])_reshape_VxA_( _cat_VxV_(shp, [2]), (double[*])A));
 }
 
 
@@ -103,10 +103,10 @@ complex[*] sel( int[.] idx, complex[*] array)
           ( . <= iv <= . )
           {
             new_idx = _cat_VxV_( idx, iv );
-          } : (:complex[*])ArrayBasics::sel(new_idx, (:double[*])array);
+          } : (complex[*])ArrayBasics::sel(new_idx, (double[*])array);
         } : genarray( new_shape, toc(0,0) );
 
-  return( (:complex[*])res);
+  return( (complex[*])res);
 }
 
 

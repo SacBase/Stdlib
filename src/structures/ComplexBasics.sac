@@ -13,13 +13,13 @@ typedef double[2] complex;
 
 inline double real(complex CPX)
 {
-  return(((:double[2])CPX)[[0]]);
+  return(((double[2])CPX)[[0]]);
 }
 
 
 inline double imag(complex CPX)
 {
-  return(((:double[2])CPX)[[1]]);
+  return(((double[2])CPX)[[1]]);
 }
 
 /*  
@@ -30,44 +30,44 @@ inline double imag(complex CPX)
 
 inline  complex toc(int    REAL, int    IMAG)
 {
-  return((:complex)[ScalarArith::tod(REAL), ScalarArith::tod(IMAG)]);
+  return((complex)[ScalarArith::tod(REAL), ScalarArith::tod(IMAG)]);
 }
 
 
 inline  complex toc(float  REAL, float  IMAG)
 {
-  return((:complex)[ScalarArith::tod(REAL), ScalarArith::tod(IMAG)]);
+  return((complex)[ScalarArith::tod(REAL), ScalarArith::tod(IMAG)]);
 }
 
 
 inline  complex toc(double REAL, double IMAG)
 {
-  return((:complex)[REAL, IMAG]);
+  return((complex)[REAL, IMAG]);
 }
 
 
 inline complex toc(double[2] COMP) 
 {
-  return((:complex)COMP);
+  return((complex)COMP);
 
 }
 
 
 inline  complex toc(int    REAL)
 {
-  return((:complex)[ScalarArith::tod(REAL), 0.0d]);
+  return((complex)[ScalarArith::tod(REAL), 0.0d]);
 }
 
 
 inline  complex toc(float  REAL)
 {
-  return((:complex)[ScalarArith::tod(REAL), 0.0d]);
+  return((complex)[ScalarArith::tod(REAL), 0.0d]);
 }
 
 
 inline complex toc(double REAL)
 {
-  return((:complex)[REAL, 0.0d]);
+  return((complex)[REAL, 0.0d]);
 }
 
 
@@ -122,20 +122,20 @@ inline double, double ptod(complex C)
 
 inline complex polar(double MAG, double ANGLE)
 {
-  return((:complex)[MAG ScalarArith::* Math::cos(ANGLE), MAG ScalarArith::* Math::sin(ANGLE)]);
+  return((complex)[MAG ScalarArith::* Math::cos(ANGLE), MAG ScalarArith::* Math::sin(ANGLE)]);
 }
 
     
 inline complex polar(double MAG)
 {
-  return((:complex)[MAG, 0.0d]);
+  return((complex)[MAG, 0.0d]);
 }
 
     
 inline double normSq(complex CPX)
 {
-  return(  ((:double[2])CPX)[[0]] ScalarArith::* ((:double[2])CPX)[[0]] 
-         ScalarArith::+ ((:double[2])CPX)[[1]] ScalarArith::* ((:double[2])CPX)[[1]]);
+  return(  ((double[2])CPX)[[0]] ScalarArith::* ((double[2])CPX)[[0]] 
+         ScalarArith::+ ((double[2])CPX)[[1]] ScalarArith::* ((double[2])CPX)[[1]]);
 }
 
 inline double norm( complex CPX)
@@ -145,7 +145,7 @@ inline double norm( complex CPX)
 
 inline double arg(complex CPX)
 {
-  return(atan2(((:double[2])CPX)[[0]], ((:double[2])CPX)[[1]]));
+  return(atan2(((double[2])CPX)[[0]], ((double[2])CPX)[[1]]));
 }
 
 

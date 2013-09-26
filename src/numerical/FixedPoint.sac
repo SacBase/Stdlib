@@ -26,39 +26,39 @@ export all;
   typedef int TYPE( num);
                                                                             
 #define ADD( num)                                                           \
-  inline TYPE( num) (+)( TYPE( num) a, TYPE( num) b)                        \
+  inline TYPE( num) +( TYPE( num) a, TYPE( num) b)                          \
   {                                                                         \
-    return( (:TYPE( num)) _add_SxS_( (:int)a, (:int)b) );                   \
+    return( (TYPE( num)) _add_SxS_( (int)a, (int)b) );                      \
   }                                                                         \
-  ARRAY_BIN( +, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
+  ARRAY_BIN( +, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
 
 #define SUB( num)                                                           \
-  inline TYPE( num) (-)( TYPE( num) a, TYPE( num) b)                        \
+  inline TYPE( num) -( TYPE( num) a, TYPE( num) b)                          \
   {                                                                         \
-    return( (:TYPE( num)) _sub_SxS_( (:int)a, (:int)b) );                   \
+    return( (TYPE( num)) _sub_SxS_( (int)a, (int)b) );                      \
   }                                                                         \
-  ARRAY_BIN( -, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
+  ARRAY_BIN( -, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
 
 #define DIV( num)                                                           \
-  inline TYPE( num) (/)( TYPE( num) a, TYPE( num) b)                        \
+  inline TYPE( num) /( TYPE( num) a, TYPE( num) b)                          \
   {                                                                         \
-    res = _div_SxS_( _mul_SxS_( (:int)a, pow2( num)), (:int)b);             \
-    return( (:TYPE( num)) res);                                             \
+    res = _div_SxS_( _mul_SxS_( (int)a, pow2( num)), (int)b);               \
+    return( (TYPE( num)) res);                                              \
   }                                                                         \
-  ARRAY_BIN( /, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
+  ARRAY_BIN( /, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
 
 #define MUL( num)                                                           \
-  inline TYPE( num) (*)( TYPE( num) a, TYPE( num) b)                        \
+  inline TYPE( num) *( TYPE( num) a, TYPE( num) b)                          \
   {                                                                         \
-    unnorm = _mul_SxS_( (:int)a, (:int)b);                                  \
-    return( (:TYPE( num)) _div_SxS_( unnorm, pow2( num) ));                 \
+    unnorm = _mul_SxS_( (int)a, (int)b);                                    \
+    return( (TYPE( num)) _div_SxS_( unnorm, pow2( num) ));                  \
   }                                                                         \
-  ARRAY_BIN( *, (:TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))        \
+  ARRAY_BIN( *, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
 
 #define COMP( num, sim, name)                                               \
-  inline bool (sim)( TYPE( num) a, TYPE( num) b)                            \
+  inline bool sim( TYPE( num) a, TYPE( num) b)                              \
   {                                                                         \
-    res = _ ## name ## _SxS_( (:int)a, (:int)b);                            \
+    res = _ ## name ## _SxS_( (int)a, (int)b);                              \
     return( res);                                                           \
   }                                                                         \
   ARRAY_BIN( sim, false, TYPE( num), TYPE( num), bool)                      \
@@ -69,7 +69,7 @@ export all;
 #define BINARY_SEARCH( num, name, function)                       \
   inline TYPE( num) name( TYPE( num) arg)                         \
   {                                                               \
-    res = (:TYPE(num)) 1;                                         \
+    res = (TYPE(num)) 1;                                          \
     two = TO_TYPE_CAT( to_, TYPE( num))(2);                       \
     i=0;                                                          \
                                                                   \
@@ -92,7 +92,7 @@ export all;
     }                                                             \
     return( res);                                                 \
   }                                                               \
-  ARRAY_MON( name, (:TYPE( num)) 0, TYPE( num), TYPE( num))   
+  ARRAY_MON( name, (TYPE( num)) 0, TYPE( num), TYPE( num))   
 
 #define TO_INT( num)                                                        \
   inline int to_int( TYPE( num) a)                                          \
@@ -127,7 +127,7 @@ export all;
   {                                                                         \
     ans =                                                                   \
       _eq_SxS_( 0,                                                          \
-                pow2( num)) ? (:int)a: _div_SxS_( ( (:int)a), pow2( num));  \
+                pow2( num)) ? (int)a: _div_SxS_( ( (int)a), pow2( num));    \
     return( ans);                                                           \
   }                                                                         \
   ARRAY_MON( trunc, 0, TYPE( num), int)                                     \
@@ -135,7 +135,7 @@ export all;
 #define TO_RAW( num)                                                        \
   inline int to_raw( TYPE( num) a)                                          \
   {                                                                         \
-    return( (:int)a);                                                       \
+    return( (int)a);                                                        \
   }                                                                         \
   ARRAY_MON( to_raw, 0, TYPE( num), int)                                     
 
@@ -143,7 +143,7 @@ export all;
   inline int[2] to_int2( TYPE( num) a)                                      \
   {                                                                         \
     whole = to_int( a);                                                     \
-    part  = _mod_SxS_( (:int)a, pow2( num));                                \
+    part  = _mod_SxS_( (int)a, pow2( num));                                 \
     return( [whole, part]);                                                 \
   }                                                                         \
   ARRAY_MON( to_int2, ([0,0]), TYPE( num), int)                             \
@@ -158,29 +158,29 @@ export all;
   inline tc[+] fun( ta[+] a, tb[+] b)                                       \
   {                                                                         \
     return( with {                                                          \
-      ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a),            \
-                             (:tb[*])_sel_VxA_( iv, (:int[*])b));           \
-      } : genarray( _shape_A_( (:int[*])a), z));                            \
+      ( . <= iv <= .) : fun( (ta[*])_sel_VxA_( iv, (int[*])a),              \
+                             (tb[*])_sel_VxA_( iv, (int[*])b));             \
+      } : genarray( _shape_A_( (int[*])a), z));                             \
   }                                                                         \
   inline tc[+] fun( ta[+] a, tb b)                                          \
   {                                                                         \
     return( with {                                                          \
-      ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a), b);        \
-      } : genarray( _shape_A_( (:int[*])a), z));                            \
+      ( . <= iv <= .) : fun( (ta[*])_sel_VxA_( iv, (int[*])a), b);          \
+      } : genarray( _shape_A_( (int[*])a), z));                             \
   }                                                                         \
   inline tc[+] fun( ta a, tb[+] b)                                          \
   {                                                                         \
     return( with {                                                          \
-      ( . <= iv <= .) : fun( a, (:tb[*])_sel_VxA_( iv, (:int[*])b));        \
-      } : genarray( _shape_A_( (:int[*])b), z));                            \
+      ( . <= iv <= .) : fun( a, (tb[*])_sel_VxA_( iv, (int[*])b));          \
+      } : genarray( _shape_A_( (int[*])b), z));                             \
   }
 
 #define ARRAY_MON( fun, z, ta, tb)                                          \
   inline tb[+] fun( ta[+] a)                                                \
   {                                                                         \
     return( with {                                                          \
-      ( . <= iv <= .) : fun( (:ta[*])_sel_VxA_( iv, (:int[*])a));           \
-      } : genarray( _shape_A_( (:int[*])a), z));                            \
+      ( . <= iv <= .) : fun( (ta[*])_sel_VxA_( iv, (int[*])a));             \
+      } : genarray( _shape_A_( (int[*])a), z));                             \
   }
 
 #define TO_TYPE_CAT( a, b) TO_TYPE_CAT_( a, b)
@@ -188,9 +188,9 @@ export all;
 #define TO_TYPE( num, from)                                                 \
   inline TYPE( num) TO_TYPE_CAT( to_, TYPE( num))( from a)                  \
   {                                                                         \
-    return( (:TYPE( num)) _mul_SxS_(to_int( a), pow2( num)));               \
+    return( (TYPE( num)) _mul_SxS_(to_int( a), pow2( num)));                \
   }                                                                         \
-  ARRAY_MON( TO_TYPE_CAT( to_, TYPE( num)), (:TYPE( num)) 0, from, TYPE( num)) 
+  ARRAY_MON( TO_TYPE_CAT( to_, TYPE( num)), (TYPE( num)) 0, from, TYPE( num)) 
 
 #define CROSS_PRODUCT( num)                                                 \
   FORALL_POINTS2( TO_TYPE, TYPE( num))                                       

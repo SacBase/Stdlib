@@ -22,25 +22,25 @@ use ArrayBasics : { sel };
 
 inline complex sin(complex X)
 {
-  return((:complex)[Math::sin(((:double[2])X)[[0]]) ScalarArith::* Math::cosh(((:double[2])X)[[1]]),
-                    Math::cos(((:double[2])X)[[0]]) ScalarArith::* Math::sinh(((:double[2])X)[[1]])]);
+  return((complex)[Math::sin(((double[2])X)[[0]]) ScalarArith::* Math::cosh(((double[2])X)[[1]]),
+                   Math::cos(((double[2])X)[[0]]) ScalarArith::* Math::sinh(((double[2])X)[[1]])]);
 }
 
 
 inline complex cos(complex X)
 {
-  return((:complex)[Math::cos(((:double[2])X)[[0]]) ScalarArith::* Math::cosh(((:double[2])X)[[1]]), 
-                    (0d ScalarArith::- 1.0d) ScalarArith::* Math::sin(((:double[2])X)[[0]]) 
-                         ScalarArith::* Math::sinh(((:double[2])X)[[1]])]);
+  return((complex)[Math::cos(((double[2])X)[[0]]) ScalarArith::* Math::cosh(((double[2])X)[[1]]), 
+                   (0d ScalarArith::- 1.0d) ScalarArith::* Math::sin(((double[2])X)[[0]]) 
+                         ScalarArith::* Math::sinh(((double[2])X)[[1]])]);
 }
 
 
 inline complex tan(complex X)
 {
-  Z = Math::cos(2.0d ScalarArith::*((:double[2])X)[[0]]) ScalarArith::+ Math::cosh(2.0d ScalarArith::* ((:double[2])X)[[1]]);
+  Z = Math::cos(2.0d ScalarArith::*((double[2])X)[[0]]) ScalarArith::+ Math::cosh(2.0d ScalarArith::* ((double[2])X)[[1]]);
   
-  return((:complex)[Math::sin(2d ScalarArith::*((:double[2])X)[[0]])  ScalarArith::/ Z, 
-                    Math::sinh(2d ScalarArith::*((:double[2])X)[[1]])  ScalarArith::/ Z]);
+  return((complex)[Math::sin(2d ScalarArith::*((double[2])X)[[0]])  ScalarArith::/ Z, 
+                   Math::sinh(2d ScalarArith::*((double[2])X)[[1]])  ScalarArith::/ Z]);
 }
 
 
@@ -68,15 +68,15 @@ inline complex atan(complex X)
 
 inline complex sinh(complex X)
 {
-  return((:complex)[Math::sinh(((:double[2])X)[[0]]) ScalarArith::* Math::cos(((:double[2])X)[[1]]),
-                    Math::cosh(((:double[2])X)[[0]]) ScalarArith::* Math::sin(((:double[2])X)[[1]])]);
+  return((complex)[Math::sinh(((double[2])X)[[0]]) ScalarArith::* Math::cos(((double[2])X)[[1]]),
+                   Math::cosh(((double[2])X)[[0]]) ScalarArith::* Math::sin(((double[2])X)[[1]])]);
 }
 
 
 inline complex cosh(complex X)
 {
-  return((:complex)[Math::cosh(((:double[2])X)[[0]]) ScalarArith::* Math::cos(((:double[2])X)[[1]]),
-                    Math::sinh(((:double[2])X)[[0]]) ScalarArith::* Math::sin(((:double[2])X)[[1]])]);
+  return((complex)[Math::cosh(((double[2])X)[[0]]) ScalarArith::* Math::cos(((double[2])X)[[1]]),
+                   Math::sinh(((double[2])X)[[0]]) ScalarArith::* Math::sin(((double[2])X)[[1]])]);
 }
 
 
@@ -112,17 +112,17 @@ inline complex atanh(complex X)
 
 inline complex exp(complex X)
 {
-  return((:complex)[Math::exp(((:double[2])X)[[0]]) ScalarArith::* Math::cos(((:double[2])X)[[1]]),
-                    Math::exp(((:double[2])X)[[0]]) ScalarArith::* Math::sin(((:double[2])X)[[1]])]);
+  return((complex)[Math::exp(((double[2])X)[[0]]) ScalarArith::* Math::cos(((double[2])X)[[1]]),
+                   Math::exp(((double[2])X)[[0]]) ScalarArith::* Math::sin(((double[2])X)[[1]])]);
 }
 
 
 inline complex log(complex X)
 {
-  return((:complex)[0.5d
-                    ScalarArith::* Math::log(((:double[2])X)[[0]] ScalarArith::* ((:double[2])X)[[0]]
-                          ScalarArith::+ ((:double[2])X)[[1]] ScalarArith::* ((:double[2])X)[[1]]),
-                    Math::atan(((:double[2])X)[[1]] ScalarArith::/ ((:double[2])X)[[0]])]);
+  return((complex)[0.5d
+                   ScalarArith::* Math::log(((double[2])X)[[0]] ScalarArith::* ((double[2])X)[[0]]
+                          ScalarArith::+ ((double[2])X)[[1]] ScalarArith::* ((double[2])X)[[1]]),
+                   Math::atan(((double[2])X)[[1]] ScalarArith::/ ((double[2])X)[[0]])]);
 }
 
 
@@ -151,16 +151,16 @@ inline complex pow(double  BASE, complex EXPON)
 
 inline complex sqrt(complex X)
 {
-  return((:complex)[Math::sqrt(0.5d ScalarArith::* 
-                    (((:double[2])X)[[0]] 
-                     ScalarArith::+ Math::sqrt(((:double[2])X)[[0]] ScalarArith::* ((:double[2])X)[[0]]
-                            ScalarArith::+ ((:double[2])X)[[1]] ScalarArith::* ((:double[2])X)[[1]]))),
-                    Math::sqrt(0.5d ScalarArith::* 
-		    ((0d ScalarArith::- 1.0d) ScalarArith::* ((:double[2])X)[[0]]
-                     ScalarArith::+ Math::sqrt(((:double[2])X)[[0]] 
-                              ScalarArith::* ((:double[2])X)[[0]]
-                            ScalarArith::+ ((:double[2])X)[[1]]
-                              ScalarArith::* ((:double[2])X)[[1]])))]);
+  return((complex)[Math::sqrt(0.5d ScalarArith::* 
+                   (((double[2])X)[[0]] 
+                    ScalarArith::+ Math::sqrt(((double[2])X)[[0]] ScalarArith::* ((double[2])X)[[0]]
+                            ScalarArith::+ ((double[2])X)[[1]] ScalarArith::* ((double[2])X)[[1]]))),
+                   Math::sqrt(0.5d ScalarArith::* 
+		    ((0d ScalarArith::- 1.0d) ScalarArith::* ((double[2])X)[[0]]
+                     ScalarArith::+ Math::sqrt(((double[2])X)[[0]] 
+                              ScalarArith::* ((double[2])X)[[0]]
+                            ScalarArith::+ ((double[2])X)[[1]]
+                              ScalarArith::* ((double[2])X)[[1]])))]);
 }
 
 

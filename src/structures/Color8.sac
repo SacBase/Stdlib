@@ -9,42 +9,42 @@ typedef int[3] color;
 
 inline color black()
 {
-  return( (:color)[0,0,0]);
+  return( (color)[0,0,0]);
 }
 
 inline color white()
 {
-  return( (:color)[255,255,255]);
+  return( (color)[255,255,255]);
 }
 
 inline color red()
 {
-  return( (:color)[255,0,0]);
+  return( (color)[255,0,0]);
 }
 
 inline color green()
 {
-  return( (:color)[0,255,0]);
+  return( (color)[0,255,0]);
 }
 
 inline color blue()
 {
-  return( (:color)[0,0,255]);
+  return( (color)[0,0,255]);
 }
 
 inline int red( color col)
 {
-  return( ((:int[3]) col)[0] );
+  return( ((int[3]) col)[0] );
 }
 
 inline int green( color col)
 {
-  return( ((:int[3]) col)[1] );
+  return( ((int[3]) col)[1] );
 }
 
 inline int blue( color col)
 {
-  return( ((:int[3]) col)[2] );
+  return( ((int[3]) col)[2] );
 }
 
 
@@ -54,7 +54,7 @@ inline color newColor( int[3] col)
   max_col = [255, 255, 255];
 
   col = max( min( col, max_col), min_col);
-  return( (:color)col);
+  return( (color)col);
 }
 
 inline color newColor( int x, int y, int z)
@@ -64,28 +64,28 @@ inline color newColor( int x, int y, int z)
 
 inline int[3] toi( color c)
 {
-  return( (:int[3]) c);
+  return( (int[3]) c);
 }
 
 inline int[*] toi( color[*] c)
 {
-  return( (:int[*]) c);
+  return( (int[*]) c);
 }
 
 inline double[3] tod( color c)
 {
-  return( tod( (:int[3]) c));
+  return( tod( (int[3]) c));
 }
 
 inline double[*] tod( color[*] c)
 {
-  return( tod( (:int[*]) c));
+  return( tod( (int[*]) c));
 }
 
 inline color[256] Weights2Clut( double[256] w, color c1, color c2)
 {
-  return( (: color[256]) toi( { iv -> w[iv] * tod((:int[3]) c1) } 
-                               + { iv -> (1d - w[iv]) * tod((:int[3]) c2) } ));
+  return( ( color[256]) toi( { iv -> w[iv] * tod((int[3]) c1) } 
+                               + { iv -> (1d - w[iv]) * tod((int[3]) c2) } ));
 }
 
 inline double[256] genSteps( double from, double to)
@@ -206,32 +206,32 @@ inline color[*] sel( int idx, color[*] clut)
 
 inline color[*] sel( int[.] idx, color[*] a)
 {
-  res = sel( idx, ((:int[*])a));
-  return( (:color[*])res);
+  res = sel( idx, ((int[*])a));
+  return( (color[*])res);
 }
 
 inline
 int dim( color[*] a)
 {
-  return( dim((:int[*])a) - 1 );
+  return( dim((int[*])a) - 1 );
 }
 
 inline
 int[.] shape( color[*] a)
 {
-  return( _drop_SxV_( -1, shape((:int[*])a)) );
+  return( _drop_SxV_( -1, shape((int[*])a)) );
 }
 
 inline
 color[*] reshape( int[.] shp, color[*] a)
 {
-  return(  (:color[*])_reshape_VxA_( shp ++ [3], (:int[*])a) );
+  return(  (color[*])_reshape_VxA_( shp ++ [3], (int[*])a) );
 }
 
 
 
 inline
-color (+) (color a, color b)
+color + (color a, color b)
 {
   return( newColor( red(a)   + red(b),
                     green(a) + green(b),
@@ -239,7 +239,7 @@ color (+) (color a, color b)
 }
 
 inline
-color[*] (+) (color[*] a, color[*] b)
+color[*] + (color[*] a, color[*] b)
 {
   res = with{
           ( . <= iv <= . ) : a[iv] + b[iv];
@@ -250,7 +250,7 @@ color[*] (+) (color[*] a, color[*] b)
 
 
 inline
-color (-) (color a, color b)
+color - (color a, color b)
 {
   return( newColor( red(a)   - red(b),
                     green(a) - green(b),
@@ -258,7 +258,7 @@ color (-) (color a, color b)
 }
 
 inline
-color[*] (-) (color[*] a, color[*] b)
+color[*] - (color[*] a, color[*] b)
 {
   res = with{
           ( . <= iv <= . ) : a[iv] -  b[iv];
@@ -269,7 +269,7 @@ color[*] (-) (color[*] a, color[*] b)
 
 
 inline
-color (*) (color c, double x)
+color * (color c, double x)
 {
   return( newColor( toi( tod( red(   c)) * x),
                     toi( tod( green( c)) * x),
@@ -277,7 +277,7 @@ color (*) (color c, double x)
 }
 
 inline
-color[*] (*) (color[*] c, double x)
+color[*] * (color[*] c, double x)
 {
   res = with{
           ( . <= iv <= . ) : c[iv] * x;

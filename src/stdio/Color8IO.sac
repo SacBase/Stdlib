@@ -12,6 +12,6 @@ export all;
 
 inline void print( color[*] c)
 {
-  print( (:int[*]) c);
+  print( (int[*]) c);
 }
 
