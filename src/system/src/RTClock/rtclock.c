@@ -7,13 +7,19 @@
  * time clock into the world of SAC.
  */
 
-
 #include <time.h>
 
-#ifdef __MACH__
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_GETTIME_REALTIME
+#include <sys/times.h>
+#elif HAVE_MACH_CLOCK_GET_TIME
 #include <mach/clock.h>
 #include <mach/mach.h>
 #endif
+
 
 void *TheRTClock;
 
@@ -30,7 +36,14 @@ void SAC_RTClock_gettime( int *sec, int *nano)
 {
   struct timespec result;
 
-#ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
+  result.tv_sec = 0;
+  result.tv_nsec = 0;
+
+#ifdef HAVE_GETTIME_REALTIME
+
+  clock_gettime( CLOCK_REALTIME, &result);
+
+#elif HAVE_MACH_CLOCK_GET_TIME
   clock_serv_t cclock;
   mach_timespec_t mts;
   host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
@@ -38,12 +51,11 @@ void SAC_RTClock_gettime( int *sec, int *nano)
   mach_port_deallocate(mach_task_self(), cclock);
   result.tv_sec = mts.tv_sec;
   result.tv_nsec = mts.tv_nsec;
+
 #else
-  clock_gettime( CLOCK_REALTIME, &result);
+#warning no implementation of SAC_RTClock_gettime on this target
 #endif
 
   *sec = (int) result.tv_sec;
   *nano = (int) result.tv_nsec;
 }
-                                                                   
-

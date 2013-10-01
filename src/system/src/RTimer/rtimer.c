@@ -18,32 +18,47 @@
 #include <time.h>
 #include "sac.h"
 
-#ifdef __MACH__
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_GETTIME_REALTIME
+#include <sys/times.h>
+#elif HAVE_MACH_CLOCK_GET_TIME
 #include <mach/clock.h>
 #include <mach/mach.h>
 #endif
 
 
-struct rtimer 
+struct rtimer
 {
   struct timespec elapsed;
   struct timespec started;
   int instance;
 };
-  
+
 
 void current_utc_time(struct timespec *ts) {
 
-#ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
-  clock_serv_t cclock;
-  mach_timespec_t mts;
-  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-  clock_get_time(cclock, &mts);
-  mach_port_deallocate(mach_task_self(), cclock);
-  ts->tv_sec = mts.tv_sec;
-  ts->tv_nsec = mts.tv_nsec;
+    ts->tv_sec = 0;
+    ts->tv_nsec = 0;
+
+#ifdef HAVE_GETTIME_REALTIME
+
+    clock_gettime( CLOCK_REALTIME, ts);
+
+#elif HAVE_MACH_CLOCK_GET_TIME
+
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts->tv_sec = mts.tv_sec;
+    ts->tv_nsec = mts.tv_nsec;
+
 #else
-  clock_gettime(CLOCK_REALTIME, ts);
+#warning no implementation of current_utc_time on this target
 #endif
 
 }
