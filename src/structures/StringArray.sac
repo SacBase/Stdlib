@@ -67,7 +67,7 @@ stringArray modarray( stringArray array, int[.] idx, stringArray val)
   if( ( Array::any( idx Array::>= shape( array))) || 
       ( Array::any( idx Array::< ( 0 Array::* shape( array))))) {
     RuntimeError::error( 1, 
-        "Index out of bounds in call to stringArray::modarray");
+        "Index out of bounds in call to StringArray::modarray");
   }
 
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
@@ -101,7 +101,7 @@ stringArray modarray( stringArray array, int[.] idx, stringArray val)
   else {
     res = array;
     RuntimeError::error( 1, 
-        "Overlarge index vector passed to stringArray::modarray");
+        "Overlarge index vector passed to StringArray::modarray");
   }
   return( res);
 }
@@ -117,7 +117,7 @@ stringArray sel( int[.] idx, stringArray array)
   if( ( Array::any( idx Array::>= shape( array))) || 
       ( Array::any( idx Array::< ( 0 Array::* shape( array))))) {
     RuntimeError::error( 1, 
-        "Index out of bounds in call to stringArray::sel");
+        "Index out of bounds in call to StringArray::sel");
   }
 
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
