@@ -18,18 +18,18 @@ export { print, fprint, show};
 #define LINKSPECS(actualtype, typename)                                       \
 external void printarray(File &stream, int d, int[.] s, actualtype[*] a);     \
   PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
-  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+  PRINTME(HASH)pragma linkobj "src/ArrayIO/PrintArray.o"               \
 external void printarray(TermFile &stream, int d, int[.] s, actualtype[*] a); \
   PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
-  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+  PRINTME(HASH)pragma linkobj "src/ArrayIO/PrintArray.o"               \
 external void printarray(File &stream, string fmt,                            \
                          int d, int[.] s, actualtype[*] a);                   \
   PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
-  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+  PRINTME(HASH)pragma linkobj "src/ArrayIO/PrintArray.o"               \
 external void printarray(TermFile &stream, string fmt, int d,                 \
                          int[.] s, actualtype[*] a);                          \
   PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
-  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               
+  PRINTME(HASH)pragma linkobj "src/ArrayIO/PrintArray.o"
 
 LINKSPECS (bool, Bool)
 LINKSPECS (byte, Byte)

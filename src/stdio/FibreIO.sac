@@ -315,36 +315,36 @@ inline void FibrePrint( string scaler)
 									\
 external  type  FibreScan##alias( File &stream);			\
   PRINTME(HASH)pragma linksign[0,1]					\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/ScanOthers.o)		\
+  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthers.o"		\
 									\
 external  type  FibreScan##alias( TermFile &stream);			\
   PRINTME(HASH)pragma linksign[0,1]					\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/ScanOthers.o)		\
+  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthers.o"		\
 									\
 external  type[*]  FibreScan##alias##Array( File &stream);		\
   PRINTME(HASH)pragma refcounting [0]					\
   PRINTME(HASH)pragma linksign[1,2]					\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/ScanOthersArr.o)	\
+  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"             \
 									\
 external  type[*]  FibreScan##alias##Array( TermFile &stream);		\
   PRINTME(HASH)pragma refcounting [0]					\
   PRINTME(HASH)pragma linksign[1,2]					\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/ScanOthersArr.o)	\
+  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"	        \
 									\
 external  type[*]  FibreScan##alias##ArrayStr( string stream);		\
   PRINTME(HASH)pragma refcounting [0]					\
   PRINTME(HASH)pragma linksign[1,2]					\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/ScanOthersArr.o)	\
+  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"	        \
 									\
 external void FibrePrint( File &stream, int DIM, int[+] SHAPE, 		\
 type[+] ARRAY);								\
   PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)	\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/FibrePrint.o)		\
+  PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"		\
 									\
 external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, 	\
 type[+] ARRAY);								\
   PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)	\
-  PRINTME(HASH)pragma linkobj QUOTEME(src/FibreIO/FibrePrint.o)
+  PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"
 
 
 #define FIBRESCAN(type,alias)						\
