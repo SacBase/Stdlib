@@ -15,8 +15,6 @@
 class C99Benchmarking;
 external classtype;
 
-#ifdef SAC_BACKEND_C99
-
 import Interval: all;
 use String: {string, sprintf,+};
 use Array: all except {+};
@@ -335,5 +333,3 @@ external void benchDestroyInterval( Interval interval);
 #pragma linkobj "src/C99Benchmarking/bench.o"
 #pragma linksign [1]
 
-
-#endif /* SAC_BACKEND_C99 */
