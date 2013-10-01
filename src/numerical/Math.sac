@@ -3,9 +3,9 @@ module Math;
 use ScalarArith: all;
 export all;
 
-
-#include "../../config/config.h"
-
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
   /* Trigonometric functions.  */
 

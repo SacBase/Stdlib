@@ -13,8 +13,9 @@ extern char yytext[];
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
-#include "../../../../config/config.h"
-
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 enum READMODE {
   byte_mode,
