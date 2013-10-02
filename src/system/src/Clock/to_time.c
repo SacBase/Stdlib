@@ -1,6 +1,6 @@
 /* $Id$ */
 
-#include "Time.h"
+#include "Clock.h"
 
 time_t *SACto_time( int secs)
 {
