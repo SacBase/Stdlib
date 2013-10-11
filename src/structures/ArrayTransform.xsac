@@ -60,13 +60,10 @@ inline
 int NormalizeRotateCount( int count, int max_rotate)
 {
   /* Normalizer for rotate count */
-  z = (( _eq_SxS_( 0, count)) || ( _eq_SxS_( 0, max_rotate))) ? 
-      0 : 
-      ( _gt_SxS_( count, 0)) ? _mod_SxS_( count, max_rotate) 
-          : _sub_SxS_( max_rotate, _mod_SxS_(_abs_S_( count), max_rotate));
-  z2 = _noteminval_( z, 0);
-  z3 = _notemaxval_( z2, max_rotate);
-  return(z3);
+  z = _aplmod_SxS_( count, max_rotate);
+  // z2 = _noteminval_( z, 0);
+  //z3 = _notemaxval_( z2, max_rotate);
+  return( z);
 }
 
 inline
