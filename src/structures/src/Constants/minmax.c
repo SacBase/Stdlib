@@ -17,12 +17,12 @@ rtype min##SACtype()				\
   return( typeucase##_MIN);			\
 }
 
-minmax(char, byte, CHAR);
-minmax(short, short, SHRT);
-minmax(long, long, LONG);
-minmax(long long, longlong, LLONG);
-minmax(unsigned char, ubyte, UCHAR);
-minmax(unsigned short, ushort, USHRT);
-minmax(unsigned int, uint, UINT);
-minmax(unsigned long, ulong, ULONG);
-minmax(unsigned long long, ulonglong, ULLONG);
+minmax(char, byte, CHAR)
+minmax(short, short, SHRT)
+minmax(long, long, LONG)
+minmax(long long, longlong, LLONG)
+minmax(unsigned char, ubyte, UCHAR)
+minmax(unsigned short, ushort, USHRT)
+minmax(unsigned int, uint, UINT)
+minmax(unsigned long, ulong, ULONG)
+minmax(unsigned long long, ulonglong, ULLONG)
