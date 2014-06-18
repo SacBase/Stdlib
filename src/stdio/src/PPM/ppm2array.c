@@ -69,7 +69,8 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
         }
 
         if (comment == true) {
-          fgets(line, MAXLINE, fp);
+          if (NULL == fgets(line, MAXLINE, fp))
+            break;
         }
       }
     } else {
