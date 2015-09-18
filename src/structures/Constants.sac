@@ -94,7 +94,15 @@ external double  mindouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/mindouble.o"
 
+external double  tinydouble();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/tinydouble.o"
+
 external double  maxdouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/maxdouble.o"
+
+external double  epidouble();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/epidouble.o"
 

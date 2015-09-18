@@ -33,8 +33,10 @@ external  void pclose(File STREAM);
 
 
 external  int system(string COMMAND);
+    #pragma linkobj "src/Process/system.o"
     #pragma effect TheFileSystem
-    #pragma linksign [0,1]
+    #pragma linkname "SACsystem"
+    #pragma linksign [0,1] 
     /*
      * Execute COMMAND by calling:  /bin/sh -c COMMAND
      * and wait until the command has completed execution.

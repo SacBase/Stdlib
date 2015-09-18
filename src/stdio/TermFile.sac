@@ -99,8 +99,12 @@ inline void ungetc(char C) { ungetc( C, stdin); }
 
 external void fprintf(TermFile &STREAM, string FORMAT, ...);
     #pragma effect TheTerminal
+    #pragma linkname "SACfprintf_TF"
+    #pragma linkobj "src/TermFile/fprintf.o"
 external void  printf(string FORMAT, ...);
     #pragma effect TheTerminal, stdout
+    #pragma linkname "SACprintf_TF"
+    #pragma linkobj "src/TermFile/printf.o"
     /*
      * Print formatted output to STREAM which must be open for writing.
      * The syntax of format strings is identical to that known from C.

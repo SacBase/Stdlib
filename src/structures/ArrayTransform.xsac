@@ -61,8 +61,6 @@ int NormalizeRotateCount( int count, int max_rotate)
 {
   /* Normalizer for rotate count */
   z = _aplmod_SxS_( count, max_rotate);
-  // z2 = _noteminval_( z, 0);
-  //z3 = _notemaxval_( z2, max_rotate);
   return( z);
 }
 
@@ -272,34 +270,29 @@ BUILT_IN( TRANSPOSE)
 
 
 /*----------------------------------------------------------------------------*/
-
+// Positive shift is to right, negative to left 
 #define SHIFT_S( a)                                                         \
 inline                                                                      \
 a[+] shift (int dimension, int count, a boundary, a[+] A)                   \
-{                                                                           \
-  shpa = _shape_A_( A);                                                     \
+{ shpa = _shape_A_( A);                                                     \
   max_shift = _sel_VxA_( [dimension], shpa);                                \
   zr = _mul_SxV_( 0, shpa);                                                 \
-  p = _ge_SxS_( count, 0);                                                  \
-  s = signum( count);                                                       \
+  s = signum(count);                                                        \
+  cnonneg = _ge_SxS_( count, 0);                                            \
+  cneg = _not_S_( cnonneg);                                                 \
+  cnonneg = _toi_S_( cnonneg);                                              \
+  cneg = _toi_S_( cneg);                                                    \
                                                                             \
   /* Prevent overshift */                                                   \
-  count = _min_SxS_( _abs_S_( count), max_shift);                           \
+  abscount = _abs_S_( count);                                               \
+  count = _min_SxS_( abscount, max_shift);                                  \
   count = _mul_SxS_( s, count);                                             \
                                                                             \
-  /* shift right */                                                         \
-  if( _ge_SxS_( count, 0)) {                                                \
-    lb = _modarray_AxVxS_( zr, [dimension], count);                         \
-    ub = shpa;                                                              \
-    offset = _modarray_AxVxS_( zr, [dimension], _neg_S_( count));           \
-                                                                            \
-  /* shift left */                                                          \
-  } else {                                                                  \
-    lb = zr;                                                                \
-    disp = _modarray_AxVxS_( zr, [dimension], _neg_S_( count));             \
-    ub = _sub_VxV_( shpa, disp);                                            \
-    offset = disp;                                                          \
-  }                                                                         \
+  lb = _modarray_AxVxS_( zr, [dimension], _mul_SxS_( count, cnonneg));      \
+  offset = _modarray_AxVxS_( zr, [dimension], _neg_S_( count));             \
+  ubel = _sel_VxA_( [dimension], shpa);                                     \
+  ubel = _sub_SxS_( ubel, _mul_SxS_( abscount, cneg));                      \
+  ub = _modarray_AxVxS_( shpa, [dimension], ubel);                          \
                                                                             \
   result = with {                                                           \
               ( lb <= iv < ub ) : _sel_VxA_( _add_VxV_( iv, offset), A);    \
@@ -460,11 +453,29 @@ a[+] where( bool[*] p, a A, a[+] B)             \
   return( res);                                 \
 }
 
+#define WHERE_SxS( a)                           \
+inline                                          \
+a[+] where( bool[*] p, a A, a B)                \
+{                                               \
+  res = with {                                  \
+          ( . <= iv <= . )                      \
+          {                                     \
+            if ( _sel_VxA_( iv, p)) {           \
+              val = A;                          \
+            } else {                            \
+              val = B;                          \
+            }                                   \
+          } : val;                              \
+        } : genarray( _shape_A_(p), zero(B) );  \
+                                                \
+  return( res);                                 \
+}
 
 #define WHERE( a)                            \
 WHERE_AxA( a)                                \
 WHERE_AxS( a)                                \
-WHERE_SxA( a)
+WHERE_SxA( a)                                \
+WHERE_SxS( a)
 
 BUILT_IN( WHERE)
 

@@ -185,7 +185,9 @@ external int L_tmpnam();
 
 external string mktemp(string TEMPLATE);
     #pragma effect TheFileSystem
-    #pragma linksign [1,1]
+    #pragma linkname "SACmktemp"
+    #pragma linkobj  "src/FileSystem/mktemp.o"
+    #pragma linksign [0,1]
     /*
      * Create a unique file name,  typically  in  a  temporary
      * file system. The  string TEMPLATE

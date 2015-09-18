@@ -248,12 +248,16 @@ parse_scalar: NUM
                     doublearray = (double *) SAC_MALLOC( sizeof( double));
                     *doublearray = $1;
                   }
-                  else if( ! mode == int_mode) { 
-                    yyerror( "Read integer but expected a floating point number!");
+                  else if( mode == float_mode) {
+                    floatarray = (float *) SAC_MALLOC( sizeof( float));
+                    *floatarray = $1;
                   }
-                  else {
+                  else if( mode == int_mode) {
                     intarray = (int *) SAC_MALLOC( sizeof( int));
                     *intarray = $1;
+                  }
+                  else { 
+                    yyerror( "numeric type expected!");
                   }
                  got_scalar = 1; 
                  dims = 0;
@@ -561,6 +565,9 @@ elems: elems elem
 elem: NUM 
       { if( mode == double_mode) { 
           doublearray[ array_pos]= (double)$1;
+        }
+        else if( mode == float_mode) {
+          floatarray[ array_pos] = (float)$1;
         }
         else if( mode == int_mode){
           intarray[ array_pos]=$1;

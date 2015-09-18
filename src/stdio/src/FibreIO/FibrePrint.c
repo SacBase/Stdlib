@@ -92,7 +92,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         } else {
           INDENT(stream, indent+3);
         }
-        fprintf(stream, "%e\n", ((float*)arr)[done + i]);
+        fprintf(stream, "%f\n", ((float*)arr)[done + i]);
         break;
       case DOUBLE:
         if((((double*)arr)[done + i]) >= 0) {
@@ -100,7 +100,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         } else {
           INDENT(stream, indent+3);
         }
-        fprintf(stream, "%e\n", ((double*)arr)[done + i]);
+        fprintf(stream, "%f\n", ((double*)arr)[done + i]);
         break;
       case STRING:
         INDENT(stream, indent+1);

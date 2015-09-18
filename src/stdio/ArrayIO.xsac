@@ -15,6 +15,34 @@ export { print, fprint, show};
 #define PRINTME(x) x
 #define QUOTEME(x) #x
 
+#ifdef SAC_BACKEND_DISTMEM
+
+#define LINKSPECS(actualtype, typename)                                       \
+external void printarray(File &stream, int d, int[.] s, actualtype[*] a,      \
+                         bool is_distr, ulong arr_offset,                     \
+                         ulong elems_first_nodes);                            \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+external void printarray(TermFile &stream, int d, int[.] s, actualtype[*] a,  \
+                         bool is_distr, ulong arr_offset,                     \
+                         ulong elems_first_nodes);                            \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+external void printarray(File &stream, string fmt,                            \
+                         int d, int[.] s, actualtype[*] a,                    \
+                         bool is_distr, ulong arr_offset,                     \
+                         ulong elems_first_nodes);                            \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               \
+external void printarray(TermFile &stream, string fmt, int d,                 \
+                         int[.] s, actualtype[*] a,                           \
+                         bool is_distr, ulong arr_offset,                     \
+                         ulong elems_first_nodes);                            \
+  PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
+  PRINTME(HASH)pragma linkobj QUOTEME(src/ArrayIO/PrintArray.o)               
+
+#else /* defined(SAC_BACKEND_DISTMEM) */
+
 #define LINKSPECS(actualtype, typename)                                       \
 external void printarray(File &stream, int d, int[.] s, actualtype[*] a);     \
   PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##Array)       \
@@ -30,6 +58,8 @@ external void printarray(TermFile &stream, string fmt, int d,                 \
                          int[.] s, actualtype[*] a);                          \
   PRINTME(HASH)pragma linkname QUOTEME(ARRAYIO__Print##typename##ArrayFormat) \
   PRINTME(HASH)pragma linkobj "src/ArrayIO/PrintArray.o"
+
+#endif /* defined(SAC_BACKEND_DISTMEM) */
 
 LINKSPECS (bool, Bool)
 LINKSPECS (byte, Byte)
@@ -53,6 +83,52 @@ external void showarray(File &stream, int d, int[.] s, char[*] a);
 external void showarray(TermFile &stream, int d, int[.] s, char[*] a);
     #pragma linkname "ARRAYIO__ShowCharArray"
     #pragma linkobj "src/ArrayIO/ShowArray.o"
+
+
+#ifdef SAC_BACKEND_DISTMEM
+
+#define PRINT(actualtype)                                               \
+inline void fprint(File &stream, actualtype[+] arr)                     \
+{                                                                       \
+  printarray(stream, dim(arr), shape(arr), arr,                         \
+             _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
+}                                                                       \
+                                                                        \
+inline void fprint(TermFile &stream, actualtype[+] arr)                 \
+{                                                                       \
+  printarray(stream, dim(arr), shape(arr), arr,                         \
+             _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
+}                                                                       \
+                                                                        \
+inline void print(actualtype[+] arr)                                    \
+{                                                                       \
+  printarray(stdout, dim(arr), shape(arr), arr,                         \
+             _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
+}                                                                       \
+                                                                        \
+                                                                        \
+                                                                        \
+inline void fprint(File &stream, string fmt, actualtype[+] arr)         \
+{                                                                       \
+  printarray(stream, fmt, dim(arr), shape(arr), arr,                    \
+             _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
+}                                                                       \
+                                                                        \
+inline void fprint(TermFile &stream, string fmt, actualtype[+] arr)     \
+{                                                                       \
+  printarray(stream, fmt, dim(arr), shape(arr), arr,                    \
+             _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
+}                                                                       \
+                                                                        \
+inline void print(string fmt, actualtype[+] arr)                        \
+{                                                                       \
+  printarray(stdout, fmt, dim(arr), shape(arr), arr,                    \
+             _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
+}                                                                       \
+
+
+#else /* defined(SAC_BACKEND_DISTMEM) */
+
 
 #define PRINT(actualtype)                                               \
 inline void fprint(File &stream, actualtype[+] arr)                     \
@@ -87,6 +163,7 @@ inline void print(string fmt, actualtype[+] arr)                        \
   printarray(stdout, fmt, dim(arr), shape(arr), arr);                   \
 }                                                                       \
 
+#endif /* defined(SAC_BACKEND_DISTMEM) */
 
 #define SHOW(actualtype)                                                \
 inline void show(actualtype[+] arr)                                     \

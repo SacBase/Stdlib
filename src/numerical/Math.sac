@@ -88,7 +88,7 @@ external double, int frexp(double X);
     /* Break X into a normalized fraction and an integral power of 2.  */
 
 external double ldexp(double X, int EXP);
-    #pragma linksign [0,2,1]
+    #pragma linksign [0,1,2]
     /* X times (two to the EXP power).  */
 
 external double log(double X);

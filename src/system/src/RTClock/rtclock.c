@@ -32,7 +32,7 @@ void SAC_RTClock_touch( void *rtclock)
 {
 }
 
-void SAC_RTClock_gettime( int *sec, int *nano)
+void SAC_RTClock_gettime( long *sec, long *nano)
 {
   struct timespec result;
 
@@ -56,6 +56,6 @@ void SAC_RTClock_gettime( int *sec, int *nano)
 #warning no implementation of SAC_RTClock_gettime on this target
 #endif
 
-  *sec = (int) result.tv_sec;
-  *nano = (int) result.tv_nsec;
+  *sec = result.tv_sec;
+  *nano = result.tv_nsec;
 }

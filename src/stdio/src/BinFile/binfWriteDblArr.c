@@ -10,13 +10,12 @@
 
 void SACbinfWriteDoubleArray(int fd, int dim, int *shp, double* array)
 {
-  int bytesWritten;
   int i,size;
   for( i = 0, size = 1; i < dim; i++) {
     size *= shp[i];
   }
 
-  bytesWritten = write(fd,array,size*sizeof(double));
+  (void) write(fd,array,size*sizeof(double));
 }
 
 #undef array_nt

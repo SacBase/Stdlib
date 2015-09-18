@@ -1,16 +1,47 @@
 module ComplexIO;
 
-
 /*****************************************************************/
 
 
 use IOresources: all;
-use String: { string, to_string};
-use Complex: { complex, imag, real, toc};
+use String: { string, to_string, sprintf};
+use Complex: { complex, imag, real, toc, shape, dim};
 use ScalarArith : { == };
 use TermFile : {TermFile};
 
-export all;
+export {print, fprint};
+
+/*
+ *  prototypes for externals (FUNDECS)
+ */
+
+external void printarray( File &stream, int d, int[.] s, complex[*] a)
+/*
+ *  printarray ::  ---
+ */;
+#pragma linkname "COMPLEXIO__PrintComplexArray"
+#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+
+external void  printarray( TermFile &stream, int d, int[.] s, complex[*] a)
+/*
+ *  printarray ::  ---
+ */;
+#pragma linkname "COMPLEXIO__PrintComplexArray"
+#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+
+external void printarray( File &stream, string format, int d, int[.] s, complex[*] a)
+/*
+ *  printarray ::  ---
+ */;
+#pragma linkname "COMPLEXIO__PrintComplexArrayFormat"
+#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+
+external void  printarray( TermFile &stream, string format, int d, int[.] s, complex[*] a)
+/*
+ *  printarray ::  ---
+ */;
+#pragma linkname "COMPLEXIO__PrintComplexArrayFormat"
+#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
 
 
 /*****************************************************************/
@@ -124,7 +155,7 @@ inline void fprint(TermFile &stream, complex c, int mode, int prec)
 
 inline void print(complex c)
 {
-  TermFile::printf("(%g,%g)", real(c), imag(c));
+  fprint(TermFile::stdout, c);
 }
 
 
@@ -132,21 +163,7 @@ inline void print(complex c)
 
 inline void print(complex c, int mode)
 {
-  if (mode==2)
-  {
-    TermFile::printf("%g %g", real(c), imag(c));
-  }
-  else
-  {
-    if (mode==1)
-    {
-      TermFile::printf("%g+%gi", real(c), imag(c));
-    }
-    else
-    {
-      TermFile::printf("(%g, %g)", real(c), imag(c));
-    }
-  }
+  fprint(TermFile::stdout, c, mode);
 }
 
 
@@ -154,37 +171,64 @@ inline void print(complex c, int mode)
 
 inline void print(complex c, int mode, int prec)
 {
+  fprint(TermFile::stdout, c, mode, prec);
+}
+
+/*****************************************************************/
+
+inline void print(complex[+] arr)
+{
+  printarray(TermFile::stdout, dim( arr), shape( arr), arr);
+}
+
+/*****************************************************************/
+
+inline void print(complex[+] arr, int mode)
+{
+  string format;
   if (mode==2)
   {
-    TermFile::printf("%.*g %.*g", prec, real(c), prec, imag(c));
+    format = "%g %g ";
   }
   else
   {
     if (mode==1)
     {
-      TermFile::printf("%.*g+%.*gi", prec, real(c), prec, imag(c));
+      format = "%g+%gi ";
     }
     else
     {
-      TermFile::printf("(%.*g, %.*g)", prec, real(c), prec, imag(c));
+      format = "(%g, %g) ";
     }
   }
+  printarray(TermFile::stdout, format, dim( arr), shape( arr), arr);
 }
 
+/*****************************************************************/
 
+inline void print(complex[+] arr, int mode, int prec)
+{
+  string format;
+  if (mode==2)
+  {
+    format = sprintf("%%.%dg %%.%dg ", prec, prec);
+  }
+  else
+  {
+    if (mode==1)
+    {
+      format = sprintf("%%.%dg+%%.%dgi ", prec, prec);
+    }
+    else
+    {
+      format = sprintf("(%%.%dg, %%.%dg) ", prec, prec);
+    }
+  }
+  printarray(TermFile::stdout, format, dim( arr), shape( arr), arr);
+}
 
 /*****************************************************************/
 /*****************************************************************/
-/*****************************************************************/
-
-#define BUG197FIXED
-
-/*
- * According to Bugzilla bug #197 has been fixed in revision 14584.
- * Hence, I try to reactivate this here.
- */
-
-#ifdef BUG197FIXED
 
 inline bool, complex fscancomplex(File &stream)
 {
@@ -331,10 +375,5 @@ inline bool, complex scancomplex(int mode)
   return(success==2, toc(re, im));
 }
 
-#endif /* BUG197FIXED */
-
 /*****************************************************************/
 /*****************************************************************/
-
-
-

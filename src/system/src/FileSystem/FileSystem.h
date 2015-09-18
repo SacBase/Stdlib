@@ -19,6 +19,6 @@
  * without this the stdlib build will die here.
  */
 #ifdef __CYGWIN__
-#define P_tmpdir 		"/tmp"
+#define P_tmpdir                  "/tmp"
 #endif
 

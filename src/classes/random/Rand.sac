@@ -25,7 +25,7 @@ external Rand randGen();
     #pragma linkname "create_RandGen"
     #pragma linkobj  "src/Rand/Rand.o"
     
-external void srandom(int SEED);
+external void srandom(uint SEED);
     #pragma effect Rand::RandomGen
     #pragma linkname "srand"
     #pragma linkobj  "src/Rand/Rand.o"

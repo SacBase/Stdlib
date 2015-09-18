@@ -20,7 +20,7 @@ external Rand48 randGen();
     #pragma linkobj  "src/Rand48/Rand48.o"
 
 
-external void srandom(int SEED);
+external void srandom(long SEED);
     #pragma effect Rand48::RandomGen
     #pragma linkname "srand48"
     #pragma linkobj  "src/Rand48/Rand48.o"

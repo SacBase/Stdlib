@@ -22,7 +22,7 @@ external objdef Random RandomGen;
 
 
 
-external void srandom(int SEED);
+external void srandom(uint SEED);
     #pragma effect Random::RandomGen
     #pragma linkobj "src/Random/Random.o"
 

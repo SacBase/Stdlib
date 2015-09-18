@@ -97,6 +97,13 @@ inline  double[2] todv(complex C)
   return([real(C), imag(C)]);
 }
 
+inline String::string tos(complex c)
+{
+  real, imag = tod(c);
+  str = String::sprintf("%f + %fi\n", real, imag);
+  return(str);
+}
+
 inline int, int ptoi(complex C)
 {
   r,t = ptof(C);
