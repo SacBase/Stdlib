@@ -39,10 +39,10 @@
 
 extern int linenum;
 
-extern int yyparse();
+extern int yyparse( void);
 extern int yy_scan_string( char*);
-extern void yyerror(char *);
-extern int FibreScanparse();
+extern void yyerror( char *);
+extern int FibreScanparse( void);
 
 extern char *yytext;
 

@@ -5,7 +5,7 @@
 
 extern char **environ;
 
-int EnvCount()
+int EnvCount( void)
 {
   int i = 0;
 
@@ -18,7 +18,7 @@ int EnvCount()
   return i;
 }
 
-char* IndexEnv(int i)
+char* IndexEnv( int i)
 {
   char* res;
   int k = 0;
