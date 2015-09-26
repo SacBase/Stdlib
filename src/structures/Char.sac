@@ -3,6 +3,8 @@ module Char;
 use ArrayBasics: {shape, sel};
 export all;
 
+#include "Templates.mac"
+
 external bool isalpha  (char C);
     #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/ctype.o"
@@ -90,17 +92,24 @@ external char tochar( double N);
     #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/Char.o"
     #pragma linkname "tochar_double"
+external char tochar( char N);
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/Char.o"
+    #pragma linkname "tochar_char"
 
-inline
-char[*] tochar( int[+] a)
-{
-  res = with {
-          ( . <= iv <= . ) : tochar( a[iv] );
-        } : genarray( shape(a), ' ' );
-
-  return( res);
+// These functions convert numerical values into a char (byte) value
+//
+#define TOCHAR( typ)                                 \
+inline                                               \
+char[*] tochar( typ[+] a)                            \
+{                                                    \
+  res = with {                                       \
+          ( . <= iv <= . ) : _toc_S_( a[iv] );      \
+        } : genarray( shape(a), ' ' );               \
+                                                     \
+  return( res);                                      \
 }
 
-    /* These functions convert numerical values into a char (byte) value */
+BUILT_IN( TOCHAR)
 
 

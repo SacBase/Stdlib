@@ -85,29 +85,50 @@ int signum( int y)
  *
  ********************************************************************************/
 
-/* No overtake support. */
+// Take supports overtake. 
+// E.g., take([5], [2, 3]) -->     
+//     [2, 3, 0, 0, 0]
+//
+// Take supports short v, padding the missing elements with 
+// corresponding elements from shape(array).
+// E.g., take([3], genarray([2,2], 42)) -->
+//     42 42
+//     42 42
+//      0  0
 
 #define TAKE( a)                                                                 \
 inline                                                                           \
-a[*] take( int[.] v, a[*] array)                                                 \
+a[+] take( int[.] v, a[+] array)                                             \
 {                                                                                \
   shpa = _shape_A_( array);                                                      \
   zr = _mul_VxS_( shpa, 0);                                                      \
-  offset = zr;                                                                   \
+  ylb = zr;                                                                      \
+  lb = zr;                                                                       \
+  vext = shpa;                                                                   \
                                                                                  \
   /* Pad take count for Bernecky's extended take */                              \
-  vext = shpa;                                                                   \
-  /* for-loop will get unrolled */                                               \
+  /* See APL model in function Take in apex test suite UTTakeDrop */             \
+  /* for-loop should get unrolled */                                             \
   for( i=0; _lt_SxS_( i, _sel_VxA_( [0], _shape_A_( v))); i= _add_SxS_( i, 1)) { \
-    el = _sel_VxA_( [i], v);                                                     \
+    vel = _sel_VxA_( [i], v);                                                    \
     shpel = _sel_VxA_( [i], shpa);                                               \
-    vext  = _idx_modarray_AxSxS_( vext,  i,  el);                                \
-    val = _mask_SxSxS_( _lt_SxS_( el, 0), _add_SxS_( shpel, el), 0);             \
-    offset = _idx_modarray_AxSxS_( offset, i, val);                              \
+    vext  = _idx_modarray_AxSxS_( vext,  i,  vel);                               \
+    val = _sub_SxS_(0, vel);                                                     \
+    val = _sub_SxS_( val, shpel);                                                \
+    val = _max_SxS_( val, 0);                                                    \
+    val = _mask_SxSxS_( _ge_SxS_( vel, 0), 0, val);                              \
+    lb = _idx_modarray_AxSxS_( lb, i, val);                                      \
+    val = _max_SxS_( 0, _add_SxS_( shpel, vel));                                 \
+    val = _mask_SxSxS_( _ge_SxS_( vel, 0), 0, val);                              \
+    ylb = _idx_modarray_AxSxS_( ylb, i, val);                                    \
   }                                                                              \
   shpz = _abs_V_( vext);                                                         \
+  ub = _min_VxV_( shpa, shpz);                                                   \
+  ub = _add_VxV_( ub, lb);                                                       \
   res = with {                                                                   \
-          ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);          \
+          ( lb <= iv < ub ) :                                                    \
+              _sel_VxA_( _add_VxV_(                                              \
+                           _sub_VxV_( ylb, lb), iv), array);                     \
         } : genarray( shpz, zero(array));                                        \
   return( res);                                                                  \
 }
@@ -115,15 +136,6 @@ a[*] take( int[.] v, a[*] array)                                                
 BUILT_IN( TAKE)
 
 /*----------------------------------------------------------------------------*/
-
-/*
- * No overdrop support, as it inhibits AWLF.
- * Hence, overdrops ( e.g., drop( [10], iota( 5))) 
- * can cause segfaults. If this is a problem, compile with -check c.
- * We assume that people do not, in general, write code that
- * produces overdrops.
- *
- */
 
 #define DROP( a)                                                                 \
 inline                                                                           \
@@ -134,15 +146,14 @@ a[*] drop( int[.] v, a[*] array)                                                
   offset = zr;                                                                   \
   /* Pad drop count */                                                           \
   vext = zr;                                                                     \
-  /* for-loop will get unrolled */                                               \
   for( i=0; _lt_SxS_( i, _sel_VxA_( [0], _shape_A_( v))); i= _add_SxS_( i, 1)) { \
     el     = _sel_VxA_( [i], v);                                                 \
     shpel  = _sel_VxA_( [i], shpa);                                              \
     vext   = _idx_modarray_AxSxS_( vext,  i,  el);                               \
-    val    = _mask_SxSxS_( _le_SxS_( el, 0), 0, el);                             \
+    val    = _mask_SxSxS_( _le_SxS_( el, 0), 0, _min_SxS_( shpel, el));              \
     offset = _idx_modarray_AxSxS_( offset, i, val);                              \
   }                                                                              \
-  shpz = _sub_VxV_( shpa, _abs_V_( vext));                                       \
+  shpz = _max_VxV_( zr,_sub_VxV_( shpa, _abs_V_( vext)));                        \
   res = with {                                                                   \
           ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);          \
         } : genarray( shpz, zero(array));                                        \
