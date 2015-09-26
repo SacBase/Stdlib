@@ -14,7 +14,7 @@
 
 extern void srand48(long int seed);
 
-extern double drand48();
+extern double drand48( void);
 
 
 /********************************************************************/
@@ -27,7 +27,7 @@ void *Rand48Gen;
 
 
 
-void *create_Rand48Gen()
+void *create_Rand48Gen( void)
 {
   srand48(1);
   

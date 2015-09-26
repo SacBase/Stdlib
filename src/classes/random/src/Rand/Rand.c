@@ -27,7 +27,7 @@ void *RandGen;
 /********************************************************************/
 
 
-void *create_RandGen()
+void *create_RandGen( void)
 {
   srand(1);
   
@@ -55,7 +55,7 @@ int SACrand(int min, int max)
 /********************************************************************/
 
 
-int SACcrand()
+int SACcrand( void)
 {
   int n;
 

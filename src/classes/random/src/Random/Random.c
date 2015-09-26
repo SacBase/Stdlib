@@ -36,7 +36,7 @@ void *RandomGen;
 
 
 
-void *create_RandomGen()
+void *create_RandomGen( void)
 {
   srandom(1);
   
