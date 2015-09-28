@@ -10,7 +10,7 @@
 
 /*****************************************************************/
 
-char *SACgetcwd()
+char *SACgetcwd( void)
 {
   char *res;
   int size=100;

@@ -8,7 +8,7 @@
 
 /*****************************************************************/
 
-char *SACPtmpdir()
+char *SACPtmpdir( void)
 {
   char *result;
 
@@ -21,7 +21,7 @@ char *SACPtmpdir()
 
 /*****************************************************************/
 
-int SACLtmpnam()
+int SACLtmpnam( void)
 {
   return(L_tmpnam);
 }

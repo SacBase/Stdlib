@@ -12,7 +12,7 @@
  * More information can be found at:
  * http://forums.codeguru.com/showthread.php?260921-DBL_MIN-and-DBL_MAX&p=799431#post799431
  */
-double mindouble()
+double mindouble( void)
 {
   return( -DBL_MAX);
 }

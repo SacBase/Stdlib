@@ -10,19 +10,19 @@
 
 /*****************************************************************/
 
-void *SAC_create_stdin()
+void *SAC_create_stdin( void)
 {
   return(stdin);
 }
 
 
-void *SAC_create_stdout()
+void *SAC_create_stdout( void)
 {
   return(stdout);
 }
 
 
-void *SAC_create_stderr()
+void *SAC_create_stderr( void)
 {
   return(stderr);
 }

@@ -1,7 +1,7 @@
 #include <limits.h>
 
 
-int maxint()
+int maxint( void)
 {
   return( INT_MAX);
 }

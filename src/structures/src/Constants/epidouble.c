@@ -1,6 +1,6 @@
 #include <float.h>
 
-double epidouble()
+double epidouble( void)
 {
     return( DBL_EPSILON);
 }

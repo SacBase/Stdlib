@@ -9,7 +9,7 @@
 #define yylval FibreScanlval
 
 #include "FibreScan.tab.h"
-extern int FibreScanparse();
+extern int FibreScanparse( void);
 
 
 #define RETURNnum(token) yylval.cint=atoi(yytext); return(token)

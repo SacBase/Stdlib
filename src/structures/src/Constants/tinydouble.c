@@ -3,7 +3,7 @@
 /* DBL_MIN represents the smallest normilised
  * value that can be represented.
  */
-double tinydouble()
+double tinydouble( void)
 {
   return( DBL_MIN);
 }

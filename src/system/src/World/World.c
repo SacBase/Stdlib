@@ -6,7 +6,7 @@
 void *TheWorld;
 
 
-void *create_TheWorld()
+void *create_TheWorld( void)
 {
   return(0);
 }

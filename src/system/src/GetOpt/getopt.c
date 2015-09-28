@@ -22,7 +22,7 @@
  *
  *     stdlib/world/system/src/CommandLine/CommandLine.c
  */
-int SACargc();
+int SACargc( void);
 char *SACargv(int n);
 
 static int optind = 1;
@@ -95,7 +95,7 @@ static void setarg(char *arg)
   optarg = arg;
 }
 
-static void missing()
+static void missing( void)
 {
   if (opterr == 1)
   {

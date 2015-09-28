@@ -48,7 +48,7 @@ extern char *yytext;
 
 extern FILE *yyin;
 extern int start_token;
-extern int FibreScanlex();
+extern int FibreScanlex( void);
 extern void doScan( FILE *stream);
 
 extern int boolval;

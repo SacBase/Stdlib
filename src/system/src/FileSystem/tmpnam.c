@@ -9,7 +9,7 @@
 
 /*****************************************************************/
 
-char *SACtmpnam()
+char *SACtmpnam( void)
 {
   char *buffer, *name;
   

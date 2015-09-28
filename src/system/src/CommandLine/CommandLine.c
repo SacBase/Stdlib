@@ -28,7 +28,7 @@ extern ComLine *SACo_CommandLine__TheCommandLine;
 /*****************************************************/
 
 
-ComLine *create_TheCommandLine()
+ComLine *create_TheCommandLine( void)
 {
   ComLine *parameters;
   
@@ -43,7 +43,7 @@ ComLine *create_TheCommandLine()
 /*****************************************************/
 
 
-int SACargc()
+int SACargc( void)
 {
   return(SACo_CommandLine__TheCommandLine->argc);
 }
@@ -75,7 +75,7 @@ char *SACargv(int n)
 /*****************************************************/
 
 
-char *SACargvall()
+char *SACargvall( void)
 {
   char *result;
   int len,i;

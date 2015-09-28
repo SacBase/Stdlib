@@ -9,7 +9,7 @@
 /******************************************************************/
 
 
-time_t *SACgettime()
+time_t *SACgettime( void)
 {
   time_t *res;
   
