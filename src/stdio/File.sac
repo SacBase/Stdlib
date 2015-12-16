@@ -125,6 +125,8 @@ external  void fprintf(File &STREAM, string FORMAT, ...);
 
 external  int, ... fscanf(File &STREAM, string FORMAT);
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/File/fscanf.o"
+    #pragma linkname "SACfscanf"
     /*
      * Scan the given stream STREAM concerning the format string FORMAT.
      * The syntax of format strings is identical to C except that the
