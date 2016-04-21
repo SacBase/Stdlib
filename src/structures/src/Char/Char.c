@@ -12,6 +12,11 @@ char tochar_int( int i)
   return( (char)i);
 }
 
+char tochar_long( long i)
+{
+  return( (char)i);
+}
+
 char tochar_float( float i)
 {
   return( (char)i);

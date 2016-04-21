@@ -84,6 +84,10 @@ external char tochar( int N);
     #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/Char.o"
     #pragma linkname "tochar_int"
+external char tochar( long N);
+    #pragma linksign[ 0, 1]
+    #pragma linkobj "src/Char/Char.o"
+    #pragma linkname "tochar_long"
 external char tochar( float N);
     #pragma linksign[ 0, 1]
     #pragma linkobj "src/Char/Char.o"
