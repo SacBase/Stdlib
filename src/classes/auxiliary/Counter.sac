@@ -61,6 +61,17 @@ void increment( Counter &cnt)
 }
 
 /** <!-- ****************************************************************** -->
+ * @brief Increments the counter by the value of the second argument.
+ *
+ * @param cnt the counter object to update
+ ******************************************************************************/
+void incrementBy( Counter &cnt, int x)
+{
+  val = from_Counter( cnt);
+  cnt = to_Counter( val + x);
+}
+
+/** <!-- ****************************************************************** -->
  * @brief Returns the current value of the counter object and
  *        increments the counter object by one
  * 
