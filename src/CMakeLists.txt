@@ -40,6 +40,8 @@ ADD_CUSTOM_COMMAND (
                  -v0 -noprelude -cc ccmod
                  -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
                  "${LEX_OUT}"
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
     COMMENT "Generating FibreIO Lexer")
 
 ADD_CUSTOM_COMMAND (
@@ -53,6 +55,8 @@ ADD_CUSTOM_COMMAND (
                  -v0 -noprelude -cc ccmod
                  -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
                  "${BIS_OUTC}"
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
     COMMENT "Generating FibreIO Parser")
 
 
@@ -327,6 +331,8 @@ FOREACH(name ${C_DEPS_SRC})
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
                  -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}/${dir}
     COMMENT "Generating ${dst}"
   )
 ENDFOREACH(name)
@@ -365,7 +371,7 @@ FOREACH (name ${SAC_SRC})
         WORKING_DIRECTORY
             ${dir}
         DEPENDS ${moddep_list}
-        COMMENT "Building ${name} module for target `${TARGET}'")
+        COMMENT "Building ${dir}/${dst} module for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
     # to the corresponding locations.
@@ -402,18 +408,27 @@ FOREACH (name ${XSAC_SRC})
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
+
     ADD_CUSTOM_COMMAND (
-        OUTPUT ${mod} ${tree}
+        OUTPUT ${dir}/${dst}.sac
         # FIXME it would be better to call saccc like it is done currently
         #       $(SACCC) $(SAC2C) prog seq -E "-x c" -I. $(DEFS)
         COMMAND
             ${SAC2C} -cc ccprog -Xc -E -Xc -xc -noprelude -o /dev/stdout ${src} > ${dir}/${dst}.sac
+        WORKING_DIRECTORY
+            ${dir}
+        DEPENDS ${src}
+        COMMENT "Building ${dst}.sac from ${src}")
+
+
+    ADD_CUSTOM_COMMAND (
+        OUTPUT ${mod} ${tree}
         COMMAND
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} ${dir}/${dst}.sac
         WORKING_DIRECTORY
             ${dir}
-        DEPENDS ${moddep_list}
-        COMMENT "Building ${name} module for target `${TARGET}'")
+        DEPENDS ${moddep_list} ${dir}/${dst}.sac
+        COMMENT "Building ${dir}/${dst} module for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
     # to the corresponding locations.
