@@ -1,0 +1,13 @@
+/* Real time libraries.  */
+#cmakedefine HAVE_GETTIME_REALTIME
+
+#cmakedefine HAVE_MACH_CLOCK_GET_TIME
+
+/* `mkdtemp' function */
+#cmakedefine HAVE_MKDTEMP
+
+/* Do we need to link with -lm.  */
+#cmakedefine NEED_LIBM
+
+/* Do we need to link with -lrt.  */
+#cmakedefine NEED_LIBRT
