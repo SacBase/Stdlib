@@ -355,6 +355,9 @@ FOREACH (name ${SAC_SRC})
 
     MESSAGE ("dependencies of ${name} => `${moddep_list}'")
 
+    # Make sure that we have a directory we are changing to.
+    FILE (MAKE_DIRECTORY "${dir}")
+
     ADD_CUSTOM_COMMAND (
         OUTPUT ${mod} ${tree}
         COMMAND
@@ -397,6 +400,8 @@ FOREACH (name ${XSAC_SRC})
 
     MESSAGE ("dependencies of ${name} => `${moddep_list}'")
 
+    # Make sure that we have a directory we are changing to.
+    FILE (MAKE_DIRECTORY "${dir}")
     ADD_CUSTOM_COMMAND (
         OUTPUT ${mod} ${tree}
         # FIXME it would be better to call saccc like it is done currently
