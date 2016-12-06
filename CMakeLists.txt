@@ -8,7 +8,7 @@ PROJECT (sac-stdlib)
 SET (DLL_BUILD_DIR  "${PROJECT_BINARY_DIR}/lib")
 
 # For what targets we build modules
-SET (TARGETS            seq   CACHE STRING "Build stdlib-jpeg for these targets")
+SET (TARGETS            seq mt_pth  CACHE STRING "Build stdlib-jpeg for these targets")
 SET (SAC2C_EXEC                     CACHE STRING "A path to sac2c compiler")
 SET (LINKSETSIZE        "200"       CACHE STRING "Set a value for -linksetsize parameter of sac2c")
 SET (SAC2C_EXTRA_INC
