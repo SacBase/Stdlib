@@ -2,19 +2,59 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/resolve-sac2c-dependencies.cmake")
 
-FLEX_TARGET (FibreScanLex
-             "stdio/src/FibreIO/FibreScan.l"
-             "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.c"
-             COMPILE_FLAGS -PFibreScan)
 
+SET (LEX_BIS_DIR "stdio/src/FibreIO")
+SET (LEX_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}/FibreScan.l")
+SET (LEX_OUT "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}/lex.FibreScan.c")
+SET (BIS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}/FibreScan.y")
+SET (BIS_OUTC "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}/FibreScan.tab.c")
+SET (BIS_OUTH "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}/FibreScan.tab.h")
 
-BISON_TARGET (FibreScanParser
-              "stdio/src/FibreIO/FibreScan.y"
-              "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.c"
-              DEFINES_FILE "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.h"
-              COMPILE_FLAGS "--defines -b ${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan")
+# Add rules to build *.[ch] files from *.l and *.y files.
+# NOTE that we are not using FLEX_TARGET and BISON_TARGET here
+# intantionally, as at the time of writing (06/12/2016) these
+# macros do not put correct dependencies which triggers flex/bison
+# rebuild at every make invocation.
+ADD_CUSTOM_COMMAND (
+    OUTPUT "${LEX_OUT}"
+    COMMAND ${FLEX_EXECUTABLE} -PFibreScan -o "${LEX_OUT}" "${LEX_SRC}"
+    DEPENDS "${LEX_SRC}"
+    COMMENT "Running ${FLEX_EXECUTABLE} on `${LEX_SRC}'")
 
-ADD_FLEX_BISON_DEPENDENCY (FibreScanLex FibreScanParser)
+ADD_CUSTOM_COMMAND (
+    OUTPUT "${BIS_OUTC}" "${BIS_OUTH}"
+    COMMAND ${BISON_EXECUTABLE} --defines  "${BIS_SRC}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}"
+    DEPENDS "${BIS_SRC}"
+    COMMENT "Running ${BISON_EXECUTABLE} on `${LEX_SRC}'")
+
+# Build object files from FLEX/BISON generated source files.
+ADD_CUSTOM_COMMAND (
+    OUTPUT
+        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
+    DEPENDS
+        "${LEX_OUT}" "${BIS_OUTH}"
+    COMMAND
+        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}
+                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
+                 -v0 -noprelude -cc ccmod
+                 -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
+                 "${LEX_OUT}"
+    COMMENT "Generating FibreIO Lexer")
+
+ADD_CUSTOM_COMMAND (
+    OUTPUT
+        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
+    DEPENDS
+        "${BIS_OUTC}" "${BIS_OUTH}"
+    COMMAND
+        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}
+                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
+                 -v0 -noprelude -cc ccmod
+                 -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
+                 "${BIS_OUTC}"
+    COMMENT "Generating FibreIO Parser")
+
 
 # C files relatively to thes CMakeLists.txt.
 SET (C_DEPS_SRC
@@ -182,38 +222,6 @@ SET (C_DEPS_SRC
     classes/random/src/Rand/Rand.c
     auxiliary/src/C99Benchmarking/bench.c
 )
-
-# Relative to BINARY_DIR
-SET (FLEX_BISON_SRC
-    stdio/src/FibreIO/lex.FibreScan.c
-    stdio/src/FibreIO/FibreScan.tab.c
-)
-
-ADD_CUSTOM_COMMAND (
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
-    DEPENDS
-        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.c"
-        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.h"
-    COMMAND
-        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/stdio/src/FibreIO
-                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO
-                 -v0 -noprelude -cc ccmod
-                 -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
-                 "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.c"
-    COMMENT "Generating FibreIO Lexer")
-
-ADD_CUSTOM_COMMAND (
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
-    DEPENDS
-        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.c"
-        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.h"
-    COMMAND
-        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/stdio/src/FibreIO
-                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO
-                 -v0 -noprelude -cc ccmod
-                 -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
-                 "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.c"
-    COMMENT "Generating FibreIO Parser")
 
 
 # SaC files relatively to this CMakeLists.txt.
