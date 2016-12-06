@@ -5,7 +5,7 @@ INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/resolve-sac2c-dependencies.cmake")
 # This variable will hold all the Mod/Tree files that this module
 # will deliver and they will become a part of the all-modules target
 # which will be the only default target generted by this makefile.
-SET (ALL_SAC_FILES)
+SET (ALL_SAC_MODULES)
 
 SET (LEX_BIS_DIR "stdio/src/FibreIO")
 SET (LEX_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}/FibreScan.l")
@@ -46,7 +46,7 @@ ADD_CUSTOM_COMMAND (
                  "${LEX_OUT}"
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
-    COMMENT "Generating FibreIO Lexer")
+    COMMENT "Generating FibreIO Lexer for target `${TARGET}'")
 
 ADD_CUSTOM_COMMAND (
     OUTPUT
@@ -61,7 +61,7 @@ ADD_CUSTOM_COMMAND (
                  "${BIS_OUTC}"
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
-    COMMENT "Generating FibreIO Parser")
+    COMMENT "Generating FibreIO Parser for target `${TARGET}'")
 
 
 # C files relatively to thes CMakeLists.txt.
@@ -337,10 +337,9 @@ FOREACH(name ${C_DEPS_SRC})
                  -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
     WORKING_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
-    COMMENT "Generating ${dst}"
+    COMMENT "Generating ${dst} for target `${TARGET}'"
   )
 ENDFOREACH(name)
-
 
 
 # Make a directory for sac2c output
@@ -375,7 +374,7 @@ FOREACH (name ${SAC_SRC})
         WORKING_DIRECTORY
             "${dir}"
         DEPENDS ${moddep_list}
-        COMMENT "Building ${dir}/${dst} module for target `${TARGET}'")
+        COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
     # to the corresponding locations.
@@ -387,7 +386,7 @@ FOREACH (name ${SAC_SRC})
         DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
 
     ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
-    LIST (APPEND ALL_SAC_FILES "${mod}" "${tree}")
+    LIST (APPEND ALL_SAC_MODULES "${mod}" "${tree}")
 ENDFOREACH (name)
 
 # For every xsac file, compile Tree and Mod files.
@@ -421,7 +420,7 @@ FOREACH (name ${XSAC_SRC})
         WORKING_DIRECTORY
             "${dir}"
         DEPENDS "${src}"
-        COMMENT "Building ${dst}.sac from ${src}")
+        COMMENT "Building `${dst}.sac' from `${dst}.xsac' for target `${TARGET}'")
 
 
     ADD_CUSTOM_COMMAND (
@@ -431,7 +430,7 @@ FOREACH (name ${XSAC_SRC})
         WORKING_DIRECTORY
             ${dir}
         DEPENDS ${moddep_list} "${dir}/${dst}.sac"
-        COMMENT "Building ${dir}/${dst} module for target `${TARGET}'")
+        COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
     # to the corresponding locations.
@@ -443,7 +442,7 @@ FOREACH (name ${XSAC_SRC})
         DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
 
     ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS ${mod} ${tree})
-    LIST (APPEND ALL_SAC_FILES "${mod}" "${tree}")
+    LIST (APPEND ALL_SAC_MODULES "${mod}" "${tree}")
 ENDFOREACH (name)
 
-ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL DEPENDS ${ALL_SAC_FILES})
+ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL DEPENDS ${ALL_SAC_MODULES})
