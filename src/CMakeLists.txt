@@ -3,15 +3,16 @@ INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/resolve-sac2c-dependencies.cmake")
 
 FLEX_TARGET (FibreScanLex
-             "world/stdio/src/FibreIO/FibreScan.l"
-             "${PROJECT_BINARY_DIR}/world/stdio/src/FibreIO/lex.FibreScan.c"
+             "stdio/src/FibreIO/FibreScan.l"
+             "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.c"
              COMPILE_FLAGS -PFibreScan)
 
+
 BISON_TARGET (FibreScanParser
-              "world/stdio/src/FibreIO/FibreScan.y"
-              "${PROJECT_BINARY_DIR}/world/stdio/src/FibreIO/FibreScan.tab.c"
-              DEFINES_FILE "${PROJECT_BINARY_DIR}/world/stdio/src/FibreIO/FibreScan.tab.h"
-              COMPILE_FLAGS "--defines -b ${PROJECT_BINARY_DIR}/world/stdio/src/FibreIO/FibreScan")
+              "stdio/src/FibreIO/FibreScan.y"
+              "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.c"
+              DEFINES_FILE "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.h"
+              COMPILE_FLAGS "--defines -b ${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan")
 
 ADD_FLEX_BISON_DEPENDENCY (FibreScanLex FibreScanParser)
 
@@ -165,8 +166,6 @@ SET (C_DEPS_SRC
     stdio/src/FibreIO/ScanDblArr.c
     stdio/src/FibreIO/ScanDbl.c
     stdio/src/FibreIO/FibrePrint.c
-    ${PROJECT_BINARY_DIR}/world/stdio/src/FibreIO/lex.FibreScan.c
-    ${PROJECT_BINARY_DIR}/world/stdio/src/FibreIO/FibreScan.tab.c
     stdio/src/ComplexIO/PrintComplexArray.c
     stdio/src/BinFile/binfopen.c
     stdio/src/BinFile/binfflags.c
@@ -183,6 +182,39 @@ SET (C_DEPS_SRC
     classes/random/src/Rand/Rand.c
     auxiliary/src/C99Benchmarking/bench.c
 )
+
+# Relative to BINARY_DIR
+SET (FLEX_BISON_SRC
+    stdio/src/FibreIO/lex.FibreScan.c
+    stdio/src/FibreIO/FibreScan.tab.c
+)
+
+ADD_CUSTOM_COMMAND (
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
+    DEPENDS
+        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.c"
+        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.h"
+    COMMAND
+        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/stdio/src/FibreIO
+                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO
+                 -v0 -noprelude -cc ccmod
+                 -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
+                 "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.c"
+    COMMENT "Generating FibreIO Lexer")
+
+ADD_CUSTOM_COMMAND (
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
+    DEPENDS
+        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.c"
+        "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.h"
+    COMMAND
+        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/stdio/src/FibreIO
+                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO
+                 -v0 -noprelude -cc ccmod
+                 -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
+                 "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.c"
+    COMMENT "Generating FibreIO Parser")
+
 
 # SaC files relatively to this CMakeLists.txt.
 SET (SAC_SRC
@@ -270,12 +302,12 @@ SET (XSAC_SRC
 # XXX do we ever pass some extra flags, etc to C files?
 FOREACH(name ${C_DEPS_SRC})
   SET (src "${CMAKE_CURRENT_SOURCE_DIR}/${name}")
-  
+
   GET_FILENAME_COMPONENT (dir ${name} DIRECTORY)
-  
+
   GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
   SET (dst "${CMAKE_CURRENT_BINARY_DIR}/${dir}/${dst}${OBJEXT}")
-  
+
   # Make sure that we put the object file in the same location where
   # the source file was.
   FILE (MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dir}")
@@ -283,10 +315,15 @@ FOREACH(name ${C_DEPS_SRC})
   ADD_CUSTOM_COMMAND (
     OUTPUT "${dst}"
     DEPENDS "${src}"
-    COMMAND ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir} -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
+    COMMAND
+        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
+                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+                 -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
     COMMENT "Generating ${dst}"
   )
 ENDFOREACH(name)
+
+
 
 # Make a directory for sac2c output
 FILE (MAKE_DIRECTORY "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}")
@@ -313,7 +350,7 @@ FOREACH (name ${SAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT ${mod} ${tree}
         COMMAND
-            ${SAC2C} -v0 -linksetsize 0 -o ${DLL_BUILD_DIR} ${src}
+            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} ${src}
         WORKING_DIRECTORY
             ${dir}
         DEPENDS ${moddep_list}
@@ -355,11 +392,11 @@ FOREACH (name ${XSAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT ${mod} ${tree}
         # FIXME it would be better to call saccc like it is done currently
-        #       $(SACCC) $(SAC2C) prog seq -E "-x c" -I. $(DEFS) 
+        #       $(SACCC) $(SAC2C) prog seq -E "-x c" -I. $(DEFS)
         COMMAND
             ${SAC2C} -cc ccprog -Xc -E -Xc -xc -noprelude -o /dev/stdout ${src} > ${dir}/${dst}.sac
         COMMAND
-            ${SAC2C} -v0 -linksetsize 0 -o ${DLL_BUILD_DIR} ${dir}/${dst}.sac
+            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} ${dir}/${dst}.sac
         WORKING_DIRECTORY
             ${dir}
         DEPENDS ${moddep_list}
