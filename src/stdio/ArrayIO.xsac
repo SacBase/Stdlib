@@ -9,7 +9,7 @@ use TermFile: {TermFile};
 
 export { print, fprint, show};
 
-#include "../../modules/structures/Templates.mac"
+#include "Templates.mac"
 
 #define HASH #
 #define PRINTME(x) x

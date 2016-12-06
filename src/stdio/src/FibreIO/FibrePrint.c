@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../../../../modules/structures/src/StringArray/StringArray.h"
+#include "../../../structures/src/StringArray/StringArray.h"
 
 #define INT    		1
 #define FLOAT  		2

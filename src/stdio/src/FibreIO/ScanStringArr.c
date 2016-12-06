@@ -6,7 +6,7 @@
 #include "FibreScan.h"
 #include "FibreScan.tab.h"
 
-#include "../../../../modules/structures/src/StringArray/StringArray.h"
+#include "../../../structures/src/StringArray/StringArray.h"
 
 #define resout_nt (resout, T_OLD((SCL, (HID, (NUQ, )))))
 #define res_nt    (res,   T_OLD((SCL, (HID, (NUQ, )))))
