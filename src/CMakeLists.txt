@@ -2,6 +2,10 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/resolve-sac2c-dependencies.cmake")
 
+# This variable will hold all the Mod/Tree files that this module
+# will deliver and they will become a part of the all-modules target
+# which will be the only default target generted by this makefile.
+SET (ALL_SAC_FILES)
 
 SET (LEX_BIS_DIR "stdio/src/FibreIO")
 SET (LEX_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}/FibreScan.l")
@@ -332,7 +336,7 @@ FOREACH(name ${C_DEPS_SRC})
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
                  -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
     WORKING_DIRECTORY
-        ${CMAKE_CURRENT_BINARY_DIR}/${dir}
+        "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
     COMMENT "Generating ${dst}"
   )
 ENDFOREACH(name)
@@ -365,26 +369,25 @@ FOREACH (name ${SAC_SRC})
     FILE (MAKE_DIRECTORY "${dir}")
 
     ADD_CUSTOM_COMMAND (
-        OUTPUT ${mod} ${tree}
+        OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} ${src}
+            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
-            ${dir}
+            "${dir}"
         DEPENDS ${moddep_list}
         COMMENT "Building ${dir}/${dst} module for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
     # to the corresponding locations.
     INSTALL (
-        FILES ${mod}
+        FILES "${mod}"
         DESTINATION ${INSTALL_MOD_DIR}/${TARGET_ENV}/${SBI})
     INSTALL (
-        FILES ${tree}
+        FILES "${tree}"
         DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
 
-    # Make a call to the command that compiles the module a part
-    # of the default build process.
-    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} ALL DEPENDS ${mod} ${tree})
+    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    LIST (APPEND ALL_SAC_FILES "${mod}" "${tree}")
 ENDFOREACH (name)
 
 # For every xsac file, compile Tree and Mod files.
@@ -410,38 +413,37 @@ FOREACH (name ${XSAC_SRC})
     FILE (MAKE_DIRECTORY "${dir}")
 
     ADD_CUSTOM_COMMAND (
-        OUTPUT ${dir}/${dst}.sac
+        OUTPUT "${dir}/${dst}.sac"
         # FIXME it would be better to call saccc like it is done currently
         #       $(SACCC) $(SAC2C) prog seq -E "-x c" -I. $(DEFS)
         COMMAND
-            ${SAC2C} -cc ccprog -Xc -E -Xc -xc -noprelude -o /dev/stdout ${src} > ${dir}/${dst}.sac
+            ${SAC2C} -cc ccprog -Xc -E -Xc -xc -noprelude -o /dev/stdout "${src}" > "${dir}/${dst}.sac"
         WORKING_DIRECTORY
-            ${dir}
-        DEPENDS ${src}
+            "${dir}"
+        DEPENDS "${src}"
         COMMENT "Building ${dst}.sac from ${src}")
 
 
     ADD_CUSTOM_COMMAND (
-        OUTPUT ${mod} ${tree}
+        OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} ${dir}/${dst}.sac
+            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${dir}/${dst}.sac"
         WORKING_DIRECTORY
             ${dir}
-        DEPENDS ${moddep_list} ${dir}/${dst}.sac
+        DEPENDS ${moddep_list} "${dir}/${dst}.sac"
         COMMENT "Building ${dir}/${dst} module for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
     # to the corresponding locations.
     INSTALL (
-        FILES ${mod}
+        FILES "${mod}"
         DESTINATION ${INSTALL_MOD_DIR}/${TARGET_ENV}/${SBI})
     INSTALL (
-        FILES ${tree}
+        FILES "${tree}"
         DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
 
-    # Make a call to the command that compiles the module a part
-    # of the default build process.
-    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} ALL DEPENDS ${mod} ${tree})
+    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS ${mod} ${tree})
+    LIST (APPEND ALL_SAC_FILES "${mod}" "${tree}")
 ENDFOREACH (name)
 
-
+ADD_CUSTOM_TARGET (all-modules ALL DEPENDS ${ALL_SAC_FILES})
