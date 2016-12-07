@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
-INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/resolve-sac2c-dependencies.cmake")
+INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/generate-sac2c-dependency-targets.cmake")
 
 # This variable will hold all the Mod/Tree files that this module
 # will deliver and they will become a part of the all-modules target
@@ -308,6 +308,10 @@ SET (XSAC_SRC
     stdio/ArrayIO.xsac
 )
 
+SET (ALL_SAC_SRC ${SAC_SRC} ${XSAC_SRC})
+
+ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL)
+
 # TODO(artem) We may want to introduce a mechanism of generating depenencies
 #             on a given sac2c versoin.  That is, recompiler all modules if
 #             sac2c version changes.
@@ -357,15 +361,14 @@ FOREACH (name ${SAC_SRC})
     SET (tree
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
-    SET (ALL_SAC_SRC ${SAC_SRC})
-    LIST (APPEND ALL_SAC_SRC ${XSAC_SRC})
-
-    RESOLVE_SAC_DEPENDENCIES ("${name}" "${ALL_SAC_SRC}" moddep_list)
-
-    MESSAGE ("dependencies of ${name} => `${moddep_list}'")
+    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
+    MESSAGE (STATUS "dependencies of ${name} => `${targets_list}'")
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
+
+    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    ADD_DEPENDENCIES (${TARGET}-all-modules ${TARGET}-module-${dst})
 
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
@@ -373,7 +376,7 @@ FOREACH (name ${SAC_SRC})
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
-        DEPENDS ${moddep_list}
+        DEPENDS ${targets_list}
         COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
@@ -385,8 +388,6 @@ FOREACH (name ${SAC_SRC})
         FILES "${tree}"
         DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
 
-    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
-    LIST (APPEND ALL_SAC_MODULES "${mod}" "${tree}")
 ENDFOREACH (name)
 
 # For every xsac file, compile Tree and Mod files.
@@ -401,12 +402,8 @@ FOREACH (name ${XSAC_SRC})
     SET (tree
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
-    SET (ALL_SAC_SRC ${SAC_SRC})
-    LIST (APPEND ALL_SAC_SRC ${XSAC_SRC})
-
-    RESOLVE_SAC_DEPENDENCIES ("${name}" "${ALL_SAC_SRC}" moddep_list)
-
-    MESSAGE ("dependencies of ${name} => `${moddep_list}'")
+    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
+    MESSAGE (STATUS "dependencies of ${name} => `${targets_list}'")
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
@@ -422,14 +419,16 @@ FOREACH (name ${XSAC_SRC})
         DEPENDS "${src}"
         COMMENT "Building `${dst}.sac' from `${dst}.xsac' for target `${TARGET}'")
 
+    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    ADD_DEPENDENCIES (${TARGET}-all-modules ${TARGET}-module-${dst})
 
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${dir}/${dst}.sac"
         WORKING_DIRECTORY
-            ${dir}
-        DEPENDS ${moddep_list} "${dir}/${dst}.sac"
+            "${dir}"
+        DEPENDS "${dir}/${dst}.sac" ${targets_list}
         COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
@@ -441,8 +440,4 @@ FOREACH (name ${XSAC_SRC})
         FILES "${tree}"
         DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
 
-    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS ${mod} ${tree})
-    LIST (APPEND ALL_SAC_MODULES "${mod}" "${tree}")
 ENDFOREACH (name)
-
-ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL DEPENDS ${ALL_SAC_MODULES})
