@@ -279,7 +279,10 @@ FOREACH(name ${C_DEPS_SRC})
 
   ADD_CUSTOM_COMMAND (
     OUTPUT "${dst}"
-    DEPENDS "${src}"
+    # XXX BIS_OUTH is not a dependency for *every* C file.
+    #     This is a hack to make sure that bison stuff is
+    #     built before any C files are compiled.
+    DEPENDS "${src}" "${BIS_OUTH}"
     COMMAND
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
