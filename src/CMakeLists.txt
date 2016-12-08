@@ -8,6 +8,15 @@ INCLUDE ("${CMAKE_SOURCE_DIR}/cmake/parse-core-ext-files.cmake")
 # which will be the only default target generted by this makefile.
 SET (ALL_SAC_MODULES)
 
+UNSET (SAC_NOTREE)
+SET (NOTREE_FLAG "")
+IF (TARGET_COUNT GREATER 1)
+    SET (SAC_NOTREE 1)
+    SET (NOTREE_FLAG "-notree")
+ENDIF ()
+
+
+
 SET (LEX_BIS_DIR "stdio/src/FibreIO")
 SET (LEX_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}/FibreScan.l")
 SET (LEX_OUT "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}/lex.FibreScan.c")
@@ -309,18 +318,23 @@ FOREACH (name ${SAC_SRC})
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
     RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
-    MESSAGE (STATUS "dependencies of ${name} => `${targets_list}'")
+    MESSAGE (STATUS "Computing dependencies for `${name}'")
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
 
-    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    IF (SAC_NOTREE)
+        ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}")
+    ELSE ()
+        ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    ENDIF ()
+
     ADD_DEPENDENCIES (${TARGET}-all-modules ${TARGET}-module-${dst})
 
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${src}"
+            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
         DEPENDS ${targets_list}
@@ -331,10 +345,11 @@ FOREACH (name ${SAC_SRC})
     INSTALL (
         FILES "${mod}"
         DESTINATION ${INSTALL_MOD_DIR}/${TARGET_ENV}/${SBI})
-    INSTALL (
-        FILES "${tree}"
-        DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
-
+    IF (NOT SAC_NOTREE)
+        INSTALL (
+            FILES "${tree}"
+            DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
+    ENDIF ()
 ENDFOREACH (name)
 
 # For every xsac file, compile Tree and Mod files.
@@ -350,7 +365,7 @@ FOREACH (name ${XSAC_SRC})
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
     RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
-    MESSAGE (STATUS "dependencies of ${name} => `${targets_list}'")
+    MESSAGE (STATUS "Computing dependencies for `${name}'")
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
@@ -366,7 +381,11 @@ FOREACH (name ${XSAC_SRC})
         DEPENDS "${src}"
         COMMENT "Building `${dst}.sac' from `${dst}.xsac' for target `${TARGET}'")
 
-    ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    IF (SAC_NOTREE)
+        ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}")
+    ELSE ()
+        ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
+    ENDIF ()
     ADD_DEPENDENCIES (${TARGET}-all-modules ${TARGET}-module-${dst})
 
     ADD_CUSTOM_COMMAND (
@@ -383,8 +402,9 @@ FOREACH (name ${XSAC_SRC})
     INSTALL (
         FILES "${mod}"
         DESTINATION ${INSTALL_MOD_DIR}/${TARGET_ENV}/${SBI})
-    INSTALL (
-        FILES "${tree}"
-        DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
-
+    IF (NOT SAC_NOTREE)
+        INSTALL (
+            FILES "${tree}"
+            DESTINATION ${INSTALL_TREE_DIR}/tree/${TARGET_ENV})
+    ENDIF ()
 ENDFOREACH (name)

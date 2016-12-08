@@ -28,7 +28,9 @@ INCLUDE ("cmake-common/check-sac2c.cmake")
 INCLUDE ("cmake/config.cmake")
 
 # For every target run CMakeLists.txt in src
+SET (TARGET_COUNT 1)
 FOREACH (TARGET IN ITEMS ${TARGETS})
-    #MESSAGE ("t = ${TARGET}")
+    #MESSAGE ("target #${TARGET_COUNT} = ${TARGET}")
     ADD_SUBDIRECTORY (src   src-${TARGET})
+    MATH (EXPR TARGET_COUNT "${TARGET_COUNT} + 1")
 ENDFOREACH ()
