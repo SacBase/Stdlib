@@ -269,7 +269,7 @@ SET (ALL_SAC_SRC ${SAC_SRC} ${XSAC_SRC})
 ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL)
 
 # This target is responsible for generating the package sac2crc file
-ADD_CUSTOM_TARGET (create-sac2crc-file ALL
+ADD_CUSTOM_TARGET (${TARGET}-create-sac2crc-file ALL
     COMMAND ${CMAKE_COMMAND}
         -DUSER_HOME="$ENV{HOME}"
         # XXX ideally we should use PROJECT_NAME, but sadly this has a dash `-'
