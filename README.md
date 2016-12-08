@@ -21,7 +21,7 @@ $ make -jN
 $ make install
 ```
 
-Variables that can be passed to the CMake
+Variables that can be passed to CMake
 =========================================
 
 When running CMake it is possible to pass the following variables:
