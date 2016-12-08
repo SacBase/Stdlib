@@ -263,7 +263,23 @@ ENDIF ()
 
 SET (ALL_SAC_SRC ${SAC_SRC} ${XSAC_SRC})
 
+# This is the main target of the entire build, though it all modules are
+# built for all backends (seq, mt_pth, etc.) - depending on config, only
+# core modules or core + extended modules are built.
 ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL)
+
+# This target is responsible for generating the package sac2crc file
+ADD_CUSTOM_TARGET (create-sac2crc-file ALL
+    COMMAND ${CMAKE_COMMAND}
+        -DUSER_HOME="$ENV{HOME}"
+        # XXX ideally we should use PROJECT_NAME, but sadly this has a dash `-'
+        #     which sac2crc does not support within target names
+        -DPACKAGE_NAME="stdlib"
+        -DLIB_PATH="${DLL_BUILD_DIR}"
+        -DTREE_PATH="${DLL_BUILD_DIR}"
+        -P "${PROJECT_SOURCE_DIR}/cmake-common/generate-sac2crc-file.cmake"
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Creating package sac2crc file in user home directory")
 
 # TODO(artem) We may want to introduce a mechanism of generating depenencies
 #             on a given sac2c versoin.  That is, recompiler all modules if
