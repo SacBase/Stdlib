@@ -54,6 +54,7 @@ fun( double)
 
 #define BUILT_IN( fun)    \
 fun( int)                 \
+fun( long)                \
 fun( float)               \
 fun( double)              \
 fun( bool)                \
@@ -62,6 +63,7 @@ fun( char)
 
 #define NUM( fun)         \
 fun( int)                 \
+fun( long)                \
 fun( float)               \
 fun( double)
 
