@@ -31,7 +31,7 @@ IF (NOT POW_WORKS)
     IF (POW_WORKS)
         SET (NEED_LIBM 1)
     ELSE ()
-        MESSAGE (FATAL_ERROR 
+        MESSAGE (FATAL_ERROR
                  "Failed to compile math function `pow', "
                  "both with and without -lm")
     ENDIF ()
@@ -82,3 +82,16 @@ HAVE_MACH_CLOCK_GET_TIME)
 
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/cmake/config.h.in"
                 "${PROJECT_BINARY_DIR}/include/config.h")
+
+MESSAGE ("
+ * Stdlib configuration done.
+ *
+ * sac2c executable:       ${SAC2C_EXEC}
+ * local builddir:         ${DLL_BUILD_DIR}
+ * targets:                ${TARGETS}
+ * sac2c extra flags:      ${SAC2C_EXTRA_INC}
+ *
+ * Configuration state:
+ * - realtime clock:       ${HAVE_GETTIME_REALTIME}
+ * - mach clock:           ${HAVE_MACH_CLOCK_GET_TIME}
+")
