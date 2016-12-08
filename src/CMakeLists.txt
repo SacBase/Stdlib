@@ -241,14 +241,13 @@ PARSE_CORE_EXT_CONFIG (
     XSAC_EXT_SRC)
 
 
-SET (BUILD_CORE 1)
-# Are we are building core stdlib
+# By default we are always going to build extended version
+UNSET (BUILD_CORE)
 IF (BUILD_CORE)
     SET (SAC_SRC  ${SAC_CORE_SRC})
     SET (XSAC_SRC ${XSAC_CORE_SRC})
 # Are we building extended stdlib
 ELSE ()
-    # FIXME we have to create generate extended modules here as well.
     SET (SAC_SRC  ${SAC_CORE_SRC} ${SAC_EXT_SRC})
     SET (XSAC_SRC  ${XSAC_CORE_SRC} ${XSAC_EXT_SRC})
 ENDIF ()
