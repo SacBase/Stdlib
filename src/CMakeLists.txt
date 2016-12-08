@@ -1,6 +1,7 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/generate-sac2c-dependency-targets.cmake")
+INCLUDE ("${CMAKE_SOURCE_DIR}/cmake/parse-core-ext-files.cmake")
 
 # This variable will hold all the Mod/Tree files that this module
 # will deliver and they will become a part of the all-modules target
@@ -231,82 +232,26 @@ SET (C_DEPS_SRC
     auxiliary/src/C99Benchmarking/bench.c
 )
 
+# Read the list of sac sources from sac-core-ext.txt
+PARSE_CORE_EXT_CONFIG (
+    "${CMAKE_SOURCE_DIR}/cmake/sac-core-ext.txt"
+    SAC_CORE_SRC
+    SAC_EXT_SRC
+    XSAC_CORE_SRC
+    XSAC_EXT_SRC)
 
-# SaC files relatively to this CMakeLists.txt.
-SET (SAC_SRC
-    utrace/UTrace.sac
-    utrace/Indent.sac
-    system/World.sac
-    system/TimeStamp.sac
-    system/Terminal.sac
-    system/System.sac
-    system/SysErr.sac
-    system/RuntimeError.sac
-    system/RTimer.sac
-    system/RTClock.sac
-    system/Process.sac
-    system/MTClock.sac
-    system/GetOpt.sac
-    system/FileSystem.sac
-    system/Environment.sac
-    system/Dir.sac
-    system/CommandLine.sac
-    system/Clock.sac
-    structures/Structures.sac
-    structures/StringArray.sac
-    structures/String.sac
-    structures/List.sac
-    structures/Grey.sac
-    structures/Constants.sac
-    structures/ComplexScalarArith.sac
-    structures/ComplexBasics.sac
-    structures/Complex.sac
-    structures/Color8.sac
-    structures/Char.sac
-    structures/Bool.sac
-    structures/Bits.sac
-    structures/Array.sac
-    stdio/TermFile.sac
-    stdio/StdIO.sac
-    stdio/ScalarIO.sac
-    stdio/PPM.sac
-    stdio/PGM.sac
-    stdio/ListIO.sac
-    stdio/IOresources.sac
-    stdio/GreyIO.sac
-    stdio/File.sac
-    stdio/FibreIO.sac
-    stdio/ComplexIO.sac
-    stdio/Color8IO.sac
-    stdio/BinFile.sac
-    numerical/SaCMath.sac
-    numerical/Numerical.sac
-    numerical/MathArray.sac
-    numerical/Math.sac
-    numerical/FixedPoint.sac
-    numerical/ComplexMath.sac
-    classes/random/Random.sac
-    classes/random/RandLC.sac
-    classes/random/Rand48.sac
-    classes/random/Rand.sac
-    classes/auxiliary/Counter.sac
-    auxiliary/Interval.sac
-    auxiliary/Hiding.sac
-    auxiliary/C99Benchmarking.sac
-    auxiliary/Benchmarking.sac
-)
 
-SET (XSAC_SRC
-    structures/ScalarArith.xsac
-    structures/ComplexArrayTransform.xsac
-    structures/ComplexArrayBasics.xsac
-    structures/ComplexArrayArith.xsac
-    structures/ArrayTransform.xsac
-    structures/ArrayFormat.xsac
-    structures/ArrayBasics.xsac
-    structures/ArrayArith.xsac
-    stdio/ArrayIO.xsac
-)
+SET (BUILD_CORE 1)
+# Are we are building core stdlib
+IF (BUILD_CORE)
+    SET (SAC_SRC  ${SAC_CORE_SRC})
+    SET (XSAC_SRC ${XSAC_CORE_SRC})
+# Are we building extended stdlib
+ELSE ()
+    # FIXME we have to create generate extended modules here as well.
+    SET (SAC_SRC  ${SAC_CORE_SRC} ${SAC_EXT_SRC})
+    SET (XSAC_SRC  ${XSAC_CORE_SRC} ${XSAC_EXT_SRC})
+ENDIF ()
 
 SET (ALL_SAC_SRC ${SAC_SRC} ${XSAC_SRC})
 

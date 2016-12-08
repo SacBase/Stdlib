@@ -1,0 +1,84 @@
+# This file describes the list of all the *.sac and *.xsac files
+# and annotation whether a file belongs to the Core build or
+# to the Extended build of the standard library.
+# 
+# The syntax of the file is:
+#       <filename><spaces>(Core|Ext)
+# 
+# The filename is specified relatively to src directory.
+
+# The xsac files:
+structures/ScalarArith.xsac                Core
+structures/ComplexArrayTransform.xsac      Ext 
+structures/ComplexArrayBasics.xsac         Ext
+structures/ComplexArrayArith.xsac          Ext
+structures/ArrayTransform.xsac             Core
+structures/ArrayFormat.xsac                Core
+structures/ArrayBasics.xsac                Core
+structures/ArrayArith.xsac                 Core
+stdio/ArrayIO.xsac                         Core
+
+# The sac files:
+utrace/UTrace.sac                          Core 
+utrace/Indent.sac                          Core
+system/World.sac                           Core
+system/TimeStamp.sac                       Core
+system/Terminal.sac                        Core
+system/Clock.sac                           Core
+system/System.sac                          Core
+system/SysErr.sac                          Core
+system/RuntimeError.sac                    Core
+system/RTClock.sac                         Core
+system/RTimer.sac                          Core
+system/FileSystem.sac                      Core
+system/Process.sac                         Core
+system/MTClock.sac                         Core
+system/CommandLine.sac                     Core
+system/GetOpt.sac                          Core
+system/Environment.sac                     Core
+system/Dir.sac                             Core
+structures/Array.sac                       Core
+structures/Structures.sac                  Core
+structures/StringArray.sac                 Ext
+structures/Color8.sac                      Ext
+structures/List.sac                        Ext
+structures/Grey.sac                        Ext
+structures/Constants.sac                   Core
+structures/ComplexScalarArith.sac          Ext
+structures/ComplexBasics.sac               Ext
+structures/Complex.sac                     Ext
+structures/Char.sac                        Core
+structures/Bool.sac                        Core
+structures/Bits.sac                        Core
+structures/String.sac                      Core
+stdio/TermFile.sac                         Core
+stdio/ScalarIO.sac                         Core
+stdio/PPM.sac                              Ext
+stdio/PGM.sac                              Ext
+stdio/ListIO.sac                           Ext
+stdio/IOresources.sac                      Core
+stdio/GreyIO.sac                           Ext
+stdio/FibreIO.sac                          Ext
+stdio/ComplexIO.sac                        Ext
+stdio/Color8IO.sac                         Ext
+stdio/BinFile.sac                          Core
+stdio/StdIO.sac                            Core
+stdio/File.sac                             Core
+# This file relies on the SDL which we keep 
+# in a separate module these days.
+#stdio/BMP.sac                              Ext
+numerical/SaCMath.sac                      Ext
+numerical/ComplexMath.sac                  Ext
+numerical/Numerical.sac                    Core
+numerical/MathArray.sac                    Core
+numerical/Math.sac                         Core
+numerical/FixedPoint.sac                   Ext
+classes/random/Random.sac                  Core
+classes/random/RandLC.sac                  Core
+classes/random/Rand48.sac                  Core
+classes/random/Rand.sac                    Core
+classes/auxiliary/Counter.sac              Ext
+auxiliary/Interval.sac                     Ext
+auxiliary/Hiding.sac                       Ext
+auxiliary/C99Benchmarking.sac              Ext
+auxiliary/Benchmarking.sac                 Ext

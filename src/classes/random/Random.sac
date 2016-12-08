@@ -14,7 +14,9 @@ class Random;
 
 external classtype;
 
+#ifdef EXT_STDLIB
 use Complex: all;
+#endif /* ETX_STDLIB  */
 
 export all;
 
@@ -55,6 +57,7 @@ external double random(double MIN, double MAX);
      * floating-point number in the interval [MIN, MAX).
      */
 
+#ifdef EXT_STDLIB
 complex random(double rmin, double rmax, double imin, double imax)
 {
   return(toc(random(rmin,rmax), random(imin,imax)));
@@ -76,6 +79,7 @@ complex prandom(complex lb, complex rt)
   rrt, trt = ptod(rt);
   return prandom (ScalarArith::min (rlb, rrt), ScalarArith::max (rlb, rrt), trt, tlb);
 }
+#endif /* EXT_STDLIB  */
 
 int[*] random( int[.] shp, int MIN, int MAX)
 {
