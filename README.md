@@ -34,4 +34,4 @@ When running CMake it is possible to pass the following variables:
     * value `0` is the fastest time-wise but potentially results in a large memory consumption
     * value `1` reduces the memory consumption to minimum, buy significantly increases compilation time.
     
-......*Default value: 500.*
+      *Default value: 500.*
