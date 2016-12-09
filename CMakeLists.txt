@@ -21,7 +21,6 @@ SET (SAC2C_CPP_INC
      -cppI${PROJECT_BINARY_DIR}/include
      -cppI${PROJECT_SOURCE_DIR}/include)
      
-
 # Check whether sac2c is operational
 INCLUDE ("cmake-common/check-sac2c.cmake")
 
@@ -34,3 +33,17 @@ FOREACH (TARGET IN ITEMS ${TARGETS})
     ADD_SUBDIRECTORY (src   src-${TARGET})
     MATH (EXPR TARGET_COUNT "${TARGET_COUNT} + 1")
 ENDFOREACH ()
+
+# This build target is responsible for generating the package sac2crc file
+ADD_CUSTOM_TARGET (create-sac2crc-file ALL
+    COMMAND ${CMAKE_COMMAND}
+        -DUSER_HOME="$ENV{HOME}"
+        # XXX ideally we should use PROJECT_NAME, but sadly this has a dash `-'
+        #     which sac2crc does not support within target names
+        -DPACKAGE_NAME="stdlib"
+        -DLIB_PATH="${DLL_BUILD_DIR}"
+        -DTREE_PATH="${DLL_BUILD_DIR}"
+        -P "${PROJECT_SOURCE_DIR}/cmake-common/generate-sac2crc-file.cmake"
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Creating package sac2crc file in user's home directory")
+
