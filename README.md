@@ -13,11 +13,13 @@ To build the system one requires an operational [CMake](https://cmake.org/) >= 3
 
 An example on how to build the library:
 ```bash
-$ cd Stdlin
+$ cd Stdlib
+$ git submodule init
+$ git submodule update
 $ mkdir build
 $ cd build
 $ cmake ..
-$ make -jN
+$ make -j4  //you should have roughly 2GB per thread :-)
 $ make install
 ```
 
