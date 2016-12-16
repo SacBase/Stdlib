@@ -145,9 +145,15 @@ SET (C_DEPS_SRC
     structures/src/String/strext.c
     structures/src/String/strdrop.c
     structures/src/String/strcmp.c
+    structures/src/String/strncmp.c
+    structures/src/String/strcasecmp.c
+    structures/src/String/strncasecmp.c
     structures/src/String/strchr.c
     structures/src/String/strcat.c
+    structures/src/String/sscanf.c
     structures/src/String/sscanfstr.c
+    structures/src/String/strcspn.c
+    structures/src/String/strspn.c
     structures/src/String/sprintf.c
     structures/src/String/itos.c
     structures/src/String/ftos.c

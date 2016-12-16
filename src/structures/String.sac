@@ -67,19 +67,25 @@ external int strcmp(string S1, string S2);
        and zero if S1 == S2. */
 
 external int strncmp(string S1, string S2, int N);
+    #pragma linkname "SACstrncmp"
     #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strncmp.o"
     /* Compare the first N characters of strings S1 and S2.
        Result is negative if S1 < S2, positive if S1 > S2 
        and zero if S1 == S2. */
 
 external int strcasecmp(string S1, string S2);
+    #pragma linkname "SACstrcasecmp"
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcasecmp.o"
     /* Compare strings S1 and S2 while ignoring upper/lower case.
        Result is negative if S1 < S2 alphabetically, positive if S1 > S2
        and zero if S1 == S2, all modulo case. */
 
 external int strncasecmp(string S1, string S2, int N);
+    #pragma linkname "SACstrncasecmp"
     #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strncasecmp.o"
     /* Compare the first N characters of strings S1 and S2 ignoring case.
        Result is negative if S1 < S2 alphabetically, positive if S1 > S2
        and zero if S1 == S2, all modulo case. */
@@ -117,7 +123,9 @@ external string sprintf(string FORMAT, ...);
        functions. */
 
 external int, ... sscanf(string S, string FORMAT);
+    #pragma linkname "SACsscanf"
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/sscanf.o"
     /* Scan the string S concerning the format string FORMAT.
        The format string is the same as for fscanf.
        The int result gives the maximum number of successfully performed 
@@ -150,12 +158,16 @@ external int strrchr(string S, char C);
        at all. */
 
 external int strcspn(string S, string REJECT);
+    #pragma linkname "SACstrcspn"
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcspn.o"
     /* Return the length of the initial segment of S which
        consists entirely of characters not in REJECT.  */
 
 external int strspn(string S, string ACCEPT);
+    #pragma linkname "SACstrspn"
     #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strspn.o"
     /* Return the length of the initial segment of S which
        consists entirely of characters in ACCEPT.  */
 
