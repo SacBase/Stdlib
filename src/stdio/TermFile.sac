@@ -50,6 +50,8 @@ external TermFile createStdErr();
 
 external void fputc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linkname "SACfputc_TF"
+    #pragma linkobj "src/TermFile/fputc.o"
 inline void  putc(char C) { fputc( C, stdout); }
     /*
      * Put the character C to the output stream STREAM which must be
@@ -59,6 +61,8 @@ inline void  putc(char C) { fputc( C, stdout); }
 
 external char fgetc(TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linkname "SACfgetc_TF"
+    #pragma linkobj "src/TermFile/fgetc.o"
     #pragma linksign [0,1]
 inline char  getc() { return fgetc( stdin); }
     /*
@@ -68,12 +72,16 @@ inline char  getc() { return fgetc( stdin); }
 
 external  void fputs(string S, TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linkname "SACfputs_TF"
+    #pragma linkobj "src/TermFile/fputs.o"
     /*
      * Write string S to stream.
      */
 
 external  void puts(string S);
     #pragma effect TheTerminal
+    #pragma linkname "SACputs_TF"
+    #pragma linkobj "src/TermFile/puts.o"
     /*
      * Write string S and a newline to stdout.
      */
@@ -81,6 +89,8 @@ external  void puts(string S);
 
 external void ungetc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linkname "SACungetc_TF"
+    #pragma linkobj "src/TermFile/ungetc.o"
 inline void ungetc(char C) { ungetc( C, stdin); }
     /*
      * Put the character C back to the input stream STREAM 
@@ -115,9 +125,13 @@ external void  printf(string FORMAT, ...);
 
 external int, ... fscanf(TermFile &STREAM, string FORMAT);
     #pragma effect TheTerminal
+    #pragma linkname "SACfscanf_TF"
+    #pragma linkobj "src/TermFile/fscanf.o"
     #pragma linksign [0,1,2]
 external int, ...  scanf(string FORMAT);
     #pragma effect TheTerminal, stdin
+    #pragma linkname "SACscanf_TF"
+    #pragma linkobj "src/TermFile/scanf.o"
     #pragma linksign [0,1]
     /*
      * Scan the given stream STREAM concerning the format string FORMAT.
@@ -168,6 +182,8 @@ inline string  scanl(int MAX) { return fscanl( stdin, MAX); }
 
 external void fflush(TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linkname "SACfflush_TF"
+    #pragma  linkobj "src/TermFile/fflush.o"
 inline void  flush() { fflush( stdout); }
     /*
      * Write the buffer of a buffered output stream STREAM which must be 
@@ -177,6 +193,8 @@ inline void  flush() { fflush( stdout); }
 
 external bool feof(TermFile &STREAM);
     #pragma effect TheTerminal
+    #pragma linkname "SACfeof_TF"
+    #pragma  linkobj "src/TermFile/feof.o"
     #pragma linksign [0,1]
 inline bool  eof() { return feof( stdin); }
     /*

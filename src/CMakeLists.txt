@@ -195,6 +195,15 @@ SET (C_DEPS_SRC
     structures/src/Bits/BitAND.c
     stdio/src/TermFile/stdstreams.c
     stdio/src/TermFile/printf.c
+    stdio/src/TermFile/fputc.c
+    stdio/src/TermFile/fgetc.c
+    stdio/src/TermFile/fputs.c
+    stdio/src/TermFile/puts.c
+    stdio/src/TermFile/ungetc.c
+    stdio/src/TermFile/fscanf.c
+    stdio/src/TermFile/scanf.c
+    stdio/src/TermFile/fflush.c
+    stdio/src/TermFile/feof.c
     stdio/src/TermFile/fscans.c
     stdio/src/TermFile/fscanl.c
     stdio/src/TermFile/fprintf.c
