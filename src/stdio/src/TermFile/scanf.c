@@ -10,7 +10,7 @@
 /*****************************************************************/
 
 
-int SACfcanf_TF( char *format, ...)
+int SACscanf_TF( char *format, ...)
 {
   va_list args;
   int ret;
