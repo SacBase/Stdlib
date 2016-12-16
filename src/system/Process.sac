@@ -26,7 +26,9 @@ external  syserr, File popen(string COMMAND, string MODE);
 
 
 external  void pclose(File STREAM);
+    #pragma linkobj "src/Process/pclose.o"
     #pragma effect TheFileSystem
+    #pragma linkname "SACpclose"
     /*
      * Close the process stream given by the process handle STREAM. 
      */

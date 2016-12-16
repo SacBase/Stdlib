@@ -78,6 +78,7 @@ SET (C_DEPS_SRC
     system/src/RTClock/rtclock.c
     system/src/Process/system.c
     system/src/Process/process.c
+    system/src/Process/pclose.c
     system/src/MTClock/mtclock.c
     system/src/GetOpt/getopt.c
     system/src/FileSystem/tmpnam.c
@@ -218,6 +219,15 @@ SET (C_DEPS_SRC
     stdio/src/File/fscanf.c
     stdio/src/File/fprintf.c
     stdio/src/File/fopen.c
+    stdio/src/File/fputc.c
+    stdio/src/File/fgetc.c
+    stdio/src/File/fputs.c
+    stdio/src/File/ungetc.c
+    stdio/src/File/fflush.c
+    stdio/src/File/feof.c
+    stdio/src/File/rewind.c
+    stdio/src/File/fseek.c
+    stdio/src/File/ftell.c
     stdio/src/File/fclose.c
     stdio/src/FibreIO/ScanStringArr.c
     stdio/src/FibreIO/ScanString.c

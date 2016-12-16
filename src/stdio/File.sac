@@ -81,11 +81,15 @@ external void fremove(string fname);
 
 
 external  void fputc(char C, File &STREAM);
+    #pragma linkname "SACfputc"
+    #pragma linkobj "src/File/fputc.o"
     /*
      * Write the character C to the output stream STREAM. 
      */
 
 external  char fgetc(File &STREAM);
+    #pragma linkname "SACfgetc"
+    #pragma linkobj "src/File/fgetc.o"
     #pragma linksign [0,1]
     /*
      * Get the next character from the input stream STREAM. 
@@ -93,6 +97,8 @@ external  char fgetc(File &STREAM);
 
 
 external  void ungetc(char C, File &STREAM);
+    #pragma linkname "SACungetc"
+    #pragma linkobj "src/File/ungetc.o"
     /*
      * Put the character C back to the input stream STREAM for further
      * read operations. Only one character may be put back between two
@@ -101,6 +107,8 @@ external  void ungetc(char C, File &STREAM);
      */
 
 external  void fputs(string S, File &STREAM);
+    #pragma linkname "SACfputs"
+    #pragma linkobj "src/File/fputs.o"
     /*
      * Write string S to stream.
      */
@@ -167,6 +175,8 @@ external  string fscanl(File &STREAM, int MAX);
 
 
 external  bool feof(File &STREAM);
+    #pragma linkname "SACfeof"
+    #pragma  linkobj "src/File/feof.o"
     #pragma linksign [0,1]
     /*
      * Test the stream STREAM for having reached the end of the respective 
@@ -175,6 +185,8 @@ external  bool feof(File &STREAM);
 
 
 external  void fflush(File &STREAM);
+    #pragma linkname "SACfflush"
+    #pragma  linkobj "src/File/fflush.o"
     /*
      * Write the buffer of a buffered output stream STREAM to the
      * respective file.
@@ -182,6 +194,8 @@ external  void fflush(File &STREAM);
  
 
 external  void fseek(File &STREAM, int OFFSET, int BASE);
+    #pragma linkname "SACfseek"
+    #pragma  linkobj "src/File/fseek.o"
     /*
      * Reposition the stream STREAM. The new position is given as an offset
      * in bytes relative to BASE which may be 0 (beginning of file),
@@ -190,6 +204,8 @@ external  void fseek(File &STREAM, int OFFSET, int BASE);
 
 
 external  int ftell(File &STREAM);
+    #pragma linkname "SACftell"
+    #pragma  linkobj "src/File/ftell.o"
     #pragma linksign [0,1]
     /*
      * Return the offset of the current byte relative to
@@ -198,6 +214,8 @@ external  int ftell(File &STREAM);
 
 
 external  void rewind(File &STREAM);
+    #pragma linkname "SACrewind"
+    #pragma  linkobj "src/File/rewind.o"
     /*
      * Reposition the stream STREAM to the beginning of the file associated
      * with it (identical to fseek(<stream>, 0, 0)).
