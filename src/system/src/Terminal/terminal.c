@@ -6,7 +6,7 @@
 void *TheTerminal;
 
 
-void *create_TheTerminal()
+void *create_TheTerminal( void)
 {
   return(0);
 }

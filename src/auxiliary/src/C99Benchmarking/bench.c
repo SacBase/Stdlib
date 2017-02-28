@@ -33,7 +33,7 @@ void benchEnd( struct bench* interval, double time)
   interval->stopTime = time;
 }                         
                                                
-void benchThis( )                                                        
+void benchThis( void)
 {                                                                        
   /* noop*/
 }                                                                        
