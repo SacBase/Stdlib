@@ -430,7 +430,7 @@ a[*] where( bool[*] p, a[*] A, a[*] B)          \
 
 #define WHERE_AxS( a)                           \
 inline                                          \
-a[+] where( bool[*] p, a[+] A, a B)             \
+a[*] where( bool[*] p, a[+] A, a B)             \
 {                                               \
   res = with {                                  \
           ( . <= iv <= . )                      \
@@ -448,7 +448,7 @@ a[+] where( bool[*] p, a[+] A, a B)             \
 
 #define WHERE_SxA( a)                           \
 inline                                          \
-a[+] where( bool[*] p, a A, a[+] B)             \
+a[*] where( bool[*] p, a A, a[+] B)             \
 {                                               \
   res = with {                                  \
           ( . <= iv <= . )                      \
@@ -466,7 +466,7 @@ a[+] where( bool[*] p, a A, a[+] B)             \
 
 #define WHERE_SxS( a)                           \
 inline                                          \
-a[+] where( bool[*] p, a A, a B)                \
+a[*] where( bool[*] p, a A, a B)                \
 {                                               \
   res = with {                                  \
           ( . <= iv <= . )                      \
