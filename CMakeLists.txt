@@ -11,6 +11,8 @@ SET (DLL_BUILD_DIR  "${PROJECT_BINARY_DIR}/lib")
 SET (TARGETS            seq mt_pth  CACHE STRING "Build stdlib-jpeg for these targets")
 SET (SAC2C_EXEC                     CACHE STRING "A path to sac2c compiler")
 SET (LINKSETSIZE        "500"       CACHE STRING "Set a value for -linksetsize parameter of sac2c")
+OPTION (FULLTYPES "Include types such as long and longlong" OFF)
+
 SET (SAC2C_EXTRA_INC
      -DHAVE_CONFIG_H -DEXT_STDLIB
      -I${PROJECT_BINARY_DIR}/include
@@ -20,6 +22,10 @@ SET (SAC2C_CPP_INC
      -DHAVE_CONFIG_H -DEXT_STDLIB
      -cppI${PROJECT_BINARY_DIR}/include
      -cppI${PROJECT_SOURCE_DIR}/include)
+
+IF (FULLTYPES)
+    LIST (APPEND SAC2C_EXTRA_INC -DFULLTYPES)
+ENDIF ()
 
 # Check whether sac2c is operational
 INCLUDE ("cmake-common/check-sac2c.cmake")

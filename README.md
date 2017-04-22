@@ -37,3 +37,5 @@ When running CMake it is possible to pass the following variables:
     * value `1` reduces the memory consumption to minimum, buy significantly increases compilation time.
     
       *Default value: 500.*
+  * `-DFULLTYPES=ON|OFF` --- add support for further types to the stdlib, such as `long` and
+    `longlong` (Default is `OFF`).

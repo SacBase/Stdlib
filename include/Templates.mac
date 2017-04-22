@@ -17,7 +17,7 @@
  *
  ******************************************************************************/
 
-#ifdef SANTANU
+#ifdef FULLTYPES
 
 #define BUILT_IN( fun)    \
 fun( byte)                \
@@ -125,5 +125,3 @@ MAP_BIN_##ext( >=,  _ge_SxS_, a, bool)
 MAP_BIN_##ext( &, _and_SxS_, bool, bool)    \
 MAP_BIN_##ext( |,  _or_SxS_, bool, bool)    \
 MAP_MON_##ext( !, _not_S_, bool, bool)
-
-
