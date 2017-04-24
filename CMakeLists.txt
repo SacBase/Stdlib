@@ -28,8 +28,9 @@ IF (FULLTYPES)
 ENDIF ()
 
 # Check whether sac2c is operational
-INCLUDE ("cmake-common/check-sac2c.cmake")
+INCLUDE ("cmake-common/check-sac2c.cmake") # get SAC2C_VERSION
 INCLUDE ("cmake-common/misc-macros.cmake")
+INCLUDE ("cmake-common/generate-version-vars.cmake")
 
 INCLUDE ("cmake/config.cmake")
 
@@ -43,3 +44,11 @@ ENDFOREACH ()
 
 # This build target is responsible for generating the package sac2crc file
 CREATE_SAC2CRC_TARGET ("stdlib" "${DLL_BUILD_DIR}" "${DLL_BUILD_DIR}")
+
+# lets create packages
+SET (PROJECT_SHORT_VERSION)
+SET (PROJECT_MAJOR_VERSION)
+SET (PROJECT_MINOR_VERSION)
+SET (PROJECT_PATCH_VERSION)
+GET_PROJECT_VERSION (PROJECT_SHORT_VERSION PROJECT_MAJOR_VERSION PROJECT_MINOR_VERSION PROJECT_PATCH_VERSION)
+INCLUDE ("${PROJECT_SOURCE_DIR}/cmake/cpack.cmake")
