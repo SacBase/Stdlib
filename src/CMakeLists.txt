@@ -365,11 +365,13 @@ FOREACH (name ${SAC_SRC})
     # to the corresponding locations.
     INSTALL (
         FILES "${mod}"
-        DESTINATION ${_install_mod_dir}/${TARGET_ENV}/${SBI})
+        DESTINATION ${_install_mod_dir}/${TARGET_ENV}/${SBI}
+        COMPONENT modules)
     IF (NOT SAC_NOTREE)
         INSTALL (
             FILES "${tree}"
-            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV})
+            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
+            COMPONENT trees)
     ENDIF ()
 ENDFOREACH (name)
 
@@ -422,10 +424,12 @@ FOREACH (name ${XSAC_SRC})
     # to the corresponding locations.
     INSTALL (
         FILES "${mod}"
-        DESTINATION ${_install_mod_dir}/${TARGET_ENV}/${SBI})
+        DESTINATION ${_install_mod_dir}/${TARGET_ENV}/${SBI}
+        COMPONENT modules)
     IF (NOT SAC_NOTREE)
         INSTALL (
             FILES "${tree}"
-            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV})
+            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
+            COMPONENT trees)
     ENDIF ()
 ENDFOREACH (name)
