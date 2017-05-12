@@ -23,6 +23,9 @@ $ make -j4  //you should have roughly 2GB per thread :-)
 $ make install
 ```
 
+**NOTE:** *When pulling the latest commit, remember to run `git submodule update` or you will
+be missing changes to the `cmake-common` repository.*
+
 Variables that can be passed to CMake
 =========================================
 
