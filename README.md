@@ -19,7 +19,7 @@ $ git submodule update
 $ mkdir build
 $ cd build
 $ cmake ..
-$ make -j4  //you should have roughly 2GB per thread :-)
+$ make -j4  #you should have roughly 2GB per thread :-)
 $ make install
 ```
 
