@@ -166,6 +166,7 @@ SET (C_DEPS_SRC
     structures/src/String/dtos.c
     structures/src/String/ctos.c
     structures/src/String/copystr.c
+    structures/src/String/freestr.c
     structures/src/String/btos.c
     structures/src/List/tl.c
     structures/src/List/take.c
@@ -398,7 +399,7 @@ FOREACH (name ${XSAC_SRC})
         # FIXME it would be better to call saccc like it is done currently
         #       $(SACCC) $(SAC2C) prog seq -E "-x c" -I. $(DEFS)
         COMMAND
-            ${SAC2C} -cc ccprog -Xc -E -Xc -xc -noprelude -o /dev/stdout "${src}" > "${dir}/${dst}.sac"
+            ${SAC2C} -cc ccprog -Xc -E -Xc "-x c" -noprelude -o /dev/stdout "${src}" > "${dir}/${dst}.sac"
         WORKING_DIRECTORY
             "${dir}"
         DEPENDS "${src}"

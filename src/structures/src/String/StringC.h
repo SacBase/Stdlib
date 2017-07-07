@@ -30,4 +30,6 @@
 #define STRDUP(new, old) new=(string)SAC_MALLOC(strlen(old)+1);  \
                          strcpy(new, old);
 
+#define STRFREE(str) SAC_FREE(str);
+
 typedef char* string;

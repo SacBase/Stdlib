@@ -11,7 +11,8 @@ import ArrayBasics: {shape,sel};
 export all except {indent};
 
 external typedef string;
-    #pragma freefun "free"
+    #pragma freefun "free_string"
+    #pragma linkobj "src/String/freestr.o"
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/copystr.o"
 
