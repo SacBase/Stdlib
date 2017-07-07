@@ -12,6 +12,7 @@ export all;
 
 external double cos(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
 #ifdef NEED_LIBM
 #pragma linkwith "m"
     /* Cosine of X.  */
@@ -19,26 +20,32 @@ external double cos(double X);
 
 external double sin(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Sine of X.  */
 
 external double tan(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Tangent of X.  */
 
 external double acos(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Arc cosine of X.  */
 
 external double asin(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Arc sine of X.  */
 
 external double atan(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Arc tangent of X.  */
     
 external double atan2(double X, double Y);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* Arc tangent of Y/X.  */
 
 
@@ -48,26 +55,32 @@ external double atan2(double X, double Y);
 
 external double cosh(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Hyperbolic cosine of X.  */
 
 external double sinh(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Hyperbolic sine of X.  */
 
 external double tanh(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Hyperbolic tangent of X.  */
 
 external double acosh(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Hyperbolic arc cosine of X.  */
 
 external double asinh(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Hyperbolic arc sine of X.  */
 
 external double atanh(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Hyperbolic arc tangent of X.  */
     
 
@@ -77,42 +90,52 @@ external double atanh(double X);
 
 external double exp(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Exponentional function of X.  */
 
 external float expf(float X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Exponentional function of X.  */
 
 external double, int frexp(double X);
     #pragma linksign [0,2,1]
+    #pragma header "<math.h>"
     /* Break X into a normalized fraction and an integral power of 2.  */
 
 external double ldexp(double X, int EXP);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* X times (two to the EXP power).  */
 
 external double log(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Natural logarithm of X.  */
 
 external double log10(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Base-ten logarithm of X.  */
 
 external double log2(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Base-two logarithm of X.  */
 
 external double expm1(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Return exp(X) - 1.  */
 
 external double log1p(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Return log(1 + X).  */
 
 external double, double modf(double X);
     #pragma linksign [0,2,1]
+    #pragma header "<math.h>"
     /* Break VALUE into integral and fractional parts.  */
 
 
@@ -122,22 +145,27 @@ external double, double modf(double X);
 
 external double pow(double X, double Y);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* Return X to the Y power.  */
 
 external float powf(float X, float Y);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* Return X to the Y power.  */
 
 external double sqrt(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Return the square root of X.  */
 
 external float sqrtf(float X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Return the square root of X.  */
 
 external double cbrt(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Return the cube root of X.  */
 
 
@@ -147,18 +175,22 @@ external double cbrt(double X);
 
 external double ceil(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Smallest integral value not less than X.  */
 
 external double fabs(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Absolute value of X.  */
 
 external double floor(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Largest integer not greater than X.  */
 
 external double fmod(double X, double Y);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* Floating-point modulo remainder of X/Y.  */
 
 
@@ -190,15 +222,18 @@ external bool finite(double X);
 
 external double copysign(double X, double Y);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* Return X with its signed changed to Y's.  */
 
 external double rint(double X);
     #pragma linksign [0,1]
+    #pragma header "<math.h>"
     /* Return the integer nearest X in the direction of the
        prevailing rounding mode.  */
 
 external double hypot(double X, double Y);
     #pragma linksign [0,1,2]
+    #pragma header "<math.h>"
     /* Return `sqrt(X*X + Y*Y)'.  */
 
 
