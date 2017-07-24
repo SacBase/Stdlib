@@ -11,3 +11,6 @@
 
 /* Do we need to link with -lrt.  */
 #cmakedefine NEED_LIBRT
+
+/* Support sac2c #pragma header feature */
+#cmakedefine HAVE_HEADER_PRAGMA

@@ -20,13 +20,19 @@ use Complex: all;
 
 export all;
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 external objdef Random RandomGen;
-
-
 
 external void srandom(uint SEED);
     #pragma effect Random::RandomGen
+#ifdef HAVE_HEADER_PRAGMA
+    #pragma header "<stdlib.h>"
+#else
     #pragma linkobj "src/Random/Random.o"
+#endif
 
     /*
      * Initialize RandomGen to produce a new sequence of pseudo-random

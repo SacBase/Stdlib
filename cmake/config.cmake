@@ -3,6 +3,8 @@ INCLUDE (CheckCSourceCompiles)
 INCLUDE (CheckLibraryExists)
 INCLUDE (CheckIncludeFiles)
 
+# Additional config checks regarding feature support
+INCLUDE ("cmake-common/check-sac2c-feature-support.cmake")
 
 # Check for flex/bison
 FIND_PACKAGE (BISON  REQUIRED)
@@ -10,6 +12,9 @@ FIND_PACKAGE (FLEX  REQUIRED)
 
 # Check mkdtemp exists
 CHECK_FUNCTION_EXISTS (mkdtemp HAVE_MKDTEMP)
+
+# Check if we support SAC2C header pragma
+CHECK_SAC2C_SUPPORT_HEADER_PRAGMA ()
 
 # Check whether we have/need -lm
 SET (NEED_LIBM)
