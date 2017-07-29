@@ -106,3 +106,6 @@ external double  epidouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/epidouble.o"
 
+external int     randmax();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/randmax.o"

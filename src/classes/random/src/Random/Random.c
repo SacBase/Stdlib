@@ -39,11 +39,9 @@ void *RandomGen;
 void *create_RandomGen( void)
 {
   srandom(1);
-  
+
   return(NULL);
 }
-
-
 
 /********************************************************************/
 
@@ -51,13 +49,13 @@ void *create_RandomGen( void)
 int SACrandom(int min, int max)
 {
   long int n;
-  
+
   do
   {
      n=random();
-  } 
+  }
   while (n==RAND_MAX);
-  
+
   return((int)(((n%RAND_MAX)/(double)RAND_MAX) * (max-min+1) + min));
 }
 
@@ -75,13 +73,13 @@ int SACrandom(int min, int max)
 double SACdrandom(double min, double max)
 {
   long int n;
-  
+
   do
   {
 	 n=random();
-  } 
+  }
   while (n==RAND_MAX);
-  
+
   return(((n%RAND_MAX)/(double)RAND_MAX) * (max-min) + min);
 }
 
