@@ -47,6 +47,7 @@ structures/Constants.sac                   Core
 structures/ComplexScalarArith.sac          Ext
 structures/ComplexBasics.sac               Ext
 structures/Complex.sac                     Ext
+structures/Quaternion.sac                  Ext
 structures/Char.sac                        Core
 structures/Bool.sac                        Core
 structures/Bits.sac                        Core

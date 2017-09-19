@@ -6,6 +6,7 @@ import Bits         : all;
 import String       : all;
 #ifdef EXT_STDLIB
 import Complex      : all;
+import Quaternion   : all;
 #ifndef SAC_BACKEND_MUTC
 import List         : all;
 import Color8       : all;

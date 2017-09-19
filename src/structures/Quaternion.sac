@@ -1,0 +1,91 @@
+module Quaternion;
+
+export all;
+
+
+use Array:all except {tod,shape,dim,sel,+,*,-};
+import Array:{tod,shape,dim,sel,+,*,-};
+
+
+
+typedef double[4] quaternion;
+
+inline
+quaternion[*] toq( double[+] q)
+{
+  return (quaternion[*]) q;
+}
+
+inline
+quaternion[*] toq( int[+] q)
+{
+  return (quaternion[*]) tod(q);
+}
+
+inline
+double[+] tod( quaternion[*] q)
+{
+  res = (double[+])q;
+  // the next line ensures type conformity to be checked....
+  // this is ugly :-( but works :-)
+  res = reshape( modarray( shape(res), dim(res) - 1, 4), res);
+  return res;
+}
+
+inline
+int[.] shape( quaternion[*] q)
+{
+  return drop( [-1], shape((double[+])q));
+}
+
+inline
+int dim( quaternion[*] q)
+{
+  return dim((double[+])q)-1;
+}
+
+inline
+quaternion[*] sel( int[.] v, quaternion[*] a)
+{
+  return (quaternion[*])((double[*])a)[v];
+}
+
+inline
+quaternion[*] +(double a, quaternion[*] b)
+{
+  return (quaternion[*])(a +(double[+])b);
+}
+
+inline
+quaternion[*] +(quaternion[*] a, quaternion[*] b)
+{
+  return (quaternion[*])((double[+])a +(double[+])b);
+}
+
+inline
+quaternion[*] +(quaternion[*] a, double b)
+{
+  return (quaternion[*])((double[+])a +b);
+}
+
+inline
+quaternion[+] *(quaternion[+] a, quaternion[+] b)
+{
+   return with {
+            (. <= iv <=.) : a[iv]*b[iv];
+          } : genarray( shape(a), toq([0d,0d,0d,0d]));
+}
+
+inline
+quaternion *(quaternion a, quaternion b)
+{
+  ad = (double[4])a;
+  bd = (double[4])b;
+  return (quaternion)[ ad[0]*bd[0]-ad[1]*bd[1] -ad[2]*bd[2] -ad[3]*bd[3],
+                       ad[0]*bd[1]+ad[1]*bd[0] +ad[2]*bd[3] -ad[3]*bd[2],
+                       ad[0]*bd[2]-ad[1]*bd[3] +ad[2]*bd[0] +ad[3]*bd[1],
+                       ad[0]*bd[3]+ad[1]*bd[2] -ad[2]*bd[1] +ad[3]*bd[0] ];
+}
+
+
+
