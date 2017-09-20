@@ -4,6 +4,10 @@ export all;
 
 
 use Array:all except {tod,shape,dim,sel,+,*,-};
+/*
+ *  we should not import the versions from Array
+ *  as we will export everything....
+ */
 import Array:{tod,shape,dim,sel,+,*,-};
 
 
