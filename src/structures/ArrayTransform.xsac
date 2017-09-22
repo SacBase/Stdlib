@@ -180,11 +180,10 @@ BUILT_IN( TILE)
 /*----------------------------------------------------------------------------*/
 
 /* First axis catenation */
-
 #define CAT( a)                                                             \
 inline                                                                      \
-a[+] ++( a[+] arr_a, a[+] arr_b)                                          \
-{                                                                           \
+a[+] ++( a[+] arr_a, a[+] arr_b)                                            \
+{ /* Array-Array catenate, first axis */                                    \
   new_shp = _idx_modarray_AxSxS_( _shape_A_( arr_a), 0,                     \
                         _add_SxS_( _sel_VxA_([0], _shape_A_( arr_a)),       \
                                    _sel_VxA_([0], _shape_A_( arr_b)) ) );   \
@@ -197,7 +196,46 @@ a[+] ++( a[+] arr_a, a[+] arr_b)                                          \
           ( offset <= iv <= . ) : _sel_VxA_( _sub_VxV_( iv, offset), arr_b);\
         } : modarray( res );                                                \
   return( res);                                                             \
-}
+}                                                                           \
+                                                                            \
+inline                                                                      \
+a[+] ++( a[+] arr_a, a arr_b)                                               \
+{  /* Array-Scalar catenate, first axis */                                  \
+  new_shp = _idx_modarray_AxSxS_( _shape_A_( arr_a), 0,                     \
+                        _add_SxS_( _sel_VxA_([0], _shape_A_( arr_a)), 1));  \
+  res = with {                                                              \
+          ( . <= iv < _shape_A_(arr_a) ) : _sel_VxA_( iv, arr_a);           \
+        } : genarray( new_shp, zero(arr_a) );                               \
+  offset =  _idx_modarray_AxSxS_( _mul_SxV_( 0, new_shp), 0,                \
+                        _sel_VxA_([0], _shape_A_( arr_a)) );                \
+  res = with {                                                              \
+          ( offset <= iv <= . ) : arr_b;                                    \
+        } : modarray( res );                                                \
+  return( res);                                                             \
+}                                                                           \
+                                                                            \
+inline                                                                      \
+a[+] ++( a arr_a, a[+] arr_b)                                               \
+{ /* Scalar-Array catenate, first axis */                                   \
+  new_shp = _idx_modarray_AxSxS_( _shape_A_( arr_b), 0,                     \
+              _add_SxS_( 1, _sel_VxA_([0], _shape_A_( arr_b))));            \
+  res = with {                                                              \
+          ( . <= iv < _shape_A_(arr_b) ) : _sel_VxA_( iv, arr_b);           \
+        } : genarray( new_shp, zero(arr_b) );                               \
+  offset =  _idx_modarray_AxSxS_( _mul_SxV_( 0, new_shp), 0,                \
+                        _sel_VxA_([0], _shape_A_( arr_b)) );                \
+  res = with {                                                              \
+          ( offset <= iv <= . ) : arr_a;                                    \
+        } : modarray( res );                                                \
+  return( res);                                                             \
+}                                                                           \
+                                                                            \
+inline                                                                      \
+a[+] ++( a arr_a, a arr_b)                                                  \
+{ /* Scalar-Scalar catenate, first axis  */                                 \
+  res = [arr_a, arr_b];                                                     \
+  return( res);                                                             \
+}                                                                           \
 
 BUILT_IN( CAT)
 
@@ -208,7 +246,7 @@ BUILT_IN( CAT)
 #define CATENATE( a)                                                        \
 inline                                                                      \
 a[+] catenate( a[+] x, a[+] y)                                              \
-{                                                                           \
+{ /* Array-Array catenate, last axis */                                     \
   axis = _dim_A_( x) - 1;                                                   \
   colsx = _shape_A_(x) [ axis];                                             \
   colsy = _shape_A_(y) [ axis];                                             \
@@ -223,7 +261,53 @@ a[+] catenate( a[+] x, a[+] y)                                              \
      } : modarray( z);                                                      \
                                                                             \
  return( z);                                                                \
-}
+}                                                                           \
+                                                                            \
+inline                                                                      \
+a[+] catenate( a[+] x, a y)                                                 \
+{ /* Array-Scalar catenate, last axis */                                    \
+  axis = _dim_A_( x) - 1;                                                   \
+  colsx = _shape_A_(x) [ axis];                                             \
+  colsy = 1;                                                                \
+  shpz = _idx_modarray_AxSxS_( _shape_A_( x), axis, colsx + colsy);         \
+  offset = _mul_SxV_( 0, _shape_A_( x));                                    \
+  offset = _idx_modarray_AxSxS_( offset, axis, colsx);                      \
+  z = with {                                                                \
+       ( 0 *_shape_A_(x) <= iv < _shape_A_( x)) : x[ iv];                   \
+     } : genarray(shpz, zero( x));                                          \
+  z = with {                                                                \
+       ( offset <= iv < shpz) : y;                                          \
+     } : modarray( z);                                                      \
+                                                                            \
+ return( z);                                                                \
+}                                                                           \
+                                                                            \
+inline                                                                      \
+a[+] catenate( a x, a[+] y)                                                 \
+{ /* Scalar-Array catenate, last axis  */                                   \
+  axis = _dim_A_( y) - 1;                                                   \
+  colsx = 1;                                                                \
+  colsy = _shape_A_(y) [ axis];                                             \
+  shpz = _idx_modarray_AxSxS_( _shape_A_( y), axis, colsx + colsy);         \
+  offset = _mul_SxV_( 0, _shape_A_( y));                                    \
+  offset = _idx_modarray_AxSxS_( offset, axis, colsx);                      \
+  z = with {                                                                \
+       ( offset <= iv < shpz) : y[ iv - offset];                            \
+     } : genarray(shpz, zero( x));                                          \
+  z = with {                                                                \
+       ( 0 *_shape_A_(y) <= iv < offset) : x;                               \
+     } : modarray( z);                                                      \
+                                                                            \
+ return( z);                                                                \
+}                                                                           \
+                                                                            \
+inline                                                                      \
+a[+] catenate( a x, a y)                                                    \
+{ /* Scalar-Scalar catenate, last axis */                                   \
+  z = [x, y];                                                               \
+  return( z);                                                               \
+}                                                                           \
+
 
 BUILT_IN( CATENATE)
 
