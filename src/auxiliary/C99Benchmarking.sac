@@ -15,7 +15,7 @@
 class C99Benchmarking;
 external classtype;
 
-#ifdef SAC_BACKEND_C99
+#if defined(SAC_BACKEND_C99) || defined(SAC_BACKEND_CUDA)
 
 #define NANO_TO_SEC(time) (tod(time) / 1000000000.0)
 #define NANO_TO_MSEC(time) (tod(time) / 1000000.0)
@@ -449,4 +449,4 @@ external void benchDestroyInterval( Interval interval);
 #pragma linkobj "src/C99Benchmarking/bench.o"
 #pragma linksign [1]
 
-#endif
+#endif /* SAC_BACKEND_C99/CUDA */

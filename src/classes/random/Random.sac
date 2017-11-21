@@ -9,7 +9,7 @@ class Random;
      *  16*((2**31)-1).
      *
      *  This random number generator offers much better results than
-     *  that of class Rand but is also about 2/3 slower. 
+     *  that of class Rand but is also about 2/3 slower.
      */
 
 external classtype;
@@ -39,6 +39,14 @@ external void srandom(uint SEED);
      * numbers.
      */
 
+external long random();
+    #pragma linksign [0]
+    #pragma effect Random::RandomGen
+#ifdef HAVE_HEADER_PRAGMA
+    #pragma header "<stdlib.h>"
+#else
+    #pragma linkobj "src/Random/Random.o"
+#endif
 
 external int random(int MIN, int MAX);
     #pragma linksign [0,1,2]
