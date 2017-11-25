@@ -13,7 +13,7 @@
 #define MICROS 2
 #define NANOS 3
 
-const char * unitName[] = {"s", "ms", "us", "ns"};
+static const char * unitName[] = {"s", "ms", "us", "ns"};
 
 struct bench {                                                   
   int                num;

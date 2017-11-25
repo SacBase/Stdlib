@@ -31,8 +31,10 @@ extern int FibreScanparse( void);
 
 #define YY_USER_ACTION num_chars += yyleng;
 
-int num_chars; /* Stores the number of chars read for returned tokens */
+static int num_chars; /* Stores the number of chars read for returned tokens */
+extern int linenum;
 int linenum=1;
+extern int start_token;
 int start_token;
 
 

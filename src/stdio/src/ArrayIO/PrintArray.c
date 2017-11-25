@@ -36,15 +36,15 @@
 
 #ifdef SAC_BACKEND_DISTMEM
 
-#define PRINT_CASE( constant, ctype)                                              \
+#define PRINT_CASE( constant, ctype, ftype)                                       \
   case constant:                                                                  \
     if (is_distr) {                                                               \
       fprintf(stream, format,                                                     \
-              *(SAC_DISTMEM_ELEM_POINTER(arr_offset, ctype, elems_first_nodes,    \
+       (ftype)*(SAC_DISTMEM_ELEM_POINTER(arr_offset, ctype, elems_first_nodes,    \
                                          Index2Offset( dim, shp, index))));       \
     } else {                                                                      \
       fprintf(stream, format,                                                     \
-        ((ctype *)a)[Index2Offset(dim,shp,index)]);                               \
+        (ftype)((ctype *)a)[Index2Offset(dim,shp,index)]);                        \
     }                                                                             \
     break;
 
@@ -69,10 +69,10 @@ void ARRAYIO__Print##name_prefix##ArrayFormat( FILE *stream, string format, int 
 
 #else /* defined(SAC_BACKEND_DISTMEM) */
 
-#define PRINT_CASE( constant, ctype)                  \
-  case constant:                                      \
-    fprintf(stream, format,                           \
-      ((ctype *)a)[Index2Offset( dim, shp, index)]);  \
+#define PRINT_CASE( constant, ctype, ftype)                  \
+  case constant:                                             \
+    fprintf(stream, format,                                  \
+      (ftype)((ctype *)a)[Index2Offset( dim, shp, index)]);  \
     break;
 
 #define PRINT_FUNS( name_prefix, ctype, constant, default_format)  \
@@ -184,7 +184,7 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
         fprintf(stream, format , ((unsigned long long *)a)[0]);
         break;
       case FLOAT:
-        fprintf(stream, format, ((float *)a)[0]);
+        fprintf(stream, format, (double)((float *)a)[0]);
         break;
       case DOUBLE:
         fprintf(stream, format, ((double *)a)[0]);
@@ -220,20 +220,20 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
         while (index[n] < shp[dim-1]) {
           switch(typeflag) {
-            PRINT_CASE( BOOL, int) /* TODO: Isn't BOOL compiled to bool in the meantime? */
-            PRINT_CASE( BYTE, char) 
-            PRINT_CASE( SHORT, short) 
-            PRINT_CASE( INT, int) 
-            PRINT_CASE( LONG, long) 
-            PRINT_CASE( LONGLONG, long long) 
-            PRINT_CASE( UBYTE, unsigned char) 
-            PRINT_CASE( USHORT, unsigned short) 
-            PRINT_CASE( UINT, unsigned int) 
-            PRINT_CASE( ULONG, unsigned long) 
-            PRINT_CASE( ULONGLONG, unsigned long long) 
-            PRINT_CASE( FLOAT, float) 
-            PRINT_CASE( DOUBLE, double) 
-            PRINT_CASE( CHAR, char)  /* TODO: Isn't CHAR compiled to unsigned char? */
+            PRINT_CASE( BOOL, int, int) /* TODO: Isn't BOOL compiled to bool in the meantime? */
+            PRINT_CASE( BYTE, char, char) 
+            PRINT_CASE( SHORT, short, short) 
+            PRINT_CASE( INT, int, int) 
+            PRINT_CASE( LONG, long, long) 
+            PRINT_CASE( LONGLONG, long long, long long) 
+            PRINT_CASE( UBYTE, unsigned char, unsigned char) 
+            PRINT_CASE( USHORT, unsigned short, unsigned short) 
+            PRINT_CASE( UINT, unsigned int, unsigned int) 
+            PRINT_CASE( ULONG, unsigned long, unsigned long) 
+            PRINT_CASE( ULONGLONG, unsigned long long, unsigned long long) 
+            PRINT_CASE( FLOAT, float, double) 
+            PRINT_CASE( DOUBLE, double, double) 
+            PRINT_CASE( CHAR, char, char)  /* TODO: Isn't CHAR compiled to unsigned char? */
           }
 
           index[n]++;

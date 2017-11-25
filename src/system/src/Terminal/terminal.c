@@ -3,8 +3,6 @@
  */
 
 
-void *TheTerminal;
-
 
 void *create_TheTerminal( void)
 {

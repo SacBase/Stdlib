@@ -27,7 +27,7 @@ string SACsprintf( string format, ...)
   va_start( arg_p, format);
   n = vsnprintf( buffer, sizeof buffer, format, arg_p);
   va_end( arg_p);
-  if (n >= sizeof buffer) {
+  if ((size_t)n >= sizeof buffer) {
       new = (string) SAC_MALLOC( n + 1);
       va_start( arg_p, format);
       n = vsnprintf( new, n + 1, format, arg_p);

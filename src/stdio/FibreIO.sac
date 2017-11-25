@@ -2,7 +2,7 @@ module FibreIO;
 
 
 use IOresources: all;
-use Array : { shape, sel, dim };
+use Array : { shape, sel, dim, tod };
 use String : {string};
 use StringArray : {stringArray};
 use TermFile : {TermFile};
@@ -196,7 +196,7 @@ inline void FibrePrint(File &stream, float[+] arr)
 
 inline void FibrePrint(File &stream, float arr)
 {
-  File::fprintf(stream, "%.16f\n", arr);
+  File::fprintf(stream, "%.16f\n", tod(arr));
 }
 
 
@@ -239,7 +239,7 @@ inline void FibrePrint(TermFile &stream, float[+] arr)
 
 inline void FibrePrint(TermFile &stream, float arr)
 {
-  TermFile::fprintf(stream, "%.16f\n", arr);
+  TermFile::fprintf(stream, "%.16f\n", tod(arr));
 }
 
 
@@ -280,7 +280,7 @@ inline void FibrePrint(float[+] arr)
 
 inline void FibrePrint(float arr)
 {
-  TermFile::fprintf(stdout, "%.16f\n", arr);
+  TermFile::fprintf(stdout, "%.16f\n", tod(arr));
 }
 
 
