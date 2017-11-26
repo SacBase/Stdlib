@@ -21,8 +21,6 @@
 #endif
 
 
-void *TheRTClock;
-
 void *SAC_RTClock_createTheRTClock( void)
 {
   return((void*)0);

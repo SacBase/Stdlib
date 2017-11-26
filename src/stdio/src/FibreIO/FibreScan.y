@@ -61,17 +61,20 @@ unsigned long    *ulongarray;
 unsigned long long    *ulonglongarray;
 char    **stringarray;
 
-int i;
+static int i;
 int shape[ MAXDIM];
-int dim_pos;
-enum READMODE mode;
+static int dim_pos;
+static enum READMODE mode;
 
-int got_scalar;
-int size_fixed;
+static int got_scalar;
+static int size_fixed;
 int dims;
 int size;
 static int array_pos;
 static int elems_left[MAXDIM];
+
+extern int yychar;
+extern int yynerrs;
 
 %}
 

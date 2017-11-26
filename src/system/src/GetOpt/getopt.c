@@ -154,7 +154,7 @@ int getopt_sac(const char *opts)
     }
     else
     {
-      if (argind >= strlen(arg))
+      if ((size_t)argind >= strlen(arg))
       {
         optopt = '\0';
       }
