@@ -23,7 +23,7 @@ inline void fprint(File &stream, int n)
 
 inline void fprint(File &stream, float n)
 {
-  File::fprintf(stream, "%g", n);
+  File::fprintf(stream, "%g", tod(n));
 }
 
 
@@ -31,7 +31,7 @@ inline void fprint(File &stream, float n)
 
 inline void fprint(File &stream, float n, int prec)
 {
-  File::fprintf(stream, "%.*g", prec, n);
+  File::fprintf(stream, "%.*g", prec, tod(n));
 }
 
 
@@ -141,7 +141,7 @@ inline void fprint(TermFile &stream, int n)
 
 inline void fprint(TermFile &stream, float n)
 {
-  TermFile::fprintf(stream, "%g", n);
+  TermFile::fprintf(stream, "%g", tod(n));
 }
 
 
@@ -149,7 +149,7 @@ inline void fprint(TermFile &stream, float n)
 
 inline void fprint(TermFile &stream, float n, int prec)
 {
-  TermFile::fprintf(stream, "%.*g", prec, n);
+  TermFile::fprintf(stream, "%.*g", prec, tod(n));
 }
 
 
@@ -304,7 +304,7 @@ void print(int n)
 void print(float n)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %g\n", n);
+  TermFile::printf(" %g\n", tod(n));
 }
 
 
@@ -313,7 +313,7 @@ void print(float n)
 void print(float n, int prec)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %.*g\n", prec, n);
+  TermFile::printf(" %.*g\n", prec, tod(n));
 }
 
 

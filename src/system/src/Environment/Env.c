@@ -3,9 +3,6 @@
  */
 
 
-void *TheEnvironment;
-
-
 void *create_TheEnvironment( void)
 {
   return(0);

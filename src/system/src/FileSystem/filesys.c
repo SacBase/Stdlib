@@ -3,9 +3,6 @@
  */
 
 
-void *TheFileSystem;
-
-
 void *create_TheFileSystem()
 {
   return(0);

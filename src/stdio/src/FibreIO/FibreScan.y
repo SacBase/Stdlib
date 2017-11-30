@@ -61,17 +61,20 @@ unsigned long    *ulongarray;
 unsigned long long    *ulonglongarray;
 char    **stringarray;
 
-int i;
+static int i;
 int shape[ MAXDIM];
-int dim_pos;
-enum READMODE mode;
+static int dim_pos;
+static enum READMODE mode;
 
-int got_scalar;
-int size_fixed;
+static int got_scalar;
+static int size_fixed;
 int dims;
 int size;
 static int array_pos;
 static int elems_left[MAXDIM];
+
+extern int yychar;
+extern int yynerrs;
 
 %}
 
@@ -264,7 +267,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMBYTE
-                { if( ! mode == byte_mode) { 
+                { if( mode != byte_mode) { 
                     yyerror( "byte numeric expected!");
                   }
                   else {
@@ -276,7 +279,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMSHORT
-                { if( ! mode == short_mode) { 
+                { if(  mode != short_mode) { 
                     yyerror( "short numeric expected!");
                   }
                   else {
@@ -288,7 +291,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMLONG
-                { if( ! mode == long_mode) { 
+                { if( mode != long_mode) { 
                     yyerror( "long numeric expected!");
                   }
                   else {
@@ -300,7 +303,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMLONGLONG
-                { if( ! mode == longlong_mode) { 
+                { if( mode != longlong_mode) { 
                     yyerror( "longlong numeric expected!");
                   }
                   else {
@@ -313,7 +316,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMUBYTE
-                { if( ! mode == ubyte_mode) { 
+                { if( mode != ubyte_mode) { 
                     yyerror( "ubyte numeric expected!");
                   }
                   else {
@@ -326,7 +329,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMUSHORT
-                { if( ! mode == ushort_mode) { 
+                { if( mode != ushort_mode) { 
                     yyerror( "ushort numeric expected!");
                   }
                   else {
@@ -339,7 +342,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMUINT
-                { if( ! mode == uint_mode) { 
+                { if( mode != uint_mode) { 
                     yyerror( "uint numeric expected!");
                   }
                   else {
@@ -352,7 +355,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMULONG
-                { if( ! mode == ulong_mode) { 
+                { if( mode != ulong_mode) { 
                     yyerror( "ulong numeric expected!");
                   }
                   else {
@@ -365,7 +368,7 @@ parse_scalar: NUM
                  size = 1;
                 }
             | NUMULONGLONG
-                { if( ! mode == ulonglong_mode) { 
+                { if( mode != ulonglong_mode) { 
                     yyerror( "ulonglong numeric expected!");
                   }
                   else {
@@ -378,8 +381,8 @@ parse_scalar: NUM
                  size = 1;
                 }
             | DOUBLE
-                {if( ( ! mode == float_mode) &&
-                     ( ! mode == double_mode)) { 
+                {if( ( mode != float_mode) &&
+                     ( mode != double_mode)) { 
                    yyerror( "Unexpected floating point read!\n");
                  }
                  got_scalar = 1; 
@@ -411,7 +414,7 @@ parse_scalar: NUM
                  }
                }
               | STRING
-                { if( ! mode == string_mode)  {
+                { if( mode != string_mode)  {
                    yyerror( "Unexpected string read!\n");
                   }
                   got_scalar = 1;
@@ -577,7 +580,7 @@ elem: NUM
         }
       }
     | NUMBYTE
-	{ if( ! mode == byte_mode) { 
+	{ if( mode != byte_mode) { 
 	    yyerror( "byte array element expected!");
 	  }
 	  else {
@@ -585,7 +588,7 @@ elem: NUM
 	  }
 	}
     | NUMSHORT
-	{ if( ! mode == short_mode) { 
+	{ if( mode != short_mode) { 
 	    yyerror( "short array element expected!");
 	  }
 	  else {
@@ -593,7 +596,7 @@ elem: NUM
 	  }
 	}
     | NUMLONG
-	{ if( ! mode == long_mode) { 
+	{ if( mode != long_mode) { 
 	    yyerror( "long array element expected!");
 	  }
 	  else {
@@ -601,7 +604,7 @@ elem: NUM
 	  }
 	}
     | NUMLONGLONG
-	{ if( ! mode == longlong_mode) { 
+	{ if( mode != longlong_mode) { 
 	    yyerror( "longlong array element expected!");
 	  }
 	  else {
@@ -609,7 +612,7 @@ elem: NUM
 	  }
 	}
     | NUMUBYTE
-	{ if( ! mode == ubyte_mode) { 
+	{ if( mode != ubyte_mode) { 
 	    yyerror( "ubyte array element expected!");
 	  }
 	  else {
@@ -617,7 +620,7 @@ elem: NUM
 	  }
 	}
     | NUMUSHORT
-	{ if( ! mode == ushort_mode) { 
+	{ if( mode != ushort_mode) { 
 	    yyerror( "ushort array element expected!");
 	  }
 	  else {
@@ -625,7 +628,7 @@ elem: NUM
 	  }
 	}
     | NUMUINT
-	{ if( ! mode == uint_mode) { 
+	{ if( mode != uint_mode) { 
 	    yyerror( "uint array element expected!");
 	  }
 	  else {
@@ -633,7 +636,7 @@ elem: NUM
 	  }
 	}
     | NUMULONG
-	{ if( ! mode == ulong_mode) { 
+	{ if( mode != ulong_mode) { 
 	    yyerror( "ulong array element expected!");
 	  }
 	  else {
@@ -641,7 +644,7 @@ elem: NUM
 	  }
 	}
     | NUMULONGLONG
-	{ if( ! mode == ulonglong_mode) { 
+	{ if( mode != ulonglong_mode) { 
 	    yyerror( "ulonglong array element expected!");
 	  }
 	  else {

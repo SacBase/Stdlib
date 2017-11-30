@@ -3,6 +3,38 @@ INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/generate-sac2c-dependency-targets.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake/parse-core-ext-files.cmake")
 
+# Check if compiler `flag' is supported, and if so append it to the `var' string.
+MACRO (CHECK_SAC2C_CC_FLAG flag var)
+    # Generate the name of the check as it is cached
+    STRING (REPLACE "-" "" FLAG "${flag}")
+    STRING (REPLACE "=" "" FLAG "${FLAG}")
+    STRING (TOUPPER ${FLAG} FLAG)
+
+    # Generate a simple test program and put it into the binary directory.
+    FILE (WRITE 
+        "${CMAKE_BINARY_DIR}/test-${FLAG}.c"
+        "int main (void) { return 0; }\n")
+
+    # Call CC via sac2c
+    EXECUTE_PROCESS (
+        COMMAND 
+            ${SAC2C_T} -Xc -Werror -Xc ${flag} -noprelude -cc ccmod
+            "${CMAKE_BINARY_DIR}/test-${FLAG}.c"
+            -o "${CMAKE_BINARY_DIR}/test-${FLAG}"
+        ERROR_VARIABLE sac2c_exec_error
+        RESULT_VARIABLE sac2c_exec_ret
+    )
+
+    IF ("${sac2c_exec_ret}" STREQUAL "0")
+        SET (${var} "${${var}};-Xc;${flag}")
+    ELSE ()
+        # This is to debug why CC called via sac2c does not support a
+        # given flag.
+        MESSAGE ("call failed ${sac2c_exec_error}")
+    ENDIF ()
+ENDMACRO ()
+
+
 # To ensure we that we are able to generate packages, we need to removed the
 # leading `/' on the install paths.
 STRING (REPLACE "/usr/local/" "" _install_mod_dir ${INSTALL_MOD_DIR})
@@ -22,7 +54,7 @@ SET (BIS_OUTH "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}/FibreScan.tab.h")
 
 # Add rules to build *.[ch] files from *.l and *.y files.
 # NOTE that we are not using FLEX_TARGET and BISON_TARGET here
-# intantionally, as at the time of writing (06/12/2016) these
+# intentionally, as at the time of writing (06/12/2016) these
 # macros do not put correct dependencies which triggers flex/bison
 # rebuild at every make invocation.
 ADD_CUSTOM_COMMAND (
@@ -38,6 +70,14 @@ ADD_CUSTOM_COMMAND (
     DEPENDS "${BIS_SRC}"
     COMMENT "Running ${BISON_EXECUTABLE} on `${LEX_SRC}'")
 
+#flags needed for OSX (clang) as the generated code generates warning otherwise:
+SET (FLEX_SAC2C_CC_FLAGS "")
+CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" FLEX_SAC2C_CC_FLAGS)
+
+SET (BISON_SAC2C_CC_FLAGS "")
+CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" BISON_SAC2C_CC_FLAGS)
+CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code-break" BISON_SAC2C_CC_FLAGS)
+
 # Build object files from FLEX/BISON generated source files.
 ADD_CUSTOM_COMMAND (
     OUTPUT
@@ -47,6 +87,7 @@ ADD_CUSTOM_COMMAND (
     COMMAND
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
+                 ${FLEX_SAC2C_CC_FLAGS}
                  -v0 -noprelude -cc ccmod
                  -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
                  "${LEX_OUT}"
@@ -62,6 +103,7 @@ ADD_CUSTOM_COMMAND (
     COMMAND
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
+                 ${BISON_SAC2C_CC_FLAGS}
                  -v0 -noprelude -cc ccmod
                  -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
                  "${BIS_OUTC}"
@@ -86,9 +128,7 @@ SET (C_DEPS_SRC
     system/src/Process/pclose.c
     system/src/MTClock/mtclock.c
     system/src/GetOpt/getopt.c
-    system/src/FileSystem/tmpnam.c
     system/src/FileSystem/testfile.c
-    system/src/FileSystem/tempnam.c
     system/src/FileSystem/symlink.c
     system/src/FileSystem/rename.c
     system/src/FileSystem/remove.c

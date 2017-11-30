@@ -15,8 +15,6 @@
 #include <mach/mach.h>
 #endif
 
-void *TheMTClock;
-
 void *SAC_MTClock_createTheMTClock( void)
 {
   return((void*)0);
