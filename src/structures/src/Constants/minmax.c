@@ -7,12 +7,12 @@
 #define ULLONG_MIN 0
 
 #define minmax(rtype, SACtype, typeucase)	\
-rtype max##SACtype()				\
+rtype max##SACtype( void )			\
 {						\
   return( typeucase##_MAX);			\
 }						\
 						\
-rtype min##SACtype()				\
+rtype min##SACtype( void )			\
 {						\
   return( typeucase##_MIN);			\
 }
