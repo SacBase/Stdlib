@@ -1,7 +1,13 @@
-#include <stdlib.h>
+#include <unistd.h>
 
 char *
-SACmktemp (char *  template)
+SACmkdtemp (char *  template)
 {
-  return mktemp (template);
+  return mkdtemp (template);
+}
+
+int
+SACmkstemp (char *  template)
+{
+  return mkstemp (template);
 }
