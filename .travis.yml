@@ -23,5 +23,5 @@ before_script:
 
 script:
     - cd build
-    - cmake ..
-    - travis_wait 85 make -j2
+    - cmake -DBUILD_CORE=ON ..
+    - make -j2

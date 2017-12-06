@@ -313,7 +313,7 @@ PARSE_CORE_EXT_CONFIG (
     XSAC_EXT_SRC)
 
 # By default we are always going to build extended version
-UNSET (BUILD_CORE)
+#UNSET (BUILD_CORE)
 IF (BUILD_CORE)
     SET (SAC_SRC  ${SAC_CORE_SRC})
     SET (XSAC_SRC ${XSAC_CORE_SRC})
