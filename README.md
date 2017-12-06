@@ -1,6 +1,9 @@
 SaC standard library
 ====================
 
+
+[![build status](https://travis-ci.org/SacBase/Stdlib.svg?branch=master)](https://travis-ci.org/SacBase/Stdlib) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/SacBase/Stdlib/issues)
+
 This repository consists of SaC modules with basic functionality like
 arithmetic, stdio, etc; which together form a standard library of SaC
 language.
