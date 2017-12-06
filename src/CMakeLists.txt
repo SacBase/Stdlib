@@ -72,7 +72,8 @@ ADD_CUSTOM_COMMAND (
 
 #flags needed for OSX (clang) as the generated code generates warning otherwise:
 SET (FLEX_SAC2C_CC_FLAGS "")
-CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" FLEX_SAC2C_CC_FLAGS)
+CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" FLEX_SAC2C_CC_FLAGS) #needed on CentOS7
+CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" FLEX_SAC2C_CC_FLAGS) #needed on OSX 10.12
 
 SET (BISON_SAC2C_CC_FLAGS "")
 CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" BISON_SAC2C_CC_FLAGS)

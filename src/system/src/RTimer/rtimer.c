@@ -58,7 +58,10 @@ void current_utc_time(struct timespec *ts) {
     ts->tv_nsec = mts.tv_nsec;
 
 #else
-#warning no implementation of current_utc_time on this target
+    SAC_RuntimeError( "When the stdlib was compiled for this architecture"
+                      " neither clock_gettime( CLOCK_REALTIME, x) "
+                      " nor host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, x)"
+                      " were found");
 #endif
 
 }

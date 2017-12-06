@@ -8,6 +8,7 @@
  */
 
 #include <time.h>
+#include "libsac/essentials/message.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +52,10 @@ void SAC_RTClock_gettime( long *sec, long *nano)
   result.tv_nsec = mts.tv_nsec;
 
 #else
-#warning no implementation of SAC_RTClock_gettime on this target
+  SAC_RuntimeError( "When the stdlib was compiled for this architecture"
+                      " neither clock_gettime( CLOCK_REALTIME, x) "
+                      " nor host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, x)"
+                      " were found");
 #endif
 
   *sec = result.tv_sec;

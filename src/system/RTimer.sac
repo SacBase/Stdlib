@@ -26,6 +26,8 @@ external void destroyRTimer( RTimer rtimer);
   #pragma linkwith "rt"
 #endif
 
+#if defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
+
 external void startRTimer( RTimer &rtimer);
 #pragma effect RTClock::TheRTClock
 #pragma linkname "SAC_RTimer_startRTimer"
@@ -41,6 +43,8 @@ external void stopRTimer( RTimer &rtimer);
 #ifdef NEED_LIBRT
   #pragma linkwith "rt"
 #endif
+
+#endif //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
 
 external void resetRTimer( RTimer &rtimer);
 #pragma linkname "SAC_RTimer_resetRTimer"

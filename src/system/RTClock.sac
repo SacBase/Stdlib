@@ -23,11 +23,12 @@ external void touch( RTClock &rtclock);
 #pragma linkname "SAC_RTClock_touch"
 #pragma linkobj "src/RTClock/rtclock.o"
 
+#if defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
 external long, long gettime();
 #pragma effect  RTClock::TheRTClock  
 #pragma linkname "SAC_RTClock_gettime"
 #pragma linkobj "src/RTClock/rtclock.o"
 #pragma linksign [1,2]
 
-
+#endif //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
 
