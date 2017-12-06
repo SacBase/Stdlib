@@ -2,7 +2,6 @@ class FileSystem;
 
 external classtype;
 
-use File   : {File};
 use SysErr : {syserr};
 use String : {string};
 
@@ -175,20 +174,9 @@ external string P_tmpdir();
      */
 
 
-external File mkstemp(string TEMPLATE);
-    #pragma effect TheFileSystem
-    #pragma linkname "SACmkstemp"
-    #pragma linkobj  "src/FileSystem/mktemp.o"
-    #pragma linksign [0,1]
-    /*
-     * Create a unique file name,  typically  in  a  temporary
-     * file system. The  string TEMPLATE
-     * should  contain  a file name with six trailing Xs.
-     * These Xs are replaced by a letter and the current  process ID.
-     * The  letter  will be chosen so that the resulting
-     * name does not duplicate an existing file.
-     */
-
+/*
+ * Note here that mkstemp lives in File.sac!
+ */
 external string mkdtemp(string TEMPLATE);
     #pragma effect TheFileSystem
     #pragma linkname "SACmkdtemp"
