@@ -23,5 +23,5 @@ before_script:
 
 script:
     - cd build
-    - cmake -DTARGETS=mt_pth ..
+    - cmake -DTARGETS=mt_pth -DLINKSETSIZE=250 ..
     - make -j3

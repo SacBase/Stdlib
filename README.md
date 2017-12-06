@@ -40,7 +40,7 @@ When running CMake it is possible to pass the following variables:
     for the number of C functions that are put in a single C file when compiling a SaC program.
     The rule of thumb:
     * value `0` is the fastest time-wise but potentially results in a large memory consumption
-    * value `1` reduces the memory consumption to minimum, buy significantly increases compilation time.
+    * value `1` reduces the memory consumption to minimum, but significantly increases compilation time.
     
       *Default value: 500.*
   * `-DFULLTYPES=ON|OFF` --- add support for further types to the stdlib, such as `long` and
