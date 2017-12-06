@@ -23,5 +23,5 @@ before_script:
 
 script:
     - cd build
-    - cmake -DBUILD_CORE=ON ..
-    - make -j2
+    - cmake -DTARGETS=mt_pth ..
+    - make -j3
