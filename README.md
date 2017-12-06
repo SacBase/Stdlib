@@ -20,11 +20,14 @@ $ mkdir build
 $ cd build
 $ cmake ..
 $ make -j4  #you should have roughly 2GB per thread :-)
-$ make install
 ```
 
-**NOTE:** *When pulling the latest commit, remember to run `git submodule update` or you will
-be missing changes to the `cmake-common` repository.*
+If you like you can also install the stdlib into `/usr/local` with `make
+install`, but this is unnessicary as `sac2c` will be able to find your stdlib
+build automatically.
+
+**NOTE:** *When pulling the latest commit, remember to run `git submodule
+update` or you will be missing changes to the `cmake-common` repository.*
 
 Variables that can be passed to CMake
 =========================================
@@ -42,3 +45,5 @@ When running CMake it is possible to pass the following variables:
       *Default value: 500.*
   * `-DFULLTYPES=ON|OFF` --- add support for further types to the stdlib, such as `long` and
     `longlong` (Default is `OFF`).
+  * `-DBUILD_EXT=ON|OFF` --- build extended stdlib (see
+    `cmake/source-core-ext.txt` for details) (Default is `ON`)
