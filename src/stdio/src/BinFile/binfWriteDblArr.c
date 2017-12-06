@@ -17,7 +17,7 @@ void SACbinfWriteDoubleArray(int fd, int dim, int *shp, double* array)
   }
 
   res = write(fd,array,size*sizeof(double));
-  if( res != size*sizeof(double)) {
+  if( (int)res != size*sizeof(double)) {
     SAC_RuntimeWarning( "only managed to write %d bytes of a %d byte array of doubles",
                          res, size*sizeof(double));
   }
