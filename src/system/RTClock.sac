@@ -6,7 +6,13 @@ class RTClock;
 
 external classtype;
 
+#if defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
 export {TheRTClock,touch,gettime};
+
+#else //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
+export {TheRTClock,touch};
+
+#endif //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
 
 objdef RTClock TheRTClock = createTheRTClock();
 
