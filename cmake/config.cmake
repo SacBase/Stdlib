@@ -100,4 +100,5 @@ MESSAGE ("
  * - realtime clock:       ${HAVE_GETTIME_REALTIME}
  * - mach clock:           ${HAVE_MACH_CLOCK_GET_TIME}
  * - full types:           ${FULLTYPES}
+ * - build extended:       ${BUILD_EXT}
 ")

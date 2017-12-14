@@ -1,6 +1,9 @@
 SaC standard library
 ====================
 
+
+[![build status](https://travis-ci.org/SacBase/Stdlib.svg?branch=master)](https://travis-ci.org/SacBase/Stdlib) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/SacBase/Stdlib/issues)
+
 This repository consists of SaC modules with basic functionality like
 arithmetic, stdio, etc; which together form a standard library of SaC
 language.
@@ -20,11 +23,14 @@ $ mkdir build
 $ cd build
 $ cmake ..
 $ make -j4  #you should have roughly 2GB per thread :-)
-$ make install
 ```
 
-**NOTE:** *When pulling the latest commit, remember to run `git submodule update` or you will
-be missing changes to the `cmake-common` repository.*
+If you like you can also install the stdlib into `/usr/local` with `make
+install`, but this is unnessicary as `sac2c` will be able to find your stdlib
+build automatically.
+
+**NOTE:** *When pulling the latest commit, remember to run `git submodule
+update` or you will be missing changes to the `cmake-common` repository.*
 
 Variables that can be passed to CMake
 =========================================
@@ -37,8 +43,10 @@ When running CMake it is possible to pass the following variables:
     for the number of C functions that are put in a single C file when compiling a SaC program.
     The rule of thumb:
     * value `0` is the fastest time-wise but potentially results in a large memory consumption
-    * value `1` reduces the memory consumption to minimum, buy significantly increases compilation time.
+    * value `1` reduces the memory consumption to minimum, but significantly increases compilation time.
     
       *Default value: 500.*
   * `-DFULLTYPES=ON|OFF` --- add support for further types to the stdlib, such as `long` and
     `longlong` (Default is `OFF`).
+  * `-DBUILD_EXT=ON|OFF` --- build extended stdlib (see
+    `cmake/source-core-ext.txt` for details) (Default is `ON`)

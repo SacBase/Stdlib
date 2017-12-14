@@ -1,0 +1,35 @@
+language: c
+sudo: required # we get a VM + SUDO
+dist: trusty # latest
+
+# install dependencies
+before_install:
+    # install dependecies for sac2c
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq libhwloc-dev uuid-dev uuid-runtime
+    # install cmake
+    - CMAKE_URL="https://cmake.org/files/v3.8/cmake-3.8.0-Linux-x86_64.tar.gz"
+    - mkdir cmake-latest
+    - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake-latest
+    - export PATH=${TRAVIS_BUILD_DIR}/cmake-latest/bin:${PATH}
+    - cmake --version
+    # install sac2c (always latest release)
+    - travis_retry wget --no-check-certificate --quiet -O sac2c.deb http://www.sac-home.org/packages/release/Ub14/latest
+    - sudo dpkg --force-all -i sac2c.deb
+    - sac2c -V
+
+before_script:
+    - mkdir build
+    - mkdir ${HOME}/.sac2crc
+
+script:
+    - cd build
+    # to save time we only build one target and increase the number of files we generate
+    - cmake -DTARGETS=mt_pth -DLINKSETSIZE=250 ..
+    # we need to test that make actually completed:
+    - make -j3 2>&1 | tee build.log; travis_assert ${PIPESTATUS[0]}
+    - if [ $(grep -i 'warning' build.log | wc -l) -gt 0 ]; then
+        echo "+++ ${WARN_NUM} warnings detected +++";
+        grep -i 'warning' build.log;
+        travis_terminate 1;
+      fi
