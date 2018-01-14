@@ -11,6 +11,7 @@ SET (DLL_BUILD_DIR  "${PROJECT_BINARY_DIR}/lib")
 SET (TARGETS            seq mt_pth  CACHE STRING "Build stdlib-jpeg for these targets")
 SET (SAC2C_EXEC                     CACHE STRING "A path to sac2c compiler")
 SET (LINKSETSIZE        "500"       CACHE STRING "Set a value for -linksetsize parameter of sac2c")
+SET (IS_RELEASE         FALSE       CACHE BOOL "Indicate if we are building with release version of SAC2C")
 OPTION (FULLTYPES "Include types such as long and longlong" OFF)
 OPTION (BUILD_EXT "Build complete Stdlib with extra modules" ON)
 

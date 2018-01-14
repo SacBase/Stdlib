@@ -101,4 +101,7 @@ MESSAGE ("
  * - mach clock:           ${HAVE_MACH_CLOCK_GET_TIME}
  * - full types:           ${FULLTYPES}
  * - build extended:       ${BUILD_EXT}
+ *
+ * Packaging state:
+ * - is release:           ${IS_RELEASE}
 ")
