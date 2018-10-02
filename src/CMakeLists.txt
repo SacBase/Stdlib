@@ -10,15 +10,25 @@ MACRO (CHECK_SAC2C_CC_FLAG flag var)
     STRING (REPLACE "=" "" FLAG "${FLAG}")
     STRING (TOUPPER ${FLAG} FLAG)
 
+    # we need to treat NVCC differently, we need it to pass the C flags to the
+    # actual C-compiler
+    IF ("${TARGET}" MATCHES "^cuda.*")
+        SET (__werror "-Xc;-Xcompiler -Werror")
+        SET (__flag "-Xc;-Xcompiler ${flag}")
+    ELSE ()
+        SET (__werror "-Xc;-Werror")
+        SET (__flag "-Xc;${flag}")
+    ENDIF ()
+
     # Generate a simple test program and put it into the binary directory.
-    FILE (WRITE 
+    FILE (WRITE
         "${CMAKE_BINARY_DIR}/test-${FLAG}.c"
         "int main (void) { return 0; }\n")
 
     # Call CC via sac2c
     EXECUTE_PROCESS (
-        COMMAND 
-            ${SAC2C_T} -Xc -Werror -Xc ${flag} -noprelude -cc ccmod
+        COMMAND
+            ${SAC2C_T} ${__werror} ${__flag} -noprelude -cc ccmod
             "${CMAKE_BINARY_DIR}/test-${FLAG}.c"
             -o "${CMAKE_BINARY_DIR}/test-${FLAG}"
         ERROR_VARIABLE sac2c_exec_error
@@ -26,7 +36,7 @@ MACRO (CHECK_SAC2C_CC_FLAG flag var)
     )
 
     IF ("${sac2c_exec_ret}" STREQUAL "0")
-        SET (${var} "${${var}};-Xc;${flag}")
+        SET (${var} "${${var}};${__flag}")
     ELSE ()
         # This is to debug why CC called via sac2c does not support a
         # given flag.
