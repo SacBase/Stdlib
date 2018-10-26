@@ -21,6 +21,7 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
   char line[MAXLINE];
   int w;
   int h;
+  int i;
   int max;
   int *data;
   unsigned int c;
@@ -61,7 +62,7 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
       comment = true;
 
       while(comment == true) {
-        for(int i = 0; i < MAXLINE; i++) {
+        for(i = 0; i < MAXLINE; i++) {
           if (line[i] == '\n') {
             comment = false;
             break;
@@ -104,7 +105,7 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
    * Readout the image
    */
   if (binary == true) {
-    for (int i = 0; i < h*w*3; i++) {
+    for (i = 0; i < h*w*3; i++) {
       c = 0;
       if(fread(&c, 1, 1, fp) != 1) {
         SAC_RuntimeError( "Unexpected end of file" );
@@ -112,7 +113,7 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
       data[i] = c * (255/max);
     }
   } else {
-    for (int i = 0; i < h*w*3; i++) {
+    for (i = 0; i < h*w*3; i++) {
       if( fscanf(fp, "%d", &c) != 1) {
         SAC_RuntimeError( "Unexpected end of file");
       }
@@ -134,4 +135,3 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
   SAC_ND_A_FIELD( ret_nt) = data;
   SAC_ND_RET_out( array_nt, ret_nt)
 }
-         

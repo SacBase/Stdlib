@@ -16,6 +16,7 @@ void SAC_PPM_array2ppm( FILE *fp,
 {
   const int w = shape[1];
   const int h = shape[0];
+  int i, j;
 
   /*
    * ASCII output
@@ -26,8 +27,8 @@ void SAC_PPM_array2ppm( FILE *fp,
     fprintf(fp, "%d %d\n", w, h);
     fprintf(fp, "255\n");
 
-    for(int i = 0; i < h; i++) {
-      for (int j = 0; j < w; j++) {
+    for(i = 0; i < h; i++) {
+      for (j = 0; j < w; j++) {
         fprintf(fp, "%d %d %d", SAC_ND_A_FIELD(array_nt)[(i*w+j)*3],
                                 SAC_ND_A_FIELD(array_nt)[(i*w+j)*3+1],
                                 SAC_ND_A_FIELD(array_nt)[(i*w+j)*3+2]);
@@ -49,7 +50,7 @@ void SAC_PPM_array2ppm( FILE *fp,
     fprintf(fp, "%d %d\n", w, h);
     fprintf(fp, "255\n");
 
-    for(int i = 0; i < h * w * 3; i++) {
+    for(i = 0; i < h * w * 3; i++) {
       fprintf(fp, "%c", SAC_ND_A_FIELD(array_nt)[i]);
     }
   }
