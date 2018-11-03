@@ -10,7 +10,7 @@ before_install:
     # sanity check that cmake is the right version (should be 3.9)
     - cmake --version
     # install sac2c (always latest release)
-    - travis_retry wget --no-check-certificate --quiet -O sac2c.deb http://www.sac-home.org/packages/release/Ub14/latest
+    - travis_retry wget --no-check-certificate --quiet -O sac2c.deb http://www.sac-home.org/packages/release/Ubl14/latest
     - sudo dpkg --force-all -i sac2c.deb
     - sac2c -V
 

@@ -6,6 +6,9 @@ IF (NOT DEFINED SAC2C_VERSION)
     MESSAGE (FATAL_ERROR "Sac2c Version not set!")
 ENDIF ()
 
+# lets get sac2c version components
+PARSE_SAC2C_VERSION ("${SAC2C_VERSION}" SAC2C_MAJOR SAC2C_MINOR SAC2C_PATCH)
+
 # By setting this on we can see where installation targets are specified via
 # absolute paths. XXX (???) For portability purposes this should be avoided.
 SET (CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION ON)
@@ -53,15 +56,14 @@ SET (CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_C
 SET (CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
 SET (CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON) # non-functional?
 # FIXME Can we auto-generate these dependencies?
-SET (CPACK_DEBIAN_PACKAGE_DEPENDS "sac2c-compiler (= ${SAC2C_VERSION})")
+SET (CPACK_DEBIAN_PACKAGE_DEPENDS "sac2c-compiler (= ${SAC2C_MAJOR}.${SAC2C_MINOR}.${SAC2C_PATCH})")
 
 # RPM-specific variables
 # XXX (hans): this may not be exhaustive - does not take into account if the user
 # changes the install prefix
 SET (CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION /usr/local /usr/local/bin /usr/local/include /usr/local/lib /usr/local/libexec /usr/local/share)
 # FIXME Can we auto-generate these dependencies?
-STRING (REPLACE "-" "_" _sac2c_rpm_version ${SAC2C_VERSION})
-SET (CPACK_RPM_PACKAGE_REQUIRES "sac2c-compiler = ${_sac2c_rpm_version}") # we don't need to go crazy here as rpmbuild handles most of this for us
+SET (CPACK_RPM_PACKAGE_REQUIRES "sac2c-compiler = ${SAC2C_MAJOR}.${SAC2C_MINOR}.${SAC2C_PATCH}") # we don't need to go crazy here as rpmbuild handles most of this for us
 
 INCLUDE (CPack)
 
