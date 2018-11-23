@@ -46,7 +46,7 @@ void SAC_PGM_write_header( PGM* pgm)
 void SAC_PGM_write_data( SAC_ND_PARAM_in_nodesc(array_nt, int),
                          PGM* pgm)
 {
-  int *restrict int_array = SAC_ND_A_FIELD(array_nt);
+  int *__restrict__ int_array = SAC_ND_A_FIELD(array_nt);
   const size_t pixelcount = pgm->height * pgm->width;
   size_t i = 0;
 
