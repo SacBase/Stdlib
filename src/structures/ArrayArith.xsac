@@ -148,10 +148,12 @@ MAP_ARI_OPS( AxS, a)
 
 NUM(  ARI_OPS_A)
 
-MAP_INT_OPS( AxA)
-MAP_INT_OPS( SxA)
-MAP_INT_OPS( AxS)
+#define INT_OPS_A( a)                \
+MAP_INT_OPS( AxA, a)                 \
+MAP_INT_OPS( SxA, a)                 \
+MAP_INT_OPS( AxS, a)
 
+WHOLE_NUM(  INT_OPS_A)
 
 #define INTVEC_OPS( name, op)        \
 MAP_BIN_INT_VxV( name, op)           \

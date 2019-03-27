@@ -19,7 +19,7 @@
 
 #ifdef FULLTYPES
 
-#define BUILT_IN( fun)    \
+#define WHOLE_NUM( fun)   \
 fun( byte)                \
 fun( short)               \
 fun( int)                 \
@@ -29,48 +29,35 @@ fun( ubyte)               \
 fun( ushort)              \
 fun( uint)                \
 fun( ulong)               \
-fun( ulonglong)           \
-fun( float)               \
-fun( double)              \
-fun( bool)                \
-fun( char)
+fun( ulonglong)
 
-
-#define NUM( fun)         \
-fun( byte)                \
-fun( short)               \
-fun( int)                 \
-fun( long)                \
-fun( longlong)            \
-fun( ubyte)               \
-fun( ushort)              \
-fun( uint)                \
-fun( ulong)               \
-fun( ulonglong)           \
+#define REAL_NUM( fun)    \
 fun( float)               \
 fun( double)
 
 #else
 
-#define BUILT_IN( fun)    \
+#define WHOLE_NUM( fun)   \
 fun( int)                 \
-fun( long)                \
-fun( float)               \
-fun( double)              \
-fun( bool)                \
-fun( char)
+fun( long)
 
-
-#define NUM( fun)         \
-fun( int)                 \
-fun( long)                \
+#define REAL_NUM( fun)    \
 fun( float)               \
 fun( double)
 
 #endif
 
-#define CHAR( fun)	  \
+#define CHAR( fun)	      \
 fun( char)
+
+#define NUM( fun)         \
+WHOLE_NUM( fun)           \
+REAL_NUM( fun)
+
+#define BUILT_IN( fun)    \
+NUM( fun)                 \
+CHAR( fun)                \
+fun( bool)
 
 /********************************************************************************
  *
@@ -88,11 +75,12 @@ MAP_BIN_##ext(  max, _max_SxS_, a, a)   \
 MAP_MON_##ext( -, _neg_S_, a, a)        \
 MAP_MON_##ext( abs, _abs_S_, a, a)
 
+#define MAP_ANA_OPS( ext, a)            \
+MAP_UNA_##ext( ++, _add_SxS_, a, a)     \
+MAP_UNA_##ext( --, _sub_SxS_, a, a)
 
-#define MAP_INT_OPS( ext)               \
-MAP_BIN_##ext( %, _mod_SxS_, int, int) 
-
-
+#define MAP_INT_OPS( ext, a)            \
+MAP_BIN_##ext( %, _mod_SxS_, a, a)
 
 /********************************************************************************
  *
