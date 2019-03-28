@@ -290,7 +290,33 @@ void show(ulonglong c)
 /*****************************************************************/
 /*****************************************************************/
 
+void print(byte n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %x\n", n);
+}
 
+void print(ubyte n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %X\n", n);
+}
+
+/*****************************************************************/
+
+void print(short n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %hd\n", n);
+}
+
+void print(ushort n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %hu\n", n);
+}
+
+/*****************************************************************/
 
 void print(int n)
 {
@@ -298,6 +324,11 @@ void print(int n)
   TermFile::printf(" %d\n", n);
 }
 
+void print(uint n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %u\n", n);
+}
 
 /*****************************************************************/
 
@@ -403,8 +434,33 @@ void print(char c)
   TermFile::printf(" '%c'\n", c);
 }
 
+/*****************************************************************/
 
+void print(long n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %ld\n", n);
+}
 
+void print(ulong n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %lu\n", n);
+}
+
+/*****************************************************************/
+
+void print(longlong n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %lld\n", n);
+}
+
+void print(ulonglong n)
+{
+  TermFile::printf("Dimension:  0\nShape    : < >\n");
+  TermFile::printf(" %llu\n", n);
+}
 
 /*****************************************************************/
 /*****************************************************************/
