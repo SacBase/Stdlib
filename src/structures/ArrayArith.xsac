@@ -140,18 +140,17 @@ b[+] name( a[+] A)                                       \
  *
  ******************************************************************************/
 
-#define ARI_OPS_A( a)                \
-MAP_ARI_OPS( AxA, a)                 \
-MAP_ARI_OPS( SxA, a)                 \
-MAP_ARI_OPS( AxS, a)
-
+#define ARI_OPS_A( typ, postfix, zval, oval) \
+MAP_ARI_OPS( AxA, typ)                 \
+MAP_ARI_OPS( SxA, typ)                 \
+MAP_ARI_OPS( AxS, typ)
 
 NUM(  ARI_OPS_A)
 
-#define INT_OPS_A( a)                \
-MAP_INT_OPS( AxA, a)                 \
-MAP_INT_OPS( SxA, a)                 \
-MAP_INT_OPS( AxS, a)
+#define INT_OPS_A( typ, postfix, zval, oval) \
+MAP_INT_OPS( AxA, typ)                 \
+MAP_INT_OPS( SxA, typ)                 \
+MAP_INT_OPS( AxS, typ)
 
 WHOLE_NUM(  INT_OPS_A)
 
@@ -173,10 +172,10 @@ INTVEC_OPS( /, div)
  *
  ******************************************************************************/
 
-#define REL_OPS_A( a)                \
-MAP_REL_OPS( AxA, a)                 \
-MAP_REL_OPS( SxA, a)                 \
-MAP_REL_OPS( AxS, a)
+#define REL_OPS_A( typ, postfix, zval, oval) \
+MAP_REL_OPS( AxA, typ)                 \
+MAP_REL_OPS( SxA, typ)                 \
+MAP_REL_OPS( AxS, typ)
 
 NUM(  REL_OPS_A)
 CHAR( REL_OPS_A)
@@ -202,12 +201,12 @@ MAP_LOG_OPS( AxS)
  * version of to_bool() from Bool.sac.
 */ 
 
-#define MAP_CONVBOOL_OPS(fromtype)		\
+#define MAP_CONVBOOL_OPS(fromtype, postfix, zval, oval)		\
 MAP_MON_AxA(to_bool, to_bool, fromtype, bool)	\
 MAP_MON_AxS(to_bool, to_bool, fromtype, bool)	\
 MAP_MON_SxA(to_bool, to_bool, fromtype, bool)	\
 
-NUM(MAP_CONVBOOL_OPS)
+NUM( MAP_CONVBOOL_OPS)
 
 /* These should produce domain error 
 MAP_MON_SxA(to_bool, to_bool, char, bool)
@@ -215,7 +214,7 @@ MAP_MON_AxS(to_bool, to_bool, char, bool)
 MAP_MON_AxA(to_bool, to_bool, char, bool)
  */
 
-#define MAP_CONV_OPS(fromtype)			\
+#define MAP_CONV_OPS(fromtype, postfix, zval, oval)			\
 MAP_MON_AxA(tob, _tob_S_, fromtype, byte)	\
 MAP_MON_AxS(tob, _tob_S_, fromtype, byte)	\
 MAP_MON_SxA(tob, _tob_S_, fromtype, byte)	\

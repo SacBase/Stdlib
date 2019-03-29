@@ -17,47 +17,59 @@
  *
  ******************************************************************************/
 
+ /**
+  * The built_in types macro is of the format:
+  * 
+  *  #define BUILT_IN ( fun)  
+  *    fun( type, postfix specifier, zero/false, one/true)
+  *    ...
+  *
+  * `type`: the name of the type
+  * `postfix`: the postfix specifier for scalar values, e.g. 1i is an integer of value 1
+  * `zero/false`: the type default value, e.g. 0i for an integer
+  * `one/true`: the type default value, e.g. 1i for an integer
+  */
+
 #ifdef FULLTYPES
 
-#define WHOLE_NUM( fun)   \
-fun( byte)                \
-fun( short)               \
-fun( int)                 \
-fun( long)                \
-fun( longlong)            \
-fun( ubyte)               \
-fun( ushort)              \
-fun( uint)                \
-fun( ulong)               \
-fun( ulonglong)
-
-#define REAL_NUM( fun)    \
-fun( float)               \
-fun( double)
+#define WHOLE_NUM( fun)         \
+fun( byte, b, 0b, 1b)           \
+fun( short, s, 0s, 1s)          \
+fun( int, i, 0i, 1i)            \
+fun( long, l, 0l, 1l)           \
+fun( longlong, ll, 0ll, 1ll)    \
+fun( ubyte, ub, 0ub, 1ub)       \
+fun( ushort, us, 0us, 1us)      \
+fun( uint, ui, 0ui, 1ui)        \
+fun( ulong, ul, 0ul, 1ul)       \
+fun( ulonglong, ull, 0ull, 1ull)
 
 #else
 
-#define WHOLE_NUM( fun)   \
-fun( int)                 \
-fun( long)
-
-#define REAL_NUM( fun)    \
-fun( float)               \
-fun( double)
+#define WHOLE_NUM( fun)         \
+fun( int, i, 0i, 1i)            \
+fun( long, l, 0l, 1l)
 
 #endif
 
-#define CHAR( fun)	      \
-fun( char)
+#define REAL_NUM( fun)          \
+fun( float, f, 0f, 1f)          \
+fun( double, d, 0d, 1d)
 
-#define NUM( fun)         \
-WHOLE_NUM( fun)           \
+#define CHAR( fun)	            \
+fun( char, /* no postfix */, ' ', ' ')
+
+#define BOOL( fun)              \
+fun( bool, /* no postfix */, false, true)
+
+#define NUM( fun)               \
+WHOLE_NUM( fun)                 \
 REAL_NUM( fun)
 
-#define BUILT_IN( fun)    \
-NUM( fun)                 \
-CHAR( fun)                \
-fun( bool)
+#define BUILT_IN( fun)          \
+NUM( fun)                       \
+CHAR( fun)                      \
+BOOL( fun)
 
 /********************************************************************************
  *

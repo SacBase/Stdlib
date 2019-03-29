@@ -489,7 +489,7 @@ inline char[+] format(double[+] y, int[2] w)
  *
  ********************************************************************************/
 
-#ifdef SANTANU
+#ifdef FULLTYPES
 
 #define FORMAT_INT_SUBTYPES(type)			\
 char[.] format(type y)					\

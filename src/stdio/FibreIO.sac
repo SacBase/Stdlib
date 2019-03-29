@@ -391,7 +391,7 @@ LINKSPECS(type,alias)							\
 FIBRESCAN(type,alias)							\
 FIBREPRINT(type,formatting)
 
-#ifdef SANTANU
+#ifdef FULLTYPES
 LINKSCANPRINT(byte,Byte,hd)		
 LINKSCANPRINT(short,Short,hd)		
 LINKSCANPRINT(long,Long,ld)		
@@ -401,4 +401,4 @@ LINKSCANPRINT(ushort,Ushort,hu)
 LINKSCANPRINT(uint,Uint,u)		
 LINKSCANPRINT(ulong,Ulong,lu)		
 LINKSCANPRINT(ulonglong,Ulonglong,llu)
-#endif
+#endif /* FULLTYPES */

@@ -101,19 +101,18 @@ external char tochar( char N);
     #pragma linkobj "src/Char/Char.o"
     #pragma linkname "tochar_char"
 
-// These functions convert numerical values into a char (byte) value
-//
-#define TOCHAR( typ)                                 \
+/**
+ * These functions convert numerical values into a char (byte) value
+ */
+#define TOCHAR( typ, postfix, zval, oval)            \
 inline                                               \
 char[*] tochar( typ[+] a)                            \
 {                                                    \
   res = with {                                       \
-          ( . <= iv <= . ) : _toc_S_( a[iv] );      \
+          ( . <= iv <= . ) : _toc_S_( a[iv] );       \
         } : genarray( shape(a), ' ' );               \
                                                      \
   return( res);                                      \
 }
 
 BUILT_IN( TOCHAR)
-
-

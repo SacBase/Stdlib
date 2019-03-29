@@ -87,20 +87,20 @@ external void showarray(TermFile &stream, int d, int[.] s, char[*] a);
 
 #ifdef SAC_BACKEND_DISTMEM
 
-#define PRINT(actualtype)                                               \
-inline void fprint(File &stream, actualtype[+] arr)                     \
+#define PRINT( type, postfix, zero, one)                                \
+inline void fprint(File &stream, typ[+] arr)                            \
 {                                                                       \
   printarray(stream, dim(arr), shape(arr), arr,                         \
              _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
 }                                                                       \
                                                                         \
-inline void fprint(TermFile &stream, actualtype[+] arr)                 \
+inline void fprint(TermFile &stream, typ[+] arr)                        \
 {                                                                       \
   printarray(stream, dim(arr), shape(arr), arr,                         \
              _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
 }                                                                       \
                                                                         \
-inline void print(actualtype[+] arr)                                    \
+inline void print(typ[+] arr)                                           \
 {                                                                       \
   printarray(stdout, dim(arr), shape(arr), arr,                         \
              _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
@@ -108,19 +108,19 @@ inline void print(actualtype[+] arr)                                    \
                                                                         \
                                                                         \
                                                                         \
-inline void fprint(File &stream, string fmt, actualtype[+] arr)         \
+inline void fprint(File &stream, string fmt, typ[+] arr)                \
 {                                                                       \
   printarray(stream, fmt, dim(arr), shape(arr), arr,                    \
              _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
 }                                                                       \
                                                                         \
-inline void fprint(TermFile &stream, string fmt, actualtype[+] arr)     \
+inline void fprint(TermFile &stream, string fmt, typ[+] arr)            \
 {                                                                       \
   printarray(stream, fmt, dim(arr), shape(arr), arr,                    \
              _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
 }                                                                       \
                                                                         \
-inline void print(string fmt, actualtype[+] arr)                        \
+inline void print(string fmt, typ[+] arr)                               \
 {                                                                       \
   printarray(stdout, fmt, dim(arr), shape(arr), arr,                    \
              _isDist_A_(arr), _offs_A_(arr), _firstElems_A_(arr));      \
@@ -130,35 +130,35 @@ inline void print(string fmt, actualtype[+] arr)                        \
 #else /* defined(SAC_BACKEND_DISTMEM) */
 
 
-#define PRINT(actualtype)                                               \
-inline void fprint(File &stream, actualtype[+] arr)                     \
+#define PRINT( typ, postfix, zero, one)                                \
+inline void fprint(File &stream, typ[+] arr)                            \
 {                                                                       \
   printarray(stream, dim(arr), shape(arr), arr);                        \
 }                                                                       \
                                                                         \
-inline void fprint(TermFile &stream, actualtype[+] arr)                 \
+inline void fprint(TermFile &stream, typ[+] arr)                        \
 {                                                                       \
   printarray(stream, dim(arr), shape(arr), arr);                        \
 }                                                                       \
                                                                         \
-inline void print(actualtype[+] arr)                                    \
+inline void print(typ[+] arr)                                           \
 {                                                                       \
   printarray(stdout, dim(arr), shape(arr), arr);                        \
 }                                                                       \
                                                                         \
                                                                         \
                                                                         \
-inline void fprint(File &stream, string fmt, actualtype[+] arr)         \
+inline void fprint(File &stream, string fmt, typ[+] arr)                \
 {                                                                       \
   printarray(stream, fmt, dim(arr), shape(arr), arr);                   \
 }                                                                       \
                                                                         \
-inline void fprint(TermFile &stream, string fmt, actualtype[+] arr)     \
+inline void fprint(TermFile &stream, string fmt, typ[+] arr)            \
 {                                                                       \
   printarray(stream, fmt, dim(arr), shape(arr), arr);                   \
 }                                                                       \
                                                                         \
-inline void print(string fmt, actualtype[+] arr)                        \
+inline void print(string fmt, typ[+] arr)                               \
 {                                                                       \
   printarray(stdout, fmt, dim(arr), shape(arr), arr);                   \
 }                                                                       \
@@ -170,14 +170,14 @@ inline void show(actualtype[+] arr)                                     \
 {                                                                       \
   carr=format( arr);                                                    \
   showarray(stdout, dim(carr), shape(carr), carr);                      \
-}                                                                       
+}
 
 
 BUILT_IN( PRINT)
 /*BUILT_IN( SHOW)*/
 
-SHOW( int)                 
-SHOW( float)               
-SHOW( double)              
-SHOW( bool)                
+SHOW( int)
+SHOW( float)
+SHOW( double)
+SHOW( bool)
 SHOW( char)

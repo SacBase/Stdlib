@@ -2,6 +2,8 @@ module Constants;
 
 export all;
 
+#ifdef FULLTYPES
+
 external byte     minbyte();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
@@ -15,22 +17,6 @@ external short     minshort();
     #pragma linkobj "src/Constants/minmax.o"
 
 external short     maxshort();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minmax.o"
-
-external int     minint();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minint.o"
-
-external int     maxint();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/maxint.o"
-
-external long     minlong();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minmax.o"
-
-external long     maxlong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
@@ -79,6 +65,24 @@ external ulonglong     minulonglong();
     #pragma linkobj "src/Constants/minmax.o"
 
 external ulonglong     maxulonglong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+#endif /* FULLTYPES */
+
+external int     minint();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minint.o"
+
+external int     maxint();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/maxint.o"
+
+external long     minlong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external long     maxlong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
