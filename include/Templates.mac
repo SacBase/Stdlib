@@ -19,10 +19,12 @@
 
  /**
   * The built_in types macro is of the format:
-  * 
-  *  #define BUILT_IN ( fun)  
+  *
+  * ~~~~
+  *  #define BUILT_IN ( fun)
   *    fun( type, postfix specifier, zero/false, one/true)
   *    ...
+  * ~~~~
   *
   * `type`: the name of the type
   * `postfix`: the postfix specifier for scalar values, e.g. 1i is an integer of value 1
