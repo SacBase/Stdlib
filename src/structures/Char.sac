@@ -80,33 +80,14 @@ external char toupper (char C);
     /* These functions convert upper case letters into lower case letters
        and vice versa. */
 
-external char tochar( int N);
-    #pragma linksign[ 0, 1]
-    #pragma linkobj "src/Char/Char.o"
-    #pragma linkname "tochar_int"
-external char tochar( long N);
-    #pragma linksign[ 0, 1]
-    #pragma linkobj "src/Char/Char.o"
-    #pragma linkname "tochar_long"
-external char tochar( float N);
-    #pragma linksign[ 0, 1]
-    #pragma linkobj "src/Char/Char.o"
-    #pragma linkname "tochar_float"
-external char tochar( double N);
-    #pragma linksign[ 0, 1]
-    #pragma linkobj "src/Char/Char.o"
-    #pragma linkname "tochar_double"
-external char tochar( char N);
-    #pragma linksign[ 0, 1]
-    #pragma linkobj "src/Char/Char.o"
-    #pragma linkname "tochar_char"
+#define TOCHAR_S( typ, postfix, zval, oval)          \
+inline char tochar( typ a)                           \
+{                                                    \
+  return _toc_S_ (a);                                \
+}
 
-/**
- * These functions convert numerical values into a char (byte) value
- */
-#define TOCHAR( typ, postfix, zval, oval)            \
-inline                                               \
-char[*] tochar( typ[+] a)                            \
+#define TOCHAR_A( typ, postfix, zval, oval)          \
+inline char[*] tochar( typ[+] a)                     \
 {                                                    \
   res = with {                                       \
           ( . <= iv <= . ) : _toc_S_( a[iv] );       \
@@ -115,4 +96,8 @@ char[*] tochar( typ[+] a)                            \
   return( res);                                      \
 }
 
-BUILT_IN( TOCHAR)
+/**
+ * These functions convert numerical values into a char (byte) value
+ */
+BUILT_IN( TOCHAR_S)
+BUILT_IN( TOCHAR_A)
