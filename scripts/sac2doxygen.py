@@ -24,6 +24,8 @@ import subprocess
 import tempfile
 
 ## Fixed patterns
+# comments
+comment = re.compile (r'^\s*(?:\/\/|\/\*|\*)')
 # change external to extern
 extern = re.compile (r'^\s*external\s')
 # match SaC specifc keywards
@@ -43,6 +45,9 @@ CLASS = ''
 
 def clean_line (line):
     global CLASS
+    if re.match (comment, line):
+        # skip any line that looks like a comment
+        return (line, False)
     ma = re.match (sacclass, line)
     if ma:
         # capture class name for later use
