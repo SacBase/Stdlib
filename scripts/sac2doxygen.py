@@ -35,10 +35,10 @@ eclasstype = re.compile (r'^\s*external\sclasstype')
 classtype = re.compile (r'^\s*classtype\s')
 objdef = re.compile (r'^\s*(?:external)?\s*objdef\s')
 # match SaC functions
-funcs = re.compile (r'\w+(?:\[[\.\+\*,\d]+\])?\s+[\w\d_\-\+\\%]+\s*\([^\(\)]*\)')
+funcs = re.compile (r'(?:\w|\.)+(?:\[[\.\+\*,\d]+\])?\s+[\w\d_\-\+\\%]+\s*\([^\(\)]*\)')
 funcargs = re.compile (r'\([^\(\)]*\)')
 # match function names as symbols
-symbfuncs = re.compile (r'\s(?:!|~|^|&|&&|<<|>>|\||\|\||!|<|<=|>|>=|==|!=|\+|\+\+|\-|\-\-|\*|\/|%)\s*\([^\(\)]*\)')
+symbfuncs = re.compile (r'\s(?:!|~|\^|&|&&|<<|>>|\||\|\||!|<|<=|>|>=|==|!=|\+|\+\+|\-|\-\-|\*|\/|%)\s*\([^\(\)]*\)')
 
 # globals
 CLASS = ''
@@ -96,6 +96,9 @@ def clean_line (line):
             line = line.replace (m.group(0), repl)
         line = line.replace (',', '')
         line = line.replace ('?COMMA?', ',')
+        # doxygen does not handle va_args in return type
+        # XXX this is a kludge
+        line = line.replace ('... ', 'VARGS ')
     return (line, False)
 
 if __name__ == '__main__':
