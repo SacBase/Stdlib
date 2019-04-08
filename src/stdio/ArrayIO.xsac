@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup arrayio ArrayIO
+ *
+ * @{
+ */
 module ArrayIO;
 
 
@@ -181,3 +187,5 @@ SHOW( float)
 SHOW( double)
 SHOW( bool)
 SHOW( char)
+
+/** @} */

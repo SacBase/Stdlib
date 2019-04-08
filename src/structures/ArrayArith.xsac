@@ -26,8 +26,8 @@ export all;
 /*
  * We now define the result shape of a dyadic scalar function as being
  * the shape of the right (second) argument. The idea here is that
- * in a composition such as X + ( Y * Z), if the result shape of + 
- * is driven off the shape of ( Y * Z), then we should nearly always be able
+ * in a composition such as `X + ( Y * Z)`, if the result shape of `+`
+ * is driven off the shape of `( Y * Z)`, then we should nearly always be able
  * to WLF the composition. If the result shape is driven off shape(X),
  * then we need other semantic information to prove that the argument shapes
  * match.

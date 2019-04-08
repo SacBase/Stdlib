@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup math Math
+ *
+ * @{
+ */
 module Math;
 
 use ScalarArith: all;
@@ -736,5 +742,4 @@ inline double sqrt2_rec()
   return(0.7071067811865475244d);	/* 1/sqrt(2) */
 }
 
-
-
+/** @} */

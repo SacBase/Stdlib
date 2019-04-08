@@ -1,6 +1,12 @@
-/* WARNING: This module is untested and should be considered a work in
- *          progress */
-
+/**
+ * @file
+ * @defgroup sacmath SaCMath
+ *
+ * @warning This module is untested and should be considered a work in
+ *          progress
+ *
+ * @{
+ */
 module SaCMath;
 
 export all;
@@ -95,5 +101,6 @@ inline int log2( int a){
   else                                { res = _sub_SxS_(0,1);}
 
   return( res);
-}                                              
-                                               
+}
+
+/** @} */

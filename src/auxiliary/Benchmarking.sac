@@ -1,14 +1,8 @@
-/* Interface module
- * 
- * void start( Interval& interval);
- * void end( Interval& interval);
- * void benchThis();
- * void printResult( Interval& interval);
- * void benchThis();
- * Interval getInterval( string interval_name, int interval_number);
- * Interval getInterval( int interval_number);
- * Interval getInterval( int interval_number);
- * void destroyInterval( Interval interval);
+/**
+ * @file
+ * @defgroup bench Benchmarking Interface
+ *
+ * @{
  */
 
 module Benchmarking;
@@ -23,3 +17,5 @@ import C99Benchmarking: all;
 #ifdef SAC_BACKEND_MUTC
 import MutcBenchmarking: all;
 #endif /* SAC_BACKEND_MUTC */
+
+/** @} */
