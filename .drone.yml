@@ -1,0 +1,23 @@
+kind: pipeline
+name: build-sac-stdlib
+
+steps:
+    # drone does not support recursive git clone, we do this manually
+    - name: submodules
+      image: sacbuild/sac2c:1.3.3
+      commands:
+          - git submodule update --recursive --remote
+
+    - name: build
+      image: sacbuild/sac2c:1.3.3
+      commands:
+          - mkdir build && cd build
+          # XXX we don't build with fulltypes!
+          - cmake -DLINKSETSIZE=250 ..
+          # we need to test that make actually completed:
+          - make -j3 2>&1 | tee build.log; travis_assert ${PIPESTATUS[0]}
+          - if [ $(grep -i 'warning' build.log | wc -l) -gt 0 ]; then
+              echo "+++ ${WARN_NUM} warnings detected +++";
+              grep -i 'warning' build.log;
+              exit 1;
+            fi
