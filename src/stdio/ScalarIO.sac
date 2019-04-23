@@ -1,6 +1,5 @@
 module ScalarIO;
 
-
 use IOresources: all;
 use String : { string, to_string, strlen };
 use ScalarArith : all;
@@ -9,66 +8,60 @@ use TermFile: {TermFile};
 
 export all;
 
+#define QUOTE(s) #s
 
-
-/*****************************************************************/
-
-inline void fprint(File &stream, int n)
-{
-  File::fprintf(stream, "%d", n);
+#define FPRINT_FILE_S_( typ, format)                 \
+inline void fprint(File &stream, typ n)              \
+{                                                    \
+  File::fprintf(stream, QUOTE(%format), n);          \
 }
 
+FPRINT_FILE_S_(int, d)
+FPRINT_FILE_S_(long, ld)
+FPRINT_FILE_S_(char, c)
+FPRINT_FILE_S_(string, s)
 
-/*****************************************************************/
+#ifdef FULLTYPES
+FPRINT_FILE_S_(short, hd)
+FPRINT_FILE_S_(byte, x)
+FPRINT_FILE_S_(longlong, lld)
+FPRINT_FILE_S_(ushort, hu)
+FPRINT_FILE_S_(ubyte, X)
+FPRINT_FILE_S_(uint, u)
+FPRINT_FILE_S_(ulong, lu)
+FPRINT_FILE_S_(ulonglong, llu)
+#endif /* FULLTYPES */
+
+/* fprint functions for float, double, and bool
+ * we need to handle these seperately
+ */
 
 inline void fprint(File &stream, float n)
 {
   File::fprintf(stream, "%g", tod(n));
 }
 
-
-/*****************************************************************/
-
 inline void fprint(File &stream, float n, int prec)
 {
   File::fprintf(stream, "%.*g", prec, tod(n));
 }
-
-
-/*****************************************************************/
 
 inline void fprint(File &stream, double n)
 {
   File::fprintf(stream, "%g", n);
 }
 
-
-/*****************************************************************/
-
 inline void fprint(File &stream, double n, int prec)
 {
   File::fprintf(stream, "%.*g", prec, n);
 }
 
-
-/*****************************************************************/
-
-void fprint(File &stream, bool n)
+inline void fprint(File &stream, bool n)
 {
-  if (n)
-  {
-    File::fprintf(stream, "1");
-  }
-  else
-  {
-    File::fprintf(stream, "0");
-  }
+  File::fprintf(stream, n ? "1" : "0");
 }
 
-
-/*****************************************************************/
-
-void fprint(File &stream, bool n, int mode)
+inline void fprint(File &stream, bool n, int mode)
 {
   if (n)
   {
@@ -108,85 +101,58 @@ void fprint(File &stream, bool n, int mode)
   }
 }
 
-
-/*****************************************************************/
-
-inline void fprint(File &stream, char c)
-{
-  File::fprintf(stream, "%c", c);
+#define FPRINT_TERMFILE_S_( typ, format)             \
+inline void fprint(TermFile &stream, typ n)          \
+{                                                    \
+  TermFile::fprintf(stream, QUOTE(%format), n);      \
 }
 
+FPRINT_TERMFILE_S_(int, d)
+FPRINT_TERMFILE_S_(long, ld)
+FPRINT_TERMFILE_S_(char, c)
+FPRINT_TERMFILE_S_(string, s)
 
-/*****************************************************************/
+#ifdef FULLTYPES
+FPRINT_TERMFILE_S_(short, hd)
+FPRINT_TERMFILE_S_(byte, x)
+FPRINT_TERMFILE_S_(longlong, lld)
+FPRINT_TERMFILE_S_(ushort, hu)
+FPRINT_TERMFILE_S_(ubyte, X)
+FPRINT_TERMFILE_S_(uint, u)
+FPRINT_TERMFILE_S_(ulong, lu)
+FPRINT_TERMFILE_S_(ulonglong, llu)
+#endif /* FULLTYPES */
 
-inline void fprint(File &stream, string s)
-{
-  File::fprintf(stream, "%s", s);
-}
-
-
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-
-inline void fprint(TermFile &stream, int n)
-{
-  TermFile::fprintf(stream, "%d", n);
-}
-
-
-/*****************************************************************/
+/* fprint functions for float, double, and bool
+ * we need to handle these seperately
+ */
 
 inline void fprint(TermFile &stream, float n)
 {
   TermFile::fprintf(stream, "%g", tod(n));
 }
 
-
-/*****************************************************************/
-
 inline void fprint(TermFile &stream, float n, int prec)
 {
   TermFile::fprintf(stream, "%.*g", prec, tod(n));
 }
-
-
-/*****************************************************************/
 
 inline void fprint(TermFile &stream, double n)
 {
   TermFile::fprintf(stream, "%g", n);
 }
 
-
-/*****************************************************************/
-
 inline void fprint(TermFile &stream, double n, int prec)
 {
   TermFile::fprintf(stream, "%.*g", prec, n);
 }
 
-
-/*****************************************************************/
-
-void fprint(TermFile &stream, bool n)
+inline void fprint(TermFile &stream, bool n)
 {
-  if (n)
-  {
-    TermFile::fprintf(stream, "1");
-  }
-  else
-  {
-    TermFile::fprintf(stream, "0");
-  }
+  TermFile::fprintf(stream, n ? "1" : "0");
 }
 
-
-/*****************************************************************/
-
-void fprint(TermFile &stream, bool n, int mode)
+inline void fprint(TermFile &stream, bool n, int mode)
 {
   if (n)
   {
@@ -226,134 +192,90 @@ void fprint(TermFile &stream, bool n, int mode)
   }
 }
 
-
-/*****************************************************************/
-
-inline void fprint(TermFile &stream, char c)
-{
-  TermFile::fprintf(stream, "%c", c);
+#define SHOW_TERMFILE_S_( typ)                       \
+inline void show( typ n)                             \
+{                                                    \
+  fprint(TermFile::stdout, n);                       \
 }
 
+SHOW_TERMFILE_S_(int)
+SHOW_TERMFILE_S_(long)
+SHOW_TERMFILE_S_(char)
+SHOW_TERMFILE_S_(float)
+SHOW_TERMFILE_S_(double)
+SHOW_TERMFILE_S_(bool)
+SHOW_TERMFILE_S_(string)
 
-/*****************************************************************/
+#ifdef FULLTYPES
+SHOW_TERMFILE_S_(short)
+SHOW_TERMFILE_S_(byte)
+SHOW_TERMFILE_S_(longlong)
+SHOW_TERMFILE_S_(ushort)
+SHOW_TERMFILE_S_(ubyte)
+SHOW_TERMFILE_S_(uint)
+SHOW_TERMFILE_S_(ulong)
+SHOW_TERMFILE_S_(ulonglong)
+#endif /* FULLTYPES */
 
-inline void fprint(TermFile &stream, string s)
-{
-  TermFile::fprintf(stream, "%s", s);
+#define PRINT_TERMFILE_S_(typ, format)               \
+inline void print( typ n)                            \
+{                                                    \
+  TermFile::printf("Dimension:  0\nShape    : < >\n");\
+  TermFile::printf( " " QUOTE(%format\n), n);        \
 }
 
+PRINT_TERMFILE_S_(int, d)
+PRINT_TERMFILE_S_(long, ld)
+PRINT_TERMFILE_S_(string, s)
 
+#ifdef FULLTYPES
+PRINT_TERMFILE_S_(short, hd)
+PRINT_TERMFILE_S_(byte, x)
+PRINT_TERMFILE_S_(longlong, lld)
+PRINT_TERMFILE_S_(ushort, hu)
+PRINT_TERMFILE_S_(ubyte, X)
+PRINT_TERMFILE_S_(uint, u)
+PRINT_TERMFILE_S_(ulong, lu)
+PRINT_TERMFILE_S_(ulonglong, llu)
+#endif /* FULLTYPES */
 
-/*****************************************************************/
-/*****************************************************************/
-
-void show(bool c)
-{
-  TermFile::printf("%s\n", to_string( format(c)));
-}
-
-/*****************************************************************/
-
-void show(int c)
-{
-  TermFile::printf("%s\n", to_string( format(c)));
-}
-
-/*****************************************************************/
-
-void show(float c)
-{
-  TermFile::printf("%s\n", to_string( format(c)));
-}
-
-/*****************************************************************/
-
-void show(double c)
-{
-  TermFile::printf("%s\n", to_string( format(c)));
-}
-
-/*****************************************************************/
-
-void show(char c)
-{
-  TermFile::printf("%c\n", c);
-}
-
-/*****************************************************************/
-
-void show(ulonglong c)
-{
-  TermFile::printf("%llu\n", c);
-}
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-
-void print(int n)
+void print(char c)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %d\n", n);
+  TermFile::printf(" '%c'\n", c);
 }
 
-
-/*****************************************************************/
-
-void print(float n)
+inline void print(float n)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
   TermFile::printf(" %g\n", tod(n));
 }
 
-
-/*****************************************************************/
-
-void print(float n, int prec)
+inline void print(float n, int prec)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
   TermFile::printf(" %.*g\n", prec, tod(n));
 }
 
-
-/*****************************************************************/
-
-void print(double n)
+inline void print(double n)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
   TermFile::printf(" %g\n", n);
 }
 
-
-/*****************************************************************/
-
-void print(double n, int prec)
+inline void print(double n, int prec)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
   TermFile::printf(" %.*g\n", prec, n);
 }
 
-
-/*****************************************************************/
-
-void print(bool n)
+inline void print(bool n)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
-  if (n)
-  {
-    TermFile::printf(" true\n");
-  }
-  else
-  {
-    TermFile::printf(" false\n");
-  }
+  TermFile::printf(" %s\n", n ? "true" : "false");
 }
 
-
-/*****************************************************************/
-
-void print(bool n, int mode)
+inline void print(bool n, int mode)
 {
   TermFile::printf("Dimension:  0\nShape    : < >\n");
   if (n)
@@ -394,68 +316,36 @@ void print(bool n, int mode)
   }
 }
 
-
-/*****************************************************************/
-
-void print(char c)
-{
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" '%c'\n", c);
+#define FSCAN_FILE_S_(typ, format)                   \
+inline bool, typ fscan##typ (File &stream)           \
+{                                                    \
+  typ result;                                        \
+  success, result = File::fscanf(stream, QUOTE(%format));\
+  return (success==1, result);                       \
 }
 
+FSCAN_FILE_S_(int, d)
+FSCAN_FILE_S_(long, ld)
+FSCAN_FILE_S_(float, f)
+FSCAN_FILE_S_(double, lf)
+FSCAN_FILE_S_(char, c)
 
+#ifdef FULLTYPES
+FSCAN_FILE_S_(short, hd)
+FSCAN_FILE_S_(longlong, Ld)
+FSCAN_FILE_S_(ushort, hu)
+FSCAN_FILE_S_(uint, u)
+FSCAN_FILE_S_(ulong, lu)
+FSCAN_FILE_S_(ulonglong, Lu)
+#endif /* FULLTYPES */
 
-
-/*****************************************************************/
-/*****************************************************************/
-/*****************************************************************/
-
-inline bool, int fscanint(File &stream)
-{
-  int result;
-
-  result=0;
-  success, result=File::fscanf(stream, "%d");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-inline bool, float fscanfloat(File &stream)
-{
-  float result;
-
-  result=0.0f;
-  success, result=File::fscanf(stream, "%f");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-inline bool, double fscandouble(File &stream)
-{
-  double result;
-  
-  result=0.0d;
-  success, result=File::fscanf(stream, "%lf");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-bool, bool fscanbool(File &stream)
+inline bool, bool fscanbool(File &stream)
 {
   bool result;
   char c;
-  
+
   success, c=File::fscanf(stream, "%c");
-  
+
   if (success==1)
   {
     if ((c=='0') || (c=='f'))
@@ -472,88 +362,47 @@ bool, bool fscanbool(File &stream)
      success=0;
      result=false;
   }
-  
+
   return(success==1, result);
 }
-
-
-/*****************************************************************/
-
-inline bool, char fscanchar(File &stream)
-{
-  char result;
-  
-  success, result=File::fscanf(stream, "%c");
-  
-  return(success==1, result);
-}
-
-
-
-/*****************************************************************/
 
 inline bool, string fscanstring(File &stream, int length)
 {
   string result;
-  
   result=File::fscans(stream, length);
-    
   return(strlen(result)>0, result);
 }
 
-
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-
-inline bool, int fscanint(TermFile &stream)
-{
-  int result;
-
-  result=0;
-  success, result=TermFile::fscanf(stream, "%d");
-  
-  return(success==1, result);
+#define FSCAN_TERMFILE_S_(typ, format)               \
+inline bool, typ fscan##typ (TermFile &stream)       \
+{                                                    \
+  typ result;                                        \
+  success, result = TermFile::fscanf(stream, QUOTE(%format));\
+  return (success==1, result);                       \
 }
 
+FSCAN_TERMFILE_S_(int, d)
+FSCAN_TERMFILE_S_(long, ld)
+FSCAN_TERMFILE_S_(float, f)
+FSCAN_TERMFILE_S_(double, lf)
+FSCAN_TERMFILE_S_(char, c)
 
-/*****************************************************************/
+#ifdef FULLTYPES
+FSCAN_TERMFILE_S_(short, hd)
+FSCAN_TERMFILE_S_(longlong, Ld)
+FSCAN_TERMFILE_S_(ushort, hu)
+FSCAN_TERMFILE_S_(uint, u)
+FSCAN_TERMFILE_S_(ulong, lu)
+FSCAN_TERMFILE_S_(ulonglong, Lu)
+#endif /* FULLTYPES */
 
-inline bool, float fscanfloat(TermFile &stream)
-{
-  float result;
-
-  result=0.0f;
-  success, result=TermFile::fscanf(stream, "%f");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-inline bool, double fscandouble(TermFile &stream)
-{
-  double result;
-  
-  result=0.0d;
-  success, result=TermFile::fscanf(stream, "%lf");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-bool, bool fscanbool(TermFile &stream)
+inline bool, bool fscanbool(TermFile &stream)
 {
   bool result;
   char c;
-  
+
   success, c=TermFile::fscanf(stream, "%c");
-  
+
   if (success==1)
   {
     if ((c=='0') || (c=='f'))
@@ -570,88 +419,48 @@ bool, bool fscanbool(TermFile &stream)
      success=0;
      result=false;
   }
-  
+
   return(success==1, result);
 }
-
-
-/*****************************************************************/
-
-inline bool, char fscanchar(TermFile &stream)
-{
-  char result;
-  
-  success, result=TermFile::fscanf(stream, "%c");
-  
-  return(success==1, result);
-}
-
-
-
-/*****************************************************************/
 
 inline bool, string fscanstring(TermFile &stream, int length)
 {
   string result;
-  
+
   result=TermFile::fscans(stream, length);
-    
   return(strlen(result)>0, result);
 }
 
-
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-
-inline bool, int scanint()
-{
-  int result;
-
-  result=0;
-  success, result=TermFile::scanf("%d");
-  
-  return(success==1, result);
+#define SCAN_S_(typ, format)                         \
+inline bool, typ scan##typ ()                        \
+{                                                    \
+  typ result;                                        \
+  success, result = TermFile::scanf(QUOTE(%format)); \
+  return (success==1, result);                       \
 }
 
+SCAN_S_(int, d)
+SCAN_S_(long, ld)
+SCAN_S_(float, f)
+SCAN_S_(double, lf)
+SCAN_S_(char, c)
 
-/*****************************************************************/
+#ifdef FULLTYPES
+SCAN_S_(short, hd)
+SCAN_S_(longlong, Ld)
+SCAN_S_(ushort, hu)
+SCAN_S_(uint, u)
+SCAN_S_(ulong, lu)
+SCAN_S_(ulonglong, Lu)
+#endif /* FULLTYPES */
 
-inline bool, float scanfloat()
-{
-  float result;
-
-  result=0.0f;
-  success, result=TermFile::scanf("%f");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-inline bool, double scandouble()
-{
-  double result;
-  
-  result=0.0d;
-  success, result=TermFile::scanf("%lf");
-  
-  return(success==1, result);
-}
-
-
-/*****************************************************************/
-
-bool, bool scanbool()
+inline bool, bool scanbool()
 {
   bool result;
   char c;
-  
+
   success, c=TermFile::scanf("%c");
-  
+
   if (success==1)
   {
     if ((c=='0') || (c=='f'))
@@ -668,38 +477,14 @@ bool, bool scanbool()
      success=0;
      result=false;
   }
-  
+
   return(success==1, result);
 }
-
-
-/*****************************************************************/
-
-inline bool, char scanchar()
-{
-  char result;
-  
-  success, result=TermFile::scanf("%c");
-  
-  return(success==1, result);
-}
-
-
-
-/*****************************************************************/
 
 inline bool, string scanstring(int length)
 {
   string result;
-  
+
   result=TermFile::scans(length);
-    
   return(strlen(result)>0, result);
 }
-
-
-/*****************************************************************/
-/*****************************************************************/
-
-
-

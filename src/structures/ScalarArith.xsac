@@ -4,18 +4,6 @@ export all;
 
 #include "Templates.mac"
 
-inline int
-++ (int a)
-{
-  return _add_SxS_ (a, 1);
-}
-
-inline int
--- (int a)
-{
-  return _sub_SxS_ (a, 1);
-}
-
 /** <!--********************************************************************-->
  *
  * @fn  <a> zero( <a>[*] Array)
@@ -24,28 +12,14 @@ inline int
  *
  ******************************************************************************/
 
-#define ZERO( a, za)  \
-inline                \
-a zero( a[*] A)       \
-{                     \
-  return( za);        \
+#define ZERO( type, postfix, zval, oval) \
+inline                                   \
+type zero( type[*] A)                    \
+{                                        \
+  return( zval);                         \
 }
 
-ZERO( byte, 0b)
-ZERO( short, 0s)
-ZERO( int, 0)
-ZERO( long, 0l)
-ZERO( longlong, 0ll)
-ZERO( ubyte, 0ub)
-ZERO( ushort, 0us)
-ZERO( uint, 0ui)
-ZERO( ulong, 0ul)
-ZERO( ulonglong, 0ull)
-ZERO( double, 0d)
-ZERO( float, 0f)
-ZERO( char, ' ')
-ZERO( bool, false)
-
+BUILT_IN( ZERO)
 
 /** <!--********************************************************************-->
  *
@@ -55,30 +29,14 @@ ZERO( bool, false)
  *
  ******************************************************************************/
 
-#define ONE( a, za)  \
-inline               \
-a one( a[*] A)       \
-{                    \
-  return( za);       \
+#define ONE( type, postfix, zval, oval) \
+inline                                  \
+type one( type[*] A)                    \
+{                                       \
+  return( oval);                        \
 }
 
-ONE( byte, 1b)
-ONE( short, 1s)
-ONE( int, 1)
-ONE( long, 1l)
-ONE( longlong, 1ll)
-ONE( ubyte, 1ub)
-ONE( ushort, 1us)
-ONE( uint, 1ui)
-ONE( ulong, 1ul)
-ONE( ulonglong, 1ull)
-ONE( double, 1d) 
-ONE( float, 1f)
-ONE( char, ' ')
-ONE( bool, true)
-
-
-
+BUILT_IN( ONE)
 
 
 /** <!--********************************************************************-->
@@ -103,6 +61,12 @@ b name(a A)                           \
   return( op( A));                    \
 }
 
+#define MAP_UNA_S( name, op, a, b)    \
+inline                                \
+a name(a A)                           \
+{                                     \
+  return op (A, one (A));             \
+}
 
 
 /** <!--********************************************************************-->
@@ -111,13 +75,21 @@ b name(a A)                           \
  *
  ******************************************************************************/
 
-#define ARI_OPS_S( a)                  \
-MAP_ARI_OPS( SxS, a)
+#define ARI_OPS_S( type, postfix, zval, oval) \
+MAP_ARI_OPS( SxS, type)
 
 NUM(  ARI_OPS_S)
 
-MAP_INT_OPS( SxS)
+#define INT_OPS_S( type, postfix, zval, oval) \
+MAP_INT_OPS( SxS, type)
 
+/* _mod_SxS_ only supports whole numbers */
+WHOLE_NUM(  INT_OPS_S)
+
+#define ANA_OPS_S( type, postfix, zval, oval) \
+MAP_ANA_OPS( S, type)
+
+NUM(   ANA_OPS_S)
 
 /** <!--********************************************************************-->
  *
@@ -125,8 +97,8 @@ MAP_INT_OPS( SxS)
  *
  ******************************************************************************/
 
-#define REL_OPS_S( a)                   \
-MAP_REL_OPS( SxS, a)
+#define REL_OPS_S( type, postfix, zero, one) \
+MAP_REL_OPS( SxS, type)
 
 BUILT_IN(  REL_OPS_S)
 
