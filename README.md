@@ -36,7 +36,9 @@ Variables that can be passed to CMake
 =========================================
 
 When running CMake it is possible to pass the following variables:
-  * `-DTARGETS=x;y;z` --- build stdlib for targets x, y and z. (defaults are `seq; mt_pth`)
+  * `-DTARGETS=x;y;z` --- build stdlib for targets x, y and z. (Defaults to `seq;mt_pth`)
+  * `-DBUILDGENERIC=ON|OFF` --- build stdlib without using architecture specific optimisations
+  * (useful when creating distributable packages). (Default is `OFF`)
   * `-DSAC2C_EXEC=/path/to/sac2c` --- specify `sac2c` executable directly. Otherwise CMake will
     try to find `sac2c` on yout PATH.
   * `-DLINKSETSIZE=n` --- set `-linksetsize n` when calling `sac2c`.  This option is responsible
