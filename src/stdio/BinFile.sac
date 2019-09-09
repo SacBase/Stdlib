@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup binfile BinFile
+ *
+ * @{
+ */
 class BinFile;
 
 external classtype;
@@ -118,3 +124,4 @@ external void binfWriteDoubleArray(BinFile &binstream, int DIM, int[+] SHAPE, do
      * binstream. 
      */
 
+/** @} */

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup complexmath ComplexMath
+ *
+ * @{
+ */
 module ComplexMath;
 
 export all;
@@ -163,9 +169,4 @@ inline complex sqrt(complex X)
                               ScalarArith::* ((double[2])X)[[1]])))]);
 }
 
-
-
-
-
-
-
+/** @} */

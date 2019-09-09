@@ -1,4 +1,12 @@
+/**
+ * @file
+ * @defgroup interval Interval Object
+ * @brief This module provides the Interval classtype
+ *
+ * @{
+ */
 class Interval;
 external classtype;
 
 export {Interval};
+/** @} */

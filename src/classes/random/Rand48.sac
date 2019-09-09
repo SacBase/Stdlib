@@ -1,12 +1,13 @@
+/**
+ * @file
+ * @defgroup rand48 Rand48
+ *
+ * Class Rand48 provides a pseudo-random number generator which uses the
+ * linear congruential algorithm and 48-bit integer arithmetic.
+ *
+ * @{
+ */
 class Rand48;
-
-
-    /*
-     *  Class Rand48 provides a pseudo-random number generator which uses the
-     *  linear congruential algorithm and  48-bit  integer 
-     *  arithmetic.
-     */
-
 
 external classtype;
 
@@ -20,39 +21,45 @@ external Rand48 randGen();
     #pragma linkobj  "src/Rand48/Rand48.o"
 
 
+/**
+ * @brief Initialize RandomGen to produce a new sequence of pseudo-random
+ *        numbers.
+ * @param SEED value for seed
+ */
 external void srandom(long SEED);
     #pragma effect Rand48::RandomGen
     #pragma linkname "srand48"
     #pragma linkobj  "src/Rand48/Rand48.o"
 
-    /*
-     * Initialize RandomGen to produce a new sequence of pseudo-random
-     * numbers.
-     */
-
-
+/**
+ * @brief Use RandomGen to generate a new pseudo-random integer in the range
+ *        MIN to MAX.
+ *
+ * @param MIN lowest point on range
+ * @param MAX highest point on range
+ * @return pseudo-random value
+ */
 external int random(int MIN, int MAX);
     #pragma linksign [0,1,2]
     #pragma effect Rand48::RandomGen
     #pragma linkname "SACrand48"
     #pragma linkobj  "src/Rand48/Rand48.o"
 
-    /*
-     * Use RandomGen to generate a new pseudo-random integer in the range
-     * MIN to MAX.
-     */
-
-
+/**
+ * brief Use RandomGen to generate a new pseudo-random double precision
+ *       floating-point number in the interval [MIN, MAX).
+ *
+ * @param MIN lowest point on range
+ * @param MAX highest point on range
+ * @return pseudo-random value
+ */
 external double random(double MIN, double MAX);
     #pragma linksign [0,1,2]
     #pragma effect Rand48::RandomGen
     #pragma linkname "SACdrand48"
     #pragma linkobj  "src/Rand48/Rand48.o"
 
-    /*
-     * Use RandomGen to generate a new pseudo-random double precision
-     * floating-point number in the interval [MIN, MAX).
-     */
+
 
 int[*] random( int[.] shp, int MIN, int MAX)
 {
@@ -69,4 +76,4 @@ double[*] random( int[.] shp, double MIN, double MAX)
         } : genarray( shp, 0d );
   return( res);
 }
-
+/** @} */

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup matharray MathArray
+ *
+ * @{
+ */
 module MathArray;
 
 use ScalarArith: {zero};
@@ -5,48 +11,6 @@ use ArrayBasics: all;
 import Math: all;
 export all;
 
-
-
-/*****************************************************************************
- *
- *   This module exports the following functions:
- *
- *
- *
- * float[+]  exp( float[+]  A);
- * double[+] exp( double[+] A);
- *
- * float[+]  log( float[+]  A);
- * double[+] log( double[+] A);
- *
- * float[+]  log10( float[+]  A);
- * double[+] log10( double[+] A);
- *
- * float[+]  fabs( float[+]  A);
- * double[+] fabs( double[+] A);
- *
- * float[+]  sqrt( float[+]  A);
- * double[+] sqrt( double[+] A);
- *
- * float[+]  pow( float[+]  A, float e);
- * double[+] pow( double[+] A, double e);
- *
- * float[+]  floor( float[+]  A);
- * double[+] floor( double[+] A);
- *
- *****************************************************************************/
-
-
-/*****************************************************************************
- *
- *   Definition of code templates.
- *
- *****************************************************************************/
- 
-/*
- * Operator array template.
- */
- 
 #define OP_A_TEMPLATE(op, restype, argtype)                 \
 inline restype[+] op (argtype[+] A)                         \
 {                                                           \
@@ -77,30 +41,73 @@ inline restype[+] op (argtype[+] A, argtype S)              \
   return(result);                                           \
 }
 
-/*****************************************************************************
- *
- *   Definition of meta templates.
- *
- *****************************************************************************/
-
 #define ALL_TYPES_1(template, arg1)                     \
 template(arg1, float, float)                            \
 template(arg1, double, double)
 
-/*****************************************************************************
+/**
+ * @brief Apply `log` function elementwise to the array
  *
- *   Definition of SAC standard module MathArray.
- *
- *****************************************************************************/
-
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, log)
+
+/**
+ * @brief Apply `log2` function elementwise to the array
+ *
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, log2)
+
+/**
+ * @brief Apply `log10` function elementwise to the array
+ *
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, log10)
+
+/**
+ * @brief Apply `exp` function elementwise to the array
+ *
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, exp)
+
+/**
+ * @brief Apply `fabs` function elementwise to the array
+ *
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, fabs)
+
+/**
+ * @brief Apply `sqrt` function elementwise to the array
+ *
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, sqrt)
+
+/**
+ * @brief Apply `floor` function elementwise to the array
+ *
+ * @param A Input array
+ * @return
+ */
 ALL_TYPES_1( OP_A_TEMPLATE, floor)
 
+/**
+ * @brief Apply the `pow` function elementwise to the array
+ *
+ * @param A Input array
+ * @param S value to power up to
+ * @return
+ */
 ALL_TYPES_1( OP_AS_TEMPLATE, pow)
 
-
+/** @} */

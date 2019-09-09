@@ -1,24 +1,26 @@
-/*****************************************************************************
+/**
+ * @file
+ * @defgroup hiding Hiding
  *
- * file:   Hiding.sac
+ * @brief This module is for hiding type information.
  *
- * description:
+ * It is commonly used for static inputs and is intentioned for benchmarking.
  *
- *   This module is for hiding type information.
- *   It is commonly used for static inputs and is intentioned for benchmarking.
+ * Some functions take a single argument and hide the value, shape or
+ * dimensionality information of the input. Others in addition take an
+ * integer. This allows for calls to inlined kernel functions in a loop
+ * where where the call must be repeated N times for benchmarking.
  *
- *   Some functions take a single argument and hide the value, shape or 
- *   dimensionality information of the input. Others in addition take an
- *   integer. This allows for calls to inlined kernel functions in a loop 
- *   where where the call must be repeated N times for benchmarking.
- *   Here is an example:
- *      for( i=0 ; i < N ; i}}) {
- *        res[[i]] = kernel( hideValue( ip1, i), hideValue( ip2, i), ...);
- *      }
- *   The above code computes kernel N times even if kernel is inlined.
+ * Here is an example:
+ * ~~~~
+ *    for( i=0 ; i < N ; i}}) {
+ *      res[[i]] = kernel( hideValue( ip1, i), hideValue( ip2, i), ...);
+ *    }
+ * ~~~~
+ * The above code computes kernel N times even if kernel is inlined.
  *
- *****************************************************************************/
-
+ * @{
+ */
 module Hiding;
 
 export all;
@@ -42,7 +44,7 @@ inline                                                    \
 TYPE[*] hideValue( int i, TYPE[*] in)                     \
 {                                                         \
   return( _hideValue_SxA_( i, in));                       \
-}                                                         
+}
 HIDEVALUE( int)
 HIDEVALUE( char)
 HIDEVALUE( float)
@@ -96,4 +98,4 @@ HIDEDIMENSIONALITY( char)
 HIDEDIMENSIONALITY( float)
 HIDEDIMENSIONALITY( double)
 HIDEDIMENSIONALITY( bool)
-
+/** @} */

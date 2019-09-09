@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup fibreio FibreIO
+ *
+ * @{
+ */
 module FibreIO;
 
 
@@ -402,3 +408,5 @@ LINKSCANPRINT(uint,Uint,u)
 LINKSCANPRINT(ulong,Ulong,lu)		
 LINKSCANPRINT(ulonglong,Ulonglong,llu)
 #endif /* FULLTYPES */
+
+/** @} */

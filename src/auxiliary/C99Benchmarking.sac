@@ -1,16 +1,20 @@
-/* C99 Benchmarking Module 
+/**
+ * @file
+ * @defgroup bench99 C99 Benchmarking
  *
  * Measures time Intervals in an arbitrary time unit as doubles.
  *
  * Use getInterval to construct a benchmarking interval object and start and
  * end to measure each interval. Take care when start and stop are evaluated
- * since this will affect the windows that is measured. The function benchThis 
- * simply affects the benchmarking object and can be used in inhibit code 
- * movement. The function printResult dumps the measurement information in a 
+ * since this will affect the windows that is measured. The function benchThis
+ * simply affects the benchmarking object and can be used in inhibit code
+ * movement. The function printResult dumps the measurement information in a
  * unibench friendly format.
  *
  * When benchmarking funtions the pragma "noinline" should be specified after
  * the function body to inhibit any inlining optimisations.
+ *
+ * @{
  */
 class C99Benchmarking;
 external classtype;
@@ -428,7 +432,7 @@ void printResults( StringArray::stringArray names, double[.] results)
   printf( "### end descriptions\n");
 }
 
-/*
+/**
  * This function simply affects TheBenchmarkObject and nothing else.
  * Use it to inhibit code movement. The most common use for benchThis
  * is to call it within a function body of a function body that should be
@@ -450,3 +454,4 @@ external void benchDestroyInterval( Interval interval);
 #pragma linksign [1]
 
 #endif /* SAC_BACKEND_C99/CUDA */
+/** @} */

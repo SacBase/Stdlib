@@ -1,8 +1,10 @@
+/**
+ * @file
+ * @defgroup color8io Color8IO
+ *
+ * @{
+ */
 module Color8IO;
-
-
-/*****************************************************************/
-
 
 use IOresources: all;
 use Color8: { color };
@@ -15,3 +17,4 @@ inline void print( color[*] c)
   print( (int[*]) c);
 }
 
+/** @} */

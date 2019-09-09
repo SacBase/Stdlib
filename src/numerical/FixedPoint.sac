@@ -1,6 +1,12 @@
-/* WARNING: This module is untested and should be considered a work in
- *          progress */
-
+/**
+ * @file
+ * @defgroup fixedpoint FixedPoint
+ *
+ * @warning This module is untested and should be considered a work in
+ *          progress.
+ *
+ * @{
+ */
 module FixedPoint;
 
 use SaCMath: all;
@@ -11,20 +17,20 @@ export all;
   fun(  8, ## __VA_ARGS__)                                                  \
   fun( 16, ## __VA_ARGS__)                                                  \
   fun( 24, ## __VA_ARGS__)                                                  \
-  fun( 32, ## __VA_ARGS__)                                                  
+  fun( 32, ## __VA_ARGS__)
 
 #define FORALL_POINTS( fun, ...)                                            \
   fun(  8, ## __VA_ARGS__)                                                  \
   fun( 16, ## __VA_ARGS__)                                                  \
   fun( 24, ## __VA_ARGS__)                                                  \
-  fun( 32, ## __VA_ARGS__)                                                  
+  fun( 32, ## __VA_ARGS__)
 
 #define TYPE( name)                                                         \
   fixedpoint_ ## name
 
 #define TYPEDEF( num)                                                       \
   typedef int TYPE( num);
-                                                                            
+
 #define ADD( num)                                                           \
   inline TYPE( num) +( TYPE( num) a, TYPE( num) b)                          \
   {                                                                         \
@@ -37,7 +43,7 @@ export all;
   {                                                                         \
     return( (TYPE( num)) _sub_SxS_( (int)a, (int)b) );                      \
   }                                                                         \
-  ARRAY_BIN( -, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
+  ARRAY_BIN( -, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))
 
 #define DIV( num)                                                           \
   inline TYPE( num) /( TYPE( num) a, TYPE( num) b)                          \
@@ -45,7 +51,7 @@ export all;
     res = _div_SxS_( _mul_SxS_( (int)a, pow2( num)), (int)b);               \
     return( (TYPE( num)) res);                                              \
   }                                                                         \
-  ARRAY_BIN( /, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
+  ARRAY_BIN( /, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))
 
 #define MUL( num)                                                           \
   inline TYPE( num) *( TYPE( num) a, TYPE( num) b)                          \
@@ -53,7 +59,7 @@ export all;
     unnorm = _mul_SxS_( (int)a, (int)b);                                    \
     return( (TYPE( num)) _div_SxS_( unnorm, pow2( num) ));                  \
   }                                                                         \
-  ARRAY_BIN( *, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))         \
+  ARRAY_BIN( *, (TYPE( num)) 0, TYPE( num), TYPE( num), TYPE( num))
 
 #define COMP( num, sim, name)                                               \
   inline bool sim( TYPE( num) a, TYPE( num) b)                              \
@@ -61,7 +67,7 @@ export all;
     res = _ ## name ## _SxS_( (int)a, (int)b);                              \
     return( res);                                                           \
   }                                                                         \
-  ARRAY_BIN( sim, false, TYPE( num), TYPE( num), bool)                      \
+  ARRAY_BIN( sim, false, TYPE( num), TYPE( num), bool)
 
 #define SQ( a) a * a
 #define CB( a) a * a * a
@@ -92,7 +98,7 @@ export all;
     }                                                             \
     return( res);                                                 \
   }                                                               \
-  ARRAY_MON( name, (TYPE( num)) 0, TYPE( num), TYPE( num))   
+  ARRAY_MON( name, (TYPE( num)) 0, TYPE( num), TYPE( num))
 
 #define TO_INT( num)                                                        \
   inline int to_int( TYPE( num) a)                                          \
@@ -100,7 +106,7 @@ export all;
     ans = trunc( a);                                                        \
     return( ans);                                                           \
   }                                                                         \
-  ARRAY_MON( to_int, 0, TYPE( num), int)                                    \
+  ARRAY_MON( to_int, 0, TYPE( num), int)
 
 #define CEIL( num)                                      \
   inline int ceil( TYPE( num) a)                        \
@@ -130,14 +136,14 @@ export all;
                 pow2( num)) ? (int)a: _div_SxS_( ( (int)a), pow2( num));    \
     return( ans);                                                           \
   }                                                                         \
-  ARRAY_MON( trunc, 0, TYPE( num), int)                                     \
-                                                                            
+  ARRAY_MON( trunc, 0, TYPE( num), int)
+
 #define TO_RAW( num)                                                        \
   inline int to_raw( TYPE( num) a)                                          \
   {                                                                         \
     return( (int)a);                                                        \
   }                                                                         \
-  ARRAY_MON( to_raw, 0, TYPE( num), int)                                     
+  ARRAY_MON( to_raw, 0, TYPE( num), int)
 
 #define TO_INT2( num)                                                       \
   inline int[2] to_int2( TYPE( num) a)                                      \
@@ -146,14 +152,14 @@ export all;
     part  = _mod_SxS_( (int)a, pow2( num));                                 \
     return( [whole, part]);                                                 \
   }                                                                         \
-  ARRAY_MON( to_int2, ([0,0]), TYPE( num), int)                             \
+  ARRAY_MON( to_int2, ([0,0]), TYPE( num), int)
 
 #define FRACTION( num)                                                      \
   inline int fraction( TYPE( num) a)                                        \
   {                                                                         \
     return( pow2(num));                                                     \
-  }                                                                         
-                                                                            
+  }
+
 #define ARRAY_BIN( fun, z, ta, tb, tc)                                      \
   inline tc[+] fun( ta[+] a, tb[+] b)                                       \
   {                                                                         \
@@ -184,16 +190,16 @@ export all;
   }
 
 #define TO_TYPE_CAT( a, b) TO_TYPE_CAT_( a, b)
-#define TO_TYPE_CAT_( a, b) a##b                                              
+#define TO_TYPE_CAT_( a, b) a##b
 #define TO_TYPE( num, from)                                                 \
   inline TYPE( num) TO_TYPE_CAT( to_, TYPE( num))( from a)                  \
   {                                                                         \
     return( (TYPE( num)) _mul_SxS_(to_int( a), pow2( num)));                \
   }                                                                         \
-  ARRAY_MON( TO_TYPE_CAT( to_, TYPE( num)), (TYPE( num)) 0, from, TYPE( num)) 
+  ARRAY_MON( TO_TYPE_CAT( to_, TYPE( num)), (TYPE( num)) 0, from, TYPE( num))
 
 #define CROSS_PRODUCT( num)                                                 \
-  FORALL_POINTS2( TO_TYPE, TYPE( num))                                       
+  FORALL_POINTS2( TO_TYPE, TYPE( num))
 
 FORALL_POINTS( TYPEDEF)
 
@@ -227,3 +233,4 @@ inline int to_int( int a)
   return( a);
 }
 
+/** @} */

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @defgroup constants Constants
+ *
+ * @{
+ */
 module Constants;
 
 export all;
@@ -113,3 +119,5 @@ external double  epidouble();
 external int     randmax();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/randmax.o"
+
+/** @} */
