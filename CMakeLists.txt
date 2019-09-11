@@ -8,13 +8,13 @@ PROJECT (sac-stdlib)
 SET (DLL_BUILD_DIR  "${PROJECT_BINARY_DIR}/lib")
 
 # For what targets we build modules
-SET (TARGETS            seq mt_pth  CACHE STRING "Build stdlib-jpeg for these targets")
+SET (TARGETS            seq mt_pth  CACHE STRING "Build stdlib for these targets")
 SET (SAC2C_EXEC                     CACHE STRING "A path to sac2c compiler")
 SET (LINKSETSIZE        "500"       CACHE STRING "Set a value for -linksetsize parameter of sac2c")
 SET (IS_RELEASE         FALSE       CACHE BOOL "Indicate if we are building with release version of SAC2C")
-SET (BUILDGENERIC       FALSE       CACHE BOOL "Do not use architecture specific optimisations (useful for package builds)")
 OPTION (FULLTYPES "Include types such as long and longlong" OFF)
 OPTION (BUILD_EXT "Build complete Stdlib with extra modules" ON)
+OPTION (BUILDGENERIC "Do not use architecture specific optimisations (useful for package builds)" OFF)
 
 SET (SAC2C_EXTRA_INC
      -DHAVE_CONFIG_H
@@ -36,15 +36,24 @@ IF (BUILD_EXT)
     LIST (APPEND SAC2C_CPP_INC -DEXT_STDLIB)
 ENDIF ()
 
-IF (BUILDGENERIC)
-    LIST (APPEND SAC2C_CPP_INC "-generic")
-ENDIF ()
-
 # Check whether sac2c is operational
 INCLUDE ("cmake-common/check-sac2c.cmake") # get SAC2C_VERSION
 INCLUDE ("cmake-common/misc-macros.cmake")
+INCLUDE ("cmake-common/check-sac2c-feature-support.cmake")
 INCLUDE ("cmake-common/generate-version-vars.cmake")
 
+# if building generically, we need to make sure sac2c supports this
+IF (BUILDGENERIC)
+    CHECK_SAC2C_SUPPORT_GENERIC_FLAG ()
+    IF (HAVE_GENERIC_FLAG)
+        LIST (APPEND SAC2C_CPP_INC "-generic")
+    ELSE ()
+        MESSAGE (STATUS "Generic-build disabled as sac2c does not support this!")
+        SET (BUILDGENERIC OFF)
+    ENDIF ()
+ENDIF ()
+
+# complete configuration now
 INCLUDE ("cmake/config.cmake")
 
 # For every target run CMakeLists.txt in src
