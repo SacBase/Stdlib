@@ -588,8 +588,8 @@ typ name( typ[*] arr_a)                                             \
 #define PROD( typ, postfix, zval, oval) REDUCE( prod, typ, *, oval)
 #define ALL REDUCE( all, bool, &, true)
 #define ANY REDUCE( any, bool, |, false)
-#define MAXVAL( typ, postfix, zval, oval) REDUCE( maxval, typ, max, max##typ())
-#define MINVAL( typ, postfix, zval, oval) REDUCE( minval, typ, min, min##typ())
+#define MAXVAL( typ, postfix, zval, oval) REDUCE( maxval, typ, max, min##typ())
+#define MINVAL( typ, postfix, zval, oval) REDUCE( minval, typ, min, max##typ())
 
 NUM( SUM)
 NUM( PROD)
