@@ -44,8 +44,8 @@ INCLUDE ("cmake-common/generate-version-vars.cmake")
 
 # if building generically, we need to make sure sac2c supports this
 IF (BUILDGENERIC)
-    CHECK_SAC2C_SUPPORT_FLAG ("-generic")
-    IF (HAVE_FLAG_GENERIC)
+    CHECK_SAC2C_SUPPORT_FLAG ("generic" "-generic")
+    IF (HAVE_FLAG_generic)
         LIST (APPEND SAC2C_CPP_INC "-generic")
     ELSE ()
         MESSAGE (STATUS "Generic-build disabled as sac2c does not support this!")
