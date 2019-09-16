@@ -1,16 +1,16 @@
 language: c
 sudo: required # we get a VM + SUDO
-dist: trusty # latest
+dist: xenial # latest
 
 # install dependencies
 before_install:
     # install dependecies for sac2c
     - sudo apt-get update -qq
-    - sudo apt-get install -qq libhwloc-dev uuid-dev uuid-runtime
-    # sanity check that cmake is the right version (should be 3.9)
+    - sudo apt-get install -qq uuid-dev uuid-runtime
+    # sanity check that cmake is the right version (should be 3.12)
     - cmake --version
     # install sac2c (always latest release)
-    - travis_retry wget --no-check-certificate --quiet -O sac2c.deb http://www.sac-home.org/packages/release/Ubl14/latest
+    - travis_retry wget --no-check-certificate --quiet -O sac2c.deb http://www.sac-home.org/packages/weekly/Ubl16/1.3.3-359-1/basic/sac2c-1.3.3-MijasCosta-359-g856d44-omnibus.deb
     - sudo dpkg --force-all -i sac2c.deb
     - sac2c -V
 
