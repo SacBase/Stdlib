@@ -14,9 +14,8 @@ build_task:
             git fetch origin pull/$CIRRUS_PR/head:pull/$CIRRUS_PR
             git reset --hard $CIRRUS_CHANGE_IN_REPO
         fi
-        # cirrus does not support recursive git clone, we do this manually
-        git submodule update --init --recursive --remote
     build_script:
+        - mkdir -p ~/.sac2crc
         - mkdir build && cd build
         - cmake -DFULLTYPES=ON -DLINKSETSIZE=250 ..
         # we need to test that make actually completed:
