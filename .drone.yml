@@ -3,15 +3,14 @@ name: build-sac-stdlib
 
 steps:
     - name: build
-      image: sacbuild/sac2c:1.3.3
+      image: sacbase/sac-compiler:1.3.3-359-1
       commands:
           # drone does not automatical pull tags (WTF not?)
           - git fetch --tags
           # drone does not support recursive git clone, we do this manually
           - git submodule update --init --recursive --remote
           - mkdir build && cd build
-          # XXX we don't build with fulltypes!
-          - cmake -DLINKSETSIZE=250 ..
+          - cmake -DFULLTYPES=ON -DLINKSETSIZE=250 ..
           # we need to test that make actually completed:
           - make -j3 2>&1 | tee build.log
           - if [ ${PIPESTATUS[0]} -ne 0 ]; then
