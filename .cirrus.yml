@@ -2,9 +2,20 @@ container:
     dockerfile: .cirrus_Dockerfile
 
 build_task:
-    submodule_checkout_script:
+    # set timeout so that we don't die halfway through build
+    timeout_in: 120m
+    # we need to explicitly use local-git and not cirrus go-git (cmake doesn't like it)
+    clone_script: |
+        if [ -z "$CIRRUS_PR" ]; then
+            git clone --recursive --branch=$CIRRUS_BRANCH https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
+            git reset --hard $CIRRUS_CHANGE_IN_REPO
+        else
+            git clone --recursive https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
+            git fetch origin pull/$CIRRUS_PR/head:pull/$CIRRUS_PR
+            git reset --hard $CIRRUS_CHANGE_IN_REPO
+        fi
         # cirrus does not support recursive git clone, we do this manually
-        - git submodule update --init --recursive --remote
+        git submodule update --init --recursive --remote
     build_script:
         - mkdir build && cd build
         - cmake -DFULLTYPES=ON -DLINKSETSIZE=250 ..
