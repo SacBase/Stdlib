@@ -1,0 +1,21 @@
+container:
+    dockerfile: .cirrus_Dockerfile
+
+build_task:
+    submodule_checkout_script:
+        # cirrus does not support recursive git clone, we do this manually
+        - git submodule update --init --recursive --remote
+    build_script:
+        - mkdir build && cd build
+        - cmake -DFULLTYPES=ON -DLINKSETSIZE=250 ..
+        # we need to test that make actually completed:
+        - make -j3 2>&1 | tee build.log
+        - if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "!!! ERROR detected in build !!!";
+            exit 1;
+          fi
+        - if [ $(grep -i 'warning' build.log | wc -l) -gt 0 ]; then
+            echo "+++ ${WARN_NUM} warnings detected +++";
+            grep -i 'warning' build.log;
+            exit 1;
+          fi
