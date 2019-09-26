@@ -12,18 +12,15 @@
 
 /*****************************************************************/
 
-int SACmkstemp(FILE **stream, char *template)
+int SACmkstemp(FILE **stream, char ** name, char *template)
 {
   int error=-1;
-  char *tmp;
   int filedesc;
 
-  tmp = SAC_MALLOC( sizeof( char) * strlen( template));
-  strcpy( tmp, template);
+  *name = SAC_MALLOC( sizeof( char) * strlen( template));
+  strcpy( *name, template);
   
-  filedesc=mkstemp(tmp);
-  
-  SAC_FREE( tmp);
+  filedesc=mkstemp(*name);
 
   if (filedesc == -1) {
     error = EIO;
