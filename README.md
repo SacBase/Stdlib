@@ -26,7 +26,7 @@ $ make -j4  #you should have roughly 2GB per thread :-)
 ```
 
 If you like you can also install the stdlib into `/usr/local` with `make
-install`, but this is unnessicary as `sac2c` will be able to find your stdlib
+install`, but this is  unnecessary  as `sac2c` will be able to find your stdlib
 build automatically.
 
 **NOTE:** *When pulling the latest commit, remember to run `git submodule
