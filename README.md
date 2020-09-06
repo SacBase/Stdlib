@@ -4,7 +4,7 @@ SaC standard library
 [![build status](https://github.com/SacBase/Stdlib/workflows/CI/badge.svg)](https://github.com/SacBase/Stdlib/actions?query=workflow%3ACI) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/SacBase/Stdlib/issues)
 
 This repository consists of SaC modules with basic functionality like
-arithmetic, stdio, etc; which together form a standard library of SaC
+arithmetic, stdio, etc; which together form the standard library of the SaC
 language.
 
 Build instructions
@@ -25,7 +25,7 @@ $ make -j4  #you should have roughly 2GB per thread :-)
 ```
 
 If you like you can also install the stdlib into `/usr/local` with `make
-install`, but this is  unnecessary  as `sac2c` will be able to find your stdlib
+install`, but this is _unnecessary_ as `sac2c` will be able to find your stdlib
 build automatically.
 
 **NOTE:** *When pulling the latest commit, remember to run `git submodule
@@ -52,3 +52,20 @@ When running CMake it is possible to pass the following variables:
   `longlong` (Default is `OFF`).
 * `-DBUILD_EXT=ON|OFF` --- build extended stdlib (see
   `cmake/source-core-ext.txt` for details) (Default is `ON`)
+
+Continuous Integration
+=====================
+
+We make use of Github Actions for our CI pipeline, building the standard library on different systems
+anytime there is a pull request.
+
+Currently we build on the following systems: `ubuntu-18.04` and `macos-10.15`.
+
+Please look at `.github/workflows/` for more exact details on what we do.
+
+Licensing
+=========
+
+This project is open-source, contributions are welcome! Note that no warranty is given.
+
+Please look at `LICENSE.txt` for further details.
