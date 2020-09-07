@@ -1,11 +1,19 @@
-name: Test on PR
+# The following configuration is used to setup GitHub Actions
+# for building (and running unit tests) on pushes and PRs.
+# At the moment, we build on two runner types: Linux and MacOS,
+# specific version information can be found further below.
+name: Build On Changes
 
+# run action on all pushes and pull_request for all branches
 on: [push, pull_request]
-  #  push:
-  #    branches: [master]
-  #  pull_request:
-  #    branches: [master]
 
+# high-level constants
+env:
+  BASE_URL: https://gitlab.science.ru.nl/sac-group/sac-packages/-/raw/master/packages/weekly
+  VERS: 1.3.3-383-1
+  SPKG: sac2c-1.3.3-MijasCosta-383-g6ea12-omnibus
+
+# action listing, all jobs run in parallel
 jobs:
   build_linux:
     runs-on: ubuntu-18.04
@@ -19,8 +27,8 @@ jobs:
           submodules: 'recursive'
       - name: Install sac2c-basic
         run: |
-          wget https://gitlab.science.ru.nl/sac-group/sac-packages/-/raw/master/packages/weekly/Ubl18/1.3.3-383-1/basic/sac2c-1.3.3-MijasCosta-383-g6ea12-omnibus.deb
-          sudo apt install ./sac2c-1.3.3-MijasCosta-383-g6ea12-omnibus.deb
+          wget ${BASE_URL}/Ubl18/${VERS}/basic/${SPKG}.deb
+          sudo apt install ./${SPKG}.deb
           sac2c -V
       - name: Create build dir
         run: |
@@ -46,8 +54,8 @@ jobs:
           submodules: 'recursive'
       - name: Install sac2c-basic
         run: |
-          wget https://gitlab.science.ru.nl/sac-group/sac-packages/-/raw/master/packages/weekly/MacOS/1.3.3-383-1/basic/sac2c-1.3.3-MijasCosta-383-g6ea12-omnibus.pkg
-          sudo installer -pkg ./sac2c-1.3.3-MijasCosta-383-g6ea12-omnibus.pkg -target /
+          wget ${BASE_URL}/MacOS/${VERS}/basic/${SPKG}.pkg
+          sudo installer -pkg ./${SPKG}.pkg -target /
           sac2c -V
       - name: Create build dir
         run: |
@@ -56,9 +64,8 @@ jobs:
       - name: Configure build-system
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake -DLINKSETSIZE=200 -DFULLTYPES=ON $GITHUB_WORKSPACE
+        run: cmake -DLINKSETSIZE=200 -DFULLTYPES=ON ${GITHUB_WORKSPACE}
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: cmake --build . -j 2
-
