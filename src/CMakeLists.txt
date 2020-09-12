@@ -78,7 +78,7 @@ ADD_CUSTOM_COMMAND (
     COMMAND ${BISON_EXECUTABLE} --defines  "${BIS_SRC}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}"
     DEPENDS "${BIS_SRC}"
-    COMMENT "Running ${BISON_EXECUTABLE} on `${LEX_SRC}'")
+    COMMENT "Running ${BISON_EXECUTABLE} on `${BIS_SRC}'")
 
 #flags needed for OSX (clang) as the generated code generates warning otherwise:
 SET (FLEX_SAC2C_CC_FLAGS "")
