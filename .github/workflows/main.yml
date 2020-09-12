@@ -5,7 +5,7 @@
 name: Build On Changes
 
 # run action on all pushes and pull_request for all branches
-on: [push, pull_request]
+on: [pull_request]
 
 # high-level constants
 env:
