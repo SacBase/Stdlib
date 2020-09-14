@@ -78,7 +78,7 @@ ADD_CUSTOM_COMMAND (
     COMMAND ${BISON_EXECUTABLE} --defines  "${BIS_SRC}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}"
     DEPENDS "${BIS_SRC}"
-    COMMENT "Running ${BISON_EXECUTABLE} on `${LEX_SRC}'")
+    COMMENT "Running ${BISON_EXECUTABLE} on `${BIS_SRC}'")
 
 #flags needed for OSX (clang) as the generated code generates warning otherwise:
 SET (FLEX_SAC2C_CC_FLAGS "")
@@ -345,7 +345,7 @@ ADD_CUSTOM_TARGET (${TARGET}-all-modules ALL)
 # For every C source, compile an object file maintaining the right location
 # in the binary dir so that sac files can pick it up.
 # XXX do we ever pass some extra flags, etc to C files?
-FOREACH(name ${C_DEPS_SRC})
+FOREACH (name ${C_DEPS_SRC})
   SET (src "${CMAKE_CURRENT_SOURCE_DIR}/${name}")
 
   GET_FILENAME_COMPONENT (dir ${name} DIRECTORY)
@@ -357,10 +357,12 @@ FOREACH(name ${C_DEPS_SRC})
   # the source file was.
   FILE (MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dir}")
 
+  STRING (FIND "${name}" "FibreIO" _is_fibreio)
   ADD_CUSTOM_COMMAND (
     OUTPUT "${dst}"
     MAIN_DEPENDENCY "${src}"
     IMPLICIT_DEPENDS C "${src}"
+    DEPENDS "$<$<NOT:$<EQUAL:-1,${_is_fibreio}>>:${BIS_OUTH}>"
     COMMAND
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
@@ -369,7 +371,7 @@ FOREACH(name ${C_DEPS_SRC})
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
     COMMENT "Generating ${dst} for target `${TARGET}'"
   )
-ENDFOREACH(name)
+ENDFOREACH (name)
 
 
 # Make a directory for sac2c output
