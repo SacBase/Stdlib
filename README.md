@@ -1,7 +1,7 @@
 SaC standard library
 ====================
 
-[![build status](https://github.com/SacBase/Stdlib/workflows/CI/badge.svg)](https://github.com/SacBase/Stdlib/actions?query=workflow%3ACI) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/SacBase/Stdlib/issues)
+[![build status](https://github.com/SacBase/Stdlib/workflows/Build%20On%20Changes/badge.svg)](https://github.com/SacBase/Stdlib/actions?query=workflow%3A"Build+On+Changes") [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/SacBase/Stdlib/issues)
 
 This repository consists of SaC modules with basic functionality like
 arithmetic, stdio, etc; which together form the standard library of the SaC
