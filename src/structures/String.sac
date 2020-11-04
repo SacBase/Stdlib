@@ -17,11 +17,13 @@ external typedef string;
     #pragma linkobj "src/String/copystr.o"
 
 external string to_string(char[.] A, int LENGTH);
+    #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/tostring.o"
     /* Convert character array to string. */
 
 external string strmod(string S, int P, char C);
+    #pragma linksign [1,2,3,4]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/strmod.o"
     /* Change position P of string S to character C. */
@@ -32,6 +34,7 @@ external string strins(string S1, int P, string S2);
     /* Insert string S2 into string S1 starting at position P. */
 
 external string strovwt(string S1, int P, string S2);
+    #pragma linksign [1,2,3,4]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/strovwt.o"
     /* Overwrite string S2 with string S1 starting at position P. */
@@ -99,6 +102,7 @@ external int strlen(string S);
 
 
 external string strtake(string S, int N);
+    #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/strtake.o"
     /* Return the first N characters of string S. */
@@ -144,6 +148,7 @@ external string sscanf_str(string S, string FORMAT);
 
 
 external int strchr(string S, char C); 
+    #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strchr.o"
     #pragma linkname "SACstrchr"
     /* Return the position of the first occurrence of character C
