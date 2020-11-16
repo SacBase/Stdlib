@@ -113,6 +113,7 @@ external int[.,.] readPGMdata( PGM& pgm );
     #pragma linkobj  "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_read_data"
     #pragma refcounting [0]
+    #pragma linksign [1,2]
     /*
      * Read the pixel data from file and return it as an image.
      */
