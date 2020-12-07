@@ -55,6 +55,12 @@ jobs:
           wget ${BASE_URL}/MacOS/sac2c-basic.pkg
           sudo installer -pkg ./sac2c-basic.pkg -target /
           sac2c -V
+      - name: Set XCode version
+        run: |
+          # this ensures we are using the same Xcode version that we compiled sac2c against
+          sudo xcode-select -switch "/Applications/Xcode_12.app"
+          # we need to rewrite sysroot path to use specific Xcode version
+          sudo find /usr/local/share -type f -name 'sac2crc_*' -execdir sed -i.bak 's/Xcode\.app/Xcode_12\.app/g' {} \;
       - name: Create build dir
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
