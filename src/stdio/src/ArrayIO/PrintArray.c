@@ -15,20 +15,20 @@
 #undef SAC_DO_DISTMEM
 
 
-#define INT    		1
-#define FLOAT  		2
-#define DOUBLE 		3
-#define CHAR   		4
-#define BOOL   		5
-#define BYTE    	6
-#define SHORT    	7
-#define LONG    	8
-#define LONGLONG  9
-#define UBYTE    	10
-#define USHORT    11
-#define UINT   		12
-#define ULONG    	13
-#define ULONGLONG 14
+#define INT        1
+#define FLOAT      2
+#define DOUBLE     3
+#define CHAR       4
+#define BOOL       5
+#define BYTE       6
+#define SHORT      7
+#define LONG       8
+#define LONGLONG   9
+#define UBYTE      10
+#define USHORT     11
+#define UINT       12
+#define ULONG      13
+#define ULONGLONG  14
 
 /*
  * Code generation macros
@@ -86,7 +86,7 @@ void ARRAYIO__Print##name_prefix##ArrayFormat( FILE *stream, string format, int 
                                                int * shp, ctype * a)                   \
 {                                                                                      \
   PrintArr(stream, constant, format, dim, shp, a);                                     \
-}                                                                
+}
 
 #endif /* defined(SAC_BACKEND_DISTMEM) */
 
@@ -195,12 +195,12 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
       }
    fprintf(stream,"\n");
 
-  } else {
+  } else if (dim > 0) {
     if (element_count == 0) {
       fprintf(stream, "<>\n");
     } else {
 
-      index=(int *)SAC_MALLOC(sizeof(int)*dim);
+      index = SAC_MALLOC (dim * sizeof (int));
       for (i=0; i<dim; i++) {
         index[i]=0;
       }
@@ -221,23 +221,23 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
         while (index[n] < shp[dim-1]) {
           switch(typeflag) {
             PRINT_CASE( BOOL, int, int) /* TODO: Isn't BOOL compiled to bool in the meantime? */
-            PRINT_CASE( BYTE, char, char) 
-            PRINT_CASE( SHORT, short, short) 
-            PRINT_CASE( INT, int, int) 
-            PRINT_CASE( LONG, long, long) 
-            PRINT_CASE( LONGLONG, long long, long long) 
-            PRINT_CASE( UBYTE, unsigned char, unsigned char) 
-            PRINT_CASE( USHORT, unsigned short, unsigned short) 
-            PRINT_CASE( UINT, unsigned int, unsigned int) 
-            PRINT_CASE( ULONG, unsigned long, unsigned long) 
-            PRINT_CASE( ULONGLONG, unsigned long long, unsigned long long) 
-            PRINT_CASE( FLOAT, float, double) 
-            PRINT_CASE( DOUBLE, double, double) 
+            PRINT_CASE( BYTE, char, char)
+            PRINT_CASE( SHORT, short, short)
+            PRINT_CASE( INT, int, int)
+            PRINT_CASE( LONG, long, long)
+            PRINT_CASE( LONGLONG, long long, long long)
+            PRINT_CASE( UBYTE, unsigned char, unsigned char)
+            PRINT_CASE( USHORT, unsigned short, unsigned short)
+            PRINT_CASE( UINT, unsigned int, unsigned int)
+            PRINT_CASE( ULONG, unsigned long, unsigned long)
+            PRINT_CASE( ULONGLONG, unsigned long long, unsigned long long)
+            PRINT_CASE( FLOAT, float, double)
+            PRINT_CASE( DOUBLE, double, double)
             PRINT_CASE( CHAR, char, char)  /* TODO: Isn't CHAR compiled to unsigned char? */
           }
 
           index[n]++;
-        }        
+        }
 
         if (dim%2 == 1) {
           index[n] = 0;
@@ -247,7 +247,7 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
         else {
           fprintf(stream, "| ");
         }
-  
+
         while(( n>0) && (index[n]>=(shp[n]-1))) {
           index[n]=0;
           n -= 2;
@@ -268,8 +268,9 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
       SAC_FREE(index);
     } /* if (element_count == 0) */
+  } else {
+    SAC_RuntimeError ("Dimension is less than 0, aborting!");
   }
-
 }
 
 
