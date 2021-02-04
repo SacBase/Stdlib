@@ -83,12 +83,12 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
       }
    fprintf(stream,"\n");
 
-  } else {
+  } else if (dim > 0) {
     if (element_count == 0) {
       fprintf(stream, "<>\n");
     } else {
 
-      index=(int *)SAC_MALLOC(sizeof(int)*dim);
+      index = SAC_MALLOC(dim * sizeof(int));
       for (i=0; i<dim; i++) {
         index[i]=0;
       }
@@ -158,6 +158,8 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
       SAC_FREE(index);
     } /* if (element_count == 0) */
+  } else {
+    SAC_RuntimeError ("Dimension is less than 0, aborting!");
   }
 
 }
