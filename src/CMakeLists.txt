@@ -331,6 +331,8 @@ ELSE ()
     SET (SAC_SRC  ${SAC_CORE_SRC})
     SET (XSAC_SRC ${XSAC_CORE_SRC})
 ENDIF ()
+SET (ALL_SAC_SRC "${SAC_SRC};${XSAC_SRC}")
+MESSAGE (DEBUG "Compiled together all source paths: ${ALL_SAC_SRC}")
 
 # This is the main target of the entire build, though it all modules are
 # built for all backends (seq, mt_pth, etc.) - depending on config, only
@@ -377,6 +379,21 @@ ENDFOREACH (name)
 # Make a directory for sac2c output
 FILE (MAKE_DIRECTORY "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}")
 
+# This functions tries to match a module name with its stored
+# path information in a list. It returns on the first result, or
+# returns empty.
+FUNCTION (MATCH_NAME_IN_LIST list name ret)
+    #MESSAGE (DEBUG "Searching for ${name} in list...")
+    FOREACH (item ${list})
+        #MESSAGE (DEBUG "   checking against ${item}")
+        IF ("${item}" MATCHES "${name}\.(sac|xsac)")
+            #MESSAGE (DEBUG "   we have a match!")
+            SET (${ret} ${item} PARENT_SCOPE)
+            BREAK ()
+        ENDIF ()
+    ENDFOREACH ()
+ENDFUNCTION ()
+
 # For every sac file, compile Tree and Mod files.
 FOREACH (name ${SAC_SRC})
     SET (src "${CMAKE_CURRENT_SOURCE_DIR}/${name}")
@@ -389,8 +406,25 @@ FOREACH (name ${SAC_SRC})
     SET (tree
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
-    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
+    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" target_list objs_list source_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
+    SET (src_deps)
+    FOREACH (src_name ${source_list})
+        MESSAGE (DEBUG "Searching for ${src_name} in source path list...")
+        MATCH_NAME_IN_LIST ("${ALL_SAC_SRC}" "${src_name}" src_path)
+        IF (src_path)
+            MESSAGE (DEBUG "   found ${src_path}")
+            LIST (APPEND src_deps "${CMAKE_CURRENT_SOURCE_DIR}/${src_path}")
+        ELSE ()
+            MESSAGE (FATAL_ERROR "Unable to find path to ${src_name} in sources!")
+        ENDIF ()
+    ENDFOREACH ()
+    LIST (APPEND deps_list ${src_deps} ${objs_list} ${target_list})
+    UNSET (src_deps)
+    UNSET (objs_list)
+    UNSET (source_list)
+    UNSET (target_list)
+    MESSAGE (DEBUG "For ${name} the computed dependences are: ${deps_list}")
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
@@ -400,7 +434,6 @@ FOREACH (name ${SAC_SRC})
     ELSE ()
         ADD_CUSTOM_TARGET (${TARGET}-module-${dst} DEPENDS "${mod}" "${tree}")
     ENDIF ()
-
     ADD_DEPENDENCIES (${TARGET}-all-modules ${TARGET}-module-${dst})
 
     ADD_CUSTOM_COMMAND (
@@ -409,7 +442,8 @@ FOREACH (name ${SAC_SRC})
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
-        DEPENDS ${targets_list}
+        MAIN_DEPENDENCY "${src}"
+        DEPENDS ${deps_list}
         COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
@@ -424,6 +458,7 @@ FOREACH (name ${SAC_SRC})
             DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
             COMPONENT trees)
     ENDIF ()
+    UNSET (deps_list)
 ENDFOREACH (name)
 
 # For every xsac file, compile Tree and Mod files.
@@ -438,8 +473,25 @@ FOREACH (name ${XSAC_SRC})
     SET (tree
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
-    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
+    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" target_list objs_list source_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
+    SET (src_deps)
+    FOREACH (src_name ${source_list})
+        MESSAGE (DEBUG "Searching for ${src_name} in source path list...")
+        MATCH_NAME_IN_LIST ("${ALL_SAC_SRC}" "${src_name}" src_path)
+        IF (src_path)
+            MESSAGE (DEBUG "   found ${src_path}")
+            LIST (APPEND src_deps "${CMAKE_CURRENT_SOURCE_DIR}/${src_path}")
+        ELSE ()
+            MESSAGE (FATAL_ERROR "Unable to find path to ${src_name} in sources!")
+        ENDIF ()
+    ENDFOREACH ()
+    LIST (APPEND deps_list ${src_deps} ${objs_list} ${target_list})
+    UNSET (src_deps)
+    UNSET (objs_list)
+    UNSET (source_list)
+    UNSET (target_list)
+    MESSAGE (DEBUG "For ${name} the computed dependences are: ${deps_list}")
 
     # Make sure that we have a directory we are changing to.
     FILE (MAKE_DIRECTORY "${dir}")
@@ -468,7 +520,8 @@ FOREACH (name ${XSAC_SRC})
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${dir}/${dst}.sac"
         WORKING_DIRECTORY
             "${dir}"
-        DEPENDS "${dir}/${dst}.sac" ${targets_list}
+        MAIN_DEPENDENCY "${dir}/${dst}.sac"
+        DEPENDS ${deps_list}
         COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
@@ -483,4 +536,5 @@ FOREACH (name ${XSAC_SRC})
             DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
             COMPONENT trees)
     ENDIF ()
+    UNSET (deps_list)
 ENDFOREACH (name)
