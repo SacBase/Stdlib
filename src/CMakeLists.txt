@@ -331,6 +331,7 @@ ELSE ()
     SET (SAC_SRC  ${SAC_CORE_SRC})
     SET (XSAC_SRC ${XSAC_CORE_SRC})
 ENDIF ()
+SET (ALL_SAC_SRC "${SAC_SRC};${XSAC_SRC}")
 
 # This is the main target of the entire build, though it all modules are
 # built for all backends (seq, mt_pth, etc.) - depending on config, only
@@ -389,7 +390,7 @@ FOREACH (name ${SAC_SRC})
     SET (tree
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
-    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
+    RESOLVE_SAC_DEPS_AS_TARGETS_SOURCES ("${name}" "<TARGET>-module-<NAME>" "${ALL_SAC_SRC}" deps_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
 
     # Make sure that we have a directory we are changing to.
@@ -409,7 +410,8 @@ FOREACH (name ${SAC_SRC})
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
-        DEPENDS ${targets_list}
+        MAIN_DEPENDENCY "${src}"
+        DEPENDS ${deps_list}
         COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
@@ -438,7 +440,7 @@ FOREACH (name ${XSAC_SRC})
     SET (tree
         "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
-    RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" targets_list)
+    RESOLVE_SAC_DEPS_AS_TARGETS_SOURCES ("${name}" "<TARGET>-module-<NAME>" "${ALL_SAC_SRC}" deps_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
 
     # Make sure that we have a directory we are changing to.
@@ -468,7 +470,8 @@ FOREACH (name ${XSAC_SRC})
             ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} -o ${DLL_BUILD_DIR} "${dir}/${dst}.sac"
         WORKING_DIRECTORY
             "${dir}"
-        DEPENDS "${dir}/${dst}.sac" ${targets_list}
+        MAIN_DEPENDENCY "${dir}/${dst}.sac"
+        DEPENDS ${deps_list}
         COMMENT "Building module `${dst}' for target `${TARGET}'")
 
     # Install compiled Tree/Mod parts of the compiled module
