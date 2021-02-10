@@ -529,17 +529,20 @@ inline char[.] format(type y, int[2] w)			\
   return( z);						\
 }							
 
-FORMAT_INT_SUBTYPES(byte)
-FORMAT_INT_SUBTYPES(ubyte)
-FORMAT_INT_SUBTYPES(short)
-FORMAT_INT_SUBTYPES(ushort)
-// I have my doubts about the following.
-FORMAT_INT_SUBTYPES(uint)
+#ifdef NEEDSTYPECONVERSIONS
+// These will not work until somebody writes suitable non-scalar type
+// conversion functions for the following.
+// BUG !! needs type conversions to int for these...  FORMAT_INT_SUBTYPES(byte)
+// BUG !! FORMAT_INT_SUBTYPES(ubyte)
+// BUG !! FORMAT_INT_SUBTYPES(short)
+// BUG !! FORMAT_INT_SUBTYPES(ushort)
+// BUG !! FORMAT_INT_SUBTYPES(uint)
 FORMAT_INT_SUBTYPES(int)
 FORMAT_INT_SUBTYPES(longlong)
 FORMAT_INT_SUBTYPES(ulonglong)
 FORMAT_INT_SUBTYPES(long)
 FORMAT_INT_SUBTYPES(ulong)
+#endif // NEEDSTYPECONVERSIONS
 
 #endif // FULLTYPES
 
