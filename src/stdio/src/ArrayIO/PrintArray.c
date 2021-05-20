@@ -151,7 +151,7 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
   if( dim == 0) {
     switch(typeflag) {
       case BOOL:
-        fprintf(stream, format , ((int *)a)[0]);  /* TODO: Isn't BOOL compiled to bool in the meantime? */
+        fprintf(stream, format , ((bool *)a)[0]);
         break;
       case BYTE:
         fprintf(stream, format , ((char *)a)[0]);
@@ -220,7 +220,7 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
         while (index[n] < shp[dim-1]) {
           switch(typeflag) {
-            PRINT_CASE( BOOL, int, int) /* TODO: Isn't BOOL compiled to bool in the meantime? */
+            PRINT_CASE( BOOL, bool, bool)
             PRINT_CASE( BYTE, char, char)
             PRINT_CASE( SHORT, short, short)
             PRINT_CASE( INT, int, int)
