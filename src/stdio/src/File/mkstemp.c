@@ -23,6 +23,9 @@ int SACmkstemp ( SAC_ND_PARAM_out_nodesc (filep_nt, FILE*),
   SAC_ND_DECL__DATA (str_nt, char*, )
   SAC_ND_DECL__DATA (filep_nt, FILE*, )
 
+  // initialise filep
+  SAC_ND_A_FIELD (filep_nt) = NULL;
+
   // alloc string descriptor and string
   SAC_ND_ALLOC__DESC (str_nt, 0)
   SAC_ND_SET__RC (str_nt, 1)
