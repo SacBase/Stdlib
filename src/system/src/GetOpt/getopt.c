@@ -25,10 +25,10 @@
 int SACargc( void);
 char *SACargv(int n);
 
-int optind = 1;
-int opterr = 1;
-int optopt;
-char *optarg;
+static int optind = 1;
+static int opterr = 1;
+static int optopt;
+static char *optarg;
 
 static int argind = 1;
 
