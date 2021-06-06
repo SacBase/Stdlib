@@ -192,128 +192,151 @@ inline void fprint(TermFile &stream, bool n, int mode)
   }
 }
 
-#define SHOW_TERMFILE_S_( typ)                       \
+#define SHOW_TERMFILE_S_( typ, format)               \
 inline void show( typ n)                             \
 {                                                    \
-  fprint(TermFile::stdout, n);                       \
+  TermFile::printf(QUOTE(%format\n), n);             \
 }
 
-SHOW_TERMFILE_S_(int)
-SHOW_TERMFILE_S_(long)
-SHOW_TERMFILE_S_(char)
-SHOW_TERMFILE_S_(float)
-SHOW_TERMFILE_S_(double)
-SHOW_TERMFILE_S_(bool)
-SHOW_TERMFILE_S_(string)
+SHOW_TERMFILE_S_(int, d)
+SHOW_TERMFILE_S_(long, ld)
+SHOW_TERMFILE_S_(string, s)
 
 #ifdef FULLTYPES
-SHOW_TERMFILE_S_(short)
-SHOW_TERMFILE_S_(byte)
-SHOW_TERMFILE_S_(longlong)
-SHOW_TERMFILE_S_(ushort)
-SHOW_TERMFILE_S_(ubyte)
-SHOW_TERMFILE_S_(uint)
-SHOW_TERMFILE_S_(ulong)
-SHOW_TERMFILE_S_(ulonglong)
+SHOW_TERMFILE_S_(short, hd)
+SHOW_TERMFILE_S_(byte, x)
+SHOW_TERMFILE_S_(longlong, lld)
+SHOW_TERMFILE_S_(ushort, hu)
+SHOW_TERMFILE_S_(ubyte, X)
+SHOW_TERMFILE_S_(uint, u)
+SHOW_TERMFILE_S_(ulong, lu)
+SHOW_TERMFILE_S_(ulonglong, llu)
 #endif /* FULLTYPES */
 
-#define PRINT_TERMFILE_S_(typ, format)               \
+/* special definitions of show for char, float, double, and bool */
+inline void show(char n)
+{
+  TermFile::printf("'%c'\n", n);
+}
+
+inline void show(float n)
+{
+  TermFile::printf("%g\n", tod(n));
+}
+
+inline void show(float n, int prec)
+{
+  TermFile::printf("%.*g\n", prec, tod(n));
+}
+
+inline void show(double n)
+{
+  TermFile::printf("%g\n", n);
+}
+
+inline void show(double n, int prec)
+{
+  TermFile::printf("%.*g\n", prec, n);
+}
+
+inline void show(bool n)
+{
+  TermFile::printf("%s\n", n ? "true" : "false");
+}
+
+inline void show(bool n, int mode)
+{
+  if (n)
+  {
+    if (mode==2)
+    {
+      TermFile::printf("true\n");
+    }
+    else
+    {
+      if (mode==1)
+      {
+        TermFile::printf("t\n");
+      }
+      else
+      {
+        TermFile::printf("1\n");
+      }
+    }
+  }
+  else
+  {
+    if (mode==2)
+    {
+      TermFile::printf("false\n");
+    }
+    else
+    {
+      if (mode==1)
+      {
+        TermFile::printf("f\n");
+      }
+      else
+      {
+        TermFile::printf("0\n");
+      }
+    }
+  }
+}
+
+/* for print we reuse show implementation above, notice that
+ * we add a header *and* a preceding space to the output of show.
+ */
+#define PRINT_TERMFILE_S_( typ)                      \
 inline void print( typ n)                            \
 {                                                    \
-  TermFile::printf("Dimension:  0\nShape    : < >\n");\
-  TermFile::printf( " " QUOTE(%format\n), n);        \
+  TermFile::printf("Dimension:  0\n"                 \
+                   "Shape    : < >\n"                \
+                   " ");                             \
+  show (n);                                          \
 }
 
-PRINT_TERMFILE_S_(int, d)
-PRINT_TERMFILE_S_(long, ld)
-PRINT_TERMFILE_S_(string, s)
+PRINT_TERMFILE_S_(int)
+PRINT_TERMFILE_S_(long)
+PRINT_TERMFILE_S_(float)
+PRINT_TERMFILE_S_(double)
+PRINT_TERMFILE_S_(char)
+PRINT_TERMFILE_S_(bool)
+PRINT_TERMFILE_S_(string)
 
 #ifdef FULLTYPES
-PRINT_TERMFILE_S_(short, hd)
-PRINT_TERMFILE_S_(byte, x)
-PRINT_TERMFILE_S_(longlong, lld)
-PRINT_TERMFILE_S_(ushort, hu)
-PRINT_TERMFILE_S_(ubyte, X)
-PRINT_TERMFILE_S_(uint, u)
-PRINT_TERMFILE_S_(ulong, lu)
-PRINT_TERMFILE_S_(ulonglong, llu)
+PRINT_TERMFILE_S_(short)
+PRINT_TERMFILE_S_(byte)
+PRINT_TERMFILE_S_(longlong)
+PRINT_TERMFILE_S_(ushort)
+PRINT_TERMFILE_S_(ubyte)
+PRINT_TERMFILE_S_(uint)
+PRINT_TERMFILE_S_(ulong)
+PRINT_TERMFILE_S_(ulonglong)
 #endif /* FULLTYPES */
-
-void print(char c)
-{
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" '%c'\n", c);
-}
-
-inline void print(float n)
-{
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %g\n", tod(n));
-}
 
 inline void print(float n, int prec)
 {
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %.*g\n", prec, tod(n));
-}
-
-inline void print(double n)
-{
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %g\n", n);
+  TermFile::printf("Dimension:  0\n"
+                   "Shape    : < >\n"
+                   " ");
+  show (n, prec);
 }
 
 inline void print(double n, int prec)
 {
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %.*g\n", prec, n);
-}
-
-inline void print(bool n)
-{
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  TermFile::printf(" %s\n", n ? "true" : "false");
+  TermFile::printf("Dimension:  0\n"
+                   "Shape    : < >\n"
+                   " ");
+  show (n, prec);
 }
 
 inline void print(bool n, int mode)
 {
-  TermFile::printf("Dimension:  0\nShape    : < >\n");
-  if (n)
-  {
-     if (mode==2)
-     {
-	TermFile::printf(" true\n");
-     }
-     else
-     {
-       if (mode==1)
-       {
-	 TermFile::printf(" t\n");
-       }
-       else
-       {
-	 TermFile::printf(" 1\n");
-       }
-     }
-  }
-  else
-  {
-     if (mode==2)
-     {
-	TermFile::printf(" false\n");
-     }
-     else
-     {
-       if (mode==1)
-       {
-	 TermFile::printf(" f\n");
-       }
-       else
-       {
-	 TermFile::printf(" 0\n");
-       }
-     }
-  }
+  TermFile::printf("Dimension:  0\n"
+                   "Shape    : < >\n"
+                   " ");
+  show (n, mode);
 }
 
 #define FSCAN_FILE_S_(typ, format)                   \
