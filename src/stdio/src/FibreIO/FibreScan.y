@@ -148,6 +148,13 @@ extern int yynerrs;
  */
 #define YYMAXDEPTH 1000000
 
+/*
+ * Make sure to indicate the yylval is defined externally, otherwise
+ * we get warnings from Clang. This definition needs to be here so that
+ * macro YYSTYPE is defined (via %union above).
+ */
+extern YYSTYPE yylval;
+
 %}
 
 
