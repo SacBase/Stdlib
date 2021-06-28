@@ -9,7 +9,7 @@ on: [pull_request]
 
 # high-level constants
 env:
-  BASE_URL: https://gitlab.science.ru.nl/sac-group/sac-packages/-/raw/master/latest/weekly
+  BASE_URL: https://gitlab.sac-home.org/sac-group/sac-packages/-/raw/master/latest/weekly
 
 # action listing, all jobs run in parallel
 jobs:
