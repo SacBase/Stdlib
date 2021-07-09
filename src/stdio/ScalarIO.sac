@@ -192,36 +192,41 @@ inline void fprint(TermFile &stream, bool n, int mode)
   }
 }
 
-#define SHOW_TERMFILE_S_( typ)                       \
+// show( scalar) expansions. These are for ISO APL Standard N8485
+#define SHOW_TERMFILE_S_( typ, fmt)                  \
 inline void show( typ n)                             \
 {                                                    \
-  fprint(TermFile::stdout, n);                       \
+  TermFile::printf( QUOTE(%fmt\n), n);               \
 }
+  //TermFile::printf("%s\n", to_string( format(n)));
+  // Try cheap and cheerful, but we may need custom formatting
 
-SHOW_TERMFILE_S_(int)
-SHOW_TERMFILE_S_(long)
-SHOW_TERMFILE_S_(char)
-SHOW_TERMFILE_S_(float)
-SHOW_TERMFILE_S_(double)
-SHOW_TERMFILE_S_(bool)
-SHOW_TERMFILE_S_(string)
+SHOW_TERMFILE_S_(int, d)
+SHOW_TERMFILE_S_(long, ld)
+SHOW_TERMFILE_S_(char, c)
+
+SHOW_TERMFILE_S_(float, g)
+SHOW_TERMFILE_S_(double, g)
+SHOW_TERMFILE_S_(bool, d)
+SHOW_TERMFILE_S_(string, s)
 
 #ifdef FULLTYPES
-SHOW_TERMFILE_S_(short)
-SHOW_TERMFILE_S_(byte)
-SHOW_TERMFILE_S_(longlong)
-SHOW_TERMFILE_S_(ushort)
-SHOW_TERMFILE_S_(ubyte)
-SHOW_TERMFILE_S_(uint)
-SHOW_TERMFILE_S_(ulong)
-SHOW_TERMFILE_S_(ulonglong)
+SHOW_TERMFILE_S_(short, hd)
+SHOW_TERMFILE_S_(byte, x)
+SHOW_TERMFILE_S_(longlong, lld)
+SHOW_TERMFILE_S_(ushort, hu)
+SHOW_TERMFILE_S_(ubyte, X)
+SHOW_TERMFILE_S_(uint, u)
+SHOW_TERMFILE_S_(ulong, lu)
+SHOW_TERMFILE_S_(ulonglong, llu)
 #endif /* FULLTYPES */
 
-#define PRINT_TERMFILE_S_(typ, format)               \
-inline void print( typ n)                            \
-{                                                    \
-  TermFile::printf("Dimension:  0\nShape    : < >\n");\
-  TermFile::printf( " " QUOTE(%format\n), n);        \
+
+#define PRINT_TERMFILE_S_(typ, fmt)                    \
+inline void print( typ n)                              \
+{                                                      \
+  TermFile::printf("Dimension:  0\nShape    : < >\n"); \
+  TermFile::printf( " " QUOTE(%fmt\n), n);             \
 }
 
 PRINT_TERMFILE_S_(int, d)
@@ -237,7 +242,7 @@ PRINT_TERMFILE_S_(ubyte, X)
 PRINT_TERMFILE_S_(uint, u)
 PRINT_TERMFILE_S_(ulong, lu)
 PRINT_TERMFILE_S_(ulonglong, llu)
-#endif /* FULLTYPES */
+#endif // FULLTYPES
 
 void print(char c)
 {
