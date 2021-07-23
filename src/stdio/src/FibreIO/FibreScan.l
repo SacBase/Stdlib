@@ -6,6 +6,8 @@
 #include <strings.h>
 #include <errno.h>
 
+#define yylval FibreScanlval
+
 #include "FibreScan.tab.h"
 extern int FibreScanparse( void);
 
