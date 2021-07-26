@@ -11,16 +11,16 @@ export {format};
 
 /********************************************************************************
  *
- * Array formatting functions
- *  These functions return character representations of SAC arrays
+ * APL Array formatting functions
+ *  These functions generate character representations of SAC arrays for APL-based code.
  *  The functions come in several classes:
- *  	Default formatting: Array elements will be formatted to minimum width 
+ *  	Default formatting: Array elements are formatted to the minimum width
  * 	that does not lose precision.
- *      Defined formatting to specified precision, p: Array elements will be
+ *      Defined formatting to specified precision, p: Array elements are
  *      formatted to p significant digits.
- *  	Defined formatting: Array elements will be formatted to specified 
- *	precision and width. If result does not fit within width, 
- *	that element will be replaced by '*'.
+ *  	Defined formatting: Array elements are formatted to specified
+ *	precision and width. If a result element does not fit within width,
+ *	that element is replaced by '*'.
  *
  ********************************************************************************/
 
@@ -31,10 +31,10 @@ export {format};
  *
  ********************************************************************************/
 
-char[.] formatrow(int[.] widths, int[.] m)                      
-{ /* utility function for formatting a int vector to widths */        
- z = genarray([(sum(widths+1)-1)], ' ');                              
- /* Can't use WL because shapes differ */                               
+char[.] formatrow(int[.] widths, int[.] m)
+{ // utility function for formatting a int vector to widths
+ z = genarray([(sum(widths+1)-1)], ' ');
+ // Can't use WL because widths may differ
  sink = 0;                                                              
  for(i=0; i < sel([0], shape(m)); i++) {                               
 	curm = sel([i], m);                                           
@@ -51,11 +51,11 @@ char[.] formatrow(int[.] widths, int[.] m)
  return(z);                                                            
 }
 
-int[*] pmtl( int[*] y)                                          
-{ /* Poor man's 10-logarithm,  used to compute column widths */         
-  /* Avoid 10 log 0! */                                                 
-  z = 1 +  toi(log10(max(2.0,tod(y))));                                
-return(z);                                                             
+int[*] pmtl( int[*] y)
+{ //Poor man's 10-logarithm, used to compute column widths
+  // Avoid 10 log 0!
+  z = 1 +  toi(log10(max(2.0,tod(y))));
+return(z);
 }
 
 int[.] maxsl1(int[.,.] y)
@@ -251,6 +251,8 @@ inline char[+] format(bool[+] y, int[2] w)
  *
  * Integer formatting functions
  *
+ *   This includes int, uint, long, and ulong
+ *
  ********************************************************************************/
 
 char[.] format(int y)
@@ -279,8 +281,14 @@ char[.] format(int y)
   }
   i = max(i,0);
   z = modarray( z, [i], sig && (i >= 0) ? '-' : sel([i], z));
-#endif
+#endif // PEDANTIC
 
+ return( z);
+}
+
+char[.] format(long y)
+{ /* Default format on long scalar */
+ z = tochar(sprintf("%ld",y));
  return( z);
 }
      
@@ -484,8 +492,7 @@ inline char[+] format(double[+] y, int[2] w)
 
 /********************************************************************************
  *
- * byte, ubyte, short, ushort formatting functions. 
- * We promote these types to int and use formatting for int.
+ * Generic type-driven formatting
  *
  ********************************************************************************/
 
@@ -522,9 +529,20 @@ inline char[.] format(type y, int[2] w)			\
   return( z);						\
 }							
 
-FORMAT_INT_SUBTYPES(byte)
-FORMAT_INT_SUBTYPES(ubyte)
-FORMAT_INT_SUBTYPES(short)
-FORMAT_INT_SUBTYPES(ushort)
+#ifdef NEEDSTYPECONVERSIONS
+// These will not work until somebody writes suitable non-scalar type
+// conversion functions for the following.
+// BUG !! needs type conversions to int for these...  FORMAT_INT_SUBTYPES(byte)
+// BUG !! FORMAT_INT_SUBTYPES(ubyte)
+// BUG !! FORMAT_INT_SUBTYPES(short)
+// BUG !! FORMAT_INT_SUBTYPES(ushort)
+// BUG !! FORMAT_INT_SUBTYPES(uint)
+FORMAT_INT_SUBTYPES(int)
+FORMAT_INT_SUBTYPES(longlong)
+FORMAT_INT_SUBTYPES(ulonglong)
+FORMAT_INT_SUBTYPES(long)
+FORMAT_INT_SUBTYPES(ulong)
+#endif // NEEDSTYPECONVERSIONS
 
-#endif
+#endif // FULLTYPES
+
