@@ -383,11 +383,10 @@ FILE (MAKE_DIRECTORY "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}")
 # path information in a list. It returns on the first result, or
 # returns empty.
 FUNCTION (MATCH_NAME_IN_LIST list name ret)
-    #MESSAGE (DEBUG "Searching for ${name} in list...")
+    MESSAGE (DEBUG "Searching for ${name} in list...")
     FOREACH (item ${list})
-        #MESSAGE (DEBUG "   checking against ${item}")
         IF ("${item}" MATCHES "${name}\.(sac|xsac)")
-            #MESSAGE (DEBUG "   we have a match!")
+            MESSAGE (DEBUG "   we have a match: ${item}!")
             SET (${ret} ${item} PARENT_SCOPE)
             BREAK ()
         ENDIF ()
