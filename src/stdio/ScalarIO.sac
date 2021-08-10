@@ -205,7 +205,11 @@ SHOW_TERMFILE_S_(int, d)
 SHOW_TERMFILE_S_(long, ld)
 SHOW_TERMFILE_S_(char, c)
 
-SHOW_TERMFILE_S_(float, g)
+inline void show( float n)
+{
+  TermFile::printf ("%g\n", tod (n));
+}
+
 SHOW_TERMFILE_S_(double, g)
 SHOW_TERMFILE_S_(bool, d)
 SHOW_TERMFILE_S_(string, s)
