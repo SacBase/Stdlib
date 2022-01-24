@@ -34,12 +34,14 @@
 
 #ifdef FULLTYPES
 
-#define WHOLE_NUM( fun)         \
+#define SIGNED_INT_NUM( fun)    \
 fun( byte, b, 0b, 1b)           \
 fun( short, s, 0s, 1s)          \
 fun( int, i, 0i, 1i)            \
 fun( long, l, 0l, 1l)           \
-fun( longlong, ll, 0ll, 1ll)    \
+fun( longlong, ll, 0ll, 1ll)
+
+#define UNSIGNED_INT_NUM( fun)  \
 fun( ubyte, ub, 0ub, 1ub)       \
 fun( ushort, us, 0us, 1us)      \
 fun( uint, ui, 0ui, 1ui)        \
@@ -48,11 +50,17 @@ fun( ulonglong, ull, 0ull, 1ull)
 
 #else
 
-#define WHOLE_NUM( fun)         \
+#define SIGNED_INT_NUM( fun)    \
 fun( int, i, 0i, 1i)            \
 fun( long, l, 0l, 1l)
 
+#define UNSIGNED_INT_NUM( fun)
+
 #endif
+
+#define INT_NUM( fun)           \
+SIGNED_INT_NUM( fun)            \
+UNSIGNED_INT_NUM( fun)            
 
 #define REAL_NUM( fun)          \
 fun( float, f, 0f, 1f)          \
@@ -65,7 +73,11 @@ fun( char, /* no postfix */, ' ', ' ')
 fun( bool, /* no postfix */, false, true)
 
 #define NUM( fun)               \
-WHOLE_NUM( fun)                 \
+INT_NUM( fun)                   \
+REAL_NUM( fun)
+
+#define SIGNED_NUM( fun)        \
+SIGNED_INT_NUM( fun)            \
 REAL_NUM( fun)
 
 #define BUILT_IN( fun)          \
@@ -86,8 +98,10 @@ MAP_BIN_##ext( *, _mul_SxS_, a, a)      \
 MAP_BIN_##ext( /, _div_SxS_, a, a)      \
 MAP_BIN_##ext(  min, _min_SxS_, a, a)   \
 MAP_BIN_##ext(  max, _max_SxS_, a, a)   \
-MAP_MON_##ext( -, _neg_S_, a, a)        \
 MAP_MON_##ext( abs, _abs_S_, a, a)
+
+#define MAP_NEG_OP( ext, a)             \
+MAP_MON_##ext( -, _neg_S_, a, a)
 
 #define MAP_ANA_OPS( ext, a)            \
 MAP_UNA_##ext( ++, _add_SxS_, a, a)     \
