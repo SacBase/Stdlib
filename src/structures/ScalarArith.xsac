@@ -80,11 +80,17 @@ MAP_ARI_OPS( SxS, type)
 
 NUM(  ARI_OPS_S)
 
+#define NEG_OP_S( type, postfix, zval, oval) \
+MAP_NEG_OP( SxS, type)
+
+/* _neg_ only works on signed integers and reals */
+SIGNED_NUM(  NEG_OP_S)
+
 #define INT_OPS_S( type, postfix, zval, oval) \
 MAP_INT_OPS( SxS, type)
 
 /* _mod_SxS_ only supports whole numbers */
-WHOLE_NUM(  INT_OPS_S)
+INT_NUM(  INT_OPS_S)
 
 #define ANA_OPS_S( type, postfix, zval, oval) \
 MAP_ANA_OPS( S, type)

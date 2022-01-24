@@ -147,12 +147,19 @@ MAP_ARI_OPS( AxS, typ)
 
 NUM(  ARI_OPS_A)
 
+#define NEG_OP_A( typ, postfix, zval, oval) \
+MAP_NEG_OP( AxA, typ)                 \
+MAP_NEG_OP( SxA, typ)                 \
+MAP_NEG_OP( AxS, typ)
+
+SIGNED_NUM(  NEG_OP_A)
+
 #define INT_OPS_A( typ, postfix, zval, oval) \
 MAP_INT_OPS( AxA, typ)                 \
 MAP_INT_OPS( SxA, typ)                 \
 MAP_INT_OPS( AxS, typ)
 
-WHOLE_NUM(  INT_OPS_A)
+INT_NUM(  INT_OPS_A)
 
 #define INTVEC_OPS( name, op)        \
 MAP_BIN_INT_VxV( name, op)           \
