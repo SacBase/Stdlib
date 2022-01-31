@@ -89,7 +89,6 @@ PGM* SAC_PGM_parse( FILE* fp)
   if (hdr[0] != 'P' || (hdr[1] != PGM_TEXT && hdr[1] != PGM_BINARY))
   {
     SAC_RuntimeError("SAC_PGM_parse: File is not in PGM format");
-    goto done;
   }
 
   next();
@@ -102,7 +101,6 @@ PGM* SAC_PGM_parse( FILE* fp)
 
   if (ungetc(c, fp) == EOF) {
     SAC_RuntimeError("SAC_PGM_parse: Failed to ungetc.");
-    goto done;
   }
 
 done:
@@ -117,15 +115,12 @@ done:
 bad:
   if (c != EOF && !ferror(fp) && !feof(fp)) {
     SAC_RuntimeError("SAC_PGM_parse: Invalid PGM header.");
-    goto done;
   }
   if (ferror(fp)) {
     SAC_RuntimeError("SAC_PGM_parse: Errors while reading PGM header.");
-    goto done;
   }
   SAC_RuntimeError(
     "SAC_PGM_parse: Premature end-of-file while reading PGM header.");
-  goto done;
 }
 
 void SAC_PGM_free( PGM* pgm)
@@ -183,7 +178,6 @@ static int* SAC_PGM_read_data_low( PGM* pgm)
   {
     SAC_RuntimeError("SAC_PGM_read_data: Invalid PGM header (%zu, %zu, %zu)",
                      pgm->width, pgm->height, pgm->maxval);
-    goto done;
   }
 
   /* Make sure the data fits into the address space. */
@@ -194,13 +188,11 @@ static int* SAC_PGM_read_data_low( PGM* pgm)
     SAC_RuntimeError(
       "SAC_PGM_read_data: Image dimensions of (%zu * %zu = %zu) exceed INT_MAX",
       pgm->width, pgm->height, pixelcount);
-    goto done;
   }
 
   /* Restore file position to after the header. */
   if (fseek(pgm->fp, pgm->pos, SEEK_SET) == -1) {
     SAC_RuntimeError("SAC_PGM_read_data: Failed to seek to %ld.", pgm->pos);
-    goto done;
   }
 
   /* Read the first byte. */
@@ -261,18 +253,15 @@ done:
 bad:
   if (c != EOF && !ferror(fp) && !feof(fp)) {
     SAC_RuntimeError("SAC_PGM_read_data: Invalid PGM data.");
-    goto done;
   }
 
 err:
   if (ferror(fp)) {
     SAC_RuntimeError("SAC_PGM_read_data: Errors while reading PGM data.");
-    goto done;
   }
 
 eof:
   SAC_RuntimeError(
       "SAC_PGM_read_data: Premature end-of-file while reading PGM data.");
-  goto done;
 }
 
