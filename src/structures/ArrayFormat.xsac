@@ -31,24 +31,25 @@ export {format};
  *
  ********************************************************************************/
 
-char[.] formatrow(int[.] widths, int[.] m)
-{ // utility function for formatting a int vector to widths
- z = genarray([(sum(widths+1)-1)], ' ');
+inline
+char[.] formatrow(int[.] wid, int[.] m)
+{ // utility function for formatting a int vector to widths wid
+ z = genarray([(sum(wid+1)-1)], ' ');
  // Can't use WL because widths may differ
- sink = 0;                                                              
- for(i=0; i < sel([0], shape(m)); i++) {                               
-	curm = sel([i], m);                                           
-	curw = sel([i], widths);                                     
-        curz = format(curm, [curw,1]);                              
-	lim  = sel([0], shape(curz));                              
-        for(src=0; src <lim; src++) {                                   
-		z = modarray(z, src+sink,                               
-				sel([src], curz));                      
-        }                                                              
-	sink++; /* Inter-element blank */                               
-        sink = sink + sel( [i], widths);                                
- }                                                                      
- return(z);                                                            
+ sink = 0;
+ for(i=0; i < sel([0], shape(m)); i++) {
+	curm = sel([i], m);
+	curw = sel([i], wid);
+        curz = format(curm, [curw,1]);
+	lim  = sel([0], shape(curz));
+        for(src=0; src <lim; src++) {
+		z = modarray(z, src+sink,
+				sel([src], curz));
+        }
+	sink++; // Inter-element blank
+        sink = sink + sel( [i], wid);
+ }
+ return(z);
 }
 
 int[*] pmtl( int[*] y)
@@ -58,6 +59,7 @@ int[*] pmtl( int[*] y)
 return(z);
 }
 
+inline
 int[.] maxsl1(int[.,.] y)
 { /* first-axis max-reduce rank-2 matrix */
   z = with {
@@ -66,6 +68,7 @@ int[.] maxsl1(int[.,.] y)
   return(z);
 }
 
+inline
 int[.] minsl1(int[.,.] y)
 { /* first-axis min-reduce rank-2 matrix */
   z = with {
@@ -74,8 +77,9 @@ int[.] minsl1(int[.,.] y)
   return(z);
 }
 
+inline
 char[.] PadWithBlanks( int[1] wid, char[.] el)
-{  /* SAC does not have overtake, so this does the job */
+{  // SAC does not have overtake, so this does the job
   z = take( wid, el ++ genarray( wid, ' '));
   return( z);
 }
@@ -99,6 +103,7 @@ char[.] alignrow(char[.,.] fry, int[1] iv, int[.] widths, int[.] lodp,
  return(z);
 }
 
+inline
 int thcharsto(char[.] ch, char[.] fry)
 { /* Find chars left of decimal point (or end) */
   /* I.e.,  (fry member ch) iota 1 */
@@ -133,6 +138,7 @@ char[.] ScalarFormatter(double y, int precision)
 #endif // FORMATWIDTH
 }
 
+inline
 char[.], int ScalarFormatterPad(double y, int precision)
 { /* Primitive double scalar formatter, because sprintf is useless */
 /* FIXME - write proper formatter, using Steele/Burger formatting */
@@ -151,6 +157,7 @@ char[.], int ScalarFormatterPad(double y, int precision)
  return(z, shpz);
 }
 
+inline
 char[.] KillPlusSign(char[.] y)
 { /* Kill "+" in sprintf result for a formatted scalar */
   /* This is "(y != '+')compress y", the hard way */
@@ -163,8 +170,9 @@ char[.] KillPlusSign(char[.] y)
  return(z);
 }
 
+inline
 char[.], int thrnAppend(char[.] vec, int sink, char[.] el)
-{ /* Indexed assign el into vec for next result element */
+{ // Indexed assign el into vec for next result element
   z = vec;
   count = shape(el)[0];
   for( src=0; src<count; src++) {
@@ -174,8 +182,9 @@ char[.], int thrnAppend(char[.] vec, int sink, char[.] el)
  return(z,sink);
 }
 
+inline
 char[.] OverflowCheck(char[.] txt, int wid)
-{ /* Check for txt overflowing wid */
+{ // Check for txt overflowing wid
   z = (wid< shape(txt)[0]) ? (genarray([wid],'*')) : txt;
   return(z);
 }
@@ -186,8 +195,9 @@ char[.] OverflowCheck(char[.] txt, int wid)
  *
  ********************************************************************************/
 
-inline char[*] format(char[*] y)
-{ /* Default format on any character array */
+inline
+char[*] format(char[*] y)
+{ // Default format for any character array
   return(y);
 }
 
@@ -198,15 +208,16 @@ inline char[*] format(char[*] y)
  *
  ********************************************************************************/
 
-
+inline
 char[1] format(bool y)
-{ /* Default format on Boolean scalar */
+{ // Default format for Boolean scalar
   z = y ? '1' : '0';
   return([z]);
 }
 
+inline
 char[+] format(bool[+] y)
-{ /* Default format on Boolean non-scalars */
+{ // Default format for Boolean non-scalars
   z = with {
         (. <= iv <= .) : sel( iv, y) ? ['1',' '] : ['0',' '];
         } : genarray(shape( y));
@@ -219,18 +230,18 @@ char[+] format(bool[+] y)
   return( z);
 }
 
-inline char[.] format(bool y, int precision)
+char[.] format(bool y, int precision)
 { /* Defined-precision format on Boolean scalar */
   z = format(tod(y), precision);
   return(z);
 }
 
-inline char[+] format(bool[+] y, int precision)
+char[+] format(bool[+] y, int precision)
 { /* precision-significant digit format on boolean non-scalar */
  return(format(tod(y), precision));
 }
 
-inline char[.] format(bool y, int[2] w)
+char[.] format(bool y, int[2] w)
 { /* Defined-width and precision format on boolean scalar 
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
@@ -240,7 +251,7 @@ inline char[.] format(bool y, int[2] w)
  return( z);
 }
 
-inline char[+] format(bool[+] y, int[2] w)
+char[+] format(bool[+] y, int[2] w)
 { /* Defined-width format on boolean non-scalar */
  z = format(tod(y), w);
  return(z);
@@ -323,18 +334,18 @@ char[+] format(int[+] y)
   return(z);
 }
 
-inline char[.] format(int y, int precision)
+char[.] format(int y, int precision)
 { /* Defined-precision format on integer scalar */
   z = format(tod(y), precision);
  return( z);
 }
 
-inline char[+] format(int[+] y, int precision)
+char[+] format(int[+] y, int precision)
 { /* precision-significant digit format on integer non-scalar */
  return(format(tod(y), precision));
 }
 
-inline char[.] format(int y, int[2] w)
+char[.] format(int y, int[2] w)
 { /* Defined-width and precision format on integer scalar 
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
@@ -352,30 +363,30 @@ inline char[.] format(int y, int[2] w)
  *
  ********************************************************************************/
 
-inline char[.] format(float y)
+char[.] format(float y)
 { /* Default format on float scalar */
   precision = 15;
   return(format(tod(y), precision));
 }
 
-inline char[+] format(float[+] y)
+char[+] format(float[+] y)
 { /* Default format on float non-scalar */
   precision = 15;
   return(format(tod(y), precision));
 } 
 
-inline char[.] format(float y, int precision)
+char[.] format(float y, int precision)
 { /* Defined-precision format on floating scalar */
  z = format(tod(y), precision);
  return(z);
 }
 
-inline char[+] format(float[+] y, int precision)
+char[+] format(float[+] y, int precision)
 { /* precision-significant digit format on floating non-scalar */
  return(format(tod(y), precision));
 }
 
-inline char[.] format(float y, int[2] w)
+char[.] format(float y, int[2] w)
 { /* Defined-width and precision format on floating scalar 
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
@@ -385,7 +396,7 @@ inline char[.] format(float y, int[2] w)
  return( z);
 }
 
-inline char[+] format(float[+] y, int[2] w)
+char[+] format(float[+] y, int[2] w)
 { /* Defined-width format on float non-scalar 
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
@@ -403,20 +414,20 @@ inline char[+] format(float[+] y, int[2] w)
  *
  ********************************************************************************/
 
-inline char[.] format(double y)
+char[.] format(double y)
 { /* Default format on double scalar */
   precision = 15;
   return(format(y, precision));
 }
 
-inline char[+] format(double[+] y)
+char[+] format(double[+] y)
 { /* Default format on double non-scalar */
    /* Refer to UTThorn.dws <threal> for APL model of this */
   precision = 15;
   return(format(y, precision));
 }
 
-inline char[.] format(double y, int precision)
+char[.] format(double y, int precision)
 { /* Formatting for a double scalar */
  z = ScalarFormatter(y, precision);
  z = PadWithBlanks([precision + 7], z);
@@ -463,7 +474,7 @@ char[+] format(double[+] y, int precision)
  return(z);
 } 
 
-inline char[.] format(double y, int[2] w)
+char[.] format(double y, int[2] w)
 { /* Formatting for a double scalar */
   /* This is temporary, pending use of the Burger/Dybvig algorithm 
    * w[0] is maximum legal result width. If result is wider than this,
@@ -475,7 +486,7 @@ inline char[.] format(double y, int[2] w)
  return(z);
 }
 
-inline char[+] format(double[+] y, int[2] w)
+char[+] format(double[+] y, int[2] w)
 { /* Defined-width format on double non-scalar 
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
@@ -511,19 +522,19 @@ char[+] format(type[+] y)				\
   return(z);						\
 }							\
 							\
-inline char[.] format(type y, int precision)		\
+char[.] format(type y, int precision)			\
 { 							\
   z=format(toi(y),precision);				\
   return( z);						\
 }							\
 							\
-inline char[+] format(type[+] y, int precision)		\
+char[+] format(type[+] y, int precision)		\
 {							\
   z=format(toi(y),precision);				\
   return(z);						\
 }							\
 							\
-inline char[.] format(type y, int[2] w)			\
+char[.] format(type y, int[2] w)			\
 {							\
   z=format(toi(y),w);					\
   return( z);						\
