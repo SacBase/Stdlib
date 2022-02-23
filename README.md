@@ -57,9 +57,9 @@ Continuous Integration
 =====================
 
 We make use of Github Actions for our CI pipeline, building the standard library on different systems
-anytime there is a pull request.
+anytime there is a pull request. Build will fail if there are any compile-time warnings.
 
-Currently we build on the following systems: `ubuntu-18.04` and `macos-10.15`.
+Currently we build on the following systems: `ubuntu-18.04` and `macos-11`.
 
 Please look at `.github/workflows/` for more exact details on what we do.
 

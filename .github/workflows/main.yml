@@ -39,7 +39,13 @@ jobs:
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake --build . -j 2
+        run: |
+          cmake --build . -j 2 2>&1 | tee build.log
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "!!! ERROR detected in build !!!";
+            exit 1;
+          fi
+          ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
   build_mac:
     runs-on: macos-11
     steps:
@@ -72,4 +78,10 @@ jobs:
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake --build . -j 2
+        run: |
+          cmake --build . -j 2 2>&1 | tee build.log
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "!!! ERROR detected in build !!!";
+            exit 1;
+          fi
+          ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
