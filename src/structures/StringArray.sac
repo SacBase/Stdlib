@@ -2,14 +2,14 @@ module StringArray;
 
 use String : {string};
 use Array : {*,all,-,abs,<,>=,+,zero,++};
-export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies, 
+export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies,
     modarray_AxVxS, sel_VxA, stringArrayCreator, drop};
 
 /*
  * You can create a new stringArray using:
  *   genarray( shp, to_stringArray( "default string")
- *   
- * Modarray and sel work as usual and return stringarrays. Use to_string to 
+ *
+ * Modarray and sel work as usual and return stringarrays. Use to_string to
  * get a string back out of a scalar stringarray.
  */
 
@@ -17,8 +17,10 @@ external typedef stringArray;
     #pragma linkobj "src/StringArray/free.o"
     #pragma linkobj "src/StringArray/copy.o"
     #pragma linkobj "src/StringArray/alloc.o"
+    #pragma linkobj "src/StringArray/size.o"
     #pragma freefun "SAC_StringArray_free"
     #pragma copyfun "SAC_StringArray_copy"
+    #pragma copyfun "SAC_StringArray_size"
 
 external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
     #pragma linkname "SAC_StringArray_modarray"
@@ -29,27 +31,27 @@ external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
 
 stringArray drop( int[.] v, stringArray array)
 {
-  vext = _cat_VxV_( v,                                                         
-                    Array::genarray( [dim( array) - 
-                                      _sel_VxA_( [0], _shape_A_( v))], 
-                              0));  
-  new_shp = _sub_VxV_( shape( array), abs( vext)); 
+  vext = _cat_VxV_( v,
+                    Array::genarray( [dim( array) -
+                                      _sel_VxA_( [0], _shape_A_( v))],
+                              0));
+  new_shp = _sub_VxV_( shape( array), abs( vext));
 
   new_shp = where( new_shp < 0, 0, new_shp);
   offset = where( vext < 0, 0, vext);
   offset = where( offset >= shape( array), 0, offset);
 
-  /*  res = with {                                                   
+  /*  res = with {
   ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);
   } : genarray( new_shp, zero(array));         */
 
   res = genarray(new_shp, to_stringArray(""));
   indicies = getIndicies( new_shp);
   for ( i=0; i < _sel_VxA_( [0], Array::shape(indicies)); i++){
-    res[ Array::sel( [i], indicies)] = 
+    res[ Array::sel( [i], indicies)] =
       array[ _add_VxV_( offset, Array::sel( [i], indicies))];
   }
-  
+
   return( res);
 }
 
@@ -65,29 +67,29 @@ int[+] where( bool[+] p, int A, int[+] B)
 
 stringArray modarray( stringArray array, int[.] idx, stringArray val)
 {
-  if( ( Array::any( idx Array::>= shape( array))) || 
+  if( ( Array::any( idx Array::>= shape( array))) ||
       ( Array::any( idx Array::< ( 0 Array::* shape( array))))) {
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Index out of bounds in call to StringArray::modarray");
   }
 
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
     if( Array::!=( dim( val), 0)) {
-      RuntimeError::error( 1, 
+      RuntimeError::error( 1,
           "Attempt to use StringArray::modarray to replace scalar subarray "
           "with non-scalar");
     }
     res = modarray_AxVxS( array, idx, sel_VxA( [], val));
-  } 
+  }
   else if( Array::sel( [0], Array::shape( idx)) Array::< dim( array)) {
-    if( Array::any( 
-          shape( val) Array::!= Array::drop( [Array::sel( [0], Array::shape( idx))], 
+    if( Array::any(
+          shape( val) Array::!= Array::drop( [Array::sel( [0], Array::shape( idx))],
                                              shape(array)))) {
-      RuntimeError::error( 1, 
+      RuntimeError::error( 1,
           "Attempt to use StringArray::modarray to replace subarray with an "
           "array of a different shape");
     }
-    val_shp = Array::drop( [Array::sel( [0], Array::shape( idx))], 
+    val_shp = Array::drop( [Array::sel( [0], Array::shape( idx))],
                            shape( array));
     indicies = getIndicies( val_shp);
     res = array;
@@ -101,7 +103,7 @@ stringArray modarray( stringArray array, int[.] idx, stringArray val)
   }
   else {
     res = array;
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Overlarge index vector passed to StringArray::modarray");
   }
   return( res);
@@ -116,15 +118,15 @@ external string sel_VxA( int[.] idx, stringArray labs);
 
 stringArray sel( int[.] idx, stringArray array)
 {
-  if( ( Array::any( idx Array::>= shape( array))) || 
+  if( ( Array::any( idx Array::>= shape( array))) ||
       ( Array::any( idx Array::< ( 0 Array::* shape( array))))) {
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Index out of bounds in call to StringArray::sel");
   }
 
   if( Array::sel( [0], Array::shape( idx)) Array::== dim( array)) {
     res = to_stringArray( sel_VxA( idx, array));
-  } 
+  }
   else if( Array::sel( [0], Array::shape( idx)) Array::< dim( array)) {
     idx_len = Array::sel( [0], Array::shape( idx));
     res_shp = Array::drop( [ idx_len ], shape( array));
@@ -135,13 +137,13 @@ stringArray sel( int[.] idx, stringArray array)
 
     indicies = getIndicies( shape( res));
     for( i=0 ; i Array::< Array::sel( [0], Array::shape(indicies)); i = i Array::+ 1) {
-      res = modarray( res, Array::sel( [i], indicies), 
+      res = modarray( res, Array::sel( [i], indicies),
                       sel( idx Array::++ Array::sel( [i], indicies), array));
     }
   }
   else {
     res = array;
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Attempt to select into a stringArray with an index vector longer than the stringArray's dimensionality");
   }
   return( res);
@@ -264,25 +266,25 @@ int[.,.] getIndicies( int[.] shp)
  *   No definition found for a function "Structures::++" that accepts an
  *   argument of type "int[0]{}" as parameter no 1. Full argument types
  *   are "( int[0]{}, int[.])".
- */ 
+ */
 stringArray concatStringArrays( stringArray m1, stringArray m2)
 {
   if( dim( m1) Array::== 0) {
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Cannot concat stringArrays since argument 1 is a scalar");
   }
   if( dim( m2) Array::== 0) {
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Cannot concat stringArrays since argument 2 is a scalar");
   }
   if( dim( m1) Array::!= dim( m2)) {
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Cannot concat stringArrays with differing dimensions");
   }
   m1InnerShape = Array::drop( [1] , shape( m1));
   m2InnerShape = Array::drop( [1] , shape( m2));
   if( Array::any( m1InnerShape Array::!= m2InnerShape)) {
-    RuntimeError::error( 1, 
+    RuntimeError::error( 1,
         "Attempt to concat non-matching shapes when trying to concat "
         "two stringArrays");
   }
@@ -296,7 +298,7 @@ stringArray concatStringArrays( stringArray m1, stringArray m2)
   for( j=0 ; j Array::< m2Len ; j = j Array::+ 1) {
     res = modarray( res, [i Array::+ j], sel( [j], m2));
   }
-  return( res); 
+  return( res);
 }
 
 /*
@@ -305,13 +307,13 @@ stringArray concatStringArrays( stringArray m1, stringArray m2)
 bool in( string needle, stringArray haystack)
 {
   res = with {
-          (0 Array::* shape( haystack) <= iv < shape( haystack)) : 
+          (0 Array::* shape( haystack) <= iv < shape( haystack)) :
             to_string( sel( iv, haystack)) String::== needle;
         } : genarray( shape( haystack), false);
   res = Array::any( res);
 
   /*
-   * I'd prefer to use this code! 
+   * I'd prefer to use this code!
    * res = any( { iv -> to_string( haystack[iv]) == needle});
    */
 
