@@ -10,7 +10,7 @@
 
 size_t size_string( string s)
 {
-    return strlen(old) + 1;
+    return strlen(s) + 1;
 }
 
 /*****************************************************************/
