@@ -108,6 +108,7 @@ MAP_UNA_##ext( ++, _add_SxS_, a, a)     \
 MAP_UNA_##ext( --, _sub_SxS_, a, a)
 
 #define MAP_INT_OPS( ext, a)            \
+MAP_BIN_##ext( mod, _aplmod_SxS_, a, a) \
 MAP_BIN_##ext( %, _mod_SxS_, a, a)
 
 /********************************************************************************
