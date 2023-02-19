@@ -58,7 +58,7 @@ jobs:
           submodules: 'recursive'
       - name: Install sac2c-basic
         run: |
-          wget ${BASE_URL}/MacOS/sac2c-basic.pkg
+          wget ${BASE_URL}/MacOS_x86/sac2c-basic.pkg
           sudo installer -pkg ./sac2c-basic.pkg -target /
           sac2c -V
       - name: Set XCode version
