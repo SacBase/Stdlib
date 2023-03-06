@@ -49,7 +49,6 @@ structures/ComplexBasics.sac               Ext
 structures/Complex.sac                     Ext
 structures/Quaternion.sac                  Ext
 structures/Char.sac                        Core
-structures/Bool.sac                        Core
 structures/Bits.sac                        Core
 structures/String.sac                      Core
 stdio/TermFile.sac                         Core
