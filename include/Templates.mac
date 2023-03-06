@@ -97,8 +97,13 @@ MAP_BIN_##ext( -, _sub_SxS_, a, a)      \
 MAP_BIN_##ext( *, _mul_SxS_, a, a)      \
 MAP_BIN_##ext( /, _div_SxS_, a, a)      \
 MAP_BIN_##ext(  min, _min_SxS_, a, a)   \
-MAP_BIN_##ext(  max, _max_SxS_, a, a)   \
+MAP_BIN_##ext(  max, _max_SxS_, a, a)
+
+#define MAP_ABS_OP( ext, a)             \
 MAP_MON_##ext( abs, _abs_S_, a, a)
+
+#define MAP_ABS_NOOP( ext, a)           \
+MAP_MON_##ext( abs, , a, a)
 
 #define MAP_NEG_OP( ext, a)             \
 MAP_MON_##ext( -, _neg_S_, a, a)
@@ -142,3 +147,44 @@ MAP_BIN_##ext( >=,  _ge_SxS_, a, bool)
 MAP_BIN_##ext( &, _and_SxS_, bool, bool)    \
 MAP_BIN_##ext( |,  _or_SxS_, bool, bool)    \
 MAP_MON_##ext( !, _not_S_, bool, bool)
+
+
+
+
+/********************************************************************************
+ *
+ * Macros for generating MACRO calls for all conversion operations
+ *
+ ********************************************************************************/
+
+#define MAP_BOOL_CONV_OP( ext, a)                   \
+MAP_MON_##ext( tobool, _tobool_S_, a, bool)
+
+#define MAP_MIN_NUM_CONV_OPS( ext, a)               \
+MAP_MON_##ext( toi, _toi_S_, a, int)                \
+MAP_MON_##ext( tol, _tol_S_, a, long)               \
+MAP_MON_##ext( tof, _tof_S_, a, float)              \
+MAP_MON_##ext( tod, _tod_S_, a, double)
+
+#define MAP_FULL_NUM_CONV_OPS( ext, a)              \
+MAP_MON_##ext( tob, _tob_S_, a, byte)               \
+MAP_MON_##ext( tosh, _tos_S_, a, short)             \
+MAP_MON_##ext( toll, _toll_S_, a, longlong)         \
+MAP_MON_##ext( toub, _toub_S_, a, ubyte)            \
+MAP_MON_##ext( tous, _tous_S_, a, ushort)           \
+MAP_MON_##ext( toui, _toui_S_, a, uint)             \
+MAP_MON_##ext( toul, _toul_S_, a, ulong)            \
+MAP_MON_##ext( toull, _toull_S_, a, ulonglong)
+
+#ifdef FULLTYPES
+
+#define MAP_NUM_CONV_OPS( ext, a)                   \
+MAP_MIN_NUM_CONV_OPS( ext, a)                       \
+MAP_FULL_NUM_CONV_OPS( ext, a)
+
+#else
+
+#define MAP_NUM_CONV_OPS( ext, a)                   \
+MAP_MIN_NUM_CONV_OPS( ext, a)
+
+#endif
