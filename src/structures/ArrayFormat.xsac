@@ -414,12 +414,18 @@ char[+] format(float[+] y, int[2] w)
  *
  ********************************************************************************/
 
+#define DOINL inline
+// This is a crude workaround for sac2c Issue #2333,
+// which Bodo suggests requires major redesign of modules.
+
+DOINL
 char[.] format(double y)
 { /* Default format on double scalar */
   precision = 15;
   return(format(y, precision));
 }
 
+DOINL
 char[+] format(double[+] y)
 { /* Default format on double non-scalar */
    /* Refer to UTThorn.dws <threal> for APL model of this */
@@ -427,6 +433,7 @@ char[+] format(double[+] y)
   return(format(y, precision));
 }
 
+DOINL
 char[.] format(double y, int precision)
 { /* Formatting for a double scalar */
  z = ScalarFormatter(y, precision);
@@ -434,6 +441,7 @@ char[.] format(double y, int precision)
  return(z);
 }
 
+DOINL
 char[+] format(double[+] y, int precision)
 { /* precision-significant digit format on double non-scalar */
    /* Refer to UTThorn.dws <threal> for APL model of this */
@@ -474,6 +482,7 @@ char[+] format(double[+] y, int precision)
  return(z);
 } 
 
+DOINL
 char[.] format(double y, int[2] w)
 { /* Formatting for a double scalar */
   /* This is temporary, pending use of the Burger/Dybvig algorithm 
@@ -486,6 +495,7 @@ char[.] format(double y, int[2] w)
  return(z);
 }
 
+DOINL
 char[+] format(double[+] y, int[2] w)
 { /* Defined-width format on double non-scalar 
    * w[0] is maximum legal result width. If result is wider than this,
