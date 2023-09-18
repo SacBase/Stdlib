@@ -26,7 +26,9 @@ $ make -j4  #you should have roughly 2GB per thread :-)
 
 If you like you can also install the stdlib into `/usr/local` with `make
 install`, but this is _unnecessary_ as `sac2c` will be able to find your stdlib
-build automatically.
+build automatically. This is achieved through a file named `sac2crc.package.stdlib`
+which is being placed in `~/.sac2crc/` and which contains the path to the place 
+where you build your stdlib
 
 **NOTE:** *When pulling the latest commit, remember to run `git submodule
 update` or you will be missing changes to the `cmake-common` repository.*
