@@ -1,318 +1,325 @@
 #include "Templates.mac"
 
-
-/********************************************************************************
+/******************************************************************************
  *
- * Array-Extensions for binary monary ops
+ * Array-extensions for binary monary ops.
  *
  * Calls of these are created when using the macros provided in "Templates.mac"
- * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS...
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS, etc.
  *
- ********************************************************************************/
+ ******************************************************************************/
 
-#define MAP_BIN_AxA( name, op, a, b)                                               \
-inline                                                                             \
-b[+] name( a[+] A, a[+] B)                                                       \
-{                                                                                  \
-  shp = shape( A);                                                                 \
-  res = with {                                                                     \
-          ( . <= iv <= . ) : name ( sel(iv, A), sel(iv, B));                       \
-        } : genarray( shp, name( one(A), one(B) ) );                               \
-  return( res);                                                                    \
+#define MAP_BIN_AxA( name, op, a, b)                                           \
+inline                                                                         \
+b[+] name( a[+] A, a[+] B)                                                     \
+{                                                                              \
+  shp = shape( A);                                                             \
+  res = with {                                                                 \
+          ( . <= iv <= . )                                                     \
+            : name ( sel( iv, A), sel( iv, B));                                \
+        } : genarray( shp, name( one( A), one( B)));                           \
+  return( res);                                                                \
 }
 
-#define MAP_BIN_AxS( name, op, a, b)                                   \
-inline                                                                 \
-b[+] name( a[+] A, a B)                                              \
-{                                                                      \
-  shp = shape( A);                                                     \
-  res = with {                                                         \
-          ( . <= iv <= . ) : name ( sel(iv, A), B);                    \
-        } : genarray( shp, name( one(A), one(B) ) );                   \
-  return( res);                                                        \
+#define MAP_BIN_AxS( name, op, a, b)                                           \
+inline                                                                         \
+b[+] name( a[+] A, a B)                                                        \
+{                                                                              \
+  shp = shape( A);                                                             \
+  res = with {                                                                 \
+          ( . <= iv <= . )                                                     \
+            : name ( sel( iv, A), B);                                          \
+        } : genarray( shp, name( one( A), one( B)));                           \
+  return( res);                                                                \
 }
 
-#define MAP_BIN_SxA( name, op, a, b)                                   \
-inline                                                                 \
-b[+] name( a A, a[+] B)                                              \
-{                                                                      \
-  shp = shape( B);                                                     \
-  res = with {                                                         \
-          ( . <= iv <= . ) : name ( A, sel(iv, B));                    \
-        } : genarray( shp, name( one(A), one(B) ) );                   \
-  return( res);                                                        \
+#define MAP_BIN_SxA( name, op, a, b)                                           \
+inline                                                                         \
+b[+] name( a A, a[+] B)                                                        \
+{                                                                              \
+  shp = shape( B);                                                             \
+  res = with {                                                                 \
+          ( . <= iv <= . )                                                     \
+            : name ( A, sel( iv, B));                                          \
+        } : genarray( shp, name( one( A), one( B)));                           \
+  return( res);                                                                \
 }
 
-/********************************************************************************
- *
- * Array-Extensions for monadic ops
- *
- ********************************************************************************/
 
-#define MAP_MON_AxA( name, op, a, b)                        \
-inline                                                      \
-b[+] name( a[+] A)                                        \
-{                                                           \
-  shp = shape( A);                                          \
-  res = with {                                              \
-          ( . <= iv <= . ) : name ( sel(iv, A));            \
-        } : genarray( shp, name( zero(A) ) );               \
-  return( res);                                             \
+/******************************************************************************
+ *
+ * Array-extensions for monadic ops.
+ *
+ * Calls of these are created when using the macros provided in "Templates.mac"
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS, etc.
+ *
+ ******************************************************************************/
+
+#define MAP_MON_AxA( name, op, a, b)                                           \
+inline                                                                         \
+b[+] name( a[+] A)                                                             \
+{                                                                              \
+  shp = shape( A);                                                             \
+  res = with {                                                                 \
+          ( . <= iv <= . )                                                     \
+            : name ( sel( iv, A));                                             \
+        } : genarray( shp, name( zero( A)));                                   \
+  return( res);                                                                \
 }
 
 #define MAP_MON_SxA( name, op, a, b)
 #define MAP_MON_AxS( name, op, a, b)
 
 
-
-
-/** <!--********************************************************************-->
+/******************************************************************************
  *
- * AriOPS on arrays (see Templates.mac for details)
+ * AriOPS on arrays (see Templates.mac for details).
  *
  ******************************************************************************/
 
-#define ARI_OPS_A( a)                \
-MAP_ARI_OPS( AxA, a)                 \
-MAP_ARI_OPS( SxA, a)                 \
+#define ARI_OPS_A( a)                                                          \
+MAP_ARI_OPS( AxA, a)                                                           \
+MAP_ARI_OPS( SxA, a)                                                           \
 MAP_ARI_OPS( AxS, a)
 
 
-
-/** <!--********************************************************************-->
+/******************************************************************************
  *
- * RelOPS on arrays (see Templates.mac for details)
+ * RelOPS on arrays (see Templates.mac for details).
  *
  ******************************************************************************/
 
-#define REL_OPS_A( a)                \
-EQ_OPS_A( a)                         \
+#define REL_OPS_A( a)                                                          \
+EQ_OPS_A( a)                                                                   \
 COMP_OPS_A( a)
 
-#define EQ_OPS_A( a)                 \
-MAP_EQ_OPS( AxA, a)                  \
-MAP_EQ_OPS( SxA, a)                  \
+#define EQ_OPS_A( a)                                                           \
+MAP_EQ_OPS( AxA, a)                                                            \
+MAP_EQ_OPS( SxA, a)                                                            \
 MAP_EQ_OPS( AxS, a)
 
-#define COMP_OPS_A( a)               \
-MAP_COMP_OPS( AxA, a)                \
-MAP_COMP_OPS( SxA, a)                \
+#define COMP_OPS_A( a)                                                         \
+MAP_COMP_OPS( AxA, a)                                                          \
+MAP_COMP_OPS( SxA, a)                                                          \
 MAP_COMP_OPS( AxS, a)
 
 
-
-
-
-/********************************************************************************
+/******************************************************************************
  *
- * Structural OPS
+ * Structural OPS.
  *
- ********************************************************************************/
+ ******************************************************************************/
 
-#define TAKE( a)                                                                 \
-inline                                                                           \
-a[*] take( int[.] v, a[*] array)                                                 \
-{                                                                                \
+#define TAKE_VxA( a)                                                           \
+inline                                                                         \
+a[*] take( int[.] v, a[*] array)                                               \
+{                                                                              \
   vext = _cat_VxV_( v, _drop_SxV_( _sel_VxA_( [0],_shape_A_( v)),shape( array)));\
-  start = ArrayTransform::where( ArrayArith::<( vext, 0),                        \
-            ArrayArith::max( ArrayArith::-( _add_VxV_( shape(array), vext)),0),  \
-            0);                                                                  \
-  stop = ArrayTransform::where( ArrayArith::<(vext, 0),                          \
-           ArrayArith::abs(vext),                                                \
-           ArrayArith::min( ArrayArith::abs(vext), shape(array)));               \
-  offset = ArrayTransform::where( ArrayArith::<( vext, 0),                       \
-             _add_VxV_( shape(array), vext),                                     \
-             0);                                                                 \
-  res = with {                                                                   \
-          ( start <= iv < stop ) : sel( _add_VxV_( offset, iv), array);          \
-        } : genarray( ArrayArith::abs(vext), zero(array) );                      \
-  return( res);                                                                  \
+  start = ArrayTransform::where( ArrayArith::<( vext, 0),                      \
+            ArrayArith::max( ArrayArith::-( _add_VxV_( shape(array), vext)),0),\
+            0);                                                                \
+  stop = ArrayTransform::where( ArrayArith::<(vext, 0),                        \
+           ArrayArith::abs(vext),                                              \
+           ArrayArith::min( ArrayArith::abs(vext), shape(array)));             \
+  offset = ArrayTransform::where( ArrayArith::<( vext, 0),                     \
+             _add_VxV_( shape(array), vext),                                   \
+             0);                                                               \
+  res = with {                                                                 \
+          ( start <= iv < stop ) : sel( _add_VxV_( offset, iv), array);        \
+        } : genarray( ArrayArith::abs(vext), zero(array) );                    \
+  return( res);                                                                \
 }
 
-/*----------------------------------------------------------------------------*/
+#define TAKE( a)                                                               \
+TAKE_VxA( a)
 
-#define DROP( a)                                                                  \
-inline                                                                            \
-a[*] drop( int[.] v, a[*] array)                                                  \
-{                                                                                 \
-  vext = _cat_VxV_( v,                                                            \
-                    ArrayBasics::genarray( [_sub_SxS_( dim( array),               \
-                                             _sel_VxA_( [0], _shape_A_( v)))],    \
-                                           0));                                   \
-  new_shp = _sub_VxV_( shape( array), ArrayArith::abs( vext));                    \
-  new_shp = ArrayTransform::where( new_shp ArrayArith::< 0, 0, new_shp);          \
-  offset = ArrayTransform::where( vext ArrayArith::< 0, 0, vext);                 \
-  offset = ArrayTransform::where( offset ArrayArith::< shape( array), offset, 0); \
-  res = with {                                                                    \
-          ( . <= iv <= . ) : sel( _add_VxV_( offset, iv), array);                 \
-        } : genarray( new_shp, zero(array) );                                     \
-  return( res);                                                                   \
+/******************************************************************************/
+
+#define DROP_VxA( a)                                                           \
+inline                                                                         \
+a[*] drop( int[.] v, a[*] array)                                               \
+{                                                                              \
+  vext = _cat_VxV_( v,                                                         \
+                    ArrayBasics::genarray( [_sub_SxS_( dim( array),            \
+                                             _sel_VxA_( [0], _shape_A_( v)))], \
+                                           0));                                \
+  new_shp = _sub_VxV_( shape( array), ArrayArith::abs( vext));                 \
+  new_shp = ArrayTransform::where( new_shp ArrayArith::< 0, 0, new_shp);       \
+  offset = ArrayTransform::where( vext ArrayArith::< 0, 0, vext);              \
+  offset = ArrayTransform::where( offset ArrayArith::< shape( array), offset, 0);\
+  res = with {                                                                 \
+          ( . <= iv <= . ) : sel( _add_VxV_( offset, iv), array);              \
+        } : genarray( new_shp, zero(array) );                                  \
+  return( res);                                                                \
 }
 
+#define DROP( a)                                                               \
+DROP_VxA( a)
 
-/*----------------------------------------------------------------------------*/
+/******************************************************************************/
 
-#define TILE( a)                                                          \
-inline                                                                    \
-a[*] tile( int[.] shp, int[.] idx, a[*] array)                            \
-{                                                                         \
-  res = with {                                                            \
-          ( . <= iv <= . ) : sel( _add_VxV_( idx, iv), array);            \
-        } : genarray( shp, zero(array) );                                 \
-  return( res);                                                           \
+#define TILE_VxVxA( a)                                                         \
+inline                                                                         \
+a[*] tile( int[.] shp, int[.] idx, a[*] array)                                 \
+{                                                                              \
+  res = with {                                                                 \
+          ( . <= iv <= . ) : sel( _add_VxV_( idx, iv), array);                 \
+        } : genarray( shp, zero(array) );                                      \
+  return( res);                                                                \
 }
 
-/*----------------------------------------------------------------------------*/
+#define TILE( a)                                                               \
+TILE_VxVxA( a)
 
-#define CAT( a)                                                             \
-inline                                                                      \
-a[+] ++( a[+] arr_a, a[+] arr_b)                                          \
-{                                                                           \
-  new_shp = _modarray_AxVxS_( shape( arr_a),                                \
-                              [0],                                          \
-                              _add_SxS_( _sel_VxA_([0], shape( arr_a)),     \
-                                         _sel_VxA_([0], shape( arr_b)) ) ); \
-  res = with {                                                              \
-          ( _mul_SxV_(0, new_shp) <= iv < shape( arr_a) ) : sel( iv, arr_a);\
-        } : genarray( new_shp, zero( arr_a ) );                             \
-  offset =  _modarray_AxVxS_( _mul_SxV_( 0, new_shp),                       \
-                        [0],                                                \
-                        _sel_VxA_([0], shape( arr_a)) );                    \
-  res = with {                                                              \
-          ( offset <= iv < shape(res) )                                     \
-          : sel( _sub_VxV_( iv, offset), arr_b);                            \
-        } : modarray( res );                                                \
-  return( res);                                                             \
+/******************************************************************************/
+
+#define CAT_AxA( a)                                                            \
+inline                                                                         \
+a[+] ++( a[+] arr_a, a[+] arr_b)                                               \
+{                                                                              \
+  new_shp = _modarray_AxVxS_( shape( arr_a),                                   \
+                              [0],                                             \
+                              _add_SxS_( _sel_VxA_([0], shape( arr_a)),        \
+                                         _sel_VxA_([0], shape( arr_b)) ) );    \
+  res = with {                                                                 \
+          ( _mul_SxV_(0, new_shp) <= iv < shape( arr_a) ) : sel( iv, arr_a);   \
+        } : genarray( new_shp, zero( arr_a ) );                                \
+  offset =  _modarray_AxVxS_( _mul_SxV_( 0, new_shp),                          \
+                        [0],                                                   \
+                        _sel_VxA_([0], shape( arr_a)) );                       \
+  res = with {                                                                 \
+          ( offset <= iv < shape(res) )                                        \
+          : sel( _sub_VxV_( iv, offset), arr_b);                               \
+        } : modarray( res );                                                   \
+  return( res);                                                                \
 }
 
-/*----------------------------------------------------------------------------*/
+#define CAT( a)                                                                \
+CAT_AxA( a)
 
-#define REVERSE( a)                                                         \
-inline                                                                      \
-a[+] reverse( a[+] arr_a)                                                 \
-{                                                                           \
-  maxidx0 = _sub_SxS_( _sel_VxA_( [0], shape( arr_a)), 1);                  \
-  res = with {                                                              \
-          ( [0] <= iv = [i] <= [maxidx0] ) : arr_a[[_sub_SxS_(maxidx0, i)]];\
-        } : modarray( arr_a );                                              \
-  return( res);                                                             \
+/******************************************************************************/
+
+#define REVERSE_A( a)                                                          \
+inline                                                                         \
+a[+] reverse( a[+] arr_a)                                                      \
+{                                                                              \
+  maxidx0 = _sub_SxS_( _sel_VxA_( [0], shape( arr_a)), 1);                     \
+  res = with {                                                                 \
+          ( [0] <= iv = [i] <= [maxidx0] ) : arr_a[[_sub_SxS_(maxidx0, i)]];   \
+        } : modarray( arr_a );                                                 \
+  return( res);                                                                \
 }
 
-/*----------------------------------------------------------------------------*/
+#define REVERSE( a)                                                            \
+REVERSE_A( a)
 
-#define SHIFT_S( a)                                                           \
-inline                                                                        \
-a[+] shift (int dimension, int count, a boundary, a[+] A)                     \
-{                                                                             \
-  if (count ScalarArith::== 0) {                                              \
-    result = A;                                                               \
-  } else {                                                                    \
-    max_shift = _sel_VxA_( [dimension], shape(A));                            \
-                                                                              \
-    if (count ScalarArith::> 0) {                                             \
-      count = _min_SxS_( count, max_shift);                                   \
-      offset = _modarray_AxVxS_( _mul_SxV_( 0, shape(A)), [dimension], count);\
-      lb = offset;                                                            \
-      ub = shape(A);                                                          \
-    } else {                                                                  \
-      count = _max_SxS_( count, _neg_S_(max_shift));                          \
-      offset = _modarray_AxVxS_( _mul_SxV_( 0, shape(A)), [dimension], count);\
-      lb = _mul_SxV_( 0, shape(A));                                           \
-      ub = _add_VxV_( shape(A), offset);                                      \
-    }                                                                         \
-                                                                              \
-    result = with {                                                           \
-               ( . <= iv <= . ) : boundary;                                   \
-             } : genarray( shape(A), zero(A) );                               \
-                                                                              \
-    result = with {                                                           \
-               ( lb <= iv < ub ) : sel( _sub_VxV_( iv, offset), A);           \
-             } : modarray( result );                                          \
-  }                                                                           \
-  return(result);                                                             \
+/******************************************************************************/
+
+#define SHIFT_S( a)                                                            \
+inline                                                                         \
+a[+] shift (int dimension, int count, a boundary, a[+] A)                      \
+{                                                                              \
+  if (count ScalarArith::== 0) {                                               \
+    result = A;                                                                \
+  } else {                                                                     \
+    max_shift = _sel_VxA_( [dimension], shape(A));                             \
+                                                                               \
+    if (count ScalarArith::> 0) {                                              \
+      count = _min_SxS_( count, max_shift);                                    \
+      offset = _modarray_AxVxS_( _mul_SxV_( 0, shape(A)), [dimension], count); \
+      lb = offset;                                                             \
+      ub = shape(A);                                                           \
+    } else {                                                                   \
+      count = _max_SxS_( count, _neg_S_(max_shift));                           \
+      offset = _modarray_AxVxS_( _mul_SxV_( 0, shape(A)), [dimension], count); \
+      lb = _mul_SxV_( 0, shape(A));                                            \
+      ub = _add_VxV_( shape(A), offset);                                       \
+    }                                                                          \
+                                                                               \
+    result = with {                                                            \
+               ( . <= iv <= . ) : boundary;                                    \
+             } : genarray( shape(A), zero(A) );                                \
+                                                                               \
+    result = with {                                                            \
+               ( lb <= iv < ub ) : sel( _sub_VxV_( iv, offset), A);            \
+             } : modarray( result );                                           \
+  }                                                                            \
+  return(result);                                                              \
 }
 
-#define SHIFT_V( a)                                                \
-inline                                                             \
-a[+] shift (int[.] counts, a boundary, a[+] A)                     \
-{                                                                  \
-                                                                   \
-  for( i=0;                                                        \
-       i ScalarArith::<_sel_VxA_( [0], _shape_A_(counts));         \
-       i=i ScalarArith::+1) {                                      \
-    offset = _sel_VxA_([i], counts);                               \
-    A = shift( i, offset, boundary, A);                            \
-  }                                                                \
-                                                                   \
-  return(A);                                                       \
+#define SHIFT_V( a)                                                            \
+inline                                                                         \
+a[+] shift (int[.] counts, a boundary, a[+] A)                                 \
+{                                                                              \
+  for( i=0;                                                                    \
+       i ScalarArith::<_sel_VxA_( [0], _shape_A_(counts));                     \
+       i=i ScalarArith::+1) {                                                  \
+    offset = _sel_VxA_([i], counts);                                           \
+    A = shift( i, offset, boundary, A);                                        \
+  }                                                                            \
+  return(A);                                                                   \
 }
 
-#define SHIFT_V_Z( a)                               \
-inline                                              \
-a[*] shift (int[.] counts, a[+] A)                  \
-{                                                   \
-  return( shift ( counts, zero(A), A));             \
+#define SHIFT_V_Z( a)                                                          \
+inline                                                                         \
+a[*] shift (int[.] counts, a[+] A)                                             \
+{                                                                              \
+  return( shift ( counts, zero(A), A));                                        \
 }
 
-
-#define SHIFT( a)  \
-SHIFT_S( a)        \
-SHIFT_V( a)        \
+#define SHIFT( a)                                                              \
+SHIFT_S( a)                                                                    \
+SHIFT_V( a)                                                                    \
 SHIFT_V_Z( a)
 
-/*----------------------------------------------------------------------------*/
+/******************************************************************************/
 
-#define ROTATE_S( a)                                                       \
-inline                                                                     \
-a[+] rotate (int dimension, int count, a[+] A)                             \
-{                                                                          \
-  a array_elem;                                                            \
-                                                                           \
-  if(count ScalarArith::== 0) {                                            \
-    result = A;                                                            \
-  } else {                                                                 \
-    max_rotate = _sel_VxA_( [dimension], shape(A));                        \
-    if( _eq_SxS_( max_rotate, 0)) {                                        \
-      result = A;                                                          \
-    } else {                                                               \
-      count = _mod_SxS_( count, max_rotate);                               \
-      if (_lt_SxS_(count, 0)) {                                            \
-        count = _add_SxS_( count, max_rotate);                             \
-      }                                                                    \
-                                                                           \
-      offset = _modarray_AxVxS_(_mul_SxV_( 0, shape(A)),[dimension],count);\
-      slice_shp = _modarray_AxVxS_(shape(A), [dimension], count);          \
-                                                                           \
-      result = with {                                                      \
-                 (offset <= iv < shape(A)) : sel(_sub_VxV_(iv,offset), A); \
-               } : modarray(A);                                            \
-                                                                           \
-      result = with {                                                      \
-                 (_mul_SxV_(0,shape(result)) <= iv <  slice_shp)           \
-                 : sel(shape(A)                                            \
-                       ArrayArith::- slice_shp                             \
-                       ArrayArith::+ iv, A);                               \
-               } : modarray( result );                                     \
-    }                                                                      \
-  }                                                                        \
-  return(result);                                                          \
+#define ROTATE_S( a)                                                           \
+inline                                                                         \
+a[+] rotate (int dimension, int count, a[+] A)                                 \
+{                                                                              \
+  if(count ScalarArith::== 0) {                                                \
+    result = A;                                                                \
+  } else {                                                                     \
+    max_rotate = _sel_VxA_( [dimension], shape(A));                            \
+    if( _eq_SxS_( max_rotate, 0)) {                                            \
+      result = A;                                                              \
+    } else {                                                                   \
+      count = _mod_SxS_( count, max_rotate);                                   \
+      if (_lt_SxS_(count, 0)) {                                                \
+        count = _add_SxS_( count, max_rotate);                                 \
+      }                                                                        \
+                                                                               \
+      offset = _modarray_AxVxS_(_mul_SxV_( 0, shape(A)),[dimension],count);    \
+      slice_shp = _modarray_AxVxS_(shape(A), [dimension], count);              \
+                                                                               \
+      result = with {                                                          \
+                 (offset <= iv < shape(A)) : sel(_sub_VxV_(iv,offset), A);     \
+               } : modarray(A);                                                \
+                                                                               \
+      result = with {                                                          \
+                 (_mul_SxV_(0,shape(result)) <= iv <  slice_shp)               \
+                 : sel(shape(A)                                                \
+                       ArrayArith::- slice_shp                                 \
+                       ArrayArith::+ iv, A);                                   \
+               } : modarray( result );                                         \
+    }                                                                          \
+  }                                                                            \
+  return(result);                                                              \
 }
 
-#define ROTATE_V( a)                                                   \
-inline                                                                 \
-a[+] rotate (int[.] counts,  a[+] A)                                   \
-{                                                                      \
-  int offset;                                                          \
-                                                                       \
-  for( i=0; _lt_SxS_(i, _sel_VxA_( [0], _shape_A_(counts)));           \
-       i=_add_SxS_(i,1)) {                                             \
-    offset = _sel_VxA_( [i], counts);                                  \
-    A = rotate( i, offset, A);                                         \
-  }                                                                    \
-                                                                       \
-  return(A);                                                           \
+#define ROTATE_V( a)                                                           \
+inline                                                                         \
+a[+] rotate (int[.] counts,  a[+] A)                                           \
+{                                                                              \
+  for( i=0; _lt_SxS_(i, _sel_VxA_( [0], _shape_A_(counts)));                   \
+       i=_add_SxS_(i,1)) {                                                     \
+    offset = _sel_VxA_( [i], counts);                                          \
+    A = rotate( i, offset, A);                                                 \
+  }                                                                            \
+  return(A);                                                                   \
 }
 
-#define ROTATE( a)  \
-ROTATE_S( a)        \
+#define ROTATE( a)                                                             \
+ROTATE_S( a)                                                                   \
 ROTATE_V( a)

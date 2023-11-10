@@ -1,190 +1,195 @@
 /******************************************************************************
  *
- *  This file contains several macros for duplicating function definitions
- *  in the standard library. When modifying them you should keep in mind
- *  that these are used in several SaC modules. Among these are:
+ * This file contains several macros for duplicating function definitions
+ * in the standard library. When modifying them you should keep in mind
+ * that these are used in several SaC modules. Among these are:
  *
- *  ScalarArith.sac
- *  ArrayBasics.sac
- *  ArrayArith.sac
- *  ArrayTransform.sac
+ * ScalarArith.sac
+ * ArrayBasics.sac
+ * ArrayArith.sac
+ * ArrayTransform.sac
  *
  ******************************************************************************/
 
 /******************************************************************************
  *
- * Macros for mimicking polymorphism on elementary types....
+ * Macros for mimicking polymorphism on elementary types.
  *
  ******************************************************************************/
 
- /**
-  * The built_in types macro is of the format:
-  *
-  * ~~~~
-  *  #define BUILT_IN ( fun)
-  *    fun( type, postfix specifier, zero/false, one/true)
-  *    ...
-  * ~~~~
-  *
-  * `type`: the name of the type
-  * `postfix`: the postfix specifier for scalar values, e.g. 1i is an integer of value 1
-  * `zero/false`: the type default value, e.g. 0i for an integer
-  * `one/true`: the type default value, e.g. 1i for an integer
-  */
-
 #ifdef FULLTYPES
 
-#define SIGNED_INT_NUM( fun)    \
-fun( byte, b, 0b, 1b)           \
-fun( short, s, 0s, 1s)          \
-fun( int, i, 0i, 1i)            \
-fun( long, l, 0l, 1l)           \
+#define SIGNED_INT_NUM( fun)                                                   \
+fun( byte, b, 0b, 1b)                                                          \
+fun( short, s, 0s, 1s)                                                         \
+fun( int, i, 0i, 1i)                                                           \
+fun( long, l, 0l, 1l)                                                          \
 fun( longlong, ll, 0ll, 1ll)
 
-#define UNSIGNED_INT_NUM( fun)  \
-fun( ubyte, ub, 0ub, 1ub)       \
-fun( ushort, us, 0us, 1us)      \
-fun( uint, ui, 0ui, 1ui)        \
-fun( ulong, ul, 0ul, 1ul)       \
+#define UNSIGNED_INT_NUM( fun)                                                 \
+fun( ubyte, ub, 0ub, 1ub)                                                      \
+fun( ushort, us, 0us, 1us)                                                     \
+fun( uint, ui, 0ui, 1ui)                                                       \
+fun( ulong, ul, 0ul, 1ul)                                                      \
 fun( ulonglong, ull, 0ull, 1ull)
 
-#else
+#else /* FULLTYPES */
 
-#define SIGNED_INT_NUM( fun)    \
-fun( int, i, 0i, 1i)            \
+#define SIGNED_INT_NUM( fun)                                                   \
+fun( int, i, 0i, 1i)                                                           \
 fun( long, l, 0l, 1l)
 
 #define UNSIGNED_INT_NUM( fun)
 
-#endif
+#endif /* FULLTYPES */
 
-#define INT_NUM( fun)           \
-SIGNED_INT_NUM( fun)            \
-UNSIGNED_INT_NUM( fun)            
+#define INT_NUM( fun)                                                          \
+SIGNED_INT_NUM( fun)                                                           \
+UNSIGNED_INT_NUM( fun)
 
-#define REAL_NUM( fun)          \
-fun( float, f, 0f, 1f)          \
+#define REAL_NUM( fun)                                                         \
+fun( float, f, 0f, 1f)                                                         \
 fun( double, d, 0d, 1d)
 
-#define CHAR( fun)	            \
+#define CHAR( fun)	                                                           \
 fun( char, /* no postfix */, ' ', ' ')
 
-#define BOOL( fun)              \
+#define BOOL( fun)                                                             \
 fun( bool, /* no postfix */, false, true)
 
-#define NUM( fun)               \
-INT_NUM( fun)                   \
+#define NUM( fun)                                                              \
+INT_NUM( fun)                                                                  \
 REAL_NUM( fun)
 
-#define SIGNED_NUM( fun)        \
-SIGNED_INT_NUM( fun)            \
+#define SIGNED_NUM( fun)                                                       \
+SIGNED_INT_NUM( fun)                                                           \
 REAL_NUM( fun)
 
-#define BUILT_IN( fun)          \
-NUM( fun)                       \
-CHAR( fun)                      \
+
+/******************************************************************************
+ *
+ * Macro for generating a function for built-in types.
+ *
+ * It is of the following format:
+ *
+ * #define BUILT_IN ( fun)
+ *   fun( type, postfix, zero/false, one/true)
+ *
+ * @param type The name of the type.
+ * @param postfix The postfix specifier for scalar values.
+ *        E.g. 1i is an integer of value 1, whereas 1f is a float value.
+ * @param zero/false The default zero/false value.
+ *        E.g. false for booleans, or 0i for integers.
+ * @param one/true The default zero/false value.
+ *        E.g. true for booleans, or 1i for integers.
+ *
+ ******************************************************************************/
+
+#define BUILT_IN( fun)                                                         \
+NUM( fun)                                                                      \
+CHAR( fun)                                                                     \
 BOOL( fun)
 
-/********************************************************************************
- *
- * Macros for generating MACRO calls for all arithmetic operations
- *
- ********************************************************************************/
 
-#define MAP_ARI_OPS( ext, a)            \
-MAP_BIN_##ext( +, _add_SxS_, a, a)      \
-MAP_BIN_##ext( -, _sub_SxS_, a, a)      \
-MAP_BIN_##ext( *, _mul_SxS_, a, a)      \
-MAP_BIN_##ext( /, _div_SxS_, a, a)      \
-MAP_BIN_##ext(  min, _min_SxS_, a, a)   \
-MAP_BIN_##ext(  max, _max_SxS_, a, a)
+/******************************************************************************
+ *
+ * Macros for generating MACRO calls for all arithmetic operations.
+ *
+ ******************************************************************************/
 
-#define MAP_ABS_OP( ext, a)             \
+#define MAP_ARI_OPS( ext, a)                                                   \
+MAP_BIN_##ext( +, _add_SxS_, a, a)                                             \
+MAP_BIN_##ext( -, _sub_SxS_, a, a)                                             \
+MAP_BIN_##ext( *, _mul_SxS_, a, a)                                             \
+MAP_BIN_##ext( /, _div_SxS_, a, a)                                             \
+MAP_BIN_##ext( min, _min_SxS_, a, a)                                           \
+MAP_BIN_##ext( max, _max_SxS_, a, a)
+
+#define MAP_ABS_OP( ext, a)                                                    \
 MAP_MON_##ext( abs, _abs_S_, a, a)
 
-#define MAP_ABS_NOOP( ext, a)           \
-MAP_MON_##ext( abs, , a, a)
+#define MAP_ABS_NOOP( ext, a)                                                  \
+MAP_MON_##ext( abs, /* no postfix */, a, a)
 
-#define MAP_NEG_OP( ext, a)             \
+#define MAP_NEG_OP( ext, a)                                                    \
 MAP_MON_##ext( -, _neg_S_, a, a)
 
-#define MAP_ANA_OPS( ext, a)            \
-MAP_UNA_##ext( ++, _add_SxS_, a, a)     \
+#define MAP_ANA_OPS( ext, a)                                                   \
+MAP_UNA_##ext( ++, _add_SxS_, a, a)                                            \
 MAP_UNA_##ext( --, _sub_SxS_, a, a)
 
-#define MAP_INT_OPS( ext, a)            \
-MAP_BIN_##ext( mod, _aplmod_SxS_, a, a) \
+#define MAP_INT_OPS( ext, a)                                                   \
+MAP_BIN_##ext( mod, _aplmod_SxS_, a, a)                                        \
 MAP_BIN_##ext( %, _mod_SxS_, a, a)
 
-/********************************************************************************
- *
- * Macros for generating MACRO calls for all relational operations
- *
- ********************************************************************************/
 
-#define MAP_REL_OPS( ext, a)            \
-MAP_EQ_OPS( ext, a)                     \
+/******************************************************************************
+ *
+ * Macros for generating MACRO calls for all relational operations.
+ *
+ ******************************************************************************/
+
+#define MAP_REL_OPS( ext, a)                                                   \
+MAP_EQ_OPS( ext, a)                                                            \
 MAP_COMP_OPS( ext, a)
 
-#define MAP_EQ_OPS( ext, a)                 \
-MAP_BIN_##ext( ==,  _eq_SxS_, a, bool)      \
+#define MAP_EQ_OPS( ext, a)                                                    \
+MAP_BIN_##ext( ==, _eq_SxS_, a, bool)                                          \
 MAP_BIN_##ext( !=, _neq_SxS_, a, bool)
 
-#define MAP_COMP_OPS( ext, a)               \
-MAP_BIN_##ext(  <,  _lt_SxS_, a, bool)      \
-MAP_BIN_##ext( <=,  _le_SxS_, a, bool)      \
-MAP_BIN_##ext(  >,  _gt_SxS_, a, bool)      \
-MAP_BIN_##ext( >=,  _ge_SxS_, a, bool)
+#define MAP_COMP_OPS( ext, a)                                                  \
+MAP_BIN_##ext( <, _lt_SxS_, a, bool)                                           \
+MAP_BIN_##ext( <=, _le_SxS_, a, bool)                                          \
+MAP_BIN_##ext( >, _gt_SxS_, a, bool)                                           \
+MAP_BIN_##ext( >=, _ge_SxS_, a, bool)
 
 
-/********************************************************************************
+/******************************************************************************
  *
- * Macros for generating MACRO calls for all logic operations
+ * Macros for generating MACRO calls for all logic operations.
  *
- ********************************************************************************/
+ ******************************************************************************/
 
-#define MAP_LOG_OPS( ext)                   \
-MAP_BIN_##ext( &, _and_SxS_, bool, bool)    \
-MAP_BIN_##ext( |,  _or_SxS_, bool, bool)    \
+#define MAP_LOG_OPS( ext)                                                      \
+MAP_BIN_##ext( &, _and_SxS_, bool, bool)                                       \
+MAP_BIN_##ext( |, _or_SxS_, bool, bool)                                        \
 MAP_MON_##ext( !, _not_S_, bool, bool)
 
 
-
-
-/********************************************************************************
+/******************************************************************************
  *
- * Macros for generating MACRO calls for all conversion operations
+ * Macros for generating MACRO calls for all conversion operations.
  *
- ********************************************************************************/
+ ******************************************************************************/
 
-#define MAP_BOOL_CONV_OP( ext, a)                   \
+#define MAP_BOOL_CONV_OP( ext, a)                                              \
 MAP_MON_##ext( tobool, _tobool_S_, a, bool)
 
-#define MAP_MIN_NUM_CONV_OPS( ext, a)               \
-MAP_MON_##ext( toi, _toi_S_, a, int)                \
-MAP_MON_##ext( tol, _tol_S_, a, long)               \
-MAP_MON_##ext( tof, _tof_S_, a, float)              \
+#define MAP_MIN_NUM_CONV_OPS( ext, a)                                          \
+MAP_MON_##ext( toi, _toi_S_, a, int)                                           \
+MAP_MON_##ext( tol, _tol_S_, a, long)                                          \
+MAP_MON_##ext( tof, _tof_S_, a, float)                                         \
 MAP_MON_##ext( tod, _tod_S_, a, double)
 
-#define MAP_FULL_NUM_CONV_OPS( ext, a)              \
-MAP_MON_##ext( tob, _tob_S_, a, byte)               \
-MAP_MON_##ext( tosh, _tos_S_, a, short)             \
-MAP_MON_##ext( toll, _toll_S_, a, longlong)         \
-MAP_MON_##ext( toub, _toub_S_, a, ubyte)            \
-MAP_MON_##ext( tous, _tous_S_, a, ushort)           \
-MAP_MON_##ext( toui, _toui_S_, a, uint)             \
-MAP_MON_##ext( toul, _toul_S_, a, ulong)            \
+#define MAP_FULL_NUM_CONV_OPS( ext, a)                                         \
+MAP_MON_##ext( tob, _tob_S_, a, byte)                                          \
+MAP_MON_##ext( tosh, _tos_S_, a, short)                                        \
+MAP_MON_##ext( toll, _toll_S_, a, longlong)                                    \
+MAP_MON_##ext( toub, _toub_S_, a, ubyte)                                       \
+MAP_MON_##ext( tous, _tous_S_, a, ushort)                                      \
+MAP_MON_##ext( toui, _toui_S_, a, uint)                                        \
+MAP_MON_##ext( toul, _toul_S_, a, ulong)                                       \
 MAP_MON_##ext( toull, _toull_S_, a, ulonglong)
 
 #ifdef FULLTYPES
 
-#define MAP_NUM_CONV_OPS( ext, a)                   \
-MAP_MIN_NUM_CONV_OPS( ext, a)                       \
+#define MAP_NUM_CONV_OPS( ext, a)                                              \
+MAP_MIN_NUM_CONV_OPS( ext, a)                                                  \
 MAP_FULL_NUM_CONV_OPS( ext, a)
 
-#else
+#else /* FULLTYPES */
 
-#define MAP_NUM_CONV_OPS( ext, a)                   \
+#define MAP_NUM_CONV_OPS( ext, a)                                              \
 MAP_MIN_NUM_CONV_OPS( ext, a)
 
-#endif
+#endif /* FULLTYPES */
