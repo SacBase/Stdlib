@@ -4,152 +4,157 @@ export all;
 
 #include "Templates.mac"
 
-/** <!--********************************************************************-->
+/******************************************************************************
  *
- * @fn  <a> zero( <a>[*] Array)
+ * @fn <a> zero( <a>[*] A)
  *
- *   @brief  yields a scalar zero of the element type of its argument.
+ * @brief Yields a scalar zero of the element type of its argument.
  *
  ******************************************************************************/
 
-#define ZERO( type, postfix, zval, oval) \
-inline                                   \
-type zero( type[*] A)                    \
-{                                        \
-  return( zval);                         \
+#define ZERO( type, postfix, zval, oval)                                       \
+inline                                                                         \
+type zero( type[*] A)                                                          \
+{                                                                              \
+  return( zval);                                                               \
 }
 
 BUILT_IN( ZERO)
 
-/** <!--********************************************************************-->
+
+/******************************************************************************
  *
- * @fn  <a> one( <a>[*] Array)
+ * @fn <a> one( <a>[*] A)
  *
- *   @brief  yields a scalar one of the element type of its argument.
+ * @brief Yields a scalar one of the element type of its argument.
  *
  ******************************************************************************/
 
-#define ONE( type, postfix, zval, oval) \
-inline                                  \
-type one( type[*] A)                    \
-{                                       \
-  return( oval);                        \
+#define ONE( type, postfix, zval, oval)                                        \
+inline                                                                         \
+type one( type[*] A)                                                           \
+{                                                                              \
+  return( oval);                                                               \
 }
 
 BUILT_IN( ONE)
 
-
-/** <!--********************************************************************-->
+
+/******************************************************************************
  *
- * Macros for encapsulating binary and monary prfs:
+ * Scalar-extensions for binary monary ops.
+ *
  * Calls of these are created when using the macros provided in "Templates.mac"
- * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS...
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS.
  *
  ******************************************************************************/
 
-#define MAP_BIN_SxS( name, op, a, b)  \
-inline                                \
-b name(a A, a B)                      \
-{                                     \
-  return( op( A, B));                 \
+#define MAP_BIN_SxS( name, op, a, b)                                           \
+inline                                                                         \
+b name( a A, a B)                                                              \
+{                                                                              \
+  res = op( A, B);                                                             \
+  return( res);                                                                \
 }
 
-#define MAP_MON_SxS( name, op, a, b)  \
-inline                                \
-b name(a A)                           \
-{                                     \
-  return( op( A));                    \
+#define MAP_MON_SxS( name, op, a, b)                                           \
+inline                                                                         \
+b name( a A)                                                                   \
+{                                                                              \
+  res = op( A);                                                                \
+  return( res);                                                                \
 }
 
-#define MAP_UNA_S( name, op, a, b)    \
-inline                                \
-a name(a A)                           \
-{                                     \
-  return op (A, one (A));             \
+#define MAP_UNA_S( name, op, a, b)                                             \
+inline                                                                         \
+a name( a A)                                                                   \
+{                                                                              \
+  res = op (A, one( A));                                                       \
+  return( res);                                                                \
 }
 
-
-/** <!--********************************************************************-->
+
+/******************************************************************************
  *
- * AriOPS on scalars (see Templates.mac for details)
+ * AriOPS on scalars (see Templates.mac for details).
  *
  ******************************************************************************/
 
-#define ARI_OPS_S( type, postfix, zval, oval) \
+#define ARI_OPS_S( type, postfix, zval, oval)                                  \
 MAP_ARI_OPS( SxS, type)
 
-NUM(  ARI_OPS_S)
+NUM( ARI_OPS_S)
 
-//------------------------------------------------------------------------------
+/******************************************************************************/
 
-#define ABS_OP_S( type, postfix, zval, oval) \
+#define ABS_OP_S( type, postfix, zval, oval)                                   \
 MAP_ABS_OP( SxS, type)
 
-#define ABS_NOOP_S( type, postfix, zval, oval) \
+#define ABS_NOOP_S( type, postfix, zval, oval)                                 \
 MAP_ABS_NOOP( SxS, type)
 
-/* _abs_ works on all numbers but is noop on unsigned ones */
-SIGNED_NUM(  ABS_OP_S)
-UNSIGNED_INT_NUM(  ABS_NOOP_S)
+SIGNED_NUM( ABS_OP_S)
+// abs is noop on unsigned numbers
+UNSIGNED_INT_NUM( ABS_NOOP_S)
 
-//------------------------------------------------------------------------------
+/******************************************************************************/
 
-#define NEG_OP_S( type, postfix, zval, oval) \
+#define NEG_OP_S( type, postfix, zval, oval)                                   \
 MAP_NEG_OP( SxS, type)
 
-/* _neg_ only works on signed integers and reals */
-SIGNED_NUM(  NEG_OP_S)
+// neg only works on signed integers and reals
+SIGNED_NUM( NEG_OP_S)
 
-//------------------------------------------------------------------------------
+/******************************************************************************/
 
-#define ANA_OPS_S( type, postfix, zval, oval) \
+#define ANA_OPS_S( type, postfix, zval, oval)                                  \
 MAP_ANA_OPS( S, type)
 
-NUM(   ANA_OPS_S)
+NUM( ANA_OPS_S)
 
-//------------------------------------------------------------------------------
+/******************************************************************************/
 
-#define INT_OPS_S( type, postfix, zval, oval) \
+#define INT_OPS_S( type, postfix, zval, oval)                                  \
 MAP_INT_OPS( SxS, type)
 
-/* _mod_SxS_ only supports whole numbers */
-INT_NUM(  INT_OPS_S)
+// mod only supports whole numbers
+INT_NUM( INT_OPS_S)
 
-/** <!--********************************************************************-->
+
+/******************************************************************************
  *
- * RelOPS on scalars (see Templates.mac for details)
+ * RelOPS on scalars (see Templates.mac for details).
  *
  ******************************************************************************/
 
-#define REL_OPS_S( type, postfix, zero, one) \
+#define REL_OPS_S( type, postfix, zero, one)                                   \
 MAP_REL_OPS( SxS, type)
 
-BUILT_IN(  REL_OPS_S)
+BUILT_IN( REL_OPS_S)
 
 
-/** <!--********************************************************************-->
+/******************************************************************************
  *
- * LogOPS on scalars (see Templates.mac for details)
+ * LogOPS on scalars (see Templates.mac for details).
  *
  ******************************************************************************/
 
 MAP_LOG_OPS( SxS)
 
 
-/** <!--********************************************************************-->
+/******************************************************************************
  *
- * ConvOPS on scalars (see Templates.mac for details)
+ * ConvOPS on scalars (see Templates.mac for details).
  *
  ******************************************************************************/
 
-#define BOOL_CONV_OP_S(  type, postfix, zero, one) \
+#define BOOL_CONV_OP_S( type, postfix, zero, one)                              \
 MAP_BOOL_CONV_OP( SxS, type)
+
 NUM( BOOL_CONV_OP_S)
 BOOL( BOOL_CONV_OP_S)
 
-#define NUM_CONV_OPS_S( type, postfix, zero, one) \
+#define NUM_CONV_OPS_S( type, postfix, zero, one)                              \
 MAP_NUM_CONV_OPS( SxS, type)
 
 BUILT_IN( NUM_CONV_OPS_S)
-
-
