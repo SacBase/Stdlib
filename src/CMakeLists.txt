@@ -366,8 +366,8 @@ FOREACH (name ${C_DEPS_SRC})
     IMPLICIT_DEPENDS C "${src}"
     DEPENDS "$<$<NOT:$<EQUAL:-1,${_is_fibreio}>>:${BIS_OUTH}>"
     COMMAND
-        ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
-                 -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+        ${SAC2C} -Xp -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
+                 -Xp -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
                  -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
     WORKING_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
@@ -497,10 +497,9 @@ FOREACH (name ${XSAC_SRC})
 
     ADD_CUSTOM_COMMAND (
         OUTPUT "${dir}/${dst}.sac"
-        # FIXME it would be better to call saccc like it is done currently
-        #       $(SACCC) $(SAC2C) prog seq -E "-x c" -I. $(DEFS)
         COMMAND
-            ${SAC2C} -cc ccprog -Xc -E -Xc "-x c" -noprelude -o /dev/stdout "${src}" > "${dir}/${dst}.sac"
+            # sac2c calls the preprocessor and the '-cppI's are there anyways!
+            cp "${src}" "${dir}/${dst}.sac" # sac2c calls the preprocessor and the 
         WORKING_DIRECTORY
             "${dir}"
         DEPENDS "${src}"
