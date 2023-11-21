@@ -28,7 +28,7 @@ MACRO (CHECK_SAC2C_CC_FLAG flag var)
     # Call CC via sac2c
     EXECUTE_PROCESS (
         COMMAND
-            ${SAC2C_T} ${__werror} ${__flag} -noprelude -cc ccmod
+            ${SAC2C_T} ${__werror} ${__flag} -noprelude -cc ccrmod
             "${CMAKE_BINARY_DIR}/test-${FLAG}.c"
             -o "${CMAKE_BINARY_DIR}/test-${FLAG}"
         ERROR_VARIABLE sac2c_exec_error
@@ -99,7 +99,7 @@ ADD_CUSTOM_COMMAND (
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
                  ${FLEX_SAC2C_CC_FLAGS}
-                 -v0 -noprelude -cc ccmod
+                 -v0 -noprelude -cc ccrmod
                  -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/lex.FibreScan.o"
                  "${LEX_OUT}"
     WORKING_DIRECTORY
@@ -115,7 +115,7 @@ ADD_CUSTOM_COMMAND (
         ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${LEX_BIS_DIR}
                  -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${LEX_BIS_DIR}
                  ${BISON_SAC2C_CC_FLAGS}
-                 -v0 -noprelude -cc ccmod
+                 -v0 -noprelude -cc ccrmod
                  -o "${CMAKE_CURRENT_BINARY_DIR}/stdio/src/FibreIO/FibreScan.tab.o"
                  "${BIS_OUTC}"
     WORKING_DIRECTORY
@@ -368,7 +368,7 @@ FOREACH (name ${C_DEPS_SRC})
     COMMAND
         ${SAC2C} -Xp -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                  -Xp -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
-                 -v0 -noprelude -cc ccmod -o "${dst}" "${src}"
+                 -v0 -noprelude -cc ccrmod -o "${dst}" "${src}"
     WORKING_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
     COMMENT "Generating ${dst} for target `${TARGET}'"
