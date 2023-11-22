@@ -499,7 +499,7 @@ FOREACH (name ${XSAC_SRC})
         OUTPUT "${dir}/${dst}.sac"
         COMMAND
             # sac2c calls the preprocessor and the '-cppI's are there anyways!
-            cp "${src}" "${dir}/${dst}.sac" # sac2c calls the preprocessor and the 
+            cp "${src}" "${dir}/${dst}.sac"
         WORKING_DIRECTORY
             "${dir}"
         DEPENDS "${src}"
