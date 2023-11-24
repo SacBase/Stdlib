@@ -40,33 +40,21 @@ export all;
 inline                                                                         \
 b[d:shp] name( a[d:shp] A, a[d:shp] B)                                         \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : op( _sel_VxA_( iv, A), _sel_VxA_( iv, B));                       \
-        } : genarray( shp, op( one( A), one( B)));                             \
-  return( res);                                                                \
+  return { iv -> op( _sel_VxA_( iv, A), _sel_VxA_( iv, B)) };                  \
 }
 
 #define MAP_BIN_AxS( name, op, a, b)                                           \
 inline                                                                         \
 b[d:shp] name( a[d:shp] A, a B)                                                \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : op( _sel_VxA_( iv, A), B);                                       \
-        } : genarray( shp, op( one( A), one( B)));                             \
-  return( res);                                                                \
+  return { iv -> op( _sel_VxA_( iv, A), B) };                                  \
 }
 
 #define MAP_BIN_SxA( name, op, a, b)                                           \
 inline                                                                         \
 b[d:shp] name( a A, a[d:shp] B)                                                \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : op( A, _sel_VxA_( iv, B));                                       \
-        } : genarray( shp, op( one( A), one( B)));                             \
-  return( res);                                                                \
+  return { iv -> op( A, _sel_VxA_( iv, B)) };                                  \
 }
 
 /******************************************************************************/
@@ -75,24 +63,21 @@ b[d:shp] name( a A, a[d:shp] B)                                                \
 inline                                                                         \
 int[n] (name)( int[n] A, int[n] B)                                             \
 {                                                                              \
-  res = _##op##_VxV_( A, B);                                                   \
-  return( res);                                                                \
+  return _##op##_VxV_( A, B);                                                  \
 }
 
 #define MAP_BIN_INT_VxS( name, op)                                             \
 inline                                                                         \
 int[n] (name)( int[n] A, int B)                                                \
 {                                                                              \
-  res = _##op##_VxS_( A, B);                                                   \
-  return( res);                                                                \
+  return _##op##_VxS_( A, B);                                                  \
 }
 
 #define MAP_BIN_INT_SxV( name, op)                                             \
 inline                                                                         \
 int[n] (name)( int A, int[n] B)                                                \
 {                                                                              \
-  res = _##op##_SxV_( A, B);                                                   \
-  return( res);                                                                \
+  return _##op##_SxV_( A, B);                                                  \
 }
 
 
@@ -106,11 +91,7 @@ int[n] (name)( int A, int[n] B)                                                \
 inline                                                                         \
 b[d:shp] name( a[d:shp] A)                                                     \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : op( _sel_VxA_( iv, A));                                          \
-        } : genarray( shp, op( zero( A)));                                     \
-  return( res);                                                                \
+  return { iv -> op( _sel_VxA_( iv, A)) };                                     \
 }
 
 #define MAP_MON_AxS( name, op, a, b)
@@ -208,30 +189,3 @@ BOOL( BOOL_CONV_OP_A)
 MAP_NUM_CONV_OPS( AxA, type)
 
 BUILT_IN( NUM_CONV_OPS_A)
-
-
-/******************************************************************************
- *
- * Reduction operations.
- *
- ******************************************************************************/
-
-inline
-bool all( bool[d:shp] A)
-{
-  res = with {
-          (_mul_SxV_( 0, shp) <= iv < shp)
-            : _sel_VxA_( iv, A);
-        } : fold( ScalarArith::&, true);
-  return( res);
-}
-
-inline
-bool any( bool[d:shp] A)
-{
-  res = with {
-          (_mul_SxV_( 0, shp) <= iv < shp)
-            : _sel_VxA_( iv, A);
-        } : fold( ScalarArith::|, false);
-  return( res);
-}

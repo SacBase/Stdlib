@@ -16,7 +16,7 @@ export all;
 inline                                                                         \
 type zero( type[*] A)                                                          \
 {                                                                              \
-  return( zval);                                                               \
+  return zval;                                                                 \
 }
 
 BUILT_IN( ZERO)
@@ -34,7 +34,7 @@ BUILT_IN( ZERO)
 inline                                                                         \
 type one( type[*] A)                                                           \
 {                                                                              \
-  return( oval);                                                               \
+  return oval;                                                                 \
 }
 
 BUILT_IN( ONE)
@@ -53,24 +53,21 @@ BUILT_IN( ONE)
 inline                                                                         \
 b name( a A, a B)                                                              \
 {                                                                              \
-  res = op( A, B);                                                             \
-  return( res);                                                                \
+  return op( A, B);                                                            \
 }
 
 #define MAP_MON_SxS( name, op, a, b)                                           \
 inline                                                                         \
 b name( a A)                                                                   \
 {                                                                              \
-  res = op( A);                                                                \
-  return( res);                                                                \
+  return op( A);                                                               \
 }
 
 #define MAP_UNA_S( name, op, a, b)                                             \
 inline                                                                         \
 a name( a A)                                                                   \
 {                                                                              \
-  res = op (A, one( A));                                                       \
-  return( res);                                                                \
+  return op(A, one( A));                                                       \
 }
 
 

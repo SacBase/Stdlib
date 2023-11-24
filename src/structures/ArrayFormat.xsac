@@ -1,7 +1,6 @@
 module ArrayFormat;
 
 use Array: all;
-use MathArray: { log10 };
 use String: { tochar, sprintf };
 
 export { format };
@@ -38,7 +37,7 @@ export { format };
 DOINL
 char[d:shp] format( char[d:shp] A)
 {
-  return( A);
+  return A;
 }
 
 
@@ -52,31 +51,24 @@ char[d:shp] format( char[d:shp] A)
 DOINL
 char[1] format( bool A)
 {
-  res = A ? '1' : '0';
-  return( [res]);
+  return [A ? '1' : '0'];
 }
 
 /******************************************************************************
  *
- * @fn char[+] format( bool[d:shp] A)
+ * @fn char[+] format( bool[d:shp,n] A)
  *
  * Default format for boolean non-scalars.
  *
  ******************************************************************************/
 DOINL
-char[+] format( bool[d:shp] A)
+char[+] format( bool[d:shp,n] A)
 {
-  res = with {
-        (. <= iv <= .)
-          : A[ iv] ? ['1', ' '] : ['0', ' '];
-      } : genarray( shp);
-  zs = drop( [-2], shape( res));
-  zs = zs ++ [prod( take( [-2], shape( res)))];
-  res = reshape( zs, res);
-  lastcol = genarray( [dim( res)], 0);
-  lastcol = modarray( lastcol, dim( res) - 1, -1);
+  res = { iv -> A[ iv] ? ['1', ' '] : ['0', ' '] };
+  res = reshape( shp ++ [2 * n], res);
+  lastcol = genarray( [d], 0) ++ [-1];
   res = drop( lastcol, res);
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -93,8 +85,7 @@ char[+] format( bool[d:shp] A)
 DOINL
 char[.] format( bool A, int[2] w)
 {
-  res = format( tod( A), w);
-  return( res);
+  return format( tod( A), w);
 }
 
 /******************************************************************************
@@ -107,8 +98,7 @@ char[.] format( bool A, int[2] w)
 DOINL
 char[+] format( bool[+] A, int[2] w)
 {
-  res = format( tod( A), w);
-  return( res);
+  return format( tod( A), w);
 }
 
 
@@ -122,8 +112,7 @@ char[+] format( bool[+] A, int[2] w)
 DOINL
 char[.] format( int A)
 {
-  res = tochar( sprintf( "%d", A));
-  return( res);
+  return tochar( sprintf( "%d", A));
 }
 
 /******************************************************************************
@@ -136,8 +125,7 @@ char[.] format( int A)
 DOINL
 char[.] format( long A)
 {
-  res = tochar( sprintf( "%ld", A));
-  return( res);
+  return tochar( sprintf( "%ld", A));
 }
 
 /******************************************************************************
@@ -152,29 +140,24 @@ char[.] format( long A)
 DOINL
 char[+] format( int[d:shp,n] A)
 {
-  shpm = [prod( shp)] ++ [n];
-  if (prod( shpm) == 0) {
-    res = genarray(shp, ' ');
+  shpp = prod( shp);
+  if (shpp == 0 || n == 0) {
+    res = genarray( shp, ' ');
   } else {
-    m = reshape( shpm, A);
-    widths = pmtl( maxsl1( abs( m)));
+    m = reshape( [shpp, n], A);
+
     // Large negative number may need extra column for minus sign
-    maxneg = minsl1( m);
-    neg = toi( maxneg < 0);
-    maxneg2 = pmtl( abs( maxneg));
-    widths = widths + neg * toi( maxneg2 >= widths);
+    minm = minsl1( m);
+    maxneg = log10( abs( minm));
+    widths = log10( maxsl1( abs( m)));
+    widths += toi( minm < 0) * toi( maxneg >= widths);
     zcols = sum( widths + 1) - 1;
-    zdef = genarray( [zcols], ' ');
 
-    res = with {
-            ( . <= iv <= . )
-              : formatrow( widths, m[ iv]);
-          } : genarray( take( [1], shape( m)), zdef);
-
-    shpz = shp ++ take( [-1], shape( res));
-    res = reshape( shpz, res);
+    res = { [i] -> formatrow( widths, m[ i]) | [i] < [shpp] };
+    res = reshape( shp ++ [zcols], res);
   }
-  return( res);
+
+  return res;
 }
 
 /******************************************************************************
@@ -187,8 +170,7 @@ char[+] format( int[d:shp,n] A)
 DOINL
 char[.] format( int A, int precision)
 {
-  res = format( tod( A), precision);
-  return( res);
+  return format( tod( A), precision);
 }
 
 /******************************************************************************
@@ -201,8 +183,7 @@ char[.] format( int A, int precision)
 DOINL
 char[+] format( int[+] A, int precision)
 {
-  res = format( tod( A), precision);
-  return( res);
+  return format( tod( A), precision);
 }
 
 /******************************************************************************
@@ -221,7 +202,7 @@ char[.] format( int A, int[2] w)
 {
   res = tochar( sprintf( "%*.*d", w[ 0], w[ 1], A));
   res = overflowCheck( res, w[ 0]);
-  return( res);
+  return res;
 }
 
 
@@ -235,9 +216,7 @@ char[.] format( int A, int[2] w)
 DOINL
 char[.] format( float A)
 {
-  precision = 15;
-  res = format( tod( A), precision);
-  return( res);
+  return format( tod( A), 15);
 }
 
 /******************************************************************************
@@ -250,9 +229,7 @@ char[.] format( float A)
 DOINL
 char[+] format( float[+] A)
 {
-  precision = 15;
-  res = format( tod( A), precision);
-  return( res);
+  return format( tod( A), 15);
 }
 
 /******************************************************************************
@@ -265,8 +242,7 @@ char[+] format( float[+] A)
 DOINL
 char[.] format( float A, int precision)
 {
-  res = format( tod( A), precision);
-  return( res);
+  return format( tod( A), precision);
 }
 
 /******************************************************************************
@@ -279,8 +255,7 @@ char[.] format( float A, int precision)
 DOINL
 char[+] format( float[+] A, int precision)
 {
-  res = format( tod( A), precision);
-  return( res);
+  return format( tod( A), precision);
 }
 
 /******************************************************************************
@@ -297,8 +272,7 @@ char[+] format( float[+] A, int precision)
 DOINL
 char[.] format( float A, int[2] w)
 {
-  res = format( tod( A), w);
-  return( res);
+  return format( tod( A), w);
 }
 
 /******************************************************************************
@@ -315,8 +289,7 @@ char[.] format( float A, int[2] w)
 DOINL
 char[+] format(float[+] A, int[2] w)
 {
-  res = format( tod( A), w);
-  return( res);
+  return format( tod( A), w);
 }
 
 
@@ -330,9 +303,7 @@ char[+] format(float[+] A, int[2] w)
 DOINL
 char[.] format( double A)
 {
-  precision = 15;
-  res = format( A, precision);
-  return( res);
+  return format( A, 15);
 }
 
 /******************************************************************************
@@ -347,9 +318,7 @@ char[.] format( double A)
 DOINL
 char[+] format( double[+] A)
 {
-  precision = 15;
-  res = format( A, precision);
-  return( res);
+  return format( A, 15);
 }
 
 /******************************************************************************
@@ -364,7 +333,7 @@ char[.] format( double A, int precision)
 {
   res = scalarFormatter( A, precision);
   res = padWithBlanks( precision + 7, res);
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -377,51 +346,36 @@ char[.] format( double A, int precision)
  *
  ******************************************************************************/
 DOINL
-char[+] format( double[d:shp] A, int precision)
+char[+] format( double[d:shp,n] A, int precision)
 {
-  rows = prod( drop( [-1], shp));
-  cols = take( [-1], [1] ++ shp)[ 0];
-  ravel = reshape( [prod( shp)], A);
+  shpp = prod( shp);
+  if (shpp == 0 || n == 0) {
+    res = genarray( shp, ' ');
+  } else {
+    ravel = reshape( [shpp * n], A);
 
-  // Formatted results and their shapes
-  // See scalarFormatter for why the value 7 appears in next line
-  wid = precision + 7;
-  defcell = genarray( [wid], ' ');
+    // Format each array element
+    // See scalarFormatter for why we do 'precision + 7'
+    fry = { [i] -> padWithBlanks( precision + 7,
+                                  scalarFormatter( ravel[ i], precision)) };
 
-  // Format each array element
-  fry = with {
-          ( . <= iv <= . ) {
-            el = scalarFormatter( ravel[ iv], precision);
-            el = padWithBlanks( wid, el);
-          } : el;
-        } : genarray( shape( ravel), defcell);
+    // Determine width of each result column
+    // First, chars left of decimal point
+    lodp = { [i] -> thCharsTo( [' ', '.'], fry[ i]) };
+    // Decimal point and # non-blankchars to right of decimal point
+    rodp = { [i] -> thCharsTo( [' ', ' '], drop( [lodp[ i]], fry[ i])) };
 
-  // Determine width of each result column
-  // First, chars left of decimal point
-  odpshp = [shape( fry)[ 0]];
-  lodp = with {
-          ( . <= iv <= . )
-            : thCharsTo ([' ', '.'], fry[ iv]);
-        } : genarray( odpshp, 0);
-  // Decimal point and # non-blankchars to right of decimal point
-  rodp = with {
-          ( . <= iv <= . )
-            : thCharsTo( [' ', ' '], drop( [lodp[ iv]], fry[ iv]));
-        } : genarray( odpshp, 0);
+    lodpmax = maxsl1( reshape( [shpp, n], lodp));
+    rodpmax = maxsl1( reshape( [shpp, n], rodp));
+    widths = lodpmax + rodpmax;
+    zcols = sum( widths + 2) - 1;  // Room for decimal point and blank
 
-  lodpmax = maxsl1( reshape( [rows, cols], lodp));
-  rodpmax = maxsl1( reshape( [rows, cols], rodp));
-  widths = lodpmax + rodpmax;
-  zcols = sum( widths + 2) - 1;  // Room for decimal point and blank
-  shpz = drop( [-1], shp) ++ [zcols];
-  defcell = genarray( [zcols], ' ');
+    res = { [i] -> alignrow( fry, i, widths, lodp, lodpmax, zcols)
+          | [i] < [shpp] };
+    res = reshape( shp ++ [zcols], res);
+  }
 
-  res = with {
-        ([0] <= [i] < [rows])
-          : alignrow( fry, i, widths, lodp, lodpmax, zcols);
-      } : genarray( [rows], defcell);
-  res = reshape( shpz, res);
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -442,7 +396,7 @@ char[.] format( double A, int[2] w)
 {
   res = tochar( sprintf( "%*.*g", w[ 0], w[ 1], A));
   res = overflowCheck( res, w[ 0]);
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -459,15 +413,11 @@ char[.] format( double A, int[2] w)
 DOINL
 char[+] format( double[d:shp] A, int[2] w)
 {
-  defcell = genarray( [w[ 0]], ' ');
-  res = with {
-        ( . <= iv < . )
-          : format( A[ iv], w);
-      } : genarray( shp, defcell);
+  res = { iv -> format( A[ iv], w) | iv < shp };
   zshp = shape( res);
   zshp = drop( [-2], zshp) ++ [prod( take( [-2], zshp))];
   res = reshape( zshp, res);
-  return( res);
+  return res;
 }
 
 
@@ -493,9 +443,8 @@ char[olen] formatrow( int[vlen] wid, int[vlen] A)
   // Can't use WL because widths may differ
   sink = 0;
   for (i = 0; i < vlen; i++) {
-    curm = A[ i];
-    curw = wid[ i];
-    curz = format( curm, [curw, 1]);
+    w = [wid[ i], 1];
+    curz = format( A[ i], w);
     lim  = shape( curz)[ 0];
 
     for (src = 0; src < lim; src++) {
@@ -503,23 +452,23 @@ char[olen] formatrow( int[vlen] wid, int[vlen] A)
     }
 
     // Inter-element blank
-    sink = sink + 1 + wid[ i];
+    sink += wid[ i] + 1;
   }
-  return( res);
+
+  return res;
 }
 
 /******************************************************************************
  *
- * @fn int[d:shp] pmtl( int[d:shp] A)
+ * @fn int[d:shp] log10( int[d:shp] A)
  *
  * @brief Poor man's 10-logarithm, used to compute column widths.
  *
  ******************************************************************************/
-int[d:shp] pmtl( int[d:shp] A)
+int[d:shp] log10( int[d:shp] A)
 {
   // Avoid 10 log 0!
-  res = toi( log10( tod( max( A, 2)))) + 1;
-  return( res);
+  return toi( MathArray::log10( tod( max( A, 2)))) + 1;
 }
 
 /******************************************************************************
@@ -535,7 +484,7 @@ int[n] maxsl1( int[n,m] A)
   res = with {
           ([0] <= iv < [n]) : A[ iv];
         } : fold( max, minint());
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -551,7 +500,7 @@ int[n] minsl1( int[n,m] A)
   res = with {
           ([0] <= iv < [n]) : A[ iv];
         } : fold( min, maxint());
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -566,6 +515,7 @@ char[zcols] alignrow( char[.,.] fry, int i, int[cols] widths,
                       int[.] lodp, int[.] lodpmax, int zcols)
 {
   res = genarray( [zcols], ' ');
+
   zci = 0;
   for (ci = 0; ci < cols; ci++) {
     fi = ci + cols * i;             // Source item index
@@ -574,9 +524,10 @@ char[zcols] alignrow( char[.,.] fry, int i, int[cols] widths,
     sz = sefe + abs( sc);
     zit = padWithBlanks( sz, rotate( [-sc], fry[ fi]));
     res, junk = thrnAppend( res, zci, zit);
-    zci = zci + widths[ ci] + 1;
+    zci += widths[ ci] + 1;
   }
-  return( res);
+
+  return res;
 }
 
 /******************************************************************************
@@ -593,7 +544,7 @@ char[wid] padWithBlanks( int wid, char[n] A)
   res = with {
           ([0] <= iv < [maxidx]) : A[ iv];
         } : genarray( [wid], ' ');
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -615,7 +566,8 @@ int thCharsTo( char[n] ch, char[lim] fry)
       i = lim;
     }
   }
-  return( res);
+
+  return res;
 }
 
 /******************************************************************************
@@ -633,7 +585,8 @@ char[d], int thrnAppend( char[d] vec, int sink, char[n] A)
     res[ sink] = A[ src];
     sink++;
   }
-  return( res, sink);
+
+  return (res, sink);
 }
 
 /******************************************************************************
@@ -649,7 +602,7 @@ char[.] scalarFormatter( double A, int precision)
 {
   res = tochar( sprintf( "%.*g", precision, A));
   res = killPlusSign( res);
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -667,12 +620,11 @@ char[.] killPlusSign( char[n] A)
   sink = 1;
   for (src = 1; src < n; src++) {
     res[ sink] = A[ src];
-    if (res[ sink] != '+') {
-      sink++;
-    }
+    sink += toi( res[ sink] != '+');
   }
+
   res = take( [sink], res);
-  return( res);
+  return res;
 }
 
 /******************************************************************************
@@ -685,6 +637,5 @@ char[.] killPlusSign( char[n] A)
 inline
 char[.] overflowCheck( char[n] A, int wid)
 {
-  res = wid < n ? genarray( [wid], '*') : A;
-  return( res);
+  return wid < n ? genarray( [wid], '*') : A;
 }
