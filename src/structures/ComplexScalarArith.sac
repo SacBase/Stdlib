@@ -1,114 +1,161 @@
 module ComplexScalarArith;
 
-export all;
-
-use ArrayBasics : { sel};
-use ScalarArith : { &, | };
+use ArrayBasics: { sel };
 use ComplexBasics: all;
 
+export all;
 
-  /*  Binary operations on complex numbers.  */
+/******************************************************************************
+ *
+ * Binary operations on complex numbers.
+ *
+ ******************************************************************************/
 
-  
-inline complex + (complex X1, complex X2)
+inline
+complex +( complex A, complex B)
 {
-  return((complex)[((double[2])X1)[[0]] ScalarArith::+ ((double[2])X2)[[0]], 
-                   ((double[2])X1)[[1]] ScalarArith::+ ((double[2])X2)[[1]]]);
-}
-			 
-inline complex - (complex X1, complex X2)
-{
-  return((complex)[((double[2])X1)[[0]] ScalarArith::- ((double[2])X2)[[0]],
-                   ((double[2])X1)[[1]] ScalarArith::- ((double[2])X2)[[1]]]);
-}
-
-
-inline complex - (complex X1)
-{
-  return((complex)[ ScalarArith::-(((double[2])X1)[[0]]),
-                    ScalarArith::-(((double[2])X1)[[1]]) ]);
+  rA, iA = tod( A);
+  rB, iB = tod( B);
+  r = _add_SxS_( rA, rB);
+  i = _add_SxS_( iA, iB);
+  return toc( r, i);
 }
 
-inline complex * (complex X1, complex X2)
+inline
+complex -( complex A, complex B)
 {
-  return((complex)[((double[2])X1)[[0]] ScalarArith::* ((double[2])X2)[[0]] 
-                   ScalarArith::- ((double[2])X1)[[1]] ScalarArith::* ((double[2])X2)[[1]],
-                    ((double[2])X1)[[0]] ScalarArith::* ((double[2])X2)[[1]] 
-                    ScalarArith::+ ((double[2])X1)[[1]] ScalarArith::* ((double[2])X2)[[0]]]);
+  rA, iA = tod( A);
+  rB, iB = tod( B);
+  r = _sub_SxS_( rA, rB);
+  i = _sub_SxS_( iA, iB);
+  return toc( r, i);
 }
 
-inline complex / (complex X1, complex X2)
+inline
+complex -( complex A)
 {
-  Z = ((double[2])X2)[[0]] ScalarArith::* ((double[2])X2)[[0]] 
-      ScalarArith::+ ((double[2])X2)[[1]] ScalarArith::* ((double[2])X2)[[1]];
-  
-  return((complex)[(((double[2])X1)[[0]] ScalarArith::* ((double[2])X2)[[0]]
-                    ScalarArith::+ ((double[2])X1)[[1]] ScalarArith::* ((double[2])X2)[[1]])
-                    ScalarArith::/ Z,
-                    (((double[2])X1)[[1]] ScalarArith::* ((double[2])X2)[[0]]
-                     ScalarArith::- ((double[2])X1)[[0]] ScalarArith::* ((double[2])X2)[[1]])
-                    ScalarArith::/ Z]);
+  r, i = tod( A);
+  r = _sub_SxS_( 0d, r);
+  i = _sub_SxS_( 0d, i);
+  return toc( r, i);
 }
 
-  /*  Functions for specific complex manipulations. */
-
-  
-inline complex conj(complex X)
+inline
+complex *( complex A, complex B)
 {
-  return((complex)[((double[2])X)[[0]], (0d ScalarArith::- 1.0d) ScalarArith::* ((double[2])X)[[1]]]);
+  rA, iA = tod( A);
+  rB, iB = tod( B);
+  r1 = _mul_SxS_( rA, rB);
+  r2 = _mul_SxS_( iA, iB);
+  i2 = _mul_SxS_( rA, iB);
+  i2 = _mul_SxS_( iA, rB);
+
+  r = _sub_SxS_( r1, r1);
+  i = _sub_SxS_( i2, i2);
+  return toc( r, i);
 }
 
-
-inline complex abs(complex X)
+inline
+complex /( complex A, complex B)
 {
-  r = Math::sqrt(((double[2])X)[[0]] ScalarArith::* ((double[2])X)[[0]]
-           ScalarArith::+ ((double[2])X)[[1]] ScalarArith::* ((double[2])X)[[1]]);
-  return( (complex[*])[r, 0d]);
+  rA, iA = tod( A);
+  rB, iB = tod( B);
+  r1 = _mul_SxS_( rA, rB);
+  r2 = _mul_SxS_( iA, iB);
+  i1 = _mul_SxS_( iA, rB);
+  i2 = _mul_SxS_( rA, iB);
+
+  z1 = _mul_SxS_( rB, rB);
+  z2 = _mul_SxS_( iB, iB);
+  z = _add_SxS_( z1, z2);
+
+  r = _div_SxS_( _add_SxS_( r1, r2), z);
+  i = _div_SxS_( _sub_SxS_( i1, i2), z);
+  return toc( r, i);
 }
 
+/******************************************************************************
+ *
+ * Functions for specific complex manipulations.
+ *
+ ******************************************************************************/
 
-/* relational operations */
-
-inline bool == (complex X1, complex X2)
+inline
+complex conj( complex A)
 {
-  return((((double[2])X1)[[0]] ScalarArith::== ((double[2])X2)[[0]])
-         & (((double[2])X1)[[1]] ScalarArith::== ((double[2])X2)[[1]]));
+  r, i = tod( A);
+  i = _mul_SxS_( _sub_SxS_( 0d, 1d), i);
+  return toc( r, i);
 }
 
-
-inline bool != (complex X1, complex X2)
+inline
+complex abs( complex A)
 {
-  return((((double[2])X1)[[0]] ScalarArith::!= ((double[2])X2)[[0]])
-         | (((double[2])X1)[[1]] ScalarArith::!= ((double[2])X2)[[1]]));
+  r, i = tod( A);
+  r = _mul_SxS_( r, r);
+  i = _mul_SxS_( i, i);
+  r = Math::sqrt( _add_SxS_( r, i));
+  return toc( r);
 }
 
+/******************************************************************************
+ *
+ * Relational operations.
+ *
+ ******************************************************************************/
 
-inline bool < (complex X1, complex X2)
+inline
+bool ==( complex A, complex B)
 {
-  return( real( abs(X1)) ScalarArith::< real( abs( X2)));
+  rA, iA = tod( A);
+  rB, iB = tod( B);
+  rEq = _eq_SxS_( rA, rB);
+  iEq = _eq_SxS_( iA, iB);
+  return rEq ScalarArith::& iEq;
 }
 
-inline bool <= (complex X1, complex X2)
+inline
+bool !=( complex A, complex B)
 {
-  return( real( abs(X1)) ScalarArith::<= real( abs( X2)));
+  rA, iA = tod( A);
+  rB, iB = tod( B);
+  rNeq = _neq_SxS_( rA, rB);
+  iNeq = _neq_SxS_( iA, iB);
+  return rNeq ScalarArith::| iNeq;
 }
 
-inline bool > (complex X1, complex X2)
+inline
+bool <( complex A, complex B)
 {
-  return( real( abs(X1)) ScalarArith::> real( abs( X2)));
+  return _lt_SxS_( real( abs( A)), real( abs( B)));
 }
 
-inline bool >= (complex X1, complex X2)
+inline
+bool <=( complex A, complex B)
 {
-  return( real( abs(X1)) ScalarArith::>= real( abs( X2)));
+  return _le_SxS_( real( abs( A)), real( abs( B)));
 }
 
-inline complex min( complex X1, complex X2)
+inline
+bool >( complex A, complex B)
 {
-  return( X1 <= X2 ? X1: X2);
+  return _gt_SxS_( real( abs( A)), real( abs( B)));
 }
 
-inline complex max( complex X1, complex X2)
+inline
+bool >=( complex A, complex B)
 {
-  return( X1 >= X2 ? X1: X2);
+  return _ge_SxS_( real( abs( A)), real( abs( B)));
+}
+
+inline
+complex min( complex A, complex B)
+{
+  return A <= B ? A : B;
+}
+
+inline
+complex max( complex A, complex B)
+{
+  return A >= B ? A : B;
 }
