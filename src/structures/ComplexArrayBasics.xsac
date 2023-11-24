@@ -1,167 +1,143 @@
 module ComplexArrayBasics;
 
-use ComplexBasics: all except {norm, normSq};
-//use ComplexScalarArith: {zero};
-use ScalarArith: {-};
+use ComplexBasics: { complex };
+
+#define OVERLOADS dim,shape,sel,reshape,genarray,modarray
+use Array: all except { OVERLOADS };
+import Array: { OVERLOADS };
 
 export all;
 
 #include "Templates.mac"
 
-/** <!--********************************************************************-->
+/******************************************************************************
  *
- * @fn  double[*] norm( complex[*] Array)
+ * @fn int dim( complex[*] A)
  *
- *   @brief  yields an array of norms
+ * @brief Yields an array's dimensionality (rank).
  *
  ******************************************************************************/
+inline
+int dim( complex[*] A)
+{
+  d = dim( (double[+])A);
+  return d - 1;
+}
+
+/******************************************************************************
+ *
+ * @fn int[.] shape( complex[*] A)
+ *
+ * @brief Yields an array's shape vector.
+ *
+ ******************************************************************************/
+inline
+int[.] shape( complex[*] A)
+{
+  shp = shape( (double[+])A);
+  return drop( [-1], shp);
+}
+
+/******************************************************************************
+ *
+ * @fn complex[d:shp] sel( int[vlen] idx, complex[vlen:vshp,d:shp] A)
+ *
+ * @brief Generalizes selections for scalar indices.
+ *
+ ******************************************************************************/
+inline
+complex[d:shp] sel( int[vlen] idx, complex[vlen:vshp,d:shp] A)
+  | all( 0 <= idx), all( idx < vshp)
+{
+  v = ((double[+])A)[ idx];
+  return (complex[*])v;
+}
 
 inline
-double[*] norm( complex[*] Array) 
+complex[d:shp] sel( int idx, complex[n,d:shp] A)
+  | 0 <= idx, idx < n
+{
+  return sel( [idx], A);
+}
+
+/******************************************************************************
+ *
+ * @fn double[d:shp] norm( complex[d:shp] A)
+ *
+ * @brief Yields an array of norms.
+ *
+ ******************************************************************************/
+inline
+double[d:shp] norm( complex[d:shp] A)
+{
+  return { iv -> ComplexBasics::norm( A[ iv]) | iv < shp };
+}
+
+/******************************************************************************
+ *
+ * @fn double[d:shp] normSq( complex[d:shp] A)
+ *
+ * @brief Yields an array of normSq.
+ *
+ ******************************************************************************/
+inline
+double[d:shp] normSq( complex[d:shp] A)
+{
+  return { iv -> ComplexBasics::normSq( A[ iv]) | iv < shp };
+}
+
+/******************************************************************************
+ *
+ * @fn complex[d:shp] reshape( int[d] shp, complex[o:oshp] A)
+ *
+ * @brief Creates a new array with identical data vector but new shape,
+ *        provided the length of the data vector matches the product of
+ *        the new shape vector.
+ *
+ ******************************************************************************/
+inline
+complex[d:shp] reshape( int[d] shp, complex[o:oshp] A)
+  | all( 0 <= shp), prod( shp) == prod( oshp)
+{
+  v = reshape( shp ++ [2], (double[*])A);
+  return (complex[*])v;
+}
+
+/******************************************************************************
+ *
+ * @fn complex[n:shp,m:vshp] genarray( int[n] shp, complex[m:vshp] val)
+ *
+ * @brief Generates a new array from the given shape and default value.
+ *
+ ******************************************************************************/
+inline
+complex[n:shp,m:vshp] genarray( int[n] shp, complex[m:vshp] val)
+{
+  return { iv -> val | iv < shp };
+}
+
+/******************************************************************************
+ *
+ * @fn complex[o:outer,i:inner] modarray( complex[o:outer,i:inner] A,
+ *                                        int[o] idx, complex[i:inner] val)
+ *
+ * @brief Modifies the element of array at position idx.
+ *
+ ******************************************************************************/
+inline
+complex[o:outer,i:inner] modarray( complex[o:outer,i:inner] A,
+                                   int[o] idx, complex[i:inner] val)
+  | all( 0 <= idx), all( idx < outer)
 {
   res = with {
-          ( . <= iv <= .) : ComplexBasics::norm( Array[iv]);
-        } : genarray( shape( Array), 0.0d);
-
-  return( res);
-}
-
-/** <!--********************************************************************-->
- *
- * @fn  double[*] normSq( complex[*] Array)
- *
- *   @brief  yields an array of normSq
- *
- ******************************************************************************/
-
-inline
-double[*] normSq( complex[*] Array) 
-{
-  res = with {
-          ( . <= iv <= .) : ComplexBasics::normSq( Array[iv]);
-        } : genarray( shape( Array), 0.0d);
-
-  return( res);
-}
-
-/** <!--********************************************************************-->
- *
- * @fn  int dim( complex[*] Array)
- *
- *   @brief  yields an array's dimensionality (rank).
- *
- ******************************************************************************/
-
-inline
-int dim( complex[*] array)
-{
-  return( _dim_A_( (double[*])(array)) - 1);
-}
-
-
-/** <!--********************************************************************-->
- *
- * @fn  int[.] shape( complex[*] Array)
- *
- *   @brief  yields an array's shape vector.
- *
- ******************************************************************************/
-
-
-inline
-int[.] shape( complex[*] array)
-{
-  return( _drop_SxV_( -1, _shape_A_( (double[*])array)));
-}
-
-
-
-/** <!--********************************************************************-->
- *
- * @fn  complex[*] reshape( int[.] shp, complex[*] Array)
- *
- *   @brief  creates a new array with identical data vector but new shape,
- *           provided the length of the data vector matches the product of
- *           the new shape vector.
- *
- ******************************************************************************/
-
-inline
-complex[*] reshape( int[.] shp, complex[*] A)
-{
-  return( (complex[*])_reshape_VxA_( _cat_VxV_(shp, [2]), (double[*])A));
-}
-
-
-
-inline
-complex[*] sel( int[.] idx, complex[*] array)
-{
-  new_shape = _drop_SxV_( _sel_VxA_( [0], _shape_A_(idx)), shape(array));
-
-  res = with {
-          ( . <= iv <= . )
-          {
-            new_idx = _cat_VxV_( idx, iv );
-          } : (complex[*])ArrayBasics::sel(new_idx, (double[*])array);
-        } : genarray( new_shape, toc(0,0) );
-
-  return( (complex[*])res);
-}
-
-
-
-/** <!--********************************************************************-->
- *
- * @fn  complex[*] sel( int idx, complex[*] Array)
- * 
- *   @brief  generalizes selections for scalar indices.
- *
- ******************************************************************************/
-
-inline
-complex[*] sel( int idx, complex[*] A)
-{
-  return( sel( [idx], A));
-}
-
-
-
-/** <!--********************************************************************-->
- *
- * @fn  complex[*] modarray( complex[*] Array, int[.] idx, complex val)
- * 
- *   @brief  modifies the element of Array at position idx, provided 
- *           shape( idx)[[0]] == dim( Array) holds.
- *
- ******************************************************************************/
-
-inline
-complex[*] genarray( int[.] shp, complex[*] val)
-{
-  res = with {
-          ( . <= iv <= . ) : val;
-        } : genarray( shp, val );
-
-  return( res);
+          (idx <= iv <= idx) : val;
+        } : modarray( A);
+  return res;
 }
 
 inline
-complex[*] modarray( complex[*] array, int[.] v, complex[*] val)
+complex[n,d:shp] modarray( complex[n,d:shp] A, int idx, complex[d:shp] val)
+  | 0 <= idx, idx < n
 {
-  res = with {
-          ( v <= iv <= v ) : val;
-        } : modarray( array );
-
-  return( res);
+  return modarray( A, [idx], val);
 }
-
-
-inline
-complex[*] modarray( complex[*] array, int v, complex[*] val)
-{
-  return( modarray( array, [v], val));
-}
-
-
-
