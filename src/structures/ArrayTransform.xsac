@@ -14,7 +14,7 @@ export all;
 
 /******************************************************************************
  *
- * @fn <a>[d:shpz] take( int[vlen] sv, typ[d:shp] A)
+ * @fn <a>[d:oshp] take( int[vlen] sv, typ[d:shp] A)
  *
  * @brief Takes a number of elements from the array, given a shape vector.
  *
@@ -33,7 +33,7 @@ export all;
 
 #define TAKE( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[d:shpz] take( int[vlen] sv, typ[d:shp] A)                                  \
+typ[d:oshp] take( int[vlen] sv, typ[d:shp] A)                                  \
 {                                                                              \
   zr = _mul_SxV_( 0, shp);                                                     \
   ylb = zr;                                                                    \
@@ -48,7 +48,7 @@ typ[d:shpz] take( int[vlen] sv, typ[d:shp] A)                                  \
   for (i = 0; _lt_SxS_( i, vlen); i = _add_SxS_( i, 1)) {                      \
     vel = _sel_VxA_( [i], sv);                                                 \
     shpel = _sel_VxA_( [i], shp);                                              \
-    vext = _idx_modarray_AxSxS_( vext,  i,  vel);                              \
+    vext = _idx_modarray_AxSxS_( vext, i, vel);                                \
     val = _sub_SxS_( 0, vel);                                                  \
     val = _sub_SxS_( val, shpel);                                              \
     val = _max_SxS_( val, 0);                                                  \
@@ -59,14 +59,14 @@ typ[d:shpz] take( int[vlen] sv, typ[d:shp] A)                                  \
     ylb = _idx_modarray_AxSxS_( ylb, i, val);                                  \
   }                                                                            \
                                                                                \
-  shpz = _abs_V_( vext);                                                       \
-  ub = _min_VxV_( shp, shpz);                                                  \
+  oshp = _abs_V_( vext);                                                       \
+  ub = _min_VxV_( shp, oshp);                                                  \
   ub = _add_VxV_( ub, lb);                                                     \
   res = with {                                                                 \
           (lb <= iv < ub)                                                      \
             : _sel_VxA_( _add_VxV_( _sub_VxV_( ylb, lb), iv), A);              \
-        } : genarray( shpz, zval);                                             \
-  return( res);                                                                \
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 BUILT_IN( TAKE)
@@ -74,7 +74,7 @@ BUILT_IN( TAKE)
 
 /******************************************************************************
  *
- * @fn <a>[d:shpz] drop( int[vlen] sv, <a>[d:shp] A)
+ * @fn <a>[d:oshp] drop( int[vlen] sv, <a>[d:shp] A)
  *
  * @brief Drops a number of elements from the array, given a shape vector.
  *
@@ -82,7 +82,7 @@ BUILT_IN( TAKE)
 
 #define DROP( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[d:shpz] drop( int[vlen] sv, typ[d:shp] A)                                  \
+typ[d:oshp] drop( int[vlen] sv, typ[d:shp] A)                                  \
 {                                                                              \
   zr = _mul_SxV_( 0, shp);                                                     \
   offset = zr;                                                                 \
@@ -97,12 +97,9 @@ typ[d:shpz] drop( int[vlen] sv, typ[d:shp] A)                                  \
     offset = _idx_modarray_AxSxS_( offset, i, val);                            \
   }                                                                            \
                                                                                \
-  shpz = _max_VxV_( zr, _sub_VxV_( shp, _abs_V_( vext)));                      \
-  res = with {                                                                 \
-          ( . <= iv <= . )                                                     \
-            : _sel_VxA_( _add_VxV_( offset, iv), A);                           \
-        } : genarray( shpz, zval);                                             \
-  return( res);                                                                \
+  oshp = _max_VxV_( zr, _sub_VxV_( shp, _abs_V_( vext)));                      \
+  res = { iv -> _sel_VxA_( _add_VxV_( offset, iv), A) | iv < oshp };           \
+  return res;                                                                  \
 }
 
 BUILT_IN( DROP)
@@ -120,11 +117,7 @@ BUILT_IN( DROP)
 inline                                                                         \
 typ[d:shp] tile( int[d] shp, int[.] idx, typ[*] A)                             \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( _add_VxV_( idx, iv), A);                              \
-        } : genarray( shp, zval);                                              \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( _add_VxV_( idx, iv), A) | iv < shp };              \
 }
 
 BUILT_IN( TILE)
@@ -132,7 +125,7 @@ BUILT_IN( TILE)
 
 /******************************************************************************
  *
- * @fn <a>[z,d:shp] ++( <a>[n,d:shp] A, <a>[m,d:shp] B)
+ * @fn <a>[o,d:shp] ++( <a>[n,d:shp] A, <a>[m,d:shp] B)
  *
  * @brief First-axis catenation.
  *
@@ -140,65 +133,54 @@ BUILT_IN( TILE)
 
 #define CAT_AxA( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[z,d:shp] ++( typ[n,d:shp] A, typ[m,d:shp] B)                               \
+typ[o,d:shp] ++( typ[n,d:shp] A, typ[m,d:shp] B)                               \
 {                                                                              \
-  shpx = _shape_A_( A);                                                        \
-  z = _add_SxS_( n, m);                                                        \
-  shpz = _cat_VxV_( [z], shp);                                                 \
+  o = _add_SxS_( n, m);                                                        \
+  oshp = _cat_VxV_( [o], shp);                                                 \
+  zshp = _mul_SxV_( 0, oshp);                                                  \
   offset = _cat_VxV_( [n], _mul_SxV_( 0, shp));                                \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shpx) <= iv < shpx)                                   \
-            : _sel_VxA_( iv, A);                                               \
-        } : genarray( shpz, zval);                                             \
-  res = with {                                                                 \
-          (offset <= iv < shpz)                                                \
-            : _sel_VxA_( _sub_VxV_( iv, offset), B);                           \
-        } : modarray( res);                                                    \
-  return( res);                                                                \
+          (zshp <= iv < _shape_A_( A)) : _sel_VxA_( iv, A);                    \
+          (offset <= iv < oshp)        : _sel_VxA_( _sub_VxV_( iv, offset), B);\
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 #define CAT_AxS( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[z,d:shp] ++( typ[n,d:shp] A, typ B)                                        \
+typ[o,d:shp] ++( typ[n,d:shp] A, typ B)                                        \
 {                                                                              \
-  shpx = _shape_A_( A);                                                        \
-  z = _add_SxS_( n, 1);                                                        \
-  shpz = _cat_VxV_( [z], shp);                                                 \
+  o = _add_SxS_( n, 1);                                                        \
+  oshp = _cat_VxV_( [o], shp);                                                 \
+  zshp = _mul_SxV_( 0, oshp);                                                  \
   offset = _cat_VxV_( [n], _mul_SxV_( 0, shp));                                \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shpx) <= iv < shpx)                                   \
-            : _sel_VxA_( iv, A);                                               \
-        } : genarray( shpz, zval);                                             \
-  res = with {                                                                 \
-          (offset <= iv < shpz) : B;                                           \
-        } : modarray( res);                                                    \
-  return( res);                                                                \
+          (zshp <= iv < _shape_A_( A)) : _sel_VxA_( iv, A);                    \
+          (offset <= iv < oshp)        : B;                                    \
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 #define CAT_SxA( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[z,d:shp] ++( typ A, typ[m,d:shp] B)                                        \
+typ[o,d:shp] ++( typ A, typ[m,d:shp] B)                                        \
 {                                                                              \
-  shpy = _shape_A_( B);                                                        \
-  z = _add_SxS_( 1, m);                                                        \
-  shpz = _cat_VxV_( [z], shp);                                                 \
+  o = _add_SxS_( m, 1);                                                        \
+  oshp = _cat_VxV_( [o], shp);                                                 \
+  zshp = _mul_SxV_( 0, oshp);                                                  \
   offset = _cat_VxV_( [m], _mul_SxV_( 0, shp));                                \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shpy) <= iv < shpy)                                   \
-            : _sel_VxA_( iv, B);                                               \
-        } : genarray( shpz, zval);                                             \
-  res = with {                                                                 \
-          (offset <= iv < shpz) : A;                                           \
-        } : modarray( res);                                                    \
-  return( res);                                                                \
+          (zshp <= iv < _shape_A_( B)) : _sel_VxA_( iv, B);                    \
+          (offset <= iv < oshp)        : A;                                    \
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 #define CAT_SxS( typ, postfix, zval, oval)                                     \
 inline                                                                         \
 typ[2] ++( typ A, typ B)                                                       \
 {                                                                              \
-  res = [A, B];                                                                \
-  return( res);                                                                \
+  return [A, B];                                                               \
 }
 
 #define CAT( typ, postfix, zval, oval)                                         \
@@ -212,7 +194,7 @@ BUILT_IN( CAT)
 
 /******************************************************************************
  *
- * @fn <a>[d:shp,z] ++( <a>[d:shp,n] A, <a>[d:shp,m] B)
+ * @fn <a>[d:shp,o] ++( <a>[d:shp,n] A, <a>[d:shp,m] B)
  *
  * @brief Last-axis catenation. We assume that A and B are the same shape,
  * except perhaps along the last axis.
@@ -221,65 +203,54 @@ BUILT_IN( CAT)
 
 #define CATENATE_AxA( typ, postfix, zval, oval)                                \
 inline                                                                         \
-typ[d:shp,z] catenate( typ[d:shp,n] A, typ[d:shp,m] B)                         \
+typ[d:shp,o] catenate( typ[d:shp,n] A, typ[d:shp,m] B)                         \
 {                                                                              \
-  shpx = _shape_A_( A);                                                        \
-  z = _add_SxS_( n, m);                                                        \
-  shpz = _cat_VxV_( shp, [z]);                                                 \
+  o = _add_SxS_( n, m);                                                        \
+  oshp = _cat_VxV_( shp, [o]);                                                 \
+  zshp = _mul_SxV_( 0, oshp);                                                  \
   offset = _cat_VxV_( _mul_SxV_( 0, shp), [n]);                                \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shpx) <= iv < shpx)                                   \
-            : _sel_VxA_( iv, A);                                               \
-        } : genarray( shpz, zval);                                             \
-  res = with {                                                                 \
-          (offset <= iv < shpz)                                                \
-            : _sel_VxA_( _sub_VxV_( iv, offset), B);                           \
-        } : modarray( res);                                                    \
-  return( res);                                                                \
+          (zshp <= iv < offset) : _sel_VxA_( iv, A);                           \
+          (offset <= iv < oshp) : _sel_VxA_( _sub_VxV_( iv, offset), B);       \
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 #define CATENATE_AxS( typ, postfix, zval, oval)                                \
 inline                                                                         \
-typ[d:shp,z] catenate( typ[d:shp,n] A, typ B)                                  \
+typ[d:shp,o] catenate( typ[d:shp,n] A, typ B)                                  \
 {                                                                              \
-  shpx = _shape_A_( A);                                                        \
-  z = _add_SxS_( n, 1);                                                        \
-  shpz = _cat_VxV_( shp, [z]);                                                 \
+  o = _add_SxS_( n, 1);                                                        \
+  oshp = _cat_VxV_( shp, [o]);                                                 \
+  zshp = _mul_SxV_( 0, oshp);                                                  \
   offset = _cat_VxV_( _mul_SxV_( 0, shp), [n]);                                \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shpx) <= iv < shpx)                                   \
-            : _sel_VxA_( iv, A);                                               \
-        } : genarray( shpz, zval);                                             \
-  res = with {                                                                 \
-          (offset <= iv < shpz) : B;                                           \
-        } : modarray( res);                                                    \
-  return( res);                                                                \
+          (zshp <= iv < offset) : _sel_VxA_( iv, A);                           \
+          (offset <= iv < oshp) : B;                                           \
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 #define CATENATE_SxA( typ, postfix, zval, oval)                                \
 inline                                                                         \
-typ[d:shp,z] catenate( typ A, typ[d:shp,m] B)                                  \
+typ[d:shp,o] catenate( typ A, typ[d:shp,m] B)                                  \
 {                                                                              \
-  shpy = _shape_A_( B);                                                        \
-  z = _add_SxS_( 1, m);                                                        \
-  shpz = _cat_VxV_( shp, [z]);                                                 \
+  o = _add_SxS_( m, 1);                                                        \
+  oshp = _cat_VxV_( shp, [o]);                                                 \
+  zshp = _mul_SxV_( 0, oshp);                                                  \
   offset = _cat_VxV_( _mul_SxV_( 0, shp), [m]);                                \
   res = with {                                                                 \
-          (offset <= iv < shpz)                                                \
-            : _sel_VxA_( _sub_VxV_( iv, offset), B);                           \
-        } : genarray( shpz, zval);                                             \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shpy) <= iv < offset) : A;                            \
-        } : modarray( res);                                                    \
-  return( res);                                                                \
+          (zshp <= iv < offset) : A;                                           \
+          (offset <= iv < oshp) : _sel_VxA_( _sub_VxV_( iv, offset), B);       \
+        } : genarray( oshp, zval);                                             \
+  return res;                                                                  \
 }
 
 #define CATENATE_SxS( typ, postfix, zval, oval)                                \
 inline                                                                         \
 typ[2] catenate( typ A, typ B)                                                 \
 {                                                                              \
-  res = [A, B];                                                                \
-  return( res);                                                                \
+  return [A, B];                                                               \
 }
 
 #define CATENATE( typ, postfix, zval, oval)                                    \
@@ -303,12 +274,11 @@ BUILT_IN( CATENATE)
 inline                                                                         \
 typ[n,d:shp] reverse( typ[n,d:shp] A)                                          \
 {                                                                              \
-  maxidx0 = _sub_SxS_( n, 1);                                                  \
+  max = _sub_SxS_( n, 1);                                                      \
   res = with {                                                                 \
-          ([0] <= [i] <= [maxidx0])                                            \
-            : _sel_VxA_( [_sub_SxS_( maxidx0, i)], A);                         \
+          ([0] <= [i] <= [max]) : _sel_VxA_( [_sub_SxS_( max, i)], A);         \
         } : modarray( A);                                                      \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 BUILT_IN( REVERSE)
@@ -329,12 +299,12 @@ typ[d:shp] reverse( int axis, typ[d:shp] A)                                    \
   shpel = _sel_VxA_( [axis], shp);                                             \
   offset = _sub_SxS_( shpel, 1);                                               \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp) {                                   \
-            ivel = _sel_VxA_( [axis], iv);                                     \
-            idx = _modarray_AxVxS_( iv, [axis], _sub_SxS_( offset, ivel));     \
-          }  : _sel_VxA_( idx, A);                                             \
+          ( . <= iv <= . ) {                                                   \
+            i = _sel_VxA_( [axis], iv);                                        \
+            idx = _modarray_AxVxS_( iv, [axis], _sub_SxS_( offset, i));        \
+          } : _sel_VxA_( idx, A);                                              \
         } : modarray( A);                                                      \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 BUILT_IN( REVERSEAXIS)
@@ -352,12 +322,7 @@ BUILT_IN( REVERSEAXIS)
 inline                                                                         \
 typ[d:shpT] transpose( typ[d:shp] A)                                           \
 {                                                                              \
-  shpT = reverse( shp);                                                        \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( reverse( iv), A);                                     \
-        } : genarray( shpT, zval);                                             \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( reverse( iv), A) | iv < shp };                     \
 }
 
 BUILT_IN( TRANSPOSE)
@@ -373,39 +338,39 @@ BUILT_IN( TRANSPOSE)
 
 #define SHIFT_S( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[d:shp] shift( int dimension, int count, typ boundary, typ[d:shp] A)        \
+typ[d:shp] shift( int dim, int count, typ boundary, typ[d:shp] A)              \
+  | _le_SxS_( 0, dim), _lt_SxS_( dim, d)                                       \
 {                                                                              \
   /* Prevent overshift */                                                      \
   abscount = _abs_S_( count);                                                  \
-  max_shift = _sel_VxA_( [dimension], shp);                                    \
+  max_shift = _sel_VxA_( [dim], shp);                                          \
   count = _min_SxS_( abscount, max_shift);                                     \
-                                                                               \
-  zr = _mul_SxV_( 0, shp);                                                     \
   cneg = _toi_S_( _lt_SxS_( count, 0));                                        \
   cnonneg = _toi_S_( _ge_SxS_( count, 0));                                     \
                                                                                \
-  lb = _modarray_AxVxS_( zr, [dimension], _mul_SxS_( count, cnonneg));         \
-  offset = _modarray_AxVxS_( zr, [dimension], _neg_S_( count));                \
+  zr = _mul_SxV_( 0, shp);                                                     \
+  lb = _modarray_AxVxS_( zr, [dim], _mul_SxS_( count, cnonneg));               \
+  offset = _modarray_AxVxS_( zr, [dim], _neg_S_( count));                      \
   ubel = _sub_SxS_( max_shift, _mul_SxS_( abscount, cneg));                    \
-  ub = _modarray_AxVxS_( shp, [dimension], ubel);                              \
+  ub = _modarray_AxVxS_( shp, [dim], ubel);                                    \
                                                                                \
   res = with {                                                                 \
           (lb <= iv < ub)                                                      \
             : _sel_VxA_( _add_VxV_( iv, offset), A);                           \
         } : genarray( shp, boundary);                                          \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 #define SHIFT_V( typ, postfix, zval, oval)                                     \
 inline                                                                         \
 typ[d:shp] shift( int[n] counts, typ boundary, typ[d:shp] A)                   \
-  | n <= d                                                                     \
+  | _le_SxS_( n, d)                                                            \
 {                                                                              \
   for (i = 0; _lt_SxS_( i, n); i = _add_SxS_( i, 1)) {                         \
     offset = _sel_VxA_( [i], counts);                                          \
     A = shift( i, offset, boundary, A);                                        \
   }                                                                            \
-  return( A);                                                                  \
+  return A;                                                                    \
 }
 
 #define SHIFT_VZ( typ, postfix, zval, oval)                                    \
@@ -413,8 +378,7 @@ inline                                                                         \
 typ[d:shp] shift( int[n] counts, typ[d:shp] A)                                 \
   | n <= d                                                                     \
 {                                                                              \
-  res = shift( counts, zval, A);                                               \
-  return( res);                                                                \
+  return shift( counts, zval, A);                                              \
 }
 
 #define SHIFT( typ, postfix, zval, oval)                                       \
@@ -427,7 +391,7 @@ BUILT_IN( SHIFT)
 
 /******************************************************************************
  *
- * @fn <a>[d:shp] rotate( int dimension, int count, <a>[d:shp] A)
+ * @fn <a>[d:shp] rotate( int dim, int count, <a>[d:shp] A)
  *
  * @brief Rotates the given array, wrapping values that go out of bounds.
  * Positive rotate is to right, negative to left.
@@ -443,33 +407,34 @@ BUILT_IN( SHIFT)
 
 #define ROTATE_S( typ, postfix, zval, oval)                                    \
 inline                                                                         \
-typ[d:shp] rotate( int dimension, int count, typ[d:shp] A)                     \
+typ[d:shp] rotate( int dim, int count, typ[d:shp] A)                           \
+  | _le_SxS_( 0, dim), _lt_SxS_( dim, d)                                       \
 {                                                                              \
-  max_rotate = _sel_VxA_( [dimension], shp);                                   \
+  max_rotate = _sel_VxA_( [dim], shp);                                         \
   count = _aplmod_SxS_( count, max_rotate);                                    \
-  offset = _modarray_AxVxS_( _mul_SxV_( 0, shp), [dimension], count);          \
+  offset = _modarray_AxVxS_( _mul_SxV_( 0, shp), [dim], count);                \
   res = with {                                                                 \
           (offset <= iv <= . )                                                 \
             : _sel_VxA_( _sub_VxV_( iv, offset), A);                           \
         } : modarray( A);                                                      \
-  slice_shp = _modarray_AxVxS_( shp, [dimension], count);                      \
+  slice_shp = _modarray_AxVxS_( shp, [dim], count);                            \
   res = with {                                                                 \
           ( . <= iv < slice_shp)                                               \
             : _sel_VxA_( _add_VxV_( iv, _sub_VxV_( shp, slice_shp)), A);       \
         } : modarray( res);                                                    \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 #define ROTATE_V( typ, postfix, zval, oval)                                    \
 inline                                                                         \
 typ[d:shp] rotate (int[n] counts,  typ[d:shp] A)                               \
-  | n <= d                                                                     \
+  | _le_SxS_( n, d)                                                            \
 {                                                                              \
   for (i = 0; _lt_SxS_( i, n); i = _add_SxS_( i, 1)) {                         \
     offset = _sel_VxA_( [i], counts);                                          \
     A = rotate( i, offset, A);                                                 \
   }                                                                            \
-  return( A);                                                                  \
+  return A;                                                                    \
 }
 
 #define ROTATE( typ, postfix, zval, oval)                                      \
@@ -492,44 +457,28 @@ BUILT_IN( ROTATE)
 inline                                                                         \
 typ[d:shp] where( bool[d:shp] p, typ[d:shp] A, typ[d:shp] B)                   \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( iv, _sel_VxA_( iv, p) ? A : B);                       \
-        } : genarray( shp, zval);                                              \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( iv, p) ? _sel_VxA_( iv, A) : _sel_VxA_( iv, B) };  \
 }
 
 #define WHERE_AxS( typ, postfix, zval, oval)                                   \
 inline                                                                         \
 typ[d:shp] where( bool[d:shp] p, typ[d:shp] A, typ B)                          \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( iv, p) ? _sel_VxA_( iv, A) : B;                       \
-        } : genarray( shp, zval);                                              \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( iv, p) ? _sel_VxA_( iv, A) : B };                  \
 }
 
 #define WHERE_SxA( typ, postfix, zval, oval)                                   \
 inline                                                                         \
 typ[d:shp] where( bool[d:shp] p, typ A, typ[d:shp] B)                          \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( iv, p) ? A : _sel_VxA_( iv, B);                       \
-        } : genarray( shp, zval);                                              \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( iv, p) ? A : _sel_VxA_( iv, B) };                  \
 }
 
 #define WHERE_SxS( typ, postfix, zval, oval)                                   \
 inline                                                                         \
 typ[b:shp] where( bool[b:shp] p, typ A, typ B)                                 \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( iv, p) ? A : B;                                       \
-        } : genarray( shp, zval);                                              \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( iv, p) ? A : B };                                  \
 }
 
 #define WHERE( typ, postfix, zval, oval)                                       \
@@ -554,10 +503,9 @@ inline                                                                         \
 typ name( typ[d:shp] A)                                                        \
 {                                                                              \
   res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( iv, A);                                               \
+          (_mul_SxV_( 0, shp) <= iv < shp) : _sel_VxA_( iv, A);                \
         } : fold( fun, neutral);                                               \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 #define NUM_REDUCE( typ, postfix, zval, oval)                                  \
@@ -593,29 +541,28 @@ bool match( typ[n:shpA] A, typ[m:shpB] B)                                      \
           (_mul_SxV_( 0, shpA) <= iv < shpA)                                   \
             : _eq_SxS_( _sel_VxA_( iv, A), _sel_VxA_( iv, B));                 \
         } : foldfix( ScalarArith::&, true, false);                             \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 #define MATCH_AxS( typ, postfix, zval, oval)                                   \
 inline                                                                         \
 bool match( typ[+] A, typ B)                                                   \
 {                                                                              \
-  return( false);                                                              \
+  return false;                                                                \
 }
 
 #define MATCH_SxA( typ, postfix, zval, oval)                                   \
 inline                                                                         \
 bool match( typ A, typ[+] B)                                                   \
 {                                                                              \
-  return( false);                                                              \
+  return false;                                                                \
 }
 
 #define MATCH_SxS( typ, postfix, zval, oval)                                   \
 inline                                                                         \
 bool match( typ A, typ B)                                                      \
 {                                                                              \
-  res = _eq_SxS_( A, B);                                                       \
-  return( res);                                                                \
+  return _eq_SxS_( A, B);                                                      \
 }
 
 #define MATCH( typ, postfix, zval, oval)                                       \
@@ -644,64 +591,56 @@ BUILT_IN( MATCH)
 inline                                                                         \
 typ[n] mask( bool[n] p, typ[n] A, typ[n] B)                                    \
 {                                                                              \
-  res = _mask_VxVxV_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_VxVxV_( p, A, B);                                               \
 }
 
 #define MASK_VxVxS( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ[n] mask( bool[n] p, typ[n] A, typ B)                                       \
 {                                                                              \
-  res = _mask_VxVxS_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_VxVxS_( p, A, B);                                               \
 }
 
 #define MASK_VxSxV( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ[n] mask( bool[n] p, typ A, typ[n] B)                                       \
 {                                                                              \
-  res = _mask_VxSxV_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_VxSxV_( p, A, B);                                               \
 }
 
 #define MASK_VxSxS( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ[n] mask( bool[n] p, typ A, typ B)                                          \
 {                                                                              \
-  res = _mask_VxSxS_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_VxSxS_( p, A, B);                                               \
 }
 
 #define MASK_SxVxV( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ[n] mask( bool p, typ[n] A, typ[n] B)                                       \
 {                                                                              \
-  res = _mask_SxVxV_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_SxVxV_( p, A, B);                                               \
 }
 
 #define MASK_SxVxS( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ[n] mask( bool p, typ[n] A, typ B)                                          \
 {                                                                              \
-  res = _mask_SxVxS_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_SxVxS_( p, A, B);                                               \
 }
 
 #define MASK_SxSxV( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ[n] mask( bool p, typ A, typ[n] B)                                          \
 {                                                                              \
-  res = _mask_SxSxV_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_SxSxV_( p, A, B);                                               \
 }
 
 #define MASK_SxSxS( typ, postfix, zval, oval)                                  \
 inline                                                                         \
 typ mask( bool p, typ A, typ B)                                                \
 {                                                                              \
-  res = _mask_SxSxS_( p, A, B);                                                \
-  return( res);                                                                \
+  return _mask_SxSxS_( p, A, B);                                               \
 }
 
 #define MASK( typ, postfix, zval, oval)                                        \

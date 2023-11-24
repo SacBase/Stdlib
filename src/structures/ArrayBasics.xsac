@@ -16,7 +16,7 @@ export all;
 inline                                                                         \
 int dim( typ[d:shp] A)                                                         \
 {                                                                              \
-  return( d);                                                                  \
+  return d;                                                                    \
 }
 
 BUILT_IN( DIM)
@@ -34,7 +34,7 @@ BUILT_IN( DIM)
 inline                                                                         \
 int[d] shape( typ[d:shp] A)                                                    \
 {                                                                              \
-  return( shp);                                                                \
+  return shp;                                                                  \
 }
 
 BUILT_IN( SHAPE)
@@ -53,24 +53,17 @@ BUILT_IN( SHAPE)
 #define SEL_VxA( typ, postfix, zval, oval)                                     \
 inline                                                                         \
 typ[d:shp] sel( int[vlen] idx, typ[vlen:vshp,d:shp] A)                         \
-  | _all_V_( _le_SxV_( 0, idx))                                                \
-  , _all_V_( _lt_VxV_( idx, vshp))                                             \
+  | _all_V_( _le_SxV_( 0, idx)), _all_V_( _lt_VxV_( idx, vshp))                \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : _sel_VxA_( _cat_VxV_( idx, iv), A);                              \
-        } : genarray( shp, zval);                                              \
-  return( res);                                                                \
+  return { iv -> _sel_VxA_( _cat_VxV_( idx, iv), A) | iv < shp };              \
 }
 
 #define SEL_SxA( typ, postfix, zval, oval)                                     \
 inline                                                                         \
 typ[d:shp] sel( int idx, typ[n,d:shp] A)                                       \
-  | _le_SxS_( 0, idx)                                                          \
-  , _lt_SxS_( idx, n)                                                          \
+  | _le_SxS_( 0, idx), _lt_SxS_( idx, n)                                       \
 {                                                                              \
-  res = sel( [idx], A);                                                        \
-  return( res);                                                                \
+  return sel( [idx], A);                                                       \
 }
 
 #define SEL( typ, postfix, zval, oval)                                         \
@@ -93,8 +86,7 @@ BUILT_IN( SEL)
 inline                                                                         \
 typ[d:shp] reshape( int[d] shp, typ[*] A)                                      \
 {                                                                              \
-  res = _reshape_VxA_( shp, A);                                                \
-  return( res);                                                                \
+  return _reshape_VxA_( shp, A);                                               \
 }
 
 BUILT_IN( RESHAPE)
@@ -112,11 +104,7 @@ BUILT_IN( RESHAPE)
 inline                                                                         \
 typ[n:shp,d:vshp] genarray( int[n] shp, typ[d:vshp] value)                     \
 {                                                                              \
-  res = with {                                                                 \
-          (_mul_SxV_( 0, shp) <= iv < shp)                                     \
-            : value;                                                           \
-        } : genarray( shp, value);                                             \
-  return( res);                                                                \
+  return { iv -> value | iv < shp };                                           \
 }
 
 BUILT_IN( GENARRAY)
@@ -134,34 +122,28 @@ BUILT_IN( GENARRAY)
 inline                                                                         \
 typ[vlen:vshp,d:shp]                                                           \
 modarray( typ[vlen:vshp,d:shp] A, int[vlen] idx, typ[d:shp] value)             \
-  | _all_V_( _le_SxV_( 0, idx))                                                \
-  , _all_V_( _lt_VxV_( idx, shp))                                              \
+  | _all_V_( _le_SxV_( 0, idx)), _all_V_( _lt_VxV_( idx, shp))                 \
 {                                                                              \
   res = with {                                                                 \
-          (idx <= iv <= idx)                                                   \
-            : value;                                                           \
+          (idx <= iv <= idx) : value;                                          \
         } : modarray( A);                                                      \
-  return( res);                                                                \
+  return res;                                                                  \
 }
 
 #define MODARRAY_AxVxS( typ, postfix, zval, oval)                              \
 inline                                                                         \
 typ[d:shp] modarray( typ[d:shp] A, int[d] idx, typ value)                      \
-  | _all_V_( _le_SxV_( 0, idx))                                                \
-  , _all_V_( _lt_VxV_( idx, shp))                                              \
+  | _all_V_( _le_SxV_( 0, idx)), _all_V_( _lt_VxV_( idx, shp))                 \
 {                                                                              \
-  res = _modarray_AxVxS_( A, idx, value);                                      \
-  return( res);                                                                \
+  return _modarray_AxVxS_( A, idx, value);                                     \
 }
 
 #define MODARRAY_AxSxA( typ, postfix, zval, oval)                              \
 inline                                                                         \
 typ[n,d:shp] modarray( typ[n,d:shp] A, int idx, typ[d:shp] value)              \
-  | _le_SxS_( 0, idx)                                                          \
-  , _lt_SxS_( idx, n)                                                          \
+  | _le_SxS_( 0, idx), _lt_SxS_( idx, n)                                       \
 {                                                                              \
-  res = modarray( A, [idx], value);                                            \
-  return( res);                                                                \
+  return modarray( A, [idx], value);                                           \
 }
 
 #define MODARRAY( typ, postfix, zval, oval)                                    \
@@ -183,17 +165,11 @@ BUILT_IN( MODARRAY)
 inline
 int[d:shp] iota( int[d] shp)
 {
-  res = with {
-          (_mul_SxV_( 0, shp) <= iv < shp) : iv;
-        } : genarray( shp, _mul_SxV_( 0, shp));
-  return( res);
+  return { iv -> iv | iv < shp };
 }
 
 inline
 int[d] iota( int d)
 {
-  res = with {
-          ([0] <= [i] < [d]) : i;
-        } : genarray( [d], 0);
-  return( res);
+  return { [i] -> i | [i] < [d] };
 }
