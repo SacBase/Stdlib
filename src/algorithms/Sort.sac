@@ -1,0 +1,30 @@
+module Sort;
+export {Sort};
+
+int[n] Sort(double[n] keys) 
+{
+  /* TODO inefficient for the GPU backend as iota(n) will be created 
+     on the device, send back to the host, and then back to the device 
+     again. Still 10x faster on a RTX 1650 than on a Ryzen 4600H. */
+  iota = with {
+    ([0] <= [i] < [n]): i;
+  }: genarray([n], 0);
+  return TrueSort(keys, iota, n); 
+}
+
+/* indices must be initialised to iota(n) */
+external int[n] TrueSort(double[n] keys, int[n] indices, int n);
+    #pragma linkname "MySortDouble"
+    #pragma linksign [2, 1, 2, 3]
+#if defined(SAC_TARGET_cuda)
+    #pragma linkobj "src/sort_gpu.o"
+    #pragma gpumem [0, 1, 2]
+#elif defined(SAC_TARGET_default_sbi)
+    #pragma linkobj "src/sort_cpu.o"
+#elif defined(SAC_TARGET_mt_pth)
+    /* TODO: make a multithreaded version work here. Thrust clashes
+       with our private heap manager. */
+    #pragma linkobj "src/sort_cpu.o"
+#else
+    #pragma linkobj "src/sort_cpu.o"
+#endif
