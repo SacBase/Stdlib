@@ -1,3 +1,4 @@
+#define THRUST_DEVICE_SYSTEM THRUST_DEVICE_SYSTEM_CPP
 #include <thrust/execution_policy.h>
 #include <thrust/sort.h>
 

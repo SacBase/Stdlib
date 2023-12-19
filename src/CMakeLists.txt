@@ -408,11 +408,13 @@ FOREACH (name ${CXX_DEPS_SRC})
         ${CMAKE_CXX_COMPILER} -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                               -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
                               -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/thrust
+                              -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/libcudacxx/include
+                              -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/cub
                               -O3
                               -march=native
                               -mtune=native
                               -fPIC
-                              -c "${src}" 
+                              -c "${src}"
                               -o "${dst}"
     WORKING_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
@@ -420,39 +422,40 @@ FOREACH (name ${CXX_DEPS_SRC})
   )
 ENDFOREACH (name)
 
-# TODO only compile when option cuda is enabled 
-# For every cuda source, compile an object file maintaining the right location
-# in the binary dir so that sac files can pick it up.
-FOREACH (name ${CUDA_DEPS_SRC})
-  SET (src "${CMAKE_CURRENT_SOURCE_DIR}/${name}")
+IF ("${TARGET}" MATCHES "^cuda.*")
+    FOREACH (name ${CUDA_DEPS_SRC})
+      SET (src "${CMAKE_CURRENT_SOURCE_DIR}/${name}")
 
-  GET_FILENAME_COMPONENT (dir ${name} DIRECTORY)
+      GET_FILENAME_COMPONENT (dir ${name} DIRECTORY)
 
-  GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
-  SET (dst "${CMAKE_CURRENT_BINARY_DIR}/${dir}/${dst}${OBJEXT}")
+      GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
+      SET (dst "${CMAKE_CURRENT_BINARY_DIR}/${dir}/${dst}${OBJEXT}")
 
-  MESSAGE(STATUS "Compiling ${dst}")
-  # Make sure that we put the object file in the same location where
-  # the source file was.
-  FILE (MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dir}")
+      MESSAGE(STATUS "Compiling ${dst}")
+      # Make sure that we put the object file in the same location where
+      # the source file was.
+      FILE (MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dir}")
 
-  ADD_CUSTOM_COMMAND (
-    OUTPUT "${dst}"
-    MAIN_DEPENDENCY "${src}"
-    IMPLICIT_DEPENDS C "${src}"
-    COMMAND
-        nvcc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
-             -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
-             -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/thrust
-             -O3
-             --compiler-options -fPIC
-             -c "${src}" 
-             -o "${dst}"
-    WORKING_DIRECTORY
-        "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
-    COMMENT "Generating ${dst} for target `${TARGET}'"
-  )
-ENDFOREACH (name)
+      ADD_CUSTOM_COMMAND (
+        OUTPUT "${dst}"
+        MAIN_DEPENDENCY "${src}"
+        IMPLICIT_DEPENDS C "${src}"
+        COMMAND
+            nvcc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
+                 -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+                 -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/thrust
+                 -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/libcudacxx/include
+                 -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/cub
+                 -O3
+                 --compiler-options -fPIC
+                 -c "${src}"
+                 -o "${dst}"
+        WORKING_DIRECTORY
+            "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
+        COMMENT "Generating ${dst} for target `${TARGET}'"
+      )
+    ENDFOREACH (name)
+ENDIF ()
 
 # Make a directory for sac2c output
 FILE (MAKE_DIRECTORY "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}")
