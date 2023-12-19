@@ -407,6 +407,7 @@ FOREACH (name ${CXX_DEPS_SRC})
     COMMAND
         ${CMAKE_CXX_COMPILER} -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                               -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+                              -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/thrust
                               -O3
                               -march=native
                               -mtune=native
@@ -441,11 +442,12 @@ FOREACH (name ${CUDA_DEPS_SRC})
     IMPLICIT_DEPENDS C "${src}"
     COMMAND
         nvcc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
-                              -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
-                              -O3
-                              --compiler-options -fPIC
-                              -c "${src}" 
-                              -o "${dst}"
+             -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+             -I${CMAKE_CURRENT_SOURCE_DIR}/algorithms/cccl/thrust
+             -O3
+             --compiler-options -fPIC
+             -c "${src}" 
+             -o "${dst}"
     WORKING_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
     COMMENT "Generating ${dst} for target `${TARGET}'"
