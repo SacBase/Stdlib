@@ -32,8 +32,7 @@ int SACmkstemp ( SAC_ND_PARAM_out_nodesc (filep_nt, FILE*),
   SAC_ND_A_FIELD (str_nt) = SAC_MALLOC (length + 1);
 
   // copy template
-  strncpy (SAC_ND_A_FIELD (str_nt), template, length);
-  SAC_ND_A_FIELD (str_nt)[length + 1] = '\0';
+  strcpy (SAC_ND_A_FIELD (str_nt), template);
 
   // create temp file, get name back
   filedesc = mkstemp (SAC_ND_A_FIELD (str_nt));
