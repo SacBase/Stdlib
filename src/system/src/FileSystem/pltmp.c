@@ -15,7 +15,7 @@ char *SACPtmpdir( void)
   const char tmp[] = "/tmp";
   const size_t l = strlen(tmp);
 
-  result=(char *)SAC_MALLOC(l);
+  result=(char *)SAC_MALLOC(l + 1); // null byte
   strcpy(result, tmp);
   
   return(result);

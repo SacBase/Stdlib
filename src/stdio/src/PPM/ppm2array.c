@@ -114,7 +114,7 @@ void SAC_PPM_ppm2array( SAC_ND_PARAM_out( array_nt, int),
     }
   } else {
     for (i = 0; i < h*w*3; i++) {
-      if( fscanf(fp, "%d", &c) != 1) {
+      if( fscanf(fp, "%u", &c) != 1) {
         SAC_RuntimeError( "Unexpected end of file");
       }
       data[i] = c * (255/max);
