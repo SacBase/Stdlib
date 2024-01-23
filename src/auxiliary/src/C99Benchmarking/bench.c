@@ -45,8 +45,9 @@ double benchRes( struct bench* interval)
 
 char* benchName( struct bench* interval)
 {
-  char* newName = SAC_MALLOC( strlen( interval->name) + 1);
-  strncpy( newName, interval->name, strlen( interval->name) + 1);
+  size_t len = strlen(interval->name) + 1;
+  char* newName = SAC_MALLOC(len);
+  memcpy(newName, interval->name, len);
   return( newName);
 }
 
@@ -57,8 +58,9 @@ int benchNum( struct bench* interval)
 
 char* benchUnitName( struct bench* interval)
 {
-  char* unit_name = SAC_MALLOC( strlen( unitName[interval->timeUnit]) + 1);
-  strncpy( unit_name, unitName[interval->timeUnit], strlen( unitName[interval->timeUnit]) + 1);
+  size_t len = strlen( unitName[interval->timeUnit]) + 1;
+  char* unit_name = SAC_MALLOC(len);
+  memcpy( unit_name, unitName[interval->timeUnit], len);
   return( unit_name);
 }
 
@@ -79,7 +81,7 @@ struct bench* benchGetInterval_si(char * name, int num)
   interval = (struct bench*)SAC_MALLOC( sizeof( struct bench));
   interval->num = num;                                    
   newName = SAC_MALLOC( strlen( name) + 1);
-  strncpy( newName, name, strlen( name) + 1);
+  memcpy( newName, name, strlen( name) + 1);
   interval->name = newName;
   interval->timeUnit = SECONDS;
   return( interval);
@@ -106,7 +108,7 @@ struct bench* benchGetInterval_siu(char * name, int num, int timeunit)
   interval = (struct bench*)SAC_MALLOC( sizeof( struct bench));
   interval->num = num;                                    
   newName = SAC_MALLOC( strlen( name) + 1);
-  strncpy( newName, name, strlen( name) + 1);
+  memcpy( newName, name, strlen( name) + 1);
   interval->name = newName;
   interval->timeUnit = timeunit;
   return( interval);
