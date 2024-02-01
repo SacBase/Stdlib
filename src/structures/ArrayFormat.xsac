@@ -97,7 +97,7 @@ char[.] format( bool A, int[2] w)
  *
  ******************************************************************************/
 DOINL
-char[d:shp,m] format( bool[d:shp,n] A)
+char[d:shp,m] format( bool[d:shp,n] A, int[2] w)
   | m == max( 2 * n - 1, 0)
 {
   return format( tod( A), w);
