@@ -75,7 +75,7 @@ BUILT_IN( SEL)
 
 /******************************************************************************
  *
- * @fn <a>[d:shp] reshape( int[d] shp, <a>[*] A)
+ * @fn <a>[d:shp] reshape( int[d] shp, <a>[o:oshp] A)
  *
  * @brief Creates a new array with identical data vector but new shape, provided
  * the length of the data vector matches the product of the new shape vector.
@@ -84,7 +84,8 @@ BUILT_IN( SEL)
 
 #define RESHAPE( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[d:shp] reshape( int[d] shp, typ[*] A)                                      \
+typ[d:shp] reshape( int[d] shp, typ[o:oshp] A)                                 \
+  | _eq_SxS_( ArrayTransform::prod( shp), ArrayTransform::prod( oshp))         \
 {                                                                              \
   return _reshape_VxA_( shp, A);                                               \
 }
@@ -156,14 +157,14 @@ BUILT_IN( MODARRAY)
 
 /******************************************************************************
  *
- * @fn int[d:shp] iota( int[d] shp)
+ * @fn int[d:shp,d] iota( int[d] shp)
  *
  * @brief Creates an array of the given shape with values ranging from 0 to d.
  *
  ******************************************************************************/
 
 inline
-int[d:shp] iota( int[d] shp)
+int[d:shp,d] iota( int[d] shp)
 {
   return { iv -> iv | iv < shp };
 }

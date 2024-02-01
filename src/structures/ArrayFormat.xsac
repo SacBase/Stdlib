@@ -62,7 +62,8 @@ char[1] format( bool A)
  *
  ******************************************************************************/
 DOINL
-char[+] format( bool[d:shp,n] A)
+char[d:shp,m] format( bool[d:shp,n] A)
+  | m == max( 2 * n - 1, 0)
 {
   res = { iv -> A[ iv] ? ['1', ' '] : ['0', ' '] };
   res = reshape( shp ++ [2 * n], res);
@@ -96,7 +97,8 @@ char[.] format( bool A, int[2] w)
  *
  ******************************************************************************/
 DOINL
-char[+] format( bool[+] A, int[2] w)
+char[d:shp,m] format( bool[d:shp,n] A)
+  | m == max( 2 * n - 1, 0)
 {
   return format( tod( A), w);
 }
