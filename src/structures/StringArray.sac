@@ -20,7 +20,6 @@ external typedef stringArray;
     #pragma linkobj "src/StringArray/size.o"
     #pragma freefun "SAC_StringArray_free"
     #pragma copyfun "SAC_StringArray_copy"
-    #pragma sizefun "SAC_StringArray_size"
 
 external stringArray modarray_AxVxS( stringArray labs, int[.] idx, string  str);
     #pragma linkname "SAC_StringArray_modarray"

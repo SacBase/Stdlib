@@ -15,7 +15,6 @@ external typedef string;
     #pragma linkobj "src/String/freestr.o"
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/copystr.o"
-    #pragma sizefun "size_string"
     #pragma linkobj "src/String/sizestr.o"
 
 external string to_string(char[.] A, int LENGTH);
