@@ -219,7 +219,6 @@ SET (C_DEPS_SRC
     structures/src/String/ctos.c
     structures/src/String/copystr.c
     structures/src/String/freestr.c
-    structures/src/String/sizestr.c
     structures/src/String/btos.c
     structures/src/List/tl.c
     structures/src/List/take.c
