@@ -17,7 +17,6 @@ external typedef stringArray;
     #pragma linkobj "src/StringArray/free.o"
     #pragma linkobj "src/StringArray/copy.o"
     #pragma linkobj "src/StringArray/alloc.o"
-    #pragma linkobj "src/StringArray/size.o"
     #pragma freefun "SAC_StringArray_free"
     #pragma copyfun "SAC_StringArray_copy"
 

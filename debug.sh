@@ -1,13 +1,19 @@
 #!/bin/sh
 
-# This is a helper script to rebuild parts of Stdlib such that errors in there
-# are easier to fix. Using gdb you will likely be able to find the module to
-# problem occurs in. Build the library with environment variable VERBOSE=1
-# and copy the command compiling the relevant module. Then add -dcccall to the
-# compile command. This will create a .sac2c file in that directory. Call this
-# script with that sac2c file as argument in that directory.
-# This assumes the nuke_semi tool from sac2c utils is in your path, and
-# clang-format is installed.
+if [ "$#" -ne 1 ]; then
+    printf "Usage: debug_distmem.sh SAC2C_FILE\n" >&2
+    printf "\tSAC2C_FILE: .sac2c file created by sac2c option -dcccall\n\n" >&2
+    printf "\tThis is for debugging parts of stdlib using gdb.\n" >&2
+    printf "\tBuild stdlib with VERBOSE=1 in the environment, and copy\n" >&2
+    printf "\tthe command compiling the relevant module.\n" >&2
+    printf "\tThen add -dcccall to the compile command.\n" >&2
+    printf "\tThis will create a sac2c file in that directory, which you.\n" >&2
+    printf "\tpass as argument to this script.\n" >&2
+    printf "\tgdb will then give line numbers for readable generated code.\n" >&2
+    exit
+fi
+
+hash clang-format || exit
 
 # We store our source files preinstead of in /tmp
 mkdir -p source_files
@@ -26,7 +32,7 @@ format_in_place()
 {
     temp=$(mktemp)
 
-    grep -v "#" "$1" | nuke_semi | clang-format > "$temp"
+    grep -v "#" "$1" | clang-format > "$temp"
     mv "$temp" "$1"
 }
 

@@ -184,7 +184,6 @@ SET (C_DEPS_SRC
     structures/src/StringArray/dim.c
     structures/src/StringArray/copy.c
     structures/src/StringArray/alloc.c
-    structures/src/StringArray/size.c
     structures/src/String/trim.c
     structures/src/String/tostring.c
     structures/src/String/strtok.c

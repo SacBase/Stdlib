@@ -5,8 +5,6 @@
 
 #include "StringC.h"
 
-/* TODO ar should be PDI */
-
 /*****************************************************************/
 
 #define str_nt (str, T_OLD((SCL, (HID, (NUQ,)))))
