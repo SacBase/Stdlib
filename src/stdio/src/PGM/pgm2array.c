@@ -12,7 +12,7 @@
 #include "sac_pgm.h"
 
 /*
- * We use macros next(), comment() skip() and num(n) 
+ * We use macros next(), comment() skip() and num(n)
  * to read the PGM input data, because PGM has awkward
  * grammar rules which are not easily translated to
  * common stdio routines. Also, note that for parsing
@@ -26,7 +26,7 @@
 #define next()        do { c = myget(fp); } while (0)
 
 /* Ignore comments.
- * Skip the rest of the line and ignore more comments until 
+ * Skip the rest of the line and ignore more comments until
  * the first character of the next line is not a comment character.
  */
 #define comment()                                          \
@@ -103,7 +103,6 @@ PGM* SAC_PGM_parse( FILE* fp)
     SAC_RuntimeError("SAC_PGM_parse: Failed to ungetc.");
   }
 
-done:
   pgm->width = width;
   pgm->height = height;
   pgm->maxval = maxval;
@@ -121,6 +120,7 @@ bad:
   }
   SAC_RuntimeError(
     "SAC_PGM_parse: Premature end-of-file while reading PGM header.");
+  return NULL;
 }
 
 void SAC_PGM_free( PGM* pgm)
@@ -247,7 +247,6 @@ static int* SAC_PGM_read_data_low( PGM* pgm)
     goto eof;
   }
 
-done:
   return data;
 
 bad:
@@ -263,5 +262,7 @@ err:
 eof:
   SAC_RuntimeError(
       "SAC_PGM_read_data: Premature end-of-file while reading PGM data.");
+
+  return NULL;
 }
 

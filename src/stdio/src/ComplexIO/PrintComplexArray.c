@@ -7,13 +7,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef SAC_BACKEND_DISTMEM
-#define SAC_DO_DISTMEM 1
-#else /* defined(SAC_BACKEND_DISTMEM) */
-#define SAC_DO_DISTMEM 0
-#endif /* defined(SAC_BACKEND_DISTMEM) */
 #include "sac.h"
-#undef SAC_DO_DISTMEM
 
 #define COMPLEX     1
 
@@ -37,25 +31,11 @@ int Index2Offset( int dim, int *shp, int *index)
   return(offset);
 }
 
-static
-#ifdef SAC_BACKEND_DISTMEM
-void PrintArrDSM(FILE *stream, int typeflag, string format, int dim, int * shp, void *a, bool is_distr, unsigned long arr_offset, unsigned long elems_first_nodes)
-#else /* defined(SAC_BACKEND_DISTMEM) */
-void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a)
-#endif /* defined(SAC_BACKEND_DISTMEM) */
+static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a)
 {
   int i,n, element_count;
   char *space=" ";
   int *index;
-
-  #ifdef SAC_BACKEND_DISTMEM
-    // TODO: Remove
-    if (is_distr) {
-      fprintf(stream, "DSM PrintArr from node %zd\n", SAC_DISTMEM_rank);
-    } else {
-      fprintf(stream, "Non-DSM PrintArr from node %zd\n", SAC_DISTMEM_rank);
-    }
-  #endif
 
   fprintf(stream, "Dimension: %2i\n", dim);
   fprintf(stream, "Shape    : <");
@@ -108,26 +88,15 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
         while (index[n] < shp[dim-1]) {
 
-          #ifdef SAC_BACKEND_DISTMEM
-            if (is_distr) {
-               fprintf(stream, format, 
-                  *(SAC_DISTMEM_ELEM_POINTER(arr_offset, int, elems_first_nodes, Index2Offset(dim,shp,index))));
-            } else {
-          #endif /* defined(SAC_BACKEND_DISTMEM) */
-
           switch(typeflag) {
           case COMPLEX:
-            fprintf(stream, format, 
+            fprintf(stream, format,
 	    	(((complex *)a)[Index2Offset(dim,shp,index)])[0], (((complex *)a)[Index2Offset(dim,shp,index)])[1]);
             break;
           }
 
-          #ifdef SAC_BACKEND_DISTMEM
-          } /* else */
-          #endif /* defined(SAC_BACKEND_DISTMEM) */
-
           index[n]++;
-        }        
+        }
 
         if (dim%2 == 1) {
           index[n] = 0;
@@ -137,7 +106,7 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
         else {
           fprintf(stream, "| ");
         }
-  
+
         while(( n>0) && (index[n]>=(shp[n]-1))) {
           index[n]=0;
           n -= 2;
@@ -164,28 +133,12 @@ void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, voi
 
 }
 
-#ifdef SAC_BACKEND_DISTMEM
-//FIXME: For now we only support dsm int arrays
-static
-void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a) {
-  PrintArrDSM( stream, typeflag, format, dim, shp, a, FALSE, 0, 0);
-}
-#endif /* defined(SAC_BACKEND_DISTMEM) */
-
-#ifdef SAC_BACKEND_DISTMEM
-void COMPLEXIO__PrintComplexArray( FILE *stream, int dim, int * shp, complex * a, bool is_distr, unsigned long arr_offset, unsigned long elems_first_nodes)
-#else /* defined(SAC_BACKEND_DISTMEM) */
 void COMPLEXIO__PrintComplexArray( FILE *stream, int dim, int * shp, complex * a)
-#endif /* defined(SAC_BACKEND_DISTMEM) */
 {
   PrintArr(stream, COMPLEX, "(%.g, %.g) ", dim, shp, a);
 }
 
-#ifdef SAC_BACKEND_DISTMEM
-void COMPLEXIO__PrintComplexArrayFormat( FILE *stream, string format, int dim, int * shp, complex * a, bool is_distr, unsigned long arr_offset, unsigned long elems_first_nodes)
-#else /* defined(SAC_BACKEND_DISTMEM) */
 void COMPLEXIO__PrintComplexArrayFormat( FILE *stream, string format, int dim, int * shp, complex * a)
-#endif /* defined(SAC_BACKEND_DISTMEM) */
 {
   PrintArr(stream, COMPLEX, format, dim, shp, a);
 }
