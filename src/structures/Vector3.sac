@@ -1,15 +1,15 @@
-module Vec3d;
+module Vector3;
 
 export all;
 
-struct Vec3d {
+struct Vector3 {
     double x;
     double y;
     double z;
 };
 
 inline double
-l2norm (struct Vec3d v)
+l2norm (struct Vector3 v)
 {
     x = _mul_SxS_ (v.x, v.x);
     y = _mul_SxS_ (v.y, v.y);
@@ -24,70 +24,70 @@ l2norm (struct Vec3d v)
  ******************************************************************************/
 
 #define VEC3D_BIN_AxA(name, op)                                                \
-inline struct Vec3d[d:shp]                                                     \
-name (struct Vec3d[d:shp] a, struct Vec3d[d:shp] b)                            \
+inline struct Vector3[d:shp]                                                   \
+name (struct Vector3[d:shp] a, struct Vector3[d:shp] b)                        \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
-            Vec3d{ op (_sel_VxA_ (iv, a).x, _sel_VxA_ (iv, b).x),              \
-                   op (_sel_VxA_ (iv, a).y, _sel_VxA_ (iv, b).y),              \
-                   op (_sel_VxA_ (iv, a).z, _sel_VxA_ (iv, b).z) };            \
-    } : genarray (shp, Vec3d{ 0d, 0d, 0d });                                   \
+            Vector3{ op (_sel_VxA_ (iv, a).x, _sel_VxA_ (iv, b).x),            \
+                     op (_sel_VxA_ (iv, a).y, _sel_VxA_ (iv, b).y),            \
+                     op (_sel_VxA_ (iv, a).z, _sel_VxA_ (iv, b).z) };          \
+    } : genarray (shp, Vector3{ 0d, 0d, 0d });                                 \
 }
 
 #define VEC3D_BIN_AxS(name, op)                                                \
-inline struct Vec3d[d:shp]                                                     \
-name (struct Vec3d[d:shp] a, struct Vec3d b)                                   \
+inline struct Vector3[d:shp]                                                   \
+name (struct Vector3[d:shp] a, struct Vector3 b)                               \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
-            Vec3d{ op (_sel_VxA_ (iv, a).x, b.x),                              \
-                   op (_sel_VxA_ (iv, a).y, b.y),                              \
-                   op (_sel_VxA_ (iv, a).z, b.z) };                            \
-    } : genarray (shp, Vec3d{ 0d, 0d, 0d });                                   \
+            Vector3{ op (_sel_VxA_ (iv, a).x, b.x),                            \
+                     op (_sel_VxA_ (iv, a).y, b.y),                            \
+                     op (_sel_VxA_ (iv, a).z, b.z) };                          \
+    } : genarray (shp, Vector3{ 0d, 0d, 0d });                                 \
 }
 
 #define VEC3D_BIN_SxA(name, op)                                                \
-inline struct Vec3d[d:shp]                                                     \
-name (struct Vec3d a, struct Vec3d[d:shp] b)                                   \
+inline struct Vector3[d:shp]                                                   \
+name (struct Vector3 a, struct Vector3[d:shp] b)                               \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
-            Vec3d{ op (a.x, _sel_VxA_ (iv, b).x),                              \
-                   op (a.y, _sel_VxA_ (iv, b).y),                              \
-                   op (a.z, _sel_VxA_ (iv, b).z) };                            \
-    } : genarray (shp, Vec3d{ 0d, 0d, 0d });                                   \
+            Vector3{ op (a.x, _sel_VxA_ (iv, b).x),                            \
+                     op (a.y, _sel_VxA_ (iv, b).y),                            \
+                     op (a.z, _sel_VxA_ (iv, b).z) };                          \
+    } : genarray (shp, Vector3{ 0d, 0d, 0d });                                 \
 }
 
 #define VEC3D_BIN_AxD(name, op)                                                \
-inline struct Vec3d[d:shp]                                                     \
-name (struct Vec3d[d:shp] a, double b)                                         \
+inline struct Vector3[d:shp]                                                   \
+name (struct Vector3[d:shp] a, double b)                                       \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
-            Vec3d{ op (_sel_VxA_ (iv, a).x, b),                                \
-                   op (_sel_VxA_ (iv, a).y, b),                                \
-                   op (_sel_VxA_ (iv, a).z, b) };                              \
-    } : genarray (shp, Vec3d{ 0d, 0d, 0d });                                   \
+            Vector3{ op (_sel_VxA_ (iv, a).x, b),                              \
+                     op (_sel_VxA_ (iv, a).y, b),                              \
+                     op (_sel_VxA_ (iv, a).z, b) };                            \
+    } : genarray (shp, Vector3{ 0d, 0d, 0d });                                 \
 }
 
 #define VEC3D_BIN_DxA(name, op)                                                \
-inline struct Vec3d[d:shp]                                                     \
-name (double a, struct Vec3d[d:shp] b)                                         \
+inline struct Vector3[d:shp]                                                   \
+name (double a, struct Vector3[d:shp] b)                                       \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
-            Vec3d{ op (a, _sel_VxA_ (iv, b).x),                                \
-                   op (a, _sel_VxA_ (iv, b).y),                                \
-                   op (a, _sel_VxA_ (iv, b).z) };                              \
-    } : genarray (shp, Vec3d{ 0d, 0d, 0d });                                   \
+            Vector3{ op (a, _sel_VxA_ (iv, b).x),                              \
+                     op (a, _sel_VxA_ (iv, b).y),                              \
+                     op (a, _sel_VxA_ (iv, b).z) };                            \
+    } : genarray (shp, Vector3{ 0d, 0d, 0d });                                 \
 }
 
 #define VEC3D_BIN_SxS(name, op)                                                \
-inline struct Vec3d                                                            \
-name (struct Vec3d a, struct Vec3d b)                                          \
+inline struct Vector3                                                          \
+name (struct Vector3 a, struct Vector3 b)                                      \
 {                                                                              \
-    return Vec3d{ op (a.x, b.x), op (a.y, b.y), op (a.z, b.z) };               \
+    return Vector3{ op (a.x, b.x), op (a.y, b.y), op (a.z, b.z) };             \
 }
 
 #define VEC3D_BIN(name, op)                                                    \
@@ -110,22 +110,22 @@ VEC3D_BIN(/, _div_SxS_)
  ******************************************************************************/
 
 #define VEC3D_UNARY_A(name, op)                                                \
-inline struct Vec3d[d:shp]                                                     \
-name (struct Vec3d[d:shp] a)                                                   \
+inline struct Vector3[d:shp]                                                   \
+name (struct Vector3[d:shp] a)                                                 \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
-            Vec3d{ op (_sel_VxA_ (iv, a).x),                                   \
-                   op (_sel_VxA_ (iv, a).y),                                   \
-                   op (_sel_VxA_ (iv, a).z) };                                 \
-    } : genarray (shp, Vec3d{ 0d, 0d, 0d });                                   \
+            Vector3{ op (_sel_VxA_ (iv, a).x),                                 \
+                     op (_sel_VxA_ (iv, a).y),                                 \
+                     op (_sel_VxA_ (iv, a).z) };                               \
+    } : genarray (shp, Vector3{ 0d, 0d, 0d });                                 \
 }
 
 #define VEC3D_UNARY_S(name, op)                                                \
-inline struct Vec3d                                                            \
-name (struct Vec3d a)                                                          \
+inline struct Vector3                                                          \
+name (struct Vector3 a)                                                        \
 {                                                                              \
-    return Vec3d{ op (a.x), op (a.y), op (a.z) };                              \
+    return Vector3{ op (a.x), op (a.y), op (a.z) };                            \
 }
 
 #define VEC3D_UNARY(name, op)                                                  \
