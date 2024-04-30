@@ -14,9 +14,9 @@ export all;
  * Helper functions
  *
  ******************************************************************************/
-inline 
+inline
 int Min( int x, int y)
-{ /* Function to perform min_SxS_( x, y), but written to 
+{ /* Function to perform min_SxS_( x, y), but written to
    * let the optimizers simplify the arguments.
    */
 
@@ -24,9 +24,9 @@ int Min( int x, int y)
   return(z);
 }
 
-inline 
+inline
 int[.] Min( int[.] x, int[.] y)
-{ /* Function to perform min_VxV_( x, y), but written to 
+{ /* Function to perform min_VxV_( x, y), but written to
    * let the optimizers simplify the arguments.
    */
 
@@ -34,9 +34,9 @@ int[.] Min( int[.] x, int[.] y)
   return(z);
 }
 
-inline 
+inline
 int Max( int x, int y)
-{ /* Function to perform max_SxS_( x, y), but written to 
+{ /* Function to perform max_SxS_( x, y), but written to
    * let the optimizers simplify the arguments.
    */
 
@@ -44,9 +44,9 @@ int Max( int x, int y)
   return(z);
 }
 
-inline 
+inline
 int[.] Max( int[.] x, int y)
-{ /* Function to perform max_VxS_( x, y), but written to 
+{ /* Function to perform max_VxS_( x, y), but written to
    * let the optimizers simplify the arguments.
    */
 
@@ -75,7 +75,7 @@ int signum( int y)
     }
   }
   return( z);
-} 
+}
 
 /********************************************************************************
  *
@@ -83,11 +83,11 @@ int signum( int y)
  *
  ********************************************************************************/
 
-// Take supports overtake. 
-// E.g., take([5], [2, 3]) -->     
+// Take supports overtake.
+// E.g., take([5], [2, 3]) -->
 //     [2, 3, 0, 0, 0]
 //
-// Take supports short v, padding the missing elements with 
+// Take supports short v, padding the missing elements with
 // corresponding elements from shape(array).
 // E.g., take([3], genarray([2,2], 42)) -->
 //     42 42
@@ -238,7 +238,7 @@ typ[+] ++( typ arr_a, typ arr_b)                                            \
 BUILT_IN( CAT)
 
 // Last-axis catenate
-// We assume that x and y are the same shape, except 
+// We assume that x and y are the same shape, except
 // perhaps along the last axis.
 
 #define CATENATE( typ, postfix, zval, oval)                                 \
@@ -363,7 +363,7 @@ BUILT_IN( TRANSPOSE)
 
 
 /*----------------------------------------------------------------------------*/
-// Positive shift is to right, negative to left 
+// Positive shift is to right, negative to left
 #define SHIFT_S( typ, postfix, zval, oval)                                  \
 inline                                                                      \
 typ[+] shift (int dimension, int count, typ boundary, typ[+] A)             \
@@ -599,6 +599,19 @@ NUM( MINVAL)
 ALL
 ANY
 
+#define RSUM( typ, postfix, zval, oval)                                        \
+inline                                                                         \
+typ[i:inner] rsum( int o, typ[o:outer,i:inner] arr)                            \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_(0, inner) <= iv < inner) : with {                           \
+            (_mul_SxV_(0, outer) <= ov < outer) : _sel_VxA_(ov ++ iv, arr);    \
+        } : fold(+, oval);                                                     \
+    } : genarray(inner, oval);                                                 \
+}
+
+NUM( RSUM)
+
 /* The match verb */
 #define MATCH( typ, postfix, zval, oval)						                    \
 inline									                                                \
@@ -632,7 +645,7 @@ bool match( typ[+] arr_a, typ[+] arr_b)					                        \
 	res = false;							                                            \
    }									                                                  \
  return( res);								                                          \
-}									
+}
 
 BUILT_IN( MATCH)
 
@@ -640,7 +653,7 @@ BUILT_IN( MATCH)
 /********************************************************************************
  *
  * mask() has the same semantics as where(), but it does not use WLs.
- * 
+ *
  * These versions are defined on scalars/vectors only, but they could
  * be extended to higher-order arrays via a WL.
  *
