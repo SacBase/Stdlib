@@ -133,3 +133,93 @@ VEC3D_UNARY_A(name, op)                                                        \
 VEC3D_UNARY_S(name, op)
 
 VEC3D_UNARY(-, _neg_S_)
+
+/******************************************************************************
+ *
+ * Equality operations
+ *
+ ******************************************************************************/
+
+#define VEC3D_EQ_AxA(name, op, and_or)                                         \
+inline bool[d:shp]                                                             \
+name (struct Vec3d[d:shp] a, struct Vec3d[d:shp] b)                            \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
+            and_or (op (_sel_VxA_ (iv, a).x, _sel_VxA_ (iv, b).x),             \
+            and_or (op (_sel_VxA_ (iv, a).y, _sel_VxA_ (iv, b).y),             \
+                    op (_sel_VxA_ (iv, a).z, _sel_VxA_ (iv, b).z)));           \
+    } : genarray (shp, true);                                                  \
+}
+
+#define VEC3D_EQ_AxS(name, op)                                                 \
+inline bool[d:shp]                                                             \
+name (struct Vec3d[d:shp] a, struct Vec3d b)                                   \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
+            and_or (op (_sel_VxA_ (iv, a).x, b.x),                             \
+            and_or (op (_sel_VxA_ (iv, a).y, b.y),                             \
+                    op (_sel_VxA_ (iv, a).z, b.z)));                           \
+    } : genarray (shp, true);                                                  \
+}
+
+#define VEC3D_EQ_SxA(name, op)                                                 \
+inline bool[d:shp]                                                             \
+name (struct Vec3d a, struct Vec3d[d:shp] b)                                   \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
+            and_or (op (a.x, _sel_VxA_ (iv, b).x),                             \
+            and_or (op (a.y, _sel_VxA_ (iv, b).y),                             \
+                    op (a.z, _sel_VxA_ (iv, b).z)));                           \
+    } : genarray (shp, true);                                                  \
+}
+
+#define VEC3D_EQ_AxD(name, op)                                                 \
+inline bool[d:shp]                                                             \
+name (struct Vec3d[d:shp] a, double b)                                         \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
+            and_or (op (_sel_VxA_ (iv, a).x, b),                               \
+            and_or (op (_sel_VxA_ (iv, a).y, b),                               \
+                    op (_sel_VxA_ (iv, a).z, b)));                             \
+    } : genarray (shp, true);                                                  \
+}
+
+#define VEC3D_EQ_DxA(name, op)                                                 \
+inline bool[d:shp]                                                             \
+name (double a, struct Vec3d[d:shp] b)                                         \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_ (0, shp) <= iv < shp) :                                     \
+            and_or (op (a, _sel_VxA_ (iv, b).x),                               \
+            and_or (op (a, _sel_VxA_ (iv, b).y),                               \
+                    op (a, _sel_VxA_ (iv, b).z)));                             \
+    } : genarray (shp, true);                                                  \
+}
+
+#define VEC3D_EQ_SxS(name, op)                                                 \
+inline bool                                                                    \
+name (struct Vec3d a, struct Vec3d b)                                          \
+{                                                                              \
+    return and_or (op (a.x, b.x),                                              \
+           and_or (op (a.y, b.y),                                              \
+                   op (a.z, b.z)));                                            \
+}
+
+#define VEC3D_EQ(name, op, and_or)                                             \
+VEC3D_EQ_AxA(name, op, and_or)                                                 \
+VEC3D_EQ_AxS(name, op, and_or)                                                 \
+VEC3D_EQ_SxA(name, op, and_or)                                                 \
+VEC3D_EQ_AxD(name, op, and_or)                                                 \
+VEC3D_EQ_DxA(name, op, and_or)                                                 \
+VEC3D_EQ_SxS(name, op, and_or)
+
+VEC3D_EQ(==, _eq_SxS_,  _and_SxS_)
+VEC3D_EQ(!=, _neq_SxS_, _or_SxS_ )
+VEC3D_EQ(>,  _gt_SxS_,  _and_SxS_)
+VEC3D_EQ(>=, _ge_SxS_,  _and_SxS_)
+VEC3D_EQ(<,  _lt_SxS_,  _and_SxS_)
+VEC3D_EQ(<=, _le_SxS_,  _and_SxS_)
