@@ -11,6 +11,7 @@ import Color8: all;
 import Complex: all;
 import List: all;
 import Quaternion: all;
+import Vector3: all;
 #endif
 
 export all;
