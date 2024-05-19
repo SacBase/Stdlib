@@ -68,6 +68,7 @@ Please look at `.github/workflows/` for more exact details on what we do.
 Licensing
 =========
 
-This project is open-source, contributions are welcome! Note that no warranty is given.
+This project is OSS, please have a look at [LICENSE.md][license] for more details. Contributions
+are welcome!
 
-Please look at `LICENSE.txt` for further details.
+[license]: https://github.com/SacBase/Stdlib/blob/master/LICENSE.md
