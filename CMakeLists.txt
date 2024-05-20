@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.20)
 
 PROJECT (sac-stdlib)
 #FIXME(artem) we can create a definitoin for language "SAC" which will

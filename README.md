@@ -10,18 +10,16 @@ language.
 Build instructions
 ==================
 
-To build the system one requires an operational [CMake](https://cmake.org/) >= 3.3,
+To build the system one requires an operational [CMake](https://cmake.org/) >= 3.20,
 [Flex](http://flex.sourceforge.net/), and [Bison](https://www.gnu.org/software/bison/).
 
 An example on how to build the library:
-```bash
-$ cd Stdlib
-$ git submodule init
-$ git submodule update
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make -j4  #you should have roughly 2GB per thread :-)
+```sh
+cd Stdlib
+git submodule init
+git submodule update
+cmake -B build
+cmake --build build -- -j4  # you should have roughly 2GB per thread :-)
 ```
 
 If you like you can also install the stdlib into `/usr/local` with `make

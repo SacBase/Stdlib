@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.20)
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/generate-sac2c-dependency-targets.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake/parse-core-ext-files.cmake")
