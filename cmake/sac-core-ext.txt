@@ -82,3 +82,4 @@ auxiliary/Interval.sac                     Ext
 auxiliary/Hiding.sac                       Ext
 auxiliary/C99Benchmarking.sac              Ext
 auxiliary/Benchmarking.sac                 Ext
+algorithms/Sort.sac                        Core
