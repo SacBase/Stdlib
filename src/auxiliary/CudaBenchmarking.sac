@@ -43,7 +43,7 @@ use String: {string, sprintf,+};
 use Array: all except {+};
 use StdIO: all;
 
-export { Interval, start, end, benchThis, returnResultUnit, printResult, 
+export { Interval, gpu_start, gpu_end, benchThis, returnResultUnit, printResult,
          getInterval, destroyInterval};
 
 objdef CudaBenchmarking TheBenchmarkObject = create_TheBenchmarkObject( );
@@ -102,12 +102,12 @@ external string benchUnitType( Interval& interval);
 #pragma linkobj "src/CudaBenchmarking/bench.o"
 #pragma linksign [0,1]
 
-void start( Interval& interval)
+void gpu_start( Interval& interval)
 {
   benchStart( interval); 
 }
 
-void end( Interval& interval)
+void gpu_end( Interval& interval)
 {
   benchEnd( interval); 
 }
