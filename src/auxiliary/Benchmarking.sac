@@ -15,18 +15,4 @@ module Benchmarking;
 
 export all;
 
-
-#if defined(SAC_BACKEND_C99)
 import C99Benchmarking: all;
-#endif /* SAC_BACKEND_C99 */
-
-/* We need CUDA events because the only synchronisation is h2d and d2h
- * transfers. So with CPU timing, we cannot benchmark a kernel that is
- * preceded or followed by a different GPU function. */
-#if defined(SAC_BACKEND_CUDA)
-import CudaBenchmarking: all;
-#endif /* SAC_BACKEND_CUDA */
-
-#ifdef SAC_BACKEND_MUTC
-import MutcBenchmarking: all;
-#endif /* SAC_BACKEND_MUTC */
