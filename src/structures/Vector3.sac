@@ -90,13 +90,31 @@ name (struct Vector3 a, struct Vector3 b)                                      \
     return Vector3{ op (a.x, b.x), op (a.y, b.y), op (a.z, b.z) };             \
 }
 
+#define VEC3D_BIN_SxD(name, op)                                                \
+inline struct Vector3                                                          \
+name (struct Vector3 a, double b)                                              \
+{                                                                              \
+    return Vector3{ op (a.x, b), op (a.y, b), op (a.z, b) };                   \
+}
+
+
+#define VEC3D_BIN_DxS(name, op)                                                \
+inline struct Vector3                                                          \
+name (double a, struct Vector3 b)                                              \
+{                                                                              \
+    return Vector3{ op (a, b.x), op (a, b.y), op (a, b.z) };                   \
+}
+
+
 #define VEC3D_BIN(name, op)                                                    \
 VEC3D_BIN_AxA(name, op)                                                        \
 VEC3D_BIN_AxS(name, op)                                                        \
 VEC3D_BIN_SxA(name, op)                                                        \
 VEC3D_BIN_AxD(name, op)                                                        \
 VEC3D_BIN_DxA(name, op)                                                        \
-VEC3D_BIN_SxS(name, op)
+VEC3D_BIN_SxS(name, op)                                                        \
+VEC3D_BIN_SxD(name, op)                                                        \
+VEC3D_BIN_DxS(name, op)
 
 VEC3D_BIN(+, _add_SxS_)
 VEC3D_BIN(-, _sub_SxS_)
@@ -209,13 +227,33 @@ name (struct Vector3 a, struct Vector3 b)                                      \
                    op (a.z, b.z)));                                            \
 }
 
+#define VEC3D_EQ_SxD(name, op, and_or)                                         \
+inline bool                                                                    \
+name (struct Vector3 a, double b)                                              \
+{                                                                              \
+    return and_or (op (a.x, b),                                                \
+           and_or (op (a.y, b),                                                \
+                   op (a.z, b)));                                              \
+}
+
+#define VEC3D_EQ_DxS(name, op, and_or)                                         \
+inline bool                                                                    \
+name (double a, struct Vector3 b)                                              \
+{                                                                              \
+    return and_or (op (a, b.x),                                                \
+           and_or (op (a, b.y),                                                \
+                   op (a, b.z)));                                              \
+}
+
 #define VEC3D_EQ(name, op, and_or)                                             \
 VEC3D_EQ_AxA(name, op, and_or)                                                 \
 VEC3D_EQ_AxS(name, op, and_or)                                                 \
 VEC3D_EQ_SxA(name, op, and_or)                                                 \
 VEC3D_EQ_AxD(name, op, and_or)                                                 \
 VEC3D_EQ_DxA(name, op, and_or)                                                 \
-VEC3D_EQ_SxS(name, op, and_or)
+VEC3D_EQ_SxS(name, op, and_or)                                                 \
+VEC3D_EQ_SxD(name, op, and_or)                                                 \
+VEC3D_EQ_DxS(name, op, and_or)
 
 VEC3D_EQ(==, _eq_SxS_,  _and_SxS_)
 VEC3D_EQ(!=, _neq_SxS_, _or_SxS_ )
