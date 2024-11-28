@@ -12,7 +12,7 @@ MACRO (CHECK_SAC2C_CC_FLAG flag var)
 
     # we need to treat NVCC differently, we need it to pass the C flags to the
     # actual C-compiler
-    IF ("${TARGET}" MATCHES "^cuda.*")
+    IF (("${TARGET}" MATCHES "^cuda.*") OR ("${TARGET}" MATCHES "multi_gpu"))
         SET (__werror "-Xc;-Xcompiler -Werror")
         SET (__flag "-Xc;-Xcompiler ${flag}")
     ELSE ()
