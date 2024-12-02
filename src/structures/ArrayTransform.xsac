@@ -599,18 +599,19 @@ NUM( MINVAL)
 ALL
 ANY
 
-#define RSUM( typ, postfix, zval, oval)                                        \
+#define RSUM(typ, postfix, zval, oval)                                         \
 inline                                                                         \
-typ[i:inner] rsum( int o, typ[o:outer,i:inner] arr)                            \
+typ[i:inner] rsum(int o, typ[o:outer,i:inner] arr)                             \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_(0, inner) <= iv < inner) : with {                           \
-            (_mul_SxV_(0, outer) <= ov < outer) : _sel_VxA_(ov ++ iv, arr);    \
+            (_mul_SxV_(0, outer) <= ov < outer) :                              \
+              _sel_VxA_(_cat_VxV_(ov, iv), arr);                               \
         } : fold(+, oval);                                                     \
     } : genarray(inner, oval);                                                 \
 }
 
-NUM( RSUM)
+NUM(RSUM)
 
 /* The match verb */
 #define MATCH( typ, postfix, zval, oval)						                    \
