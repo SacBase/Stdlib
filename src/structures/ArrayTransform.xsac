@@ -22,6 +22,10 @@ export all;
  *         E.g., take( [5], [2, 3]) =
  *           [2, 3, 0, 0, 0]
  *
+ * @remark Take supports negative v, taking the last elements
+ *         E.g., take( [-1], [2, 3]) =
+ *           [3]
+ *
  * @remark Take supports short v, padding the missing elements
  *         with corresponding elements from shp.
  *         E.g., take( [3], genarray( [2,2], 42)) =
@@ -71,29 +75,34 @@ BUILT_IN( TAKE)
  *
  * @brief Drops a number of elements from the array, given a shape vector.
  *
+ * @remark Drop supports overdrop
+ *         E.g., drop( [5], [2, 3]) =
+ *           []
+ *
+ * @remark Drop supports negative v, taking the last elements
+ *         E.g., drop( [-1], [2, 3]) =
+ *           [2]
+ *
+ * @remark Drop supports short v, padding the missing elements
+ *         with corresponding elements from shp.
+ *         E.g., drop( [1], genarray( [2,2], 42)) =
+ *           [[42, 42]]
+ *
  ******************************************************************************/
 
 #define DROP( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[d:oshp] drop( int[vlen] sv, typ[d:shp] A)                                  \
+typ[n:shp_res, m:ishp] drop( int[n] v, typ[n:oshp, m:ishp] array)              \                        
 {                                                                              \
-  zr = _mul_SxV_( 0, shp);                                                     \
-  offset = zr;                                                                 \
-  vext = zr;                                                                   \
-                                                                               \
-  /* Pad drop count */                                                         \
-  for (i = 0; _lt_SxS_( i, vlen); i = _add_SxS_( i, 1)) {                      \
-    el = _sel_VxA_( [i], sv);                                                  \
-    shpel = _sel_VxA_( [i], shp);                                              \
-    vext = _idx_modarray_AxSxS_( vext,  i,  el);                               \
-    val = _mask_SxSxS_( _le_SxS_( el, 0), 0, _min_SxS_( shpel, el));           \
-    offset = _idx_modarray_AxSxS_( offset, i, val);                            \
-  }                                                                            \
-                                                                               \
-  oshp = _max_VxV_( zr, _sub_VxV_( shp, _abs_V_( vext)));                      \
-  res = { iv -> _sel_VxA_( _add_VxV_( offset, iv), A) | iv < oshp };           \
-  return res;                                                                  \
-}
+  // Calculate shape of result array.                                          \
+  shp_res = _sub_VxV_(oshp, _abs_V_(v));                                       \
+  shp_res = ArrayTransform::where( _lt_VxS_(shp_res, 0), 0, shp_res);          \
+  // Start shows the index of the first element to be selected.                \
+  start = ArrayTransform::where( _lt_VxS_(v, 0), 0, v);                        \
+  // Select the requested elements of array.                                   \
+  res = { iv -> array[ _add_VxV_( start, iv)] | iv < shp_res };                \
+  return(res);                                                                 \
+}                                                                              \
 
 BUILT_IN( DROP)
 
