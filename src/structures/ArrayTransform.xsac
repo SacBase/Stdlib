@@ -33,41 +33,34 @@ export all;
 
 #define TAKE( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[d:oshp] take( int[vlen] sv, typ[d:shp] A)                                  \
-{                                                                              \
-  zr = _mul_SxV_( 0, shp);                                                     \
-  ylb = zr;                                                                    \
-  lb = zr;                                                                     \
-  vext = shp;                                                                  \
-                                                                               \
+typ[n:v, m:ishp] take( int[n] v, typ[n:oshp, m:ishp] A)                        \
+{                                                                              \                                                                             
+  // Offset shows the index of the first element to be selected.               \
+  offset = ArrayTransform::where( _lt_VxS_(v, 0),                              \
+            _add_VxV_( oshp, v),                                               \
+            0);                                                                \
   /*                                                                           \
-   * Pad take count for Bernecky's extended take.                              \
-   * See APL model in function Take in apex test suite UTTakeDrop.             \
-   * for-loop should get unrolled.                                             \
-   */                                                                          \
-  for (i = 0; _lt_SxS_( i, vlen); i = _add_SxS_( i, 1)) {                      \
-    vel = _sel_VxA_( [i], sv);                                                 \
-    shpel = _sel_VxA_( [i], shp);                                              \
-    vext = _idx_modarray_AxSxS_( vext, i, vel);                                \
-    val = _sub_SxS_( 0, vel);                                                  \
-    val = _sub_SxS_( val, shpel);                                              \
-    val = _max_SxS_( val, 0);                                                  \
-    val = _mask_SxSxS_( _ge_SxS_( vel, 0), 0, val);                            \
-    lb = _idx_modarray_AxSxS_( lb, i, val);                                    \
-    val = _max_SxS_( 0, _add_SxS_( shpel, vel));                               \
-    val = _mask_SxSxS_( _ge_SxS_( vel, 0), 0, val);                            \
-    ylb = _idx_modarray_AxSxS_( ylb, i, val);                                  \
-  }                                                                            \
-                                                                               \
-  oshp = _abs_V_( vext);                                                       \
-  ub = _min_VxV_( shp, oshp);                                                  \
-  ub = _add_VxV_( ub, lb);                                                     \
-  res = with {                                                                 \
-          (lb <= iv < ub)                                                      \
-            : _sel_VxA_( _add_VxV_( _sub_VxV_( ylb, lb), iv), A);              \
-        } : genarray( oshp, zval);                                             \
-  return res;                                                                  \
-}
+   * Stop signals the location of the last index element of array.             \
+   * This can be longer than the size of the array, in case offset             \
+   * is less than (-oshp).                                                     \
+  */                                                                           \
+  stop = ArrayTransform::where( _lt_VxS_(v, 0),                                \
+           _abs_V_(v),                                                         \
+           _min_VxV_( _abs_V_(v), oshp));                                      \
+  /*                                                                           \
+   * Start shows where the selection of array elements starts.                 \
+   * This can only be different from offset if offset < (-oshp).               \
+  */                                                                           \
+  start = ArrayTransform::where( _lt_VxS_(_neg_V_(offset), 0),                 \
+             0,                                                                \
+             _neg_V_(offset));                                                 \
+  // The result is calculated in 2 steps:                                      \
+  res = {// 1: select the required elements of the array                       \
+         iv -> array[ _add_VxV_( offset, iv)] | start <= iv < stop;            \         
+         // 2: add zeros around (if needed)                                    \
+         iv -> genarray(ishp, zval) | iv < _abs_V_(v)};                        \
+  return(res);                                                                 \
+}                                                                              \
 
 BUILT_IN( TAKE)
 
