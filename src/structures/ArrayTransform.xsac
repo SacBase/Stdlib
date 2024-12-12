@@ -139,41 +139,34 @@ inline                                                                         \
 typ[o, d:shp] ++( typ[n, d:shp] A, typ[m, d:shp] B)                            \
 {                                                                              \
   o = _add_SxS_(n, m);                                                         \
-  oshp = _cat_VxV_( [o], shp);                                                 \
   res = with {                                                                 \
-          ([0] <= iv < [n]) : A[iv];                                           \
-          ([n] <= iv < [o]) : B[ _sub_VxV_(iv, [n])];                          \
-        } : genarray( oshp, zval);                                             \
+          ([0] <= [i] < [n]) : A[i];                                           \
+          ([n] <= [i] < [o]) : B[ _sub_SxS_(i, n)];                            \
+        } : genarray( [o], genarray(shp, zval));                               \
   return res;                                                                  \
 }
 
 #define CAT_AxS( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[o,d:shp] ++( typ[n,d:shp] A, typ B)                                        \
+typ[o, d:shp] ++( typ[n, d:shp] A, typ B)                                      \
 {                                                                              \
-  o = _add_SxS_( n, 1);                                                        \
-  oshp = _cat_VxV_( [o], shp);                                                 \
-  zshp = _mul_SxV_( 0, oshp);                                                  \
-  offset = _cat_VxV_( [n], _mul_SxV_( 0, shp));                                \
+  o = _add_SxS_(n, 1);                                                         \
   res = with {                                                                 \
-          (zshp <= iv < _shape_A_( A)) : _sel_VxA_( iv, A);                    \
-          (offset <= iv < oshp)        : B;                                    \
-        } : genarray( oshp, zval);                                             \
+          ([0] <= [i] < [n]) : A[i];                                           \
+          ([n] <= [i] < [o]) : genarray(shp, B);                               \
+        } : genarray( [o], genarray(shp, zval));                               \
   return res;                                                                  \
 }
 
 #define CAT_SxA( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[o,d:shp] ++( typ A, typ[m,d:shp] B)                                        \
+typ[o, d:shp] ++( typ A, typ[m, d:shp] B)                                      \
 {                                                                              \
-  o = _add_SxS_( m, 1);                                                        \
-  oshp = _cat_VxV_( [o], shp);                                                 \
-  zshp = _mul_SxV_( 0, oshp);                                                  \
-  offset = _cat_VxV_( [m], _mul_SxV_( 0, shp));                                \
+  o = _add_SxS_( 1, m);                                                        \
   res = with {                                                                 \
-          (zshp <= iv < _shape_A_( B)) : _sel_VxA_( iv, B);                    \
-          (offset <= iv < oshp)        : A;                                    \
-        } : genarray( oshp, zval);                                             \
+          ([0] <= [i] < [1]) : genarray(shp, A);                               \
+          ([1] <= [i] < [o]) : B[ _sub_SxS_(i, 1)];                            \
+        } : genarray( [o], genarray(shp, zval));                               \
   return res;                                                                  \
 }
 
