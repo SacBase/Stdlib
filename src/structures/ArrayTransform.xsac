@@ -14,7 +14,7 @@ export all;
 
 /******************************************************************************
  *
- * @fn <a>[d:oshp] take( int[vlen] sv, typ[d:shp] A)
+ * @fn <a>[n:v, m:ishp] take( int[n] v, typ[n:ohsp, m:ishp] A)
  *
  * @brief Takes a number of elements from the array, given a shape vector.
  *
@@ -71,7 +71,7 @@ BUILT_IN( TAKE)
 
 /******************************************************************************
  *
- * @fn <a>[d:oshp] drop( int[vlen] sv, <a>[d:shp] A)
+ * @fn <a>[n:shp_res, m:ishp] drop( int[n] sv, <a>[n:oshp, m:ishp] A)
  *
  * @brief Drops a number of elements from the array, given a shape vector.
  *
@@ -113,6 +113,7 @@ BUILT_IN( DROP)
  *
  * @brief Takes a tile from the array, of shape shp from at index idx.
  *
+ *
  ******************************************************************************/
 
 #define TILE( typ, postfix, zval, oval)                                        \
@@ -135,15 +136,13 @@ BUILT_IN( TILE)
 
 #define CAT_AxA( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[o,d:shp] ++( typ[n,d:shp] A, typ[m,d:shp] B)                               \
+typ[o, d:shp] ++( typ[n, d:shp] A, typ[m, d:shp] B)                            \
 {                                                                              \
-  o = _add_SxS_( n, m);                                                        \
+  o = _add_SxS_(n, m);                                                         \
   oshp = _cat_VxV_( [o], shp);                                                 \
-  zshp = _mul_SxV_( 0, oshp);                                                  \
-  offset = _cat_VxV_( [n], _mul_SxV_( 0, shp));                                \
   res = with {                                                                 \
-          (zshp <= iv < _shape_A_( A)) : _sel_VxA_( iv, A);                    \
-          (offset <= iv < oshp)        : _sel_VxA_( _sub_VxV_( iv, offset), B);\
+          ([0] <= iv < [n]) : A[iv];                                           \
+          ([n] <= iv < [o]) : B[ _sub_VxV_(iv, [n])];                          \
         } : genarray( oshp, zval);                                             \
   return res;                                                                  \
 }
