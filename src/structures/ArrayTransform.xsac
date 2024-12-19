@@ -40,24 +40,24 @@ inline                                                                         \
 typ[n:v, m:ishp] take( int[n] v, typ[n:oshp, m:ishp] A)                        \
 {                                                                              \                                                                             
   // Offset shows the index of the first element to be selected.               \
-  offset = ArrayTransform::where( _lt_VxS_(v, 0),                              \
-            _add_VxV_( oshp, v),                                               \
-            0);                                                                \
+  offset = where( _lt_VxS_(v, 0),                                              \
+              _add_VxV_( oshp, v),                                             \
+              0);                                                              \
   /*                                                                           \
    * Stop signals the location of the last index element of array.             \
    * This can be longer than the size of the array, in case offset             \
    * is less than (-oshp).                                                     \
   */                                                                           \
-  stop = ArrayTransform::where( _lt_VxS_(v, 0),                                \
-           _abs_V_(v),                                                         \
-           _min_VxV_( _abs_V_(v), oshp));                                      \
+  stop = where( _lt_VxS_(v, 0),                                                \
+            _abs_V_(v),                                                        \
+            _min_VxV_( _abs_V_(v), oshp));                                     \
   /*                                                                           \
    * Start shows where the selection of array elements starts.                 \
    * This can only be different from offset if offset < (-oshp).               \
   */                                                                           \
-  start = ArrayTransform::where( _lt_VxS_(_neg_V_(offset), 0),                 \
-             0,                                                                \
-             _neg_V_(offset));                                                 \
+  start = where( _lt_VxS_(_neg_V_(offset), 0),                                 \
+            0,                                                                 \
+            _neg_V_(offset));                                                  \
   // The result is calculated in 2 steps:                                      \
   res = {// 1: select the required elements of the array                       \
          iv -> array[ _add_VxV_( offset, iv)] | start <= iv < stop;            \         
@@ -96,9 +96,9 @@ typ[n:shp_res, m:ishp] drop( int[n] v, typ[n:oshp, m:ishp] array)              \
 {                                                                              \
   // Calculate shape of result array.                                          \
   shp_res = _sub_VxV_(oshp, _abs_V_(v));                                       \
-  shp_res = ArrayTransform::where( _lt_VxS_(shp_res, 0), 0, shp_res);          \
+  shp_res = where( _lt_VxS_(shp_res, 0), 0, shp_res);                          \
   // Start shows the index of the first element to be selected.                \
-  start = ArrayTransform::where( _lt_VxS_(v, 0), 0, v);                        \
+  start = where( _lt_VxS_(v, 0), 0, v);                                        \
   // Select the requested elements of array.                                   \
   res = { iv -> array[ _add_VxV_( start, iv)] | iv < shp_res };                \
   return(res);                                                                 \
@@ -113,15 +113,31 @@ BUILT_IN( DROP)
  *
  * @brief Takes a tile from the array, of shape shp from at index idx.
  *
+ * @remark Tile supports overtile
+ *         E.g., tile( [5], [1], [2, 3, 4]) =
+ *           [3, 4, 0, 0, 0]
  *
  ******************************************************************************/
 
 #define TILE( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[d:shp] tile( int[d] shp, int[.] idx, typ[*] A)                             \
+typ[n:shp] tile( int[n] shp, int[n] idx, typ[n:shp_a] array)                   \
+| _all_V_( _ge_VxS_(shp, 0))                                                   \
 {                                                                              \
-  return { iv -> _sel_VxA_( _add_VxV_( idx, iv), A) | iv < shp };              \
-}
+  // Start shows how many elements we prepend before the array.                \
+  start = where( _lt_VxS_(idx, 0),                                             \
+           _abs_V_(idx),                                                       \
+           0);                                                                 \
+  // Stop shows where our selection of the given array ends, or, in case       \
+  // the selection goes beyond the array, where the array ends.                \
+  stop = _min_VxV_(shp, _sub_VxV_(shp_a, idx));                                \
+  // The result is calculated in 2 steps:                                      \
+  res = {// 1: select the required elements of the array                       \
+         iv -> array[ _add_VxV_(idx, iv)] | start <= iv < stop;                \
+         // 2: add zeros around (if needed)                                    \
+         iv -> zero(array) | iv < shp};                                        \
+  return( res);                                                                \
+}                                                                              \
 
 BUILT_IN( TILE)
 
@@ -139,10 +155,8 @@ inline                                                                         \
 typ[o, d:shp] ++( typ[n, d:shp] A, typ[m, d:shp] B)                            \
 {                                                                              \
   o = _add_SxS_(n, m);                                                         \
-  res = with {                                                                 \
-          ([0] <= [i] < [n]) : A[i];                                           \
-          ([n] <= [i] < [o]) : B[ _sub_SxS_(i, n)];                            \
-        } : genarray( [o], genarray(shp, zval));                               \
+  res = {[i] -> A[i] | [i] < [n];                                              \
+         [i] -> B[ _sub_SxS_(i, n)] | [n] <= [i] < [o]};                       \
   return res;                                                                  \
 }
 
@@ -151,10 +165,8 @@ inline                                                                         \
 typ[o, d:shp] ++( typ[n, d:shp] A, typ B)                                      \
 {                                                                              \
   o = _add_SxS_(n, 1);                                                         \
-  res = with {                                                                 \
-          ([0] <= [i] < [n]) : A[i];                                           \
-          ([n] <= [i] < [o]) : genarray(shp, B);                               \
-        } : genarray( [o], genarray(shp, zval));                               \
+  res = {[i] -> A[i] | [i] < [n];                                              \
+         [i] -> genarray(shp, B) | [n] <= [i] < [o]};                          \
   return res;                                                                  \
 }
 
@@ -197,46 +209,28 @@ BUILT_IN( CAT)
 
 #define CATENATE_AxA( typ, postfix, zval, oval)                                \
 inline                                                                         \
-typ[d:shp,o] catenate( typ[d:shp,n] A, typ[d:shp,m] B)                         \
+typ[d:shp,o] catenate( typ[d:shp,n] A, typ[d:shp,m] B)                         \                      
 {                                                                              \
   o = _add_SxS_( n, m);                                                        \
-  oshp = _cat_VxV_( shp, [o]);                                                 \
-  zshp = _mul_SxV_( 0, oshp);                                                  \
-  offset = _cat_VxV_( _mul_SxV_( 0, shp), [n]);                                \
-  res = with {                                                                 \
-          (zshp <= iv < offset) : _sel_VxA_( iv, A);                           \
-          (offset <= iv < oshp) : _sel_VxA_( _sub_VxV_( iv, offset), B);       \
-        } : genarray( oshp, zval);                                             \
+  res = { iv -> _cat_VxV_( A[iv], B[iv]) | iv < shp };                         \
   return res;                                                                  \
 }
 
 #define CATENATE_AxS( typ, postfix, zval, oval)                                \
 inline                                                                         \
-typ[d:shp,o] catenate( typ[d:shp,n] A, typ B)                                  \
+typ[d:shp,o] catenate( typ[d:shp,n] A, typ B)                                  \                       
 {                                                                              \
   o = _add_SxS_( n, 1);                                                        \
-  oshp = _cat_VxV_( shp, [o]);                                                 \
-  zshp = _mul_SxV_( 0, oshp);                                                  \
-  offset = _cat_VxV_( _mul_SxV_( 0, shp), [n]);                                \
-  res = with {                                                                 \
-          (zshp <= iv < offset) : _sel_VxA_( iv, A);                           \
-          (offset <= iv < oshp) : B;                                           \
-        } : genarray( oshp, zval);                                             \
+  res = { iv -> _cat_VxV_( A[iv], [B]) | iv < shp };                           \
   return res;                                                                  \
 }
 
 #define CATENATE_SxA( typ, postfix, zval, oval)                                \
 inline                                                                         \
-typ[d:shp,o] catenate( typ A, typ[d:shp,m] B)                                  \
+typ[d:shp,o] catenate( typ A, typ[d:shp,m] B)                                  \                      
 {                                                                              \
-  o = _add_SxS_( m, 1);                                                        \
-  oshp = _cat_VxV_( shp, [o]);                                                 \
-  zshp = _mul_SxV_( 0, oshp);                                                  \
-  offset = _cat_VxV_( _mul_SxV_( 0, shp), [m]);                                \
-  res = with {                                                                 \
-          (zshp <= iv < offset) : A;                                           \
-          (offset <= iv < oshp) : _sel_VxA_( _sub_VxV_( iv, offset), B);       \
-        } : genarray( oshp, zval);                                             \
+  o = _add_SxS_( 1, m);                                                        \
+  res = { iv -> _cat_VxV_( [A], B[iv]) | iv < shp };                           \
   return res;                                                                  \
 }
 
@@ -269,9 +263,7 @@ inline                                                                         \
 typ[n,d:shp] reverse( typ[n,d:shp] A)                                          \
 {                                                                              \
   max = _sub_SxS_( n, 1);                                                      \
-  res = with {                                                                 \
-          ([0] <= [i] <= [max]) : _sel_VxA_( [_sub_SxS_( max, i)], A);         \
-        } : modarray( A);                                                      \
+  res = { [i] -> A[ _sub_SxS_( max, i)] | [i] <= [max] };                      \
   return res;                                                                  \
 }
 
@@ -288,16 +280,9 @@ BUILT_IN( REVERSE)
 
 #define REVERSEAXIS( typ, postfix, zval, oval)                                 \
 inline                                                                         \
-typ[d:shp] reverse( int axis, typ[d:shp] A)                                    \
+typ[axis:oshp, n, d:shp] reverse( int axis, typ[axis:oshp, n, d:shp] A)        \
 {                                                                              \
-  shpel = _sel_VxA_( [axis], shp);                                             \
-  offset = _sub_SxS_( shpel, 1);                                               \
-  res = with {                                                                 \
-          ( . <= iv <= . ) {                                                   \
-            i = _sel_VxA_( [axis], iv);                                        \
-            idx = _modarray_AxVxS_( iv, [axis], _sub_SxS_( offset, i));        \
-          } : _sel_VxA_( idx, A);                                              \
-        } : modarray( A);                                                      \
+  res = { iv -> reverse( A[iv]) | iv < oshp };                                 \
   return res;                                                                  \
 }
 
@@ -316,7 +301,9 @@ BUILT_IN( REVERSEAXIS)
 inline                                                                         \
 typ[d:shpT] transpose( typ[d:shp] A)                                           \
 {                                                                              \
-  return { iv -> _sel_VxA_( reverse( iv), A) | iv < shp };                     \
+  shpT = reverse(shp);                                                         \
+  res = { iv -> A[ reverse(iv)] | iv < shpT };                                 \
+  return res;                                                                  \
 }
 
 BUILT_IN( TRANSPOSE)
