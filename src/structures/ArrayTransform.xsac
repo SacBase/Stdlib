@@ -60,7 +60,7 @@ typ[n:v, m:ishp] take( int[n] v, typ[n:oshp, m:ishp] A)                        \
             _neg_V_(offset));                                                  \
   /* The result is calculated in 2 steps: */                                   \
   res = {/* 1: select the required elements of the array */                    \
-         iv -> array[ _add_VxV_( offset, iv)] | start <= iv < stop;            \         
+         iv -> A[ _add_VxV_( offset, iv)] | start <= iv < stop;                \         
          /* 2: add zeros around (if needed) */                                 \
          iv -> genarray(ishp, zval) | iv < _abs_V_(v)};                        \
   return(res);                                                                 \
@@ -92,15 +92,15 @@ BUILT_IN( TAKE)
 
 #define DROP( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[n:shp_res, m:ishp] drop( int[n] v, typ[n:oshp, m:ishp] array)              \                        
+typ[n:shp_res, m:ishp] drop( int[n] v, typ[n:oshp, m:ishp] A)                  \                        
 {                                                                              \
   /* Calculate shape of result array. */                                       \
   shp_res = _sub_VxV_(oshp, _abs_V_(v));                                       \
   shp_res = where( _lt_VxS_(shp_res, 0), 0, shp_res);                          \
   /* Start shows the index of the first element to be selected. */             \
   start = where( _lt_VxS_(v, 0), 0, v);                                        \
-  /* Select the requested elements of array. */                                \
-  res = { iv -> array[ _add_VxV_( start, iv)] | iv < shp_res };                \
+  /* Select the requested elements of array A. */                              \
+  res = { iv -> A[ _add_VxV_( start, iv)] | iv < shp_res };                    \
   return(res);                                                                 \
 }                                                                              \
 
@@ -121,7 +121,7 @@ BUILT_IN( DROP)
 
 #define TILE( typ, postfix, zval, oval)                                        \
 inline                                                                         \
-typ[n:shp] tile( int[n] shp, int[n] idx, typ[n:shp_a] array)                   \
+typ[n:shp] tile( int[n] shp, int[n] idx, typ[n:shp_a] A)                       \
 | _all_V_( _ge_VxS_(shp, 0))                                                   \
 {                                                                              \
   /* Start shows how many elements we prepend before the array. */             \
@@ -135,7 +135,7 @@ typ[n:shp] tile( int[n] shp, int[n] idx, typ[n:shp_a] array)                   \
   stop = _min_VxV_(shp, _sub_VxV_(shp_a, idx));                                \
   /* The result is calculated in 2 steps: */                                   \
   res = {/* 1: select the required elements of the array */                    \
-         iv -> array[ _add_VxV_(idx, iv)] | start <= iv < stop;                \
+         iv -> A[ _add_VxV_(idx, iv)] | start <= iv < stop;                    \
          /* 2: add zeros around (if needed) */                                 \
          iv -> zval | iv < shp};                                               \
   return( res);                                                                \
