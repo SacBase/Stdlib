@@ -39,7 +39,7 @@ export all;
 inline                                                                         \
 typ[n:v, m:ishp] take( int[n] v, typ[n:oshp, m:ishp] A)                        \
 {                                                                              \                                                                             
-  // Offset shows the index of the first element to be selected.               \
+  /* Offset shows the index of the first element to be selected. */            \
   offset = where( _lt_VxS_(v, 0),                                              \
               _add_VxV_( oshp, v),                                             \
               0);                                                              \
@@ -58,10 +58,10 @@ typ[n:v, m:ishp] take( int[n] v, typ[n:oshp, m:ishp] A)                        \
   start = where( _lt_VxS_(_neg_V_(offset), 0),                                 \
             0,                                                                 \
             _neg_V_(offset));                                                  \
-  // The result is calculated in 2 steps:                                      \
-  res = {// 1: select the required elements of the array                       \
+  /* The result is calculated in 2 steps: */                                   \
+  res = {/* 1: select the required elements of the array */                    \
          iv -> array[ _add_VxV_( offset, iv)] | start <= iv < stop;            \         
-         // 2: add zeros around (if needed)                                    \
+         /* 2: add zeros around (if needed) */                                 \
          iv -> genarray(ishp, zval) | iv < _abs_V_(v)};                        \
   return(res);                                                                 \
 }                                                                              \
@@ -94,12 +94,12 @@ BUILT_IN( TAKE)
 inline                                                                         \
 typ[n:shp_res, m:ishp] drop( int[n] v, typ[n:oshp, m:ishp] array)              \                        
 {                                                                              \
-  // Calculate shape of result array.                                          \
+  /* Calculate shape of result array. */                                       \
   shp_res = _sub_VxV_(oshp, _abs_V_(v));                                       \
   shp_res = where( _lt_VxS_(shp_res, 0), 0, shp_res);                          \
-  // Start shows the index of the first element to be selected.                \
+  /* Start shows the index of the first element to be selected. */             \
   start = where( _lt_VxS_(v, 0), 0, v);                                        \
-  // Select the requested elements of array.                                   \
+  /* Select the requested elements of array. */                                \
   res = { iv -> array[ _add_VxV_( start, iv)] | iv < shp_res };                \
   return(res);                                                                 \
 }                                                                              \
@@ -124,18 +124,20 @@ inline                                                                         \
 typ[n:shp] tile( int[n] shp, int[n] idx, typ[n:shp_a] array)                   \
 | _all_V_( _ge_VxS_(shp, 0))                                                   \
 {                                                                              \
-  // Start shows how many elements we prepend before the array.                \
+  /* Start shows how many elements we prepend before the array. */             \
   start = where( _lt_VxS_(idx, 0),                                             \
            _abs_V_(idx),                                                       \
            0);                                                                 \
-  // Stop shows where our selection of the given array ends, or, in case       \
-  // the selection goes beyond the array, where the array ends.                \
+  /*                                                                           \
+   * Stop shows where our selection of the given array ends, or, in case       \
+   * the selection goes beyond the array, where the array ends.                \
+  */                                                                           \
   stop = _min_VxV_(shp, _sub_VxV_(shp_a, idx));                                \
-  // The result is calculated in 2 steps:                                      \
-  res = {// 1: select the required elements of the array                       \
+  /* The result is calculated in 2 steps: */                                   \
+  res = {/* 1: select the required elements of the array */                    \
          iv -> array[ _add_VxV_(idx, iv)] | start <= iv < stop;                \
-         // 2: add zeros around (if needed)                                    \
-         iv -> zero(array) | iv < shp};                                        \
+         /* 2: add zeros around (if needed) */                                 \
+         iv -> zval | iv < shp};                                               \
   return( res);                                                                \
 }                                                                              \
 
@@ -319,45 +321,53 @@ BUILT_IN( TRANSPOSE)
 
 #define SHIFT_S( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[d:shp] shift( int dim, int count, typ boundary, typ[d:shp] A)              \
-  | _le_SxS_( 0, dim), _lt_SxS_( dim, d)                                       \
+typ[dim:oshp, n, d:ishp] myshift2                                              \
+( int dim, int count, typ boundary, typ[dim:oshp, n, d:ishp] A)                \
 {                                                                              \
-  /* Prevent overshift */                                                      \
-  abscount = _abs_S_( count);                                                  \
-  max_shift = _sel_VxA_( [dim], shp);                                          \
-  count = _min_SxS_( abscount, max_shift);                                     \
-  cneg = _toi_S_( _lt_SxS_( count, 0));                                        \
-  cnonneg = _toi_S_( _ge_SxS_( count, 0));                                     \
-                                                                               \
-  zr = _mul_SxV_( 0, shp);                                                     \
-  lb = _modarray_AxVxS_( zr, [dim], _mul_SxS_( count, cnonneg));               \
-  offset = _modarray_AxVxS_( zr, [dim], _neg_S_( count));                      \
-  ubel = _sub_SxS_( max_shift, _mul_SxS_( abscount, cneg));                    \
-  ub = _modarray_AxVxS_( shp, [dim], ubel);                                    \
-                                                                               \
-  res = with {                                                                 \
-          (lb <= iv < ub)                                                      \
-            : _sel_VxA_( _add_VxV_( iv, offset), A);                           \
-        } : genarray( shp, boundary);                                          \
+  res = { iv ->                                                                \
+      { [i] -> ( _lt_SxS_( _sub_SxS_( i, count), n )                           \
+              && _ge_SxS_( _sub_SxS_( i, count), 0) )                          \
+      ? A[ _cat_VxV_( iv, [ _sub_SxS_( i, count)] ) ]                          \
+      : genarray( ishp, boundary) | [i] < [n] }                                \
+    | iv < oshp };                                                             \
   return res;                                                                  \
 }
 
+
 #define SHIFT_V( typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[d:shp] shift( int[n] counts, typ boundary, typ[d:shp] A)                   \
-  | _le_SxS_( n, d)                                                            \
+typ[n:oshp, m:ishp] shift( int[n] counts, typ boundary, typ[n:oshp, m:ishp] A) \
 {                                                                              \
-  for (i = 0; _lt_SxS_( i, n); i = _add_SxS_( i, 1)) {                         \
-    offset = _sel_VxA_( [i], counts);                                          \
-    A = shift( i, offset, boundary, A);                                        \
-  }                                                                            \
-  return A;                                                                    \
+  counts_ext = _cat_VxV_( counts, genarray( [m], 0));                          \
+                                                                               \
+  shp = _cat_VxV_( oshp, ishp);                                                \
+  idx = _neg_V_( counts_ext);                                                  \
+                                                                               \
+  /*                                                                           \
+   * The next section is taken from tile_apl. This can be replaced if          \
+   * tile_apl becomes an official part of this library                         \
+  */                                                                           \
+                                                                               \
+  /* Start shows how many elements we prepend before the array. */             \
+  start = where( _lt_VxS_(idx, 0),                                             \
+           _abs_V_(idx),                                                       \
+           0);                                                                 \
+  /*                                                                           \
+   * Stop shows where our selection of the given array ends, or, in case       \
+   * the selection goes beyond the array, where the array ends.                \
+  */                                                                           \
+  stop = _min_VxV_(shp, _sub_VxV_(shp, idx));                                  \
+  /* The result is calculated in 2 steps: */                                   \
+  res = {/* 1: select the required elements of the array */                    \
+         iv -> A[ _add_VxV_(idx, iv)] | start <= iv < stop;                    \
+         /* 2: add zeros around */                                             \
+         iv -> zval | iv < shp};                                               \
+  return res;                                                                  \
 }
 
 #define SHIFT_VZ( typ, postfix, zval, oval)                                    \
 inline                                                                         \
-typ[d:shp] shift( int[n] counts, typ[d:shp] A)                                 \
-  | n <= d                                                                     \
+typ[n:oshp, m:ishp] shift( int[n] counts, typ[n:oshp, m:ishp] A)               \
 {                                                                              \
   return shift( counts, zval, A);                                              \
 }
@@ -388,34 +398,26 @@ BUILT_IN( SHIFT)
 
 #define ROTATE_S( typ, postfix, zval, oval)                                    \
 inline                                                                         \
-typ[d:shp] rotate( int dim, int count, typ[d:shp] A)                           \
-  | _le_SxS_( 0, dim), _lt_SxS_( dim, d)                                       \
+typ[dim:oshp, n, d:ishp] rotate                                                \
+( int dim, int count, typ[dim:oshp, n, d:ishp] A)                              \
 {                                                                              \
-  max_rotate = _sel_VxA_( [dim], shp);                                         \
-  count = _aplmod_SxS_( count, max_rotate);                                    \
-  offset = _modarray_AxVxS_( _mul_SxV_( 0, shp), [dim], count);                \
-  res = with {                                                                 \
-          (offset <= iv <= . )                                                 \
-            : _sel_VxA_( _sub_VxV_( iv, offset), A);                           \
-        } : modarray( A);                                                      \
-  slice_shp = _modarray_AxVxS_( shp, [dim], count);                            \
-  res = with {                                                                 \
-          ( . <= iv < slice_shp)                                               \
-            : _sel_VxA_( _add_VxV_( iv, _sub_VxV_( shp, slice_shp)), A);       \
-        } : modarray( res);                                                    \
+  res = { iv ->                                                                \
+      { [i] ->                                                                 \
+        A[ _cat_VxV_( iv, [ _aplmod_SxS_ ( _sub_SxS_( i, count), n )] ) ]      \
+        | [i] < [n] }                                                          \
+    | iv < oshp };                                                             \
   return res;                                                                  \
 }
 
 #define ROTATE_V( typ, postfix, zval, oval)                                    \
 inline                                                                         \
-typ[d:shp] rotate (int[n] counts,  typ[d:shp] A)                               \
-  | _le_SxS_( n, d)                                                            \
+typ[n:oshp, m:ishp] rotate (int[n] counts, typ[n:oshp, m:ishp] A)              \
 {                                                                              \
-  for (i = 0; _lt_SxS_( i, n); i = _add_SxS_( i, 1)) {                         \
-    offset = _sel_VxA_( [i], counts);                                          \
-    A = rotate( i, offset, A);                                                 \
-  }                                                                            \
-  return A;                                                                    \
+  res = { iv ->                                                                \
+      A[ { [i] -> _aplmod_SxS_( _sub_SxS_(iv[i], counts[i]), oshp[i])          \
+      | [i] < [n] } ]                                                          \
+    | iv < oshp };                                                             \
+  return res;                                                                  \
 }
 
 #define ROTATE( typ, postfix, zval, oval)                                      \
