@@ -1,0 +1,5 @@
+#define VECTOR3 Vector3f
+#define REAL float
+#define ZERO 0f
+
+#include "Vector3.mac"

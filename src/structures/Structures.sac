@@ -8,14 +8,12 @@ import String       : all;
 import Complex      : all;
 import Quaternion   : all;
 import Vector3      : all;
+import Vector3f     : all;
 #ifndef SAC_BACKEND_MUTC
 import List         : all;
 import Color8       : all;
 import Grey         : all;
 #endif /* SAC_BACKEND_MUTC */
-#endif
+#endif /* EXT_STDLIB */
 
 export all;
-
-
-
