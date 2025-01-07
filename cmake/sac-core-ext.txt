@@ -57,6 +57,7 @@ structures/String.sac                      Core
 structures/StringArray.sac                 Ext
 structures/Structures.sac                  Core
 structures/Vector3.sac                     Ext
+structures/Vector3f.sac                    Ext
 
 # System
 system/Clock.sac                           Core
