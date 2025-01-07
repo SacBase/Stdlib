@@ -17,9 +17,9 @@ fun( bool)                \
 fun( char)
 
 #define SHOW( a) \
-void indentedShow( a[+] arr)                                                     \
+void indentedShow( a[d:shp] arr) | (d >= 1)                                      \
 {                                                                                \
-  cshape = to_string( format( shape( arr)));                                     \
+  cshape = to_string( format( shp));                                             \
   printf( "reshape( [ %s ] , [\n", cshape);                                      \
                                                                                  \
   spaces = genarray( [getIndent() + getIndent( offset) + strlen( cshape) + 18],  \
