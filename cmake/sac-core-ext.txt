@@ -71,7 +71,6 @@ numerical/ComplexMath.sac                  Ext
 numerical/Numerical.sac                    Core
 numerical/MathArray.sac                    Core
 numerical/Math.sac                         Core
-numerical/FixedPoint.sac                   Ext
 classes/random/Random.sac                  Core
 classes/random/RandLC.sac                  Core
 classes/random/Rand48.sac                  Core
