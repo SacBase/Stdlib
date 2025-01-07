@@ -153,7 +153,7 @@ external void writePGMdata( int[.,.] data, PGM& pgm );
      * Write the PGM data to file.
      */
 
-void writePGM( int[.,.] image, int[2] shp, int mval,
+void writePGM( int[2:shp] image, int[2] shp, int mval,
                bool binary, string name)
 {
   err, fp = fopen( name, "wb");
@@ -175,7 +175,7 @@ void writePGM( int[.,.] image, int[2] shp, int mval,
      * 'name' gives the filename.
      */
 
-void writePGM( int[.,.] image, int[2] shp, int mval,
+void writePGM( int[2:shp] image, int[2] shp, int mval,
                bool binary, File stream )
 {
   pgm = newPGM( shp, mval, binary, stream );
@@ -195,18 +195,18 @@ void writePGM( int[.,.] image, int[2] shp, int mval,
 /*
  * Write an image to file in the PGM format.
  */
-inline void writePGM(int[.,.] img, int mval, bool binary, string filename)
+inline void writePGM(int[2:shp] img, int mval, bool binary, string filename)
 {
-    writePGM(img, shape(img), mval, binary, filename);
+    writePGM(img, shp, mval, binary, filename);
 }
 
 
 /*
  * Write an image to file in the binary PGM format.
  */
-inline void writePGM(int[.,.] img, int mval, string filename)
+inline void writePGM(int[2:shp] img, int mval, string filename)
 {
-    writePGM(img, shape(img), mval, true, filename);
+    writePGM(img, shp, mval, true, filename);
 }
 
 
@@ -214,10 +214,10 @@ inline void writePGM(int[.,.] img, int mval, string filename)
  * Write an image to file in the PGM format
  * and calculate a suitable 'mval'.
  */
-inline void writePGM(int[.,.] img, bool binary, string filename)
+inline void writePGM(int[2:shp] img, bool binary, string filename)
 {
     mval = (maxval(img) > 255) ? 65535 : 255;
-    writePGM(img, shape(img), mval, binary, filename);
+    writePGM(img, shp, mval, binary, filename);
 }
 
 
@@ -225,7 +225,7 @@ inline void writePGM(int[.,.] img, bool binary, string filename)
  * Write an image to file in the binary PGM format
  * and calculate a suitable 'mval'.
  */
-inline void writePGM(int[.,.] img, string filename)
+inline void writePGM(int[2:shp] img, string filename)
 {
     writePGM(img, true, filename);
 }

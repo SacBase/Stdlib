@@ -114,19 +114,23 @@ external  stringArray  FibreScanStringArrayStr( string stream);
  * FibrePrint on File
  */
 
-external void FibrePrint( File &stream, int DIM, int[+] SHAPE, int[+] ARRAY);
+external void 
+FibrePrint( File &stream, int DIM, int[DIM] SHAPE, int[DIM:SHAPE] ARRAY);
   #pragma linkname "FibrePrintIntArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( File &stream, int DIM, int[+] SHAPE, float[+] ARRAY);
+external void 
+FibrePrint( File &stream, int DIM, int[DIM] SHAPE, float[DIM:SHAPE] ARRAY);
   #pragma linkname "FibrePrintFloatArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( File &stream, int DIM, int[+] SHAPE, double[+] ARRAY);
+external void 
+FibrePrint( File &stream, int DIM, int[DIM] SHAPE, double[DIM:SHAPE] ARRAY);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( File &stream, int DIM, int[+] SHAPE, stringArray ARRAY);
+external void 
+FibrePrint( File &stream, int DIM, int[DIM] SHAPE, stringArray ARRAY);
   #pragma linkname "FibrePrintStringArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -134,19 +138,24 @@ external void FibrePrint( File &stream, int DIM, int[+] SHAPE, stringArray ARRAY
  * FibrePrint on TermFile
  */
 
-external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, int[+] ARRAY);
+//TODO add DIM >= 1
+external void 
+FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, int[DIM:SHAPE] ARRAY);
   #pragma linkname "FibrePrintIntArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, float[+] ARRAY);
+external void 
+FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, float[DIM:SHAPE] ARRAY);
   #pragma linkname "FibrePrintFloatArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, double[+] ARRAY);
+external void 
+FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, double[DIM:SHAPE] ARRAY);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, stringArray ARRAY);
+external void 
+FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, stringArray ARRAY);
   #pragma linkname "FibrePrintStringArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -178,9 +187,9 @@ stringArray FibreScanStringArray()
 /*****************************************************************/
 
 
-inline void FibrePrint(File &stream, int[+] arr)
+inline void FibrePrint(File &stream, int[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stream, dim(arr), shape(arr), arr);
+  FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(File &stream, int arr)
@@ -189,9 +198,9 @@ inline void FibrePrint(File &stream, int arr)
 }
 
 
-inline void FibrePrint(File &stream, float[+] arr)
+inline void FibrePrint(File &stream, float[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stream, dim(arr), shape(arr), arr);
+  FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(File &stream, float arr)
@@ -200,9 +209,9 @@ inline void FibrePrint(File &stream, float arr)
 }
 
 
-inline void FibrePrint(File &stream, double[+] arr)
+inline void FibrePrint(File &stream, double[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stream, dim(arr), shape(arr), arr);
+  FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(File &stream, double arr)
@@ -221,9 +230,9 @@ inline void FibrePrint(File &stream, stringArray arr)
 /*****************************************************************/
 
 
-inline void FibrePrint(TermFile &stream, int[+] arr)
+inline void FibrePrint(TermFile &stream, int[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stream, dim(arr), shape(arr), arr);
+  FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(TermFile &stream, int arr)
@@ -232,9 +241,9 @@ inline void FibrePrint(TermFile &stream, int arr)
 }
 
 
-inline void FibrePrint(TermFile &stream, float[+] arr)
+inline void FibrePrint(TermFile &stream, float[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stream, dim(arr), shape(arr), arr);
+  FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(TermFile &stream, float arr)
@@ -243,9 +252,9 @@ inline void FibrePrint(TermFile &stream, float arr)
 }
 
 
-inline void FibrePrint(TermFile &stream, double[+] arr)
+inline void FibrePrint(TermFile &stream, double[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stream, dim(arr), shape(arr), arr);
+  FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(TermFile &stream, double arr)
@@ -262,9 +271,9 @@ inline void FibrePrint(TermFile &stream, stringArray arr)
 
 /*****************************************************************/
 
-inline void FibrePrint(int[+] arr)
+inline void FibrePrint(int[d:shp] arr) | (d >= 1)
 {
-  FibrePrint(stdout, dim(arr), shape(arr), arr);
+  FibrePrint(stdout, d, shp, arr);
 }
 
 inline void FibrePrint(int arr)
@@ -273,9 +282,9 @@ inline void FibrePrint(int arr)
 }
 
 
-inline void FibrePrint(float[+] arr)
+inline void FibrePrint(float[d:shp] arr)
 {
-  FibrePrint(stdout, dim(arr), shape(arr), arr);
+  FibrePrint(stdout, d, shp, arr);
 }
 
 inline void FibrePrint(float arr)
@@ -356,9 +365,9 @@ type[*]  FibreScan##alias##Array()					\
 
 #define FIBREPRINT(type,formatting)					\
 									\
-inline void FibrePrint(File &stream, type[+] arr)			\
+inline void FibrePrint(File &stream, type[d:shp] arr) | (d >= 1)			\
 {									\
-  FibrePrint(stream, dim(arr), shape(arr), arr);			\
+  FibrePrint(stream, d, shp, arr);			\
 }									\
 									\
 inline void FibrePrint(File &stream, type arr)				\
@@ -366,9 +375,9 @@ inline void FibrePrint(File &stream, type arr)				\
   File::fprintf(stream, SETFORMAT(formatting),  arr);			\
 }									\
 									\
-inline void FibrePrint(TermFile &stream, type[+] arr)			\
+inline void FibrePrint(TermFile &stream, type[d:shp] arr) | (d >= 1)			\
 {									\
-  FibrePrint(stream, dim(arr), shape(arr), arr);			\
+  FibrePrint(stream, d, shp, arr);			\
 }									\
 									\
 inline void FibrePrint(TermFile &stream, type arr)			\
@@ -376,9 +385,9 @@ inline void FibrePrint(TermFile &stream, type arr)			\
   TermFile::fprintf(stream, SETFORMAT(formatting), arr);		\
 }									\
 									\
-inline void FibrePrint(type[+] arr)					\
+inline void FibrePrint(type[d:shp] arr) | (d >= 1)					\
 {									\
-  FibrePrint(stdout, dim(arr), shape(arr), arr);			\
+  FibrePrint(stdout, d, shp, arr);			\
 }									\
 									\
 inline void FibrePrint(type arr)					\
