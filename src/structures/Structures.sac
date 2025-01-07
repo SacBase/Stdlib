@@ -12,6 +12,7 @@ import Complex: all;
 import List: all;
 import Quaternion: all;
 import Vector3: all;
+import Vector3f: all;
 #endif
 
 export all;
