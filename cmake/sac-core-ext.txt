@@ -67,7 +67,6 @@ stdio/File.sac                             Core
 # This file relies on the SDL which we keep 
 # in a separate module these days.
 #stdio/BMP.sac                              Ext
-numerical/SaCMath.sac                      Ext
 numerical/ComplexMath.sac                  Ext
 numerical/Numerical.sac                    Core
 numerical/MathArray.sac                    Core

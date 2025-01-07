@@ -3,7 +3,7 @@
 
 module FixedPoint;
 
-use SaCMath: all;
+import Math: {pow2};
 import Array: {shape,sel};
 
 export all;

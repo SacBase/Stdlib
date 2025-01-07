@@ -161,6 +161,16 @@ external double log2(double X);
 #ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
 #endif
+
+external uint log2(uint X);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Math/int_log.o"
+    #pragma linkname "SAC_MATH_log2u"
+
+external ulong log2(ulong X);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Math/int_log.o"
+    #pragma linkname "SAC_MATH_log2ul"
     /* Base-two logarithm of X.  */
 
 external double expm1(double X);
@@ -188,6 +198,9 @@ external double, double modf(double X);
 
   /* Power functions.  */
 
+inline int pow2(int a) {
+  return _shl_SxS_(1, a);
+}
 
 external double pow(double X, double Y);
     #pragma linksign [0,1,2]
@@ -257,7 +270,15 @@ external double fmod(double X, double Y);
 #endif
     /* Floating-point modulo remainder of X/Y.  */
 
+external int sign(double X);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Math/sign.o"
+    #pragma linkname "SAC_MATH_sign"
 
+external int sign(float X);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Math/sign.o"
+    #pragma linkname "SAC_MATH_signf"
 
   /* Range testing functions  */
 
@@ -544,56 +565,6 @@ external double hypot(double X, double Y);
     return(tof(hypot(tod(X), tod(Y))));
   }
     /* Return `sqrt(X*X + Y*Y)'.  */
-
-
-
-
-
-
-inline int sign(float x)
-{
-  if (x<0f)
-  {
-    res= -1;
-  }
-  else
-  {
-    if (x>0f)
-    {
-      res=1;
-    }
-    else
-    {
-      res=0;
-    }
-  }
-
-  return(res);
-}
-
-
-inline int sign(double x)
-{
-  if (x<0d)
-  {
-    res= -1;
-  }
-  else
-  {
-    if (x>0d)
-    {
-      res=1;
-    }
-    else
-    {
-      res=0;
-    }
-  }
-
-  return(res);
-}
-
-
 
 /* Numerical constants */
 
