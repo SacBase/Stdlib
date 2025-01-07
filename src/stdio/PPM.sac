@@ -23,12 +23,12 @@ external color[.,.] readStream( File &stream );
 #pragma refcounting[0]
 #pragma linksign[1,2]
 
-external void writeStream( TermFile &stream , color[.,.] image, int[2] shp, bool binary);
+external void writeStream( TermFile &stream , color[2:shp] image, int[2] shp, bool binary);
 #pragma effect Terminal::TheTerminal
 #pragma linkobj "src/PPM/array2ppm.o"
 #pragma linkname "SAC_PPM_array2ppm"
 
-external void writeStream( File &stream , color[.,.] image, int[2] shp, bool binary);
+external void writeStream( File &stream , color[2:shp] image, int[2] shp, bool binary);
 #pragma effect FileSystem::TheFileSystem
 #pragma linkobj "src/PPM/array2ppm.o"
 #pragma linkname "SAC_PPM_array2ppm"
@@ -55,13 +55,13 @@ color[.,.] readPPM( string name)
 }
 
 inline
-void printPPM( color[.,.] img)
+void printPPM( color[2:shp] img)
 {
-  writeStream( stdout, img, shape(img), false);
+  writeStream( stdout, img, shp, false);
 }
 
 inline
-void printPPM( color[.,.] img, string name, bool binary)
+void printPPM( color[2:shp] img, string name, bool binary)
 {
   err, fp = fopen( name, "w+");
   if ( SysErr::fail(err) == true) {
@@ -69,7 +69,7 @@ void printPPM( color[.,.] img, string name, bool binary)
            name);
   }
 
-  writeStream( fp, img, shape(img), binary);
+  writeStream( fp, img, shp, binary);
   fclose( fp);
 }
 
