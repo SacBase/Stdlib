@@ -16,7 +16,7 @@ external typedef string;
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/copystr.o"
 
-external string to_string(char[.] A, int LENGTH);
+external string to_string(char[n] A, int LENGTH) | (n == LENGTH + 1);
     #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/tostring.o"
@@ -321,10 +321,8 @@ TOS( double)
 TOS( bool)
 
 
-inline string to_string(char[.] arr)
+inline string to_string(char[len] arr)
 {
-  int len;
-  len=shape(arr)[[0]];
   return(to_string(_cat_VxV_(arr, ['\0']), len));
 }
 

@@ -54,7 +54,7 @@ stringArray drop( int[.] v, stringArray array)
 }
 
 inline
-int[+] where( bool[+] p, int A, int[+] B)
+int[d:shp] where( bool[d:shp] p, int A, int[d:shp] B) | (d >= 1)
 {
   res = with {
   ( . <= iv <= . ) : _sel_VxA_( iv, p) ? A : _sel_VxA_( iv, B);
