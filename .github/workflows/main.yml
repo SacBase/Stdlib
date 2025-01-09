@@ -14,7 +14,7 @@ env:
 # action listing, all jobs run in parallel
 jobs:
   build_linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
   build_mac:
-    runs-on: macos-12
+    runs-on: macos-latest
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
