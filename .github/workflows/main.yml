@@ -47,7 +47,7 @@ jobs:
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
   build_mac:
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
