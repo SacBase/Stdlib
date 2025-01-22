@@ -34,12 +34,12 @@ use Array: all;
  */
 #define HIDEVALUE( TYPE)                                  \
 inline                                                    \
-TYPE[*] hideValue( TYPE[*] in)                            \
+TYPE[n:shp] hideValue( TYPE[n:shp] in)                    \
 {                                                         \
   return( _hideValue_SxA_( 0, in));                       \
 }                                                         \
 inline                                                    \
-TYPE[*] hideValue( int i, TYPE[*] in)                     \
+TYPE[n:shp] hideValue( TYPE[n:shp] in, int i)             \
 {                                                         \
   return( _hideValue_SxA_( i, in));                       \
 }                                                         
@@ -58,12 +58,12 @@ HIDEVALUE( bool)
  */
 #define HIDESHAPE( TYPE)                               \
 inline                                                 \
-TYPE[*] hideShape( TYPE[*] in)                         \
+TYPE[n:shp] hideShape( TYPE[n:shp] in)                 \
 {                                                      \
   return( _hideShape_SxA_( 0, in));                    \
 }                                                      \
 inline                                                 \
-TYPE[*] hideShape( int i, TYPE[*] in)                  \
+TYPE[n:shp] hideShape( TYPE[n:shp] in, int i)          \
 {                                                      \
   return( _hideShape_SxA_( i, in));                    \
 }
@@ -80,20 +80,20 @@ HIDESHAPE( bool)
  * AUD -> AUD
  * SCALAR -> AUD
  */
-#define HIDEDIMENSIONALITY( TYPE)                      \
+#define HIDEDIM( TYPE)                                 \
 inline                                                 \
-TYPE[*] hideDimensionality( TYPE[*] in)                \
+TYPE[n:shp] hideDim( TYPE[n:shp] in)                   \
 {                                                      \
   return( _hideDim_SxA_( 0, in));                      \
 }                                                      \
 inline                                                 \
-TYPE[*] hideDimensionality( int i, TYPE[*] in)         \
+TYPE[n:shp] hideDim( TYPE[n:shp] in, int i)            \
 {                                                      \
   return( _hideDim_SxA_( i, in));                      \
 }
-HIDEDIMENSIONALITY( int)
-HIDEDIMENSIONALITY( char)
-HIDEDIMENSIONALITY( float)
-HIDEDIMENSIONALITY( double)
-HIDEDIMENSIONALITY( bool)
+HIDEDIM( int)
+HIDEDIM( char)
+HIDEDIM( float)
+HIDEDIM( double)
+HIDEDIM( bool)
 
