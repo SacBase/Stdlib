@@ -437,9 +437,9 @@ FOREACH (name ${SAC_SRC})
     GET_FILENAME_COMPONENT (dir "${CMAKE_CURRENT_BINARY_DIR}/${name}" DIRECTORY)
     GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
     SET (mod
-        "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${VARIANT}${MODEXT}")
+        "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${MODEXT}")
     SET (tree
-        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/${SBI}/lib${dst}Tree${VARIANT}${TREE_DLLEXT}")
+        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
     RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" target_list objs_list source_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
@@ -490,7 +490,7 @@ FOREACH (name ${SAC_SRC})
     IF (NOT SAC_NOTREE)
         INSTALL (
             FILES "${tree}"
-            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}/${SBI}
+            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
             COMPONENT trees)
     ENDIF ()
     UNSET (deps_list)
@@ -506,7 +506,7 @@ FOREACH (name ${XSAC_SRC})
     SET (mod
         "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${MODEXT}")
     SET (tree
-        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/${SBI}/lib${dst}Tree${TREE_DLLEXT}")
+        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
 
     RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" target_list objs_list source_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
@@ -567,7 +567,7 @@ FOREACH (name ${XSAC_SRC})
     IF (NOT SAC_NOTREE)
         INSTALL (
             FILES "${tree}"
-            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}/${SBI}
+            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
             COMPONENT trees)
     ENDIF ()
     UNSET (deps_list)
