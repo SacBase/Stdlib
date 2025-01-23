@@ -82,19 +82,9 @@ BUILT_IN( SEL)
  *
  ******************************************************************************/
 
-/* Helper function vector product */
-int prod_vec( int[n] v)                                                        \
-{                                                                              \
-  res = with {                                                                 \
-    ( [0] <= [i] < [n]) : v[i];                                                \
-  } : fold( ScalarArith::*, 1);                                                \
-  return res;                                                                  \
-}
-
 #define RESHAPE( typ, postfix, zval, oval)                                     \
 inline                                                                         \
 typ[d:shp] reshape( int[d] shp, typ[o:oshp] A)                                 \
-  | _eq_SxS_( prod_vec( shp), prod_vec( oshp))                                 \
 {                                                                              \
   return _reshape_VxA_( shp, A);                                               \
 }
