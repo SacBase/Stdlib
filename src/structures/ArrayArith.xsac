@@ -1,7 +1,7 @@
 module ArrayArith;
 
 use ScalarArith: { zero, one };
-use ArrayBasics: all;
+use ArrayBasics: { sel };
 
 export all;
 
