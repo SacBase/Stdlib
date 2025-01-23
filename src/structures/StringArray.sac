@@ -2,9 +2,9 @@ module StringArray;
 
 use String : {string};
 use Array : {*,all,-,abs,<,>=,!=,+,zero,drop,any,prod,iota,reshape,sum,transpose};
-import Array: { ++ };
+import Array: { ==, ++ };
 
-export all except {getIndices, modarray_AxVxS, sel_VxA, stringArrayCreator};
+export all except { stringArrayCreator, modarray_AxVxS, sel_VxA, getIndices };
 
 /******************************************************************************
  *
@@ -63,7 +63,7 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
             "Index out of bounds in call to StringArray::modarray");
     }
 
-    if (n Array::== dim(arr)) {
+    if (n == dim(arr)) {
         if (dim(val) != 0) {
             RuntimeError::error(1,
                 "Attempt to use StringArray::modarray to replace scalar "
@@ -106,12 +106,12 @@ stringArray sel(int[n] idx, stringArray arr)
             "Index out of bounds in call to StringArray::sel");
     }
 
-    if (n Array::== dim(arr)) {
+    if (n == dim(arr)) {
         res = to_stringArray(sel_VxA(idx, arr));
     }
     else if (n < dim(arr)) {
         res_shp = drop([n], shape(arr));
-        if (Array::sel([0], res_shp) Array::== 0) {
+        if (Array::sel([0], res_shp) == 0) {
             RuntimeError::error(1, "res_shape is [0]");
         }
 
@@ -169,18 +169,18 @@ stringArray genarray(int[.] shp, stringArray s)
 inline
 bool[*] ==(stringArray a, stringArray b)
 {
-    if (dim(a) Array::== 0) {
-        if (dim(b) Array::== 0) {
+    if (dim(a) == 0) {
+        if (dim(b) == 0) {
             res = to_string(a) String::== to_string(b);
         } else {
             res = { iv -> to_string(a) String::== sel_VxA(iv, b)
                   | iv < shape(b) };
         }
     } else {
-        if (dim(b) Array::== 0) {
+        if (dim(b) == 0) {
             res = { iv -> sel_VxA(iv, a) String::== to_string(b)
                   | iv < shape(a) };
-        } else if (all(shape(a) Array::== shape(b))) {
+        } else if (all(shape(a) == shape(b))) {
             res = { iv -> sel_VxA(iv, a) String::== sel_VxA(iv, b)
                   | iv < shape(a) };
         } else {
@@ -201,11 +201,11 @@ int[o,d] getIndices(int[d] shp)
 
 stringArray ++(stringArray m1, stringArray m2)
 {
-    if (dim(m1) Array::== 0) {
+    if (dim(m1) == 0) {
         RuntimeError::error(1,
             "Cannot concat stringArrays since argument 1 is a scalar");
     }
-    if (dim(m2) Array::== 0) {
+    if (dim(m2) == 0) {
         RuntimeError::error(1,
             "Cannot concat stringArrays since argument 2 is a scalar");
     }
