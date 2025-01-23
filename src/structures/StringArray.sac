@@ -4,8 +4,7 @@ use String : {string};
 use Array : {*,all,-,abs,<,>=,!=,+,zero,drop,any,prod,iota,reshape,sum,transpose};
 import Array: { ++ };
 
-export all except {getIndices,
-    modarray_AxVxS, sel_VxA, stringArrayCreator};
+export all except {getIndices, modarray_AxVxS, sel_VxA, stringArrayCreator};
 
 /******************************************************************************
  *
@@ -57,32 +56,32 @@ external string sel_VxA(int[.] idx, stringArray labs);
     #pragma refcounting [0,1,2]
     #pragma linksign [1,2,3]
 
-stringArray modarray(stringArray array, int[n] idx, stringArray val)
+stringArray modarray(stringArray arr, int[n] idx, stringArray val)
 {
-    if (any(idx < 0) || any(idx >= shape(array))) {
+    if (any(idx < 0) || any(idx >= shape(arr))) {
         RuntimeError::error(1,
             "Index out of bounds in call to StringArray::modarray");
     }
 
-    if (n Array::== dim(array)) {
+    if (n Array::== dim(arr)) {
         if (dim(val) != 0) {
             RuntimeError::error(1,
                 "Attempt to use StringArray::modarray to replace scalar "
                 "subarray with non-scalar");
         }
 
-        res = modarray_AxVxS(array, idx, sel_VxA([], val));
+        res = modarray_AxVxS(arr, idx, sel_VxA([], val));
     }
-    else if (n < dim(array)) {
-        if (any(shape(val) != drop([n], shape(array)))) {
+    else if (n < dim(arr)) {
+        if (any(shape(val) != drop([n], shape(arr)))) {
             RuntimeError::error(1,
                 "Attempt to use StringArray::modarray to replace subarray "
-                "with an array of a different shape");
+                "with an arr of a different shape");
         }
 
-        val_shp = drop([n], shape(array));
+        val_shp = drop([n], shape(arr));
         indices = getIndices(val_shp);
-        res = array;
+        res = arr;
         ub = Array::sel([0], Array::shape(indices));
         for (i = 0; i < ub; i += 1) {
             selection = Array::sel([i], indices);
@@ -92,7 +91,7 @@ stringArray modarray(stringArray array, int[n] idx, stringArray val)
         }
     }
     else {
-        res = array;
+        res = arr;
         RuntimeError::error(1,
             "Overlarge index vector passed to StringArray::modarray");
     }
@@ -100,18 +99,18 @@ stringArray modarray(stringArray array, int[n] idx, stringArray val)
     return res;
 }
 
-stringArray sel(int[n] idx, stringArray array)
+stringArray sel(int[n] idx, stringArray arr)
 {
-    if (any(idx < 0) || any(idx >= shape(array))) {
+    if (any(idx < 0) || any(idx >= shape(arr))) {
         RuntimeError::error(1,
             "Index out of bounds in call to StringArray::sel");
     }
 
-    if (n Array::== dim(array)) {
-        res = to_stringArray(sel_VxA(idx, array));
+    if (n Array::== dim(arr)) {
+        res = to_stringArray(sel_VxA(idx, arr));
     }
-    else if (n < dim(array)) {
-        res_shp = drop([n], shape(array));
+    else if (n < dim(arr)) {
+        res_shp = drop([n], shape(arr));
         if (Array::sel([0], res_shp) Array::== 0) {
             RuntimeError::error(1, "res_shape is [0]");
         }
@@ -121,17 +120,22 @@ stringArray sel(int[n] idx, stringArray array)
         indices = getIndices(shape(res));
         for (i=0; i < Array::sel([0], Array::shape(indices)); i += 1) {
             res = modarray(res, Array::sel([i], indices),
-                        sel(idx ++ Array::sel([i], indices), array));
+                        sel(idx ++ Array::sel([i], indices), arr));
         }
     }
     else {
-        res = array;
+        res = arr;
         RuntimeError::error(1,
             "Attempt to select into a stringArray with an index vector "
             "longer than the stringArray's dimensionality");
     }
 
     return res;
+}
+
+stringArray sel(int idx, stringArray arr)
+{
+    return sel([idx], arr);
 }
 
 string to_string(stringArray a)
