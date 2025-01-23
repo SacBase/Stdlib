@@ -306,6 +306,8 @@ SET (C_DEPS_SRC
     stdio/src/BinFile/binfReadDblArr.c
     stdio/src/ArrayIO/ShowArray.c
     stdio/src/ArrayIO/PrintArray.c
+    numerical/src/Math/int_log.c
+    numerical/src/Math/sign.c
     numerical/src/Math/isnan.c
     numerical/src/Math/isinf.c
     numerical/src/Math/isfinite.c

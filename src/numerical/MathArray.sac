@@ -48,7 +48,7 @@ export all;
  */
  
 #define OP_A_TEMPLATE(op, restype, argtype)                 \
-inline restype[+] op (argtype[+] A)                         \
+inline restype[n, d:shp] op (argtype[n, d:shp] A)           \
 {                                                           \
   argtype array_elem;                                       \
                                                             \
@@ -62,19 +62,19 @@ inline restype[+] op (argtype[+] A)                         \
   return(result);                                           \
 }
 
-#define OP_AS_TEMPLATE(op, restype, argtype)                \
-inline restype[+] op (argtype[+] A, argtype S)              \
-{                                                           \
-  argtype array_elem;                                       \
-                                                            \
-  result = with {                                           \
-             ( . <= iv <= . )                               \
-             {                                              \
-               array_elem = A[iv];                          \
-             } : op( array_elem, S );                       \
-           } : genarray( shape(A), zero(A) );               \
-                                                            \
-  return(result);                                           \
+#define OP_AS_TEMPLATE(op, restype, argtype)                  \
+inline restype[n, d:shp] op (argtype[n, d:shp] A, argtype S)  \
+{                                                             \
+  argtype array_elem;                                         \
+                                                              \
+  result = with {                                             \
+             ( . <= iv <= . )                                 \
+             {                                                \
+               array_elem = A[iv];                            \
+             } : op( array_elem, S );                         \
+           } : genarray( shape(A), zero(A) );                 \
+                                                              \
+  return(result);                                             \
 }
 
 /*****************************************************************************
