@@ -7,5 +7,5 @@ int SAC_MATH_sign(double X)
 
 int SAC_MATH_signf(float X)
 {
-  return copysign(1.0f, X);
+  return copysign(1.0, (double)X);
 }
