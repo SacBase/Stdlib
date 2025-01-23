@@ -2,7 +2,7 @@ module StringArray;
 
 use String : {string};
 use Array : {*,all,-,abs,<,>=,!=,+,zero,drop,any,prod,iota,reshape,sum,transpose};
-import Array: { ==, ++ };
+import Array: { shape, ==, ++ };
 
 export all except { stringArrayCreator, modarray_AxVxS, sel_VxA, getIndices };
 
@@ -82,7 +82,7 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
         val_shp = drop([n], shape(arr));
         indices = getIndices(val_shp);
         res = arr;
-        ub = Array::sel([0], Array::shape(indices));
+        ub = Array::sel([0], shape(indices));
         for (i = 0; i < ub; i += 1) {
             selection = Array::sel([i], indices);
             modarrayidx = idx ++ selection;
@@ -118,7 +118,7 @@ stringArray sel(int[n] idx, stringArray arr)
         res = genarray(res_shp, to_stringArray(""));
 
         indices = getIndices(shape(res));
-        for (i=0; i < Array::sel([0], Array::shape(indices)); i += 1) {
+        for (i=0; i < Array::sel([0], shape(indices)); i += 1) {
             res = modarray(res, Array::sel([i], indices),
                         sel(idx ++ Array::sel([i], indices), arr));
         }
@@ -159,7 +159,7 @@ stringArray genarray(int[.] shp, stringArray s)
     res = stringArrayCreator(new_shp, "");
 
     indices = getIndices(shp);
-    for (i = 0; i < Array::sel([0], Array::shape(indices)); i += 1) {
+    for (i = 0; i < Array::sel([0], shape(indices)); i += 1) {
         res = modarray(res, Array::sel([i], indices), s);
     }
 
@@ -258,12 +258,12 @@ int[n] indexOf(string needle, stringArray haystack)
     res = { [i] -> to_string(haystack[Array::sel([i], indices)]) String::== needle
                     ? Array::sel([i], indices)
                     : 0 * Array::sel([i], indices)
-          | [i] < [Array::sel([0], Array::shape(indices))] };
+          | [i] < [Array::sel([0], shape(indices))] };
 
     res = transpose(res);
 
     res = { [i] -> sum(Array::sel([i], res))
-          | [i] < [Array::sel([0], Array::shape(res))] };
+          | [i] < [Array::sel([0], shape(res))] };
 
     return res;
 }
