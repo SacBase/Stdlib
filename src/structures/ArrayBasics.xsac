@@ -21,7 +21,6 @@ int dim( typ[d:shp] A)                                                         \
 
 BUILT_IN( DIM)
 
-
 /******************************************************************************
  *
  * @fn int[d] shape( <a>[d:shp] A)
@@ -38,7 +37,6 @@ int[d] shape( typ[d:shp] A)                                                    \
 }
 
 BUILT_IN( SHAPE)
-
 
 /******************************************************************************
  *
@@ -72,7 +70,6 @@ SEL_SxA( typ, postfix, zval, oval)
 
 BUILT_IN( SEL)
 
-
 /******************************************************************************
  *
  * @fn <a>[d:shp] reshape( int[d] shp, <a>[o:oshp] A)
@@ -91,7 +88,6 @@ typ[d:shp] reshape( int[d] shp, typ[o:oshp] A)                                 \
 
 BUILT_IN( RESHAPE)
 
-
 /******************************************************************************
  *
  * @fn <a>[n:shp,d:vshp] genarray( int[n] shp, <a>[d:vshp] value)
@@ -108,7 +104,6 @@ typ[n:shp,d:vshp] genarray( int[n] shp, typ[d:vshp] value)                     \
 }
 
 BUILT_IN( GENARRAY)
-
 
 /******************************************************************************
  *
@@ -152,7 +147,6 @@ MODARRAY_AxVxS( typ, postfix, zval, oval)                                      \
 MODARRAY_AxSxA( typ, postfix, zval, oval)
 
 BUILT_IN( MODARRAY)
-
 
 /******************************************************************************
  *

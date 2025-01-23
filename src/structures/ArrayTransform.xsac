@@ -1,17 +1,11 @@
 module ArrayTransform;
 
-use Constants: all;
 use ArrayBasics: all;
+use Constants: all;
 
 export all;
 
 #include "Templates.mac"
-
-/******************************************************************************
- *
- * Structural OPS.
- *
- ******************************************************************************/
 
  /******************************************************************************
  *
@@ -48,7 +42,6 @@ typ[n:v, m:ishp] take( int[n] v, typ[n:oshp, m:ishp] A)                        \
 }
 
 BUILT_IN( TAKE)
-
 
 /******************************************************************************
  *
@@ -107,7 +100,6 @@ typ[n:v, m:ishp] take_apl( int[n] v, typ[n:oshp, m:ishp] A)                    \
 
 BUILT_IN( TAKE_APL)
 
-
 /******************************************************************************
  *
  * @fn <a>[n:shp_res, m:ishp] drop( int[n] sv, <a>[n:oshp, m:ishp] A)
@@ -142,7 +134,6 @@ typ[n:shp_res, m:ishp] drop( int[n] v, typ[n:oshp, m:ishp] A)                  \
 }
 
 BUILT_IN( DROP)
-
 
 /******************************************************************************
  *
@@ -181,7 +172,6 @@ typ[n:shp_res, m:ishp] drop_apl( int[n] v, typ[n:oshp, m:ishp] A)              \
 
 BUILT_IN( DROP_APL)
 
-
 /******************************************************************************
  *
  * @fn <a>[n:shp] tile( int[n] shp, int[n] idx, <a>[n:shp_a] A)
@@ -204,7 +194,6 @@ typ[n:shp] tile( int[n] shp, int[n] idx, typ[n:shp_a] A)                       \
 }
 
 BUILT_IN( TILE)
-
 
 /******************************************************************************
  *
@@ -238,7 +227,6 @@ typ[n:shp] tile_apl( int[n] shp, int[n] idx, typ[n:shp_a] A)                   \
 }
 
 BUILT_IN( TILE_APL)
-
 
 /******************************************************************************
  *
@@ -293,7 +281,6 @@ CAT_SxS( typ, postfix, zval, oval)
 
 BUILT_IN( CAT)
 
-
 /******************************************************************************
  *
  * @fn <a>[d:shp,o] ++( <a>[d:shp,n] A, <a>[d:shp,m] B)
@@ -342,7 +329,6 @@ CATENATE_SxS( typ, postfix, zval, oval)
 
 BUILT_IN( CATENATE)
 
-
 /******************************************************************************
  *
  * @fn <a>[n,d:shp] reverse( <a>[n,d:shp] A)
@@ -361,7 +347,6 @@ typ[n,d:shp] reverse( typ[n,d:shp] A)                                          \
 
 BUILT_IN( REVERSE)
 
-
 /******************************************************************************
  *
  * @fn <a>[d:shp] reverse( int axis, <a>[d:shp] A)
@@ -378,7 +363,6 @@ typ[axis:oshp, n, d:shp] reverse( int axis, typ[axis:oshp, n, d:shp] A)        \
 }
 
 BUILT_IN( REVERSEAXIS)
-
 
 /******************************************************************************
  *
@@ -398,7 +382,6 @@ typ[d:shp_t] transpose( typ[d:shp] A)                                          \
 }
 
 BUILT_IN( TRANSPOSE)
-
 
 /******************************************************************************
  *
@@ -421,7 +404,6 @@ typ[d1:oshp, n, d2:ishp] shift                                                 \
       : genarray( ishp, boundary) | [i] < [n] }                                \
     | iv < oshp };                                                             \
 }
-
 
 #define SHIFT_V( typ, postfix, zval, oval)                                     \
 inline                                                                         \
@@ -446,7 +428,6 @@ SHIFT_V( typ, postfix, zval, oval)                                             \
 SHIFT_VZ( typ, postfix, zval, oval)
 
 BUILT_IN( SHIFT)
-
 
 /******************************************************************************
  *
@@ -488,7 +469,6 @@ ROTATE_S( typ, postfix, zval, oval)                                            \
 ROTATE_V( typ, postfix, zval, oval)
 
 BUILT_IN( ROTATE)
-
 
 /******************************************************************************
  *
@@ -535,7 +515,6 @@ WHERE_SxS( typ, postfix, zval, oval)
 
 BUILT_IN( WHERE)
 
-
 /******************************************************************************
  *
  * @fn <a> reduce( <a>[d:shp] A)
@@ -567,7 +546,6 @@ REDUCE( all, bool, ScalarArith::&, true)                                       \
 REDUCE( any, bool, ScalarArith::|, false)
 
 BOOL_REDUCE
-
 
 /******************************************************************************
  *
@@ -618,7 +596,6 @@ MATCH_SxA( typ, postfix, zval, oval)                                           \
 MATCH_SxS( typ, postfix, zval, oval)
 
 BUILT_IN( MATCH)
-
 
 /******************************************************************************
  *
