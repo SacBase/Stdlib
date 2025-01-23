@@ -12,132 +12,139 @@ export all;
 
 /******************************************************************************
  *
- * @fn int dim( complex[*] A)
+ * @fn int dim(complex[*] arr)
  *
  * @brief Yields an array's dimensionality (rank).
  *
  ******************************************************************************/
 inline
-int dim( complex[*] A)
+int dim(complex[*] arr)
 {
-  d = dim( (double[+])A);
-  return d - 1;
+    d = dim((double[+])arr);
+    return d - 1;
 }
 
 /******************************************************************************
  *
- * @fn int[.] shape( complex[*] A)
+ * @fn int[.] shape(complex[*] arr)
  *
  * @brief Yields an array's shape vector.
  *
  ******************************************************************************/
 inline
-int[.] shape( complex[*] A)
+int[.] shape(complex[*] arr)
 {
-  shp = shape( (double[+])A);
-  return drop( [-1], shp);
+    shp = shape((double[+])arr);
+    return drop([-1], shp);
 }
 
 /******************************************************************************
  *
- * @fn complex[d:shp] sel( int[vlen] idx, complex[vlen:vshp,d:shp] A)
+ * @fn complex[d:shp] sel(int[vlen] idx, complex[vlen:vshp,d:shp] arr)
  *
  * @brief Generalizes selections for scalar indices.
  *
  ******************************************************************************/
 inline
-complex[d:shp] sel( int[vlen] idx, complex[vlen:vshp,d:shp] A)
-  | all( 0 <= idx), all( idx < vshp)
+complex[d:shp] sel(int[vlen] idx, complex[vlen:vshp,d:shp] arr)
+    | all(0 <= idx), all(idx < vshp)
 {
-  v = ((double[+])A)[ idx];
-  return (complex[*])v;
+    v = ((double[+])arr)[idx];
+    return (complex[*])v;
 }
 
 inline
-complex[d:shp] sel( int idx, complex[n,d:shp] A)
-  | 0 <= idx, idx < n
+complex[d:shp] sel(int idx, complex[n,d:shp] arr)
+    | (0 <= idx), (idx < n)
 {
-  return sel( [idx], A);
+    return sel([idx], arr);
 }
 
 /******************************************************************************
  *
- * @fn double[d:shp] norm( complex[d:shp] A)
+ * @fn complex[d:shp] reshape(int[d] shp, complex[o:oshp] arr)
  *
- * @brief Yields an array of norms.
+ * @brief Creates a new array with identical data vector but new shape, provided
+ * the length of the data vector matches the product of the new shape vector.
  *
  ******************************************************************************/
 inline
-double[d:shp] norm( complex[d:shp] A)
+complex[d:shp] reshape(int[d] shp, complex[o:oshp] arr)
+  | all(0 <= shp), prod(shp) == prod(oshp)
 {
-  return { iv -> ComplexBasics::norm( A[ iv]) | iv < shp };
+    v = reshape(shp ++ [2], (double[*])arr);
+    return (complex[*])v;
 }
 
 /******************************************************************************
  *
- * @fn double[d:shp] normSq( complex[d:shp] A)
- *
- * @brief Yields an array of normSq.
- *
- ******************************************************************************/
-inline
-double[d:shp] normSq( complex[d:shp] A)
-{
-  return { iv -> ComplexBasics::normSq( A[ iv]) | iv < shp };
-}
-
-/******************************************************************************
- *
- * @fn complex[d:shp] reshape( int[d] shp, complex[o:oshp] A)
- *
- * @brief Creates a new array with identical data vector but new shape,
- *        provided the length of the data vector matches the product of
- *        the new shape vector.
- *
- ******************************************************************************/
-inline
-complex[d:shp] reshape( int[d] shp, complex[o:oshp] A)
-  | all( 0 <= shp), prod( shp) == prod( oshp)
-{
-  v = reshape( shp ++ [2], (double[*])A);
-  return (complex[*])v;
-}
-
-/******************************************************************************
- *
- * @fn complex[n:shp,m:vshp] genarray( int[n] shp, complex[m:vshp] val)
+ * @fn complex[n:shp,m:vshp] genarray(int[n] shp, complex[m:vshp] val)
  *
  * @brief Generates a new array from the given shape and default value.
  *
  ******************************************************************************/
 inline
-complex[n:shp,m:vshp] genarray( int[n] shp, complex[m:vshp] val)
+complex[n:shp,m:vshp] genarray(int[n] shp, complex[m:vshp] val)
 {
-  return { iv -> val | iv < shp };
+    return { iv -> val | iv < shp };
 }
 
 /******************************************************************************
  *
- * @fn complex[o:outer,i:inner] modarray( complex[o:outer,i:inner] A,
- *                                        int[o] idx, complex[i:inner] val)
+ * @fn complex[o:outer,i:inner] modarray(complex[o:outer,i:inner] arr,
+ *                                       int[o] idx, complex[i:inner] val)
  *
  * @brief Modifies the element of array at position idx.
  *
  ******************************************************************************/
 inline
-complex[o:outer,i:inner] modarray( complex[o:outer,i:inner] A,
-                                   int[o] idx, complex[i:inner] val)
-  | all( 0 <= idx), all( idx < outer)
+complex[o:outer,i:inner] modarray(complex[o:outer,i:inner] arr,
+                                  int[o] idx, complex[i:inner] val)
+    | all(0 <= idx), all(idx < outer)
 {
-  res = with {
-          (idx <= iv <= idx) : val;
-        } : modarray( A);
-  return res;
+    return with {
+        (idx <= iv <= idx) : val;
+    } : modarray(arr);
 }
 
+/******************************************************************************
+ *
+ * @fn complex[n,d:shp] modarray(complex[n,d:shp] arr,
+                                 int idx, complex[d:shp] val)
+ *
+ * @brief Modifies the element of array at position [idx].
+ *
+ ******************************************************************************/
 inline
-complex[n,d:shp] modarray( complex[n,d:shp] A, int idx, complex[d:shp] val)
-  | 0 <= idx, idx < n
+complex[n,d:shp] modarray(complex[n,d:shp] arr,
+                          int idx, complex[d:shp] val)
+    | (0 <= idx), (idx < n)
 {
-  return modarray( A, [idx], val);
+    return modarray(arr, [idx], val);
+}
+
+/******************************************************************************
+ *
+ * @fn double[d:shp] norm(complex[d:shp] arr)
+ *
+ * @brief Yields an array of norms.
+ *
+ ******************************************************************************/
+inline
+double[d:shp] norm(complex[d:shp] arr)
+{
+    return { iv -> ComplexBasics::norm(arr[iv]) | iv < shp };
+}
+
+/******************************************************************************
+ *
+ * @fn double[d:shp] normSq(complex[d:shp] arr)
+ *
+ * @brief Yields an array of normSq.
+ *
+ ******************************************************************************/
+inline
+double[d:shp] normSq(complex[d:shp] arr)
+{
+    return { iv -> ComplexBasics::normSq(arr[iv]) | iv < shp };
 }
