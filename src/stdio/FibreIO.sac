@@ -2,7 +2,7 @@ module FibreIO;
 
 
 use IOresources: all;
-use Array : { shape, sel, dim, tod };
+use Array : { shape, sel, dim, tod, >= };
 use String : {string};
 use StringArray : {stringArray};
 use TermFile : {TermFile};
@@ -114,23 +114,23 @@ external  stringArray  FibreScanStringArrayStr( string stream);
  * FibrePrint on File
  */
 
-external void 
-FibrePrint( File &stream, int DIM, int[DIM] SHAPE, int[DIM:SHAPE] ARRAY);
+external void
+FibrePrint( File &stream, int d, int[d] shp, int[d:shp] arr);
   #pragma linkname "FibrePrintIntArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void 
-FibrePrint( File &stream, int DIM, int[DIM] SHAPE, float[DIM:SHAPE] ARRAY);
+external void
+FibrePrint( File &stream, int d, int[d] shp, float[d:shp] arr);
   #pragma linkname "FibrePrintFloatArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void 
-FibrePrint( File &stream, int DIM, int[DIM] SHAPE, double[DIM:SHAPE] ARRAY);
+external void
+FibrePrint( File &stream, int d, int[d] shp, double[d:shp] arr);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void 
-FibrePrint( File &stream, int DIM, int[DIM] SHAPE, stringArray ARRAY);
+external void
+FibrePrint( File &stream, int d, int[d] shp, stringArray arr);
   #pragma linkname "FibrePrintStringArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -138,24 +138,24 @@ FibrePrint( File &stream, int DIM, int[DIM] SHAPE, stringArray ARRAY);
  * FibrePrint on TermFile
  */
 
-//TODO add DIM >= 1
-external void 
-FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, int[DIM:SHAPE] ARRAY);
+//TODO add d >= 1
+external void
+FibrePrint( TermFile &stream, int d, int[d] shp, int[d:shp] arr);
   #pragma linkname "FibrePrintIntArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void 
-FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, float[DIM:SHAPE] ARRAY);
+external void
+FibrePrint( TermFile &stream, int d, int[d] shp, float[d:shp] arr);
   #pragma linkname "FibrePrintFloatArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void 
-FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, double[DIM:SHAPE] ARRAY);
+external void
+FibrePrint( TermFile &stream, int d, int[d] shp, double[d:shp] arr);
   #pragma linkname "FibrePrintDoubleArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void 
-FibrePrint( TermFile &stream, int DIM, int[DIM] SHAPE, stringArray ARRAY);
+external void
+FibrePrint( TermFile &stream, int d, int[d] shp, stringArray arr);
   #pragma linkname "FibrePrintStringArray"
   #pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -345,13 +345,13 @@ external  type[*]  FibreScan##alias##ArrayStr( string stream);		\
   PRINTME(HASH)pragma linksign[1,2]					\
   PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"	        \
 									\
-external void FibrePrint( File &stream, int DIM, int[+] SHAPE, 		\
-type[+] ARRAY);								\
+external void FibrePrint( File &stream, int d, int[+] shp, 		\
+type[+] arr);								\
   PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)	\
   PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"		\
 									\
-external void FibrePrint( TermFile &stream, int DIM, int[+] SHAPE, 	\
-type[+] ARRAY);								\
+external void FibrePrint( TermFile &stream, int d, int[+] shp, 	\
+type[+] arr);								\
   PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)	\
   PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -401,13 +401,13 @@ FIBRESCAN(type,alias)							\
 FIBREPRINT(type,formatting)
 
 #ifdef FULLTYPES
-LINKSCANPRINT(byte,Byte,hd)		
-LINKSCANPRINT(short,Short,hd)		
-LINKSCANPRINT(long,Long,ld)		
-LINKSCANPRINT(longlong,Longlong,lld)		
-LINKSCANPRINT(ubyte,Ubyte,hu)		
-LINKSCANPRINT(ushort,Ushort,hu)		
-LINKSCANPRINT(uint,Uint,u)		
-LINKSCANPRINT(ulong,Ulong,lu)		
+LINKSCANPRINT(byte,Byte,hd)
+LINKSCANPRINT(short,Short,hd)
+LINKSCANPRINT(long,Long,ld)
+LINKSCANPRINT(longlong,Longlong,lld)
+LINKSCANPRINT(ubyte,Ubyte,hu)
+LINKSCANPRINT(ushort,Ushort,hu)
+LINKSCANPRINT(uint,Uint,u)
+LINKSCANPRINT(ulong,Ulong,lu)
 LINKSCANPRINT(ulonglong,Ulonglong,llu)
 #endif /* FULLTYPES */
