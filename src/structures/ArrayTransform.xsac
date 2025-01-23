@@ -604,7 +604,7 @@ inline                                                                         \
 typ[i:ishp] rsum(int o, typ[o:oshp,i:ishp] arr)                                \
 {                                                                              \
     return { iv -> sum({                                                       \
-                ov -> _sel_VxA_(_cat_VxV_(ov, iv), arr) | ov < oshp })         \
+                ov -> arr[ov ++ iv] | ov < oshp })                             \
            | iv < ishp };                                                      \
 }
 
