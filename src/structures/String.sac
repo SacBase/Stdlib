@@ -16,7 +16,7 @@ external typedef string;
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/copystr.o"
 
-external string to_string(char[n] A, int LENGTH) | (n == LENGTH + 1);
+external string to_string(char[n] A, int LENGTH) | _eq_SxS_(n, _add_SxS_(LENGTH, 1));
     #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/tostring.o"
