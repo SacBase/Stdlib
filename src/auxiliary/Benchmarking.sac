@@ -1,5 +1,5 @@
 /* Interface module
- * 
+ *
  * void start( Interval& interval);
  * void end( Interval& interval);
  * void benchThis();

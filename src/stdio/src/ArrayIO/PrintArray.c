@@ -6,14 +6,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef SAC_BACKEND_DISTMEM
-#define SAC_DO_DISTMEM 1
-#else /* defined(SAC_BACKEND_DISTMEM) */
-#define SAC_DO_DISTMEM 0
-#endif /* defined(SAC_BACKEND_DISTMEM) */
 #include "sac.h"
-#undef SAC_DO_DISTMEM
-
 
 #define INT        1
 #define FLOAT      2
@@ -34,41 +27,6 @@
  * Code generation macros
  */
 
-#ifdef SAC_BACKEND_DISTMEM
-
-#define PRINT_CASE( constant, ctype, ftype)                                       \
-  case constant:                                                                  \
-    if (is_distr) {                                                               \
-      fprintf(stream, format,                                                     \
-       (ftype)*(SAC_DISTMEM_ELEM_POINTER(arr_offset, ctype, elems_first_nodes,    \
-                                         Index2Offset( dim, shp, index))));       \
-    } else {                                                                      \
-      fprintf(stream, format,                                                     \
-        (ftype)((ctype *)a)[Index2Offset(dim,shp,index)]);                        \
-    }                                                                             \
-    break;
-
-#define PRINT_FUNS( name_prefix, ctype, constant, default_format)                 \
-void ARRAYIO__Print##name_prefix##Array( FILE *stream, int dim,                   \
-                                         int * shp, ctype * a,                    \
-                                         bool is_distr, unsigned long arr_offset, \
-                                         unsigned long elems_first_nodes)         \
-{                                                                                 \
-  PrintArr(stream, constant, default_format, dim, shp, a,                         \
-           is_distr, arr_offset, elems_first_nodes);                              \
-}                                                                                 \
-                                                                                  \
-void ARRAYIO__Print##name_prefix##ArrayFormat( FILE *stream, string format, int dim,    \
-                                         int * shp, ctype * a,                          \
-                                         bool is_distr, unsigned long arr_offset,       \
-                                         unsigned long elems_first_nodes)               \
-{                                                                                       \
-  PrintArr(stream, constant, format, dim, shp, a,                                       \
-           is_distr, arr_offset, elems_first_nodes);                                    \
-}
-
-#else /* defined(SAC_BACKEND_DISTMEM) */
-
 #define PRINT_CASE( constant, ctype, ftype)                  \
   case constant:                                             \
     fprintf(stream, format,                                  \
@@ -87,9 +45,6 @@ void ARRAYIO__Print##name_prefix##ArrayFormat( FILE *stream, string format, int 
 {                                                                                      \
   PrintArr(stream, constant, format, dim, shp, a);                                     \
 }
-
-#endif /* defined(SAC_BACKEND_DISTMEM) */
-
 
 typedef char* string;
 
@@ -110,25 +65,11 @@ int Index2Offset( int dim, int *shp, int *index)
   return(offset);
 }
 
-static
-#ifdef SAC_BACKEND_DISTMEM
-void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a, bool is_distr, unsigned long arr_offset, unsigned long elems_first_nodes)
-#else /* defined(SAC_BACKEND_DISTMEM) */
-void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a)
-#endif /* defined(SAC_BACKEND_DISTMEM) */
+static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a)
 {
   int i,n, element_count;
   char *space=" ";
   int *index;
-
-  #ifdef SAC_BACKEND_DISTMEM
-    // TODO: Remove this when this module is verified to work.
-    if (is_distr) {
-      fprintf(stderr, "DSM PrintArr from node %zd\n", SAC_DISTMEM_rank);
-    } else {
-      fprintf(stderr, "Non-DSM PrintArr from node %zd\n", SAC_DISTMEM_rank);
-    }
-  #endif
 
   fprintf(stream, "Dimension: %2i\n", dim);
   fprintf(stream, "Shape    : <");
