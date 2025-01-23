@@ -1,10 +1,10 @@
 module StringArray;
 
-use String : {string};
-use Array : {*,all,-,abs,<,>=,!=,+,zero,drop,any,prod,iota,reshape,sum,transpose};
+use String: { string };
+use Array: all except { dim, shape, sel, modarray, genarray, ==, ++ };
 import Array: { shape, ==, ++ };
 
-export all except { stringArrayCreator, modarray_AxVxS, sel_VxA, getIndices };
+export all except { __to_stringArray, __sel, __modarray, getIndices };
 
 /******************************************************************************
  *
@@ -36,25 +36,25 @@ external int[.] shape(stringArray s);
     #pragma refcounting [0,1]
     #pragma linksign [1,2]
 
-external stringArray stringArrayCreator(int[.] shp, string s);
+external stringArray __to_stringArray(int[.] shp, string s);
     #pragma linkname "SAC_StringArray_genarray"
     #pragma linkobj "src/StringArray/genarray.o"
     #pragma refcounting [0,1,2]
     #pragma linksign [1,2,3]
 
-external stringArray modarray_AxVxS(stringArray labs, int[.] idx, string  str);
-    #pragma linkname "SAC_StringArray_modarray"
-    #pragma linkobj "src/StringArray/modarray.o"
-    #pragma linkobj "src/StringArray/index2offset.o"
-    #pragma refcounting [0,1,2,3]
-    #pragma linksign [1,2,3,4]
-
-external string sel_VxA(int[.] idx, stringArray labs);
+external string __sel(int[.] idx, stringArray labs);
     #pragma linkname "SAC_StringArray_sel"
     #pragma linkobj "src/StringArray/sel.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma refcounting [0,1,2]
     #pragma linksign [1,2,3]
+
+external stringArray __modarray(stringArray labs, int[.] idx, string  str);
+    #pragma linkname "SAC_StringArray_modarray"
+    #pragma linkobj "src/StringArray/modarray.o"
+    #pragma linkobj "src/StringArray/index2offset.o"
+    #pragma refcounting [0,1,2,3]
+    #pragma linksign [1,2,3,4]
 
 stringArray modarray(stringArray arr, int[n] idx, stringArray val)
 {
@@ -70,7 +70,7 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
                 "subarray with non-scalar");
         }
 
-        res = modarray_AxVxS(arr, idx, sel_VxA([], val));
+        res = __modarray(arr, idx, __sel([], val));
     }
     else if (n < dim(arr)) {
         if (any(shape(val) != drop([n], shape(arr)))) {
@@ -86,8 +86,8 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
         for (i = 0; i < o; i += 1) {
             selection = Array::sel([i], indices);
             modarrayidx = idx ++ selection;
-            modArrVal = sel_VxA(Array::sel([i], indices), val);
-            res = modarray_AxVxS(res, modarrayidx, modArrVal);
+            modArrVal = __sel(Array::sel([i], indices), val);
+            res = __modarray(res, modarrayidx, modArrVal);
         }
     }
     else {
@@ -107,7 +107,7 @@ stringArray sel(int[n] idx, stringArray arr)
     }
 
     if (n == dim(arr)) {
-        res = to_stringArray(sel_VxA(idx, arr));
+        res = to_stringArray(__sel(idx, arr));
     }
     else if (n < dim(arr)) {
         res_shp = drop([n], shape(arr));
@@ -118,9 +118,10 @@ stringArray sel(int[n] idx, stringArray arr)
         res = genarray(res_shp, to_stringArray(""));
 
         o, indices = getIndices(shape(res));
-        for (i=0; i < o; i += 1) {
-            res = modarray(res, Array::sel([i], indices),
-                        sel(idx ++ Array::sel([i], indices), arr));
+        for (i = 0; i < o; i += 1) {
+            res = modarray(res,
+                           Array::sel([i], indices),
+                           sel(idx ++ Array::sel([i], indices), arr));
         }
     }
     else {
@@ -133,11 +134,6 @@ stringArray sel(int[n] idx, stringArray arr)
     return res;
 }
 
-stringArray sel(int idx, stringArray arr)
-{
-    return sel([idx], arr);
-}
-
 string to_string(stringArray a)
 {
     if (dim(a) != 0) {
@@ -145,18 +141,18 @@ string to_string(stringArray a)
             "StringArray::to_string passed non-scalar stringArray");
     }
 
-    return sel_VxA([], a);
+    return __sel([], a);
 }
 
 stringArray to_stringArray(string s)
 {
-    return stringArrayCreator([], s);
+    return __to_stringArray([], s);
 }
 
 stringArray genarray(int[.] shp, stringArray s)
 {
     new_shp = shp ++ shape(s);
-    res = stringArrayCreator(new_shp, "");
+    res = __to_stringArray(new_shp, "");
 
     o, indices = getIndices(shp);
     for (i = 0; i < o; i += 1) {
@@ -173,15 +169,15 @@ bool[*] ==(stringArray a, stringArray b)
         if (dim(b) == 0) {
             res = to_string(a) String::== to_string(b);
         } else {
-            res = { iv -> to_string(a) String::== sel_VxA(iv, b)
+            res = { iv -> to_string(a) String::== __sel(iv, b)
                   | iv < shape(b) };
         }
     } else {
         if (dim(b) == 0) {
-            res = { iv -> sel_VxA(iv, a) String::== to_string(b)
+            res = { iv -> __sel(iv, a) String::== to_string(b)
                   | iv < shape(a) };
         } else if (all(shape(a) == shape(b))) {
-            res = { iv -> sel_VxA(iv, a) String::== sel_VxA(iv, b)
+            res = { iv -> __sel(iv, a) String::== __sel(iv, b)
                   | iv < shape(a) };
         } else {
             RuntimeError::error(1,
@@ -210,6 +206,7 @@ stringArray ++(stringArray m1, stringArray m2)
 
     m1InnerShape = drop([1], shape(m1));
     m2InnerShape = drop([1], shape(m2));
+
     if (any(m1InnerShape != m2InnerShape)) {
         RuntimeError::error(1,
             "Attempt to concat non-matching shapes when trying to "
@@ -218,7 +215,7 @@ stringArray ++(stringArray m1, stringArray m2)
 
     m1Len = Array::sel([0], shape(m1));
     m2Len = Array::sel([0], shape(m2));
-    resShape = [ m1Len + m2Len] ++ m1InnerShape;
+    resShape = [m1Len + m2Len] ++ m1InnerShape;
     res = genarray(resShape, to_stringArray(""));
 
     for (i = 0; i < m1Len; i += 1) {
