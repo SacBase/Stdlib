@@ -601,14 +601,11 @@ ANY
 
 #define RSUM(typ, postfix, zval, oval)                                         \
 inline                                                                         \
-typ[i:inner] rsum(int o, typ[o:outer,i:inner] arr)                             \
+typ[i:ishp] rsum(int o, typ[o:oshp,i:ishp] arr)                                \
 {                                                                              \
-    return with {                                                              \
-        (_mul_SxV_(0, inner) <= iv < inner) : with {                           \
-            (_mul_SxV_(0, outer) <= ov < outer) :                              \
-              _sel_VxA_(_cat_VxV_(ov, iv), arr);                               \
-        } : fold(+, oval);                                                     \
-    } : genarray(inner, oval);                                                 \
+    return { iv -> sum({                                                       \
+                ov -> _sel_VxA_(_cat_VxV_(ov, iv), arr) | ov < oshp })         \
+           | iv < ishp };                                                      \
 }
 
 NUM(RSUM)
