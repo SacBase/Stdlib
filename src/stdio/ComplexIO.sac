@@ -1,13 +1,10 @@
 module ComplexIO;
 
-/*****************************************************************/
-
-
 use IOresources: all;
-use String: { string, to_string, sprintf};
-use Complex: { complex, imag, real, toc, shape, dim};
+use String: { string, sprintf };
+use Complex: { complex, imag, real, toc, shape, dim };
 use ScalarArith : { == };
-use TermFile : {TermFile};
+use TermFile : { TermFile };
 
 export {print, fprint};
 
@@ -239,7 +236,7 @@ inline bool, complex fscancomplex(File &stream)
   im=0.0d;
 
   success, re, im=File::fscanf(stream, "(%lf,%lf)");
-  
+
   return(success==2, toc(re, im));
 }
 
@@ -271,7 +268,7 @@ inline bool, complex fscancomplex(File &stream, int mode)
     }
   }
 
-  
+
   return(success==2, toc(re, im));
 }
 
@@ -289,7 +286,7 @@ inline bool, complex fscancomplex(TermFile &stream)
   im=0.0d;
 
   success, re, im=TermFile::fscanf(stream, "(%lf,%lf)");
-  
+
   return(success==2, toc(re, im));
 }
 
@@ -321,7 +318,7 @@ inline bool, complex fscancomplex(TermFile &stream, int mode)
     }
   }
 
-  
+
   return(success==2, toc(re, im));
 }
 
@@ -339,7 +336,7 @@ inline bool, complex scancomplex()
   im=0.0d;
 
   success, re, im=TermFile::scanf("(%lf,%lf)");
-  
+
   return(success==2, toc(re, im));
 }
 
@@ -371,7 +368,7 @@ inline bool, complex scancomplex(int mode)
     }
   }
 
-  
+
   return(success==2, toc(re, im));
 }
 

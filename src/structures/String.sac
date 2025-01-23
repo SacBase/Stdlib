@@ -1,14 +1,16 @@
 module String;
 
 #ifdef SAC_BACKEND_MUTC
+
 import MutcString: all;
 export all;
-#else
-import Char: all;
-import ScalarArith: {&,!=,==,+,>=,>,<=,<,++};
-import ArrayBasics: {shape,sel};
 
-export all except {indent};
+#else
+
+import Array: { shape, sel, &, !=, ==, +, >=, >, <=, <, ++ };
+import Char: all;
+
+export all except { indent };
 
 external typedef string;
     #pragma freefun "free_string"
@@ -16,7 +18,8 @@ external typedef string;
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/copystr.o"
 
-external string to_string(char[.] A, int LENGTH);
+// TODO: _eq_SxS_(n, _add_SxS_(LENGTH, 1));
+external string to_string(char[n] A, int LENGTH);
     #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/tostring.o"
@@ -100,7 +103,6 @@ external int strlen(string S);
     #pragma linkobj "src/String/strlen.o"
     /* Return the length of string S. */
 
-
 external string strtake(string S, int N);
     #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
@@ -117,7 +119,6 @@ external string strext(string S, int FIRST, int LEN);
     #pragma linkobj "src/String/strext.o"
     /* Extract the substring beginning at character FIRST with length
        LEN from string S. */
-
 
 external string sprintf(string FORMAT, ...);
     #pragma linkname "SACsprintf"
@@ -145,7 +146,6 @@ external string sscanf_str(string S, string FORMAT);
     /* Scan the string S concerning the format string FORMAT.
        FORMAT must have exactly one string conversion specifier.
        The scanned substring is returned. */
-
 
 external int strchr(string S, char C);
     #pragma linksign [0,1,2]
@@ -218,7 +218,6 @@ external string trim(string S);
     #pragma linkobj "src/String/trim.o"
     /* Remove leading and trailing whitespace from S. */
 
-
 external int, string strtoi(string S, int BASE);
     #pragma linkname "SACstrtoi"
     #pragma linksign [0,1,2,3]
@@ -243,7 +242,6 @@ external double, string strtod(string S);
     /* Convert the string S into a double value. The string result
        contains the remainder of the input string. */
 
-
 external int toi(string S);
     #pragma linkname "SACtoi"
     #pragma linksign [0,1]
@@ -263,105 +261,96 @@ external double tod(string S);
     #pragma linkobj "src/String/strtod.o"
     /* Convert the string S into a double value. */
 
-
 external string tos(int N);
     #pragma linkname "SACitos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/itos.o"
-    /*  Convert integer into string.  */
+    /* Convert integer into string.  */
 
 external string tos(float N);
     #pragma linkname "SACftos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/ftos.o"
-    /*  Convert float into string.    */
+    /* Convert float into string.    */
 
 external string tos(double N);
     #pragma linkname "SACdtos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/dtos.o"
-    /*  Convert double into string.   */
+    /* Convert double into string.   */
 
 external string tos(bool B);
     #pragma linkname "SACbtos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/btos.o"
-    /*  Convert boolean into string.  */
+    /* Convert boolean into string.  */
 
-inline string indent( int indent, string str)
+inline string indent(int indent, string str)
 {
-  while ( indent > 0){
-    str = strcat( "  ", str);
-  }
-  return( str);
+    while (indent > 0){
+        str = strcat("  ", str);
+    }
+    return str;
 }
 
-#define TOS( type)                                              \
-inline string tos( type[+] in)                                  \
-{                                                               \
-  return( tos( in, 0));                                         \
-}                                                               \
-inline string tos( type in, int indent)                         \
-{                                                               \
-  return( indent( indent, tos( in)));                           \
-}                                                               \
-inline string tos( type[+] in, int indent)                      \
-{                                                               \
-  result = "[\n";                                               \
-  for ( i=0; i < shape( in)[0]; i++){                           \
-    result = strcat( result, tos( in[i], indent+1));            \
-  }                                                             \
-  result = strcat( result, indent( indent, "]\n"));             \
-  return( result);                                              \
-}                                                               \
+#define TOS(type)                                                              \
+inline string tos(type[+] in)                                                  \
+{                                                                              \
+    return(tos(in, 0));                                                        \
+}                                                                              \
+                                                                               \
+inline string tos(type in, int indent)                                         \
+{                                                                              \
+    return indent(indent, tos(in));                                            \
+}                                                                              \
+                                                                               \
+inline string tos(type[n,d:shp] in, int indent)                                \
+{                                                                              \
+    res = "[\n";                                                               \
+    for (i = 0; i < n; i++){                                                   \
+        res = strcat(res, tos(in[i], indent + 1));                             \
+    }                                                                          \
+    res = strcat(res, indent(indent, "]\n"));                                  \
+    return res;                                                                \
+}                                                                              \
 
-TOS( int)
-TOS( float)
-TOS( double)
-TOS( bool)
+TOS(int)
+TOS(float)
+TOS(double)
+TOS(bool)
 
-
-inline string to_string(char[.] arr)
+inline string to_string(char[len] arr)
 {
-  int len;
-  len=shape(arr)[[0]];
-  return(to_string(_cat_VxV_(arr, ['\0']), len));
+  return to_string(_cat_VxV_(arr, ['\0']), len);
 }
 
-inline char[.] tochar( string s)
+inline char[.] tochar(string s)
 {
-  res = with {
-          ( . <= [i] <= . ) : strsel( s, i );
-        } : genarray( [strlen(s)], ' ' );
-
-  return( res);
+    return with {
+        (. <= [i] <= .) : strsel(s, i);
+    } : genarray([strlen(s)], ' ');
 }
-
 
 inline char sel(int[.] index, string s)
 {
-  return(strsel(s, index[[0]]));
+    return strsel(s, index[[0]]);
 }
-
 
 inline string modarray(string s, int[1] index, char c)
 {
-  return(strmod(s, index[[0]], c));
+    return strmod(s, index[[0]], c);
 }
-
 
 inline string modarray(string s1, int[1] index, string s2)
 {
-  return(strovwt(s1, index[[0]], s2));
+  return strovwt(s1, index[[0]], s2);
 }
 
-
-#define COMPARE_STRINGS(cmp)                    \
-inline bool cmp (string A, string B)            \
-{                                               \
-  return(strcmp(A,B) cmp 0);                    \
+#define COMPARE_STRINGS(cmp)                                                   \
+inline bool cmp(string A, string B)                                            \
+{                                                                              \
+    return strcmp(A, B) cmp 0;                                                 \
 }
-
 
 COMPARE_STRINGS(==)
 COMPARE_STRINGS(!=)
@@ -370,20 +359,17 @@ COMPARE_STRINGS(<=)
 COMPARE_STRINGS(>)
 COMPARE_STRINGS(>=)
 
-
-
-#define TEST_STRING(pred)                       \
-inline  bool pred(string S)                     \
-{                                               \
-  len = strlen(S);                              \
-  result = false;                               \
-  for (i = 0; i < len && result; ++i) {         \
-    c = S[[i]];                                 \
-    result = pred(c);                           \
-  }                                             \
-  return result;                                \
+#define TEST_STRING(pred)                                                      \
+inline  bool pred(string S)                                                    \
+{                                                                              \
+    res = false;                                                               \
+    len = strlen(S);                                                           \
+    for (i = 0; i < len && res; i += 1) {                                      \
+        c = S[[i]];                                                            \
+        res = pred(c);                                                         \
+    }                                                                          \
+    return res;                                                                \
 }
-
 
 TEST_STRING(isalpha)
 TEST_STRING(isupper)
@@ -397,25 +383,21 @@ TEST_STRING(isprint)
 TEST_STRING(isgraph)
 TEST_STRING(iscntrl)
 
-
-#define CONVERT_STRING(pred, convert)           \
-inline  string convert (string S)               \
-{                                               \
-  s = S;                                        \
-  len = strlen(s);                              \
-  for (i = 0; i < len; ++i)                     \
-  {                                             \
-    c = s[[i]];                                 \
-    if (pred(c))                                \
-    {                                           \
-      s = strmod(s, i, convert(c));             \
-    }                                           \
-  }                                             \
-  return s;                                     \
+#define CONVERT_STRING(pred, convert)                                          \
+inline string convert(string S)                                                \
+{                                                                              \
+    s = S;                                                                     \
+    for (i = 0; i < strlen(s); i += 1) {                                       \
+        c = s[[i]];                                                            \
+        if (pred(c))                                                           \
+        {                                                                      \
+            s = strmod(s, i, convert(c));                                      \
+        }                                                                      \
+    }                                                                          \
+    return s;                                                                  \
 }
-
 
 CONVERT_STRING(isupper, tolower)
 CONVERT_STRING(islower, toupper)
 
-#endif
+#endif /* SAC_BACKEND_MUTC */
