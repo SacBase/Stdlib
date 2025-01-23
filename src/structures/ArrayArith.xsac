@@ -25,7 +25,7 @@ export all;
 /*
  * We now define the result shape of a dyadic scalar function as being
  * the shape of the right (second) argument. The idea here is that
- * in a composition such as X + ( Y * Z), if the result shape of + 
+ * in a composition such as X + ( Y * Z), if the result shape of +
  * is driven off the shape of ( Y * Z), then we should nearly always be able
  * to WLF the composition. If the result shape is driven off shape(X),
  * then we need other semantic information to prove that the argument shapes
@@ -219,31 +219,6 @@ MAP_NUM_CONV_OPS( AxA, type)
 
 BUILT_IN( NUM_CONV_OPS_A)
 
-
-/*
- * Reduction operations
- */
-
-inline bool any( bool[*] a)
-{
-  res = with {
-          (0*shape(a) <= iv < shape(a)) : a[iv];
-        } : fold( |, false );
-  
-  return( res);
-}
-
-
-inline bool all( bool[*] a)
-{
-  res = with {
-          (0*shape(a) <= iv < shape(a)) : a[iv];
-        } : fold( &, true );
-  
-  return( res);
-}
-
-
 /*
  * Auxiliary operations
  */
@@ -253,11 +228,11 @@ inline int[.] shpmin( int[.] a, int[.] b)
   sa = _sel_VxA_([0], _shape_A_(a));
   sb = _sel_VxA_([0], _shape_A_(b));
   sz = _min_SxS_( sa, sb);
-  
+
   res = with {
          ([0] <= iv < [sz]): _min_SxS_( _sel_VxA_( iv, a), _sel_VxA_( iv, b));
   }: genarray( [sz]);
-  
+
   return( res);
 }
 
@@ -273,8 +248,8 @@ inline int[.] shprem( int[.] a, int[.] b)
   else{
     res = _drop_SxV_(sb, _shape_A_(a));
   }
-  
+
   return( res);
 }
 
-  
+
