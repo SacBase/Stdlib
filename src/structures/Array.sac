@@ -1,9 +1,8 @@
 module Array;
 
-import Constants: all;
-import ScalarArith: all;
-import ArrayBasics: all;
 import ArrayArith: all;
+import ArrayBasics: all;
 import ArrayTransform: all;
+import ScalarArith: all;
 
 export all;
