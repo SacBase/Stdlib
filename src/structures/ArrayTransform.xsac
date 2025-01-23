@@ -282,7 +282,7 @@ typ[o, d:shp] ++( typ A, typ[m, d:shp] B)                                      \
 inline                                                                         \
 typ[2] ++( typ A, typ B)                                                       \
 {                                                                              \
-  return [ A, B];                                                              \
+  return [A, B];                                                               \
 }
 
 #define CAT( typ, postfix, zval, oval)                                         \
@@ -331,7 +331,7 @@ typ[d:shp,o] catenate( typ A, typ[d:shp,m] B)                                  \
 inline                                                                         \
 typ[2] catenate( typ A, typ B)                                                 \
 {                                                                              \
-  return [ A, B];                                                              \
+  return [A, B];                                                               \
 }
 
 #define CATENATE( typ, postfix, zval, oval)                                    \

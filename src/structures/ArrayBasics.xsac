@@ -83,12 +83,12 @@ BUILT_IN( SEL)
  ******************************************************************************/
 
 /* Helper function vector product */
-int prod_vec( int[n] v)
-{
-  res = with {
-    ( [0] <= [i] < [n]) : v[i];
-  } : fold( ScalarArith::*, 1);
-  return res;
+int prod_vec( int[n] v)                                                        \
+{                                                                              \
+  res = with {                                                                 \
+    ( [0] <= [i] < [n]) : v[i];                                                \
+  } : fold( ScalarArith::*, 1);                                                \
+  return res;                                                                  \
 }
 
 #define RESHAPE( typ, postfix, zval, oval)                                     \
