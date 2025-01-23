@@ -79,11 +79,11 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
                 "with an arr of a different shape");
         }
 
-        val_shp = drop([n], shape(arr));
-        indices = getIndices(val_shp);
         res = arr;
-        ub = Array::sel([0], shape(indices));
-        for (i = 0; i < ub; i += 1) {
+
+        val_shp = drop([n], shape(arr));
+        o, indices = getIndices(val_shp);
+        for (i = 0; i < o; i += 1) {
             selection = Array::sel([i], indices);
             modarrayidx = idx ++ selection;
             modArrVal = sel_VxA(Array::sel([i], indices), val);
@@ -117,8 +117,8 @@ stringArray sel(int[n] idx, stringArray arr)
 
         res = genarray(res_shp, to_stringArray(""));
 
-        indices = getIndices(shape(res));
-        for (i=0; i < Array::sel([0], shape(indices)); i += 1) {
+        o, indices = getIndices(shape(res));
+        for (i=0; i < o; i += 1) {
             res = modarray(res, Array::sel([i], indices),
                         sel(idx ++ Array::sel([i], indices), arr));
         }
@@ -158,8 +158,8 @@ stringArray genarray(int[.] shp, stringArray s)
     new_shp = shp ++ shape(s);
     res = stringArrayCreator(new_shp, "");
 
-    indices = getIndices(shp);
-    for (i = 0; i < Array::sel([0], shape(indices)); i += 1) {
+    o, indices = getIndices(shp);
+    for (i = 0; i < o; i += 1) {
         res = modarray(res, Array::sel([i], indices), s);
     }
 
@@ -191,12 +191,6 @@ bool[*] ==(stringArray a, stringArray b)
     }
 
     return res;
-}
-
-int[o,d] getIndices(int[d] shp)
-{
-    o = prod(shp);
-    return reshape([o,d], iota(shp));
 }
 
 stringArray ++(stringArray m1, stringArray m2)
@@ -253,12 +247,12 @@ bool in(string needle, stringArray haystack)
  */
 int[n] indexOf(string needle, stringArray haystack)
 {
-    indices = getIndices(shape(haystack));
+    o, indices = getIndices(shape(haystack));
 
     res = { [i] -> to_string(haystack[Array::sel([i], indices)]) String::== needle
                     ? Array::sel([i], indices)
                     : 0 * Array::sel([i], indices)
-          | [i] < [Array::sel([0], shape(indices))] };
+          | [i] < [o] };
 
     res = transpose(res);
 
@@ -266,4 +260,11 @@ int[n] indexOf(string needle, stringArray haystack)
           | [i] < [Array::sel([0], shape(res))] };
 
     return res;
+}
+
+int, int[o,d] getIndices(int[d] shp)
+{
+    o = prod(shp);
+    arr = reshape([o,d], iota(shp));
+    return (o, arr);
 }
