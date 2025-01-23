@@ -2,7 +2,7 @@ module StringArray;
 
 use String : {string};
 use Array : {*,all,-,abs,<,>=,+,zero,++};
-export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndicies,
+export all except {eq_SxS, eq_SxA, eq_AxS, eq_AxA, getIndices,
     modarray_AxVxS, sel_VxA, stringArrayCreator, drop};
 
 /*
@@ -44,10 +44,10 @@ stringArray drop( int[.] v, stringArray array)
   } : genarray( new_shp, zero(array));         */
 
   res = genarray(new_shp, to_stringArray(""));
-  indicies = getIndicies( new_shp);
-  for ( i=0; i < _sel_VxA_( [0], Array::shape(indicies)); i++){
-    res[ Array::sel( [i], indicies)] =
-      array[ _add_VxV_( offset, Array::sel( [i], indicies))];
+  indices = getIndices( new_shp);
+  for ( i=0; i < _sel_VxA_( [0], Array::shape(indices)); i++){
+    res[ Array::sel( [i], indices)] =
+      array[ _add_VxV_( offset, Array::sel( [i], indices))];
   }
 
   return( res);
@@ -89,13 +89,13 @@ stringArray modarray( stringArray array, int[.] idx, stringArray val)
     }
     val_shp = Array::drop( [Array::sel( [0], Array::shape( idx))],
                            shape( array));
-    indicies = getIndicies( val_shp);
+    indices = getIndices( val_shp);
     res = array;
-    ub = Array::sel( [0], Array::shape(indicies));
+    ub = Array::sel( [0], Array::shape(indices));
     for( i=0 ; i Array::< ub ; i = i Array::+ 1) {
-      selection = Array::sel( [i], indicies);
+      selection = Array::sel( [i], indices);
       modarrayidx = idx Array::++ selection;
-      modArrVal = sel_VxA( Array::sel( [i], indicies), val);
+      modArrVal = sel_VxA( Array::sel( [i], indices), val);
       res = modarray_AxVxS( res, modarrayidx, modArrVal);
     }
   }
@@ -133,10 +133,10 @@ stringArray sel( int[.] idx, stringArray array)
     }
     res = genarray( res_shp, to_stringArray( ""));
 
-    indicies = getIndicies( shape( res));
-    for( i=0 ; i Array::< Array::sel( [0], Array::shape(indicies)); i = i Array::+ 1) {
-      res = modarray( res, Array::sel( [i], indicies),
-                      sel( idx Array::++ Array::sel( [i], indicies), array));
+    indices = getIndices( shape( res));
+    for( i=0 ; i Array::< Array::sel( [0], Array::shape(indices)); i = i Array::+ 1) {
+      res = modarray( res, Array::sel( [i], indices),
+                      sel( idx Array::++ Array::sel( [i], indices), array));
     }
   }
   else {
@@ -184,9 +184,9 @@ stringArray genarray( int[.] shp, stringArray s)
 {
   new_shp = shp Array::++ shape( s);
   res = stringArrayCreator( new_shp, "");
-  indicies = getIndicies( shp);
-  for( i=0 ; i Array::< Array::sel( [0], Array::shape( indicies)) ; i = i Array::+ 1) {
-    res = modarray( res, Array::sel( [i], indicies), s);
+  indices = getIndices( shp);
+  for( i=0 ; i Array::< Array::sel( [0], Array::shape( indices)) ; i = i Array::+ 1) {
+    res = modarray( res, Array::sel( [i], indices), s);
   }
   return( res);
 }
@@ -246,16 +246,11 @@ bool[*] ==( stringArray a, stringArray b)
   return( res);
 }
 
-int[.,.] getIndicies( int[.] shp)
+int[o,d] getIndices(int[d] shp)
 {
-    iota_shp = Array::iota( shp);
-    return(
-       Array::reshape(
-         [ Array::prod(
-             Array::take( [ Array::dim( Array::iota( shp)) Array::- 1 ],
-                          Array::shape( iota_shp))),
-             Array::sel( [0], Array::reverse( Array::shape( shp))) ],
-         iota_shp));
+    o = Array::prod(shp);
+    arr = Array::iota(shp);
+    return Array::reshape([o,d], arr);
 }
 
 /* I'd love to name this funcion ++ but if I do then when I use Structures,
@@ -332,18 +327,18 @@ int[.] indexOf( string needle, stringArray haystack)
    *   No shape information found for index scalar 'i'.
    */
 
-  indicies = getIndicies( shape( haystack));
-  /*res = { [i] -> ( to_string( sel( Array::sel( [i], indicies),
+  indices = getIndices( shape( haystack));
+  /*res = { [i] -> ( to_string( sel( Array::sel( [i], indices),
                              haystack)) String::== needle ?
-                             Array::sel( [i], indicies) : 0 Array::*
-                             Array::sel( [i], indicies))};*/
+                             Array::sel( [i], indices) : 0 Array::*
+                             Array::sel( [i], indices))};*/
 
   res = with {
-          ( [0] <= [i] < [Array::sel( [0], Array::shape( indicies))]) :
-            ( to_string( sel( Array::sel( [i], indicies), haystack)) String::== needle ?
-                             Array::sel( [i], indicies) :
-                             0 Array::* Array::sel( [i], indicies));
-        } : modarray( indicies);
+          ( [0] <= [i] < [Array::sel( [0], Array::shape( indices))]) :
+            ( to_string( sel( Array::sel( [i], indices), haystack)) String::== needle ?
+                             Array::sel( [i], indices) :
+                             0 Array::* Array::sel( [i], indices));
+        } : modarray( indices);
 
 
 
