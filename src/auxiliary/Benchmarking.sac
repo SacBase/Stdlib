@@ -15,11 +15,4 @@ module Benchmarking;
 
 export all;
 
-
-#if defined(SAC_BACKEND_C99) || defined(SAC_BACKEND_CUDA) || defined(SAC_BACKEND_DISTMEM)
 import C99Benchmarking: all;
-#endif /* SAC_BACKEND_C99/CUDA/DISTMEM */
-
-#ifdef SAC_BACKEND_MUTC
-import MutcBenchmarking: all;
-#endif /* SAC_BACKEND_MUTC */

@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.20)
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/sac2c-variables.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake-common/generate-sac2c-dependency-targets.cmake")
 INCLUDE ("${CMAKE_SOURCE_DIR}/cmake/parse-core-ext-files.cmake")
@@ -315,6 +315,11 @@ SET (C_DEPS_SRC
     auxiliary/src/C99Benchmarking/bench.c
 )
 
+# Cuda files relatively to thes CMakeLists.txt.
+SET (CUDA_DEPS_SRC
+    auxiliary/src/CudaBenchmarking/bench.cu
+)
+
 # Read the list of sac sources from sac-core-ext.txt
 PARSE_CORE_EXT_CONFIG (
     "${CMAKE_SOURCE_DIR}/cmake/sac-core-ext.txt"
@@ -375,6 +380,37 @@ FOREACH (name ${C_DEPS_SRC})
   )
 ENDFOREACH (name)
 
+IF ("${TARGET}" MATCHES "^cuda.*" OR "${TARGET}" MATCHES "multi_gpu")
+    FOREACH (name ${CUDA_DEPS_SRC})
+      SET (src "${CMAKE_CURRENT_SOURCE_DIR}/${name}")
+
+      GET_FILENAME_COMPONENT (dir ${name} DIRECTORY)
+
+      GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
+      SET (dst "${CMAKE_CURRENT_BINARY_DIR}/${dir}/${dst}${OBJEXT}")
+
+      MESSAGE(STATUS "Compiling ${dst}")
+      # Make sure that we put the object file in the same location where
+      # the source file was.
+      FILE (MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${dir}")
+
+      ADD_CUSTOM_COMMAND (
+        OUTPUT "${dst}"
+        MAIN_DEPENDENCY "${src}"
+        IMPLICIT_DEPENDS C "${src}"
+        COMMAND
+            nvcc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
+                 -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+                 -O3
+                 --compiler-options -fPIC
+                 -c "${src}"
+                 -o "${dst}"
+        WORKING_DIRECTORY
+            "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
+        COMMENT "Generating ${dst} for target `${TARGET}'"
+      )
+    ENDFOREACH (name)
+ENDIF ()
 
 # Make a directory for sac2c output
 FILE (MAKE_DIRECTORY "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}")
@@ -401,9 +437,9 @@ FOREACH (name ${SAC_SRC})
     GET_FILENAME_COMPONENT (dir "${CMAKE_CURRENT_BINARY_DIR}/${name}" DIRECTORY)
     GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
     SET (mod
-        "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${MODEXT}")
+        "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${VARIANT}${MODEXT}")
     SET (tree
-        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
+        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/${SBI}/lib${dst}Tree${VARIANT}${TREE_DLLEXT}")
 
     RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" target_list objs_list source_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
@@ -454,7 +490,7 @@ FOREACH (name ${SAC_SRC})
     IF (NOT SAC_NOTREE)
         INSTALL (
             FILES "${tree}"
-            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
+            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}/${SBI}
             COMPONENT trees)
     ENDIF ()
     UNSET (deps_list)
@@ -470,7 +506,7 @@ FOREACH (name ${XSAC_SRC})
     SET (mod
         "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${MODEXT}")
     SET (tree
-        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/lib${dst}Tree${TREE_DLLEXT}")
+        "${DLL_BUILD_DIR}/tree/${TARGET_ENV}/${SBI}/lib${dst}Tree${TREE_DLLEXT}")
 
     RESOLVE_SAC_DEPS_AS_TARGETS ("${name}" "<TARGET>-module-<NAME>" target_list objs_list source_list)
     MESSAGE (STATUS "Computing dependencies for `${name}'")
@@ -531,7 +567,7 @@ FOREACH (name ${XSAC_SRC})
     IF (NOT SAC_NOTREE)
         INSTALL (
             FILES "${tree}"
-            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}
+            DESTINATION ${_install_tree_dir}/tree/${TARGET_ENV}/${SBI}
             COMPONENT trees)
     ENDIF ()
     UNSET (deps_list)

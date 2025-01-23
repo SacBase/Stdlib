@@ -10,18 +10,16 @@ language.
 Build instructions
 ==================
 
-To build the system one requires an operational [CMake](https://cmake.org/) >= 3.3,
+To build the system one requires an operational [CMake](https://cmake.org/) >= 3.20,
 [Flex](http://flex.sourceforge.net/), and [Bison](https://www.gnu.org/software/bison/).
 
 An example on how to build the library:
-```bash
-$ cd Stdlib
-$ git submodule init
-$ git submodule update
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make -j4  #you should have roughly 2GB per thread :-)
+```sh
+cd Stdlib
+git submodule init
+git submodule update
+cmake -B build
+cmake --build build -- -j4  # you should have roughly 2GB per thread :-)
 ```
 
 If you like you can also install the stdlib into `/usr/local` with `make
@@ -68,6 +66,7 @@ Please look at `.github/workflows/` for more exact details on what we do.
 Licensing
 =========
 
-This project is open-source, contributions are welcome! Note that no warranty is given.
+This project is OSS, please have a look at [LICENSE.md][license] for more details. Contributions
+are welcome!
 
-Please look at `LICENSE.txt` for further details.
+[license]: https://github.com/SacBase/Stdlib/blob/master/LICENSE.md

@@ -47,7 +47,7 @@ jobs:
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
   build_mac:
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
@@ -63,8 +63,7 @@ jobs:
           sac2c -V
       - name: Set XCode version
         run: |
-          # this ensures we are using the same Xcode version that we compiled sac2c against
-          sudo xcode-select -switch "/Applications/Xcode_13.4.app"
+          sudo xcode-select -switch "/Applications/Xcode_14.1.0.app"
           # we need to rewrite sysroot path to use specific Xcode version
           sudo find /usr/local/share -type f -name 'sac2crc_*' -execdir sed -i.bak 's/Xcode\.app/Xcode_13\.4\.app/g' {} \;
       - name: Create build dir
