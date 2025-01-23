@@ -35,9 +35,9 @@ stringArray drop( int[.] v, stringArray array)
                               0));
   new_shp = _sub_VxV_( shape( array), abs( vext));
 
-  new_shp = where( new_shp < 0, 0, new_shp);
-  offset = where( vext < 0, 0, vext);
-  offset = where( offset >= shape( array), 0, offset);
+  new_shp = Array::where( new_shp < 0, 0, new_shp);
+  offset = Array::where( vext < 0, 0, vext);
+  offset = Array::where( offset >= shape( array), 0, offset);
 
   /*  res = with {
   ( . <= iv <= . ) : _sel_VxA_( _add_VxV_( offset, iv), array);
