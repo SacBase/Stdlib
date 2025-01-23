@@ -175,7 +175,7 @@ void writePGM( int[2:shp] image, int[2] shp, int mval,
      * 'name' gives the filename.
      */
 
-void writePGM( int[2:shp] image, int[2] shp, int mval,
+void writePGM( int[.,.] image, int[2] shp, int mval,
                bool binary, File stream )
 {
   pgm = newPGM( shp, mval, binary, stream );
