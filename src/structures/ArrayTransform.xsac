@@ -1,7 +1,7 @@
 module ArrayTransform;
 
 use Constants: all;
-use ArrayBasics: sel;
+use ArrayBasics: all;
 
 export all;
 
