@@ -3,6 +3,7 @@ module ArrayFormat;
 use Array: all;
 use MathArray: {log10};
 use String: {tochar, sprintf};
+use Constants: all;
 
 export {format};
 
@@ -63,7 +64,7 @@ inline
 int[.] maxsl1(int[.,.] y)
 { /* first-axis max-reduce rank-2 matrix */
   z = with {
-      ([0] <= iv < take([1], shape(y))) : sel( iv, y); 
+      ([0] <= iv < take([1], shape(y))) : sel( iv, y);
         } : fold(max, minint());
   return(z);
 }
@@ -72,7 +73,7 @@ inline
 int[.] minsl1(int[.,.] y)
 { /* first-axis min-reduce rank-2 matrix */
   z = with {
-      ([0] <= iv < take([1], shape(y))) : sel( iv, y); 
+      ([0] <= iv < take([1], shape(y))) : sel( iv, y);
         } : fold(min, maxint());
   return(z);
 }
@@ -119,7 +120,7 @@ int thcharsto(char[.] ch, char[.] fry)
 }
 
 char[.] ScalarFormatter(double y, int precision)
-{ /* Primitive double scalar formatter, because sprintf 
+{ /* Primitive double scalar formatter, because sprintf
    * gives wrong answers. */
 /* FIXME - write proper formatter, using Steele/Burger formatting */
  z = String::tochar(String::sprintf("%.*g", precision, y));
@@ -221,7 +222,7 @@ char[+] format(bool[+] y)
   z = with {
         (. <= iv <= .) : sel( iv, y) ? ['1',' '] : ['0',' '];
         } : genarray(shape( y));
-  zs = drop([_sub_SxS_(0,2)], 
+  zs = drop([_sub_SxS_(0,2)],
 		shape( z)) ++ [prod( take([_sub_SxS_(0,2)], shape( z)))];
   z = reshape( zs, z);
   lastcol = genarray([dim(z)], 0);
@@ -242,7 +243,7 @@ char[+] format(bool[+] y, int precision)
 }
 
 char[.] format(bool y, int[2] w)
-{ /* Defined-width and precision format on boolean scalar 
+{ /* Defined-width and precision format on boolean scalar
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
    * w[1] is the number of significant digits to be printed.
@@ -255,7 +256,7 @@ char[+] format(bool[+] y, int[2] w)
 { /* Defined-width format on boolean non-scalar */
  z = format(tod(y), w);
  return(z);
-} 
+}
 
 
 /********************************************************************************
@@ -285,7 +286,7 @@ char[.] format(int y)
  while ((cury != 0) && (i >= 0)) {
         nexty = cury /10; /* truncate toward zero */
         dig = abs(_sub_SxS_(cury,(nexty *10)));
-        z = modarray( z, [i], sel( [dig], 
+        z = modarray( z, [i], sel( [dig],
 		['0','1','2','3','4','5','6','7','8','9']));
         cury = nexty;
 	i = _sub_SxS_(i,1);
@@ -302,13 +303,13 @@ char[.] format(long y)
  z = tochar(sprintf("%ld",y));
  return( z);
 }
-     
+
 char[+] format(int[+] y)
 { /* Default format on integer non-scalar */
   /* Refer to UTThorn.dws <thint> for APL model of this */
 
-  shpm = [prod(drop([_sub_SxS_(0,1)], 
-		shape(y)))] ++ 
+  shpm = [prod(drop([_sub_SxS_(0,1)],
+		shape(y)))] ++
 		take([_sub_SxS_(0,1)], shape(y));
   if ( 0 == prod( shpm)) {
 	z = genarray(shape(y), ' ');
@@ -327,7 +328,7 @@ char[+] format(int[+] y)
         (. <= iv <= .) : formatrow( widths, sel (iv, m));
         } : genarray(take([1],shape(m)), zdef);
 
-  shpz = drop([_sub_SxS_(0,1)], shape(y)) 
+  shpz = drop([_sub_SxS_(0,1)], shape(y))
 		++ take([_sub_SxS_(0,1)], shape(z));
   z = reshape(shpz, z);
  }
@@ -346,7 +347,7 @@ char[+] format(int[+] y, int precision)
 }
 
 char[.] format(int y, int[2] w)
-{ /* Defined-width and precision format on integer scalar 
+{ /* Defined-width and precision format on integer scalar
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
    * w[1] is the number of significant digits to be printed.
@@ -373,7 +374,7 @@ char[+] format(float[+] y)
 { /* Default format on float non-scalar */
   precision = 15;
   return(format(tod(y), precision));
-} 
+}
 
 char[.] format(float y, int precision)
 { /* Defined-precision format on floating scalar */
@@ -387,7 +388,7 @@ char[+] format(float[+] y, int precision)
 }
 
 char[.] format(float y, int[2] w)
-{ /* Defined-width and precision format on floating scalar 
+{ /* Defined-width and precision format on floating scalar
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
    * w[1] is the number of significant digits to be printed.
@@ -397,14 +398,14 @@ char[.] format(float y, int[2] w)
 }
 
 char[+] format(float[+] y, int[2] w)
-{ /* Defined-width format on float non-scalar 
+{ /* Defined-width format on float non-scalar
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
    * w[1] is the number of significant digits to be printed.
    */
  z = format(tod(y), w);
  return(z);
-} 
+}
 
 
 
@@ -454,7 +455,7 @@ char[+] format(double[+] y, int precision)
   defcell = genarray([wid], ' ');
   fry = with {          /* Format each array element */
 	(. <= iv <= .) {
-		el = ScalarFormatter( ravely[iv], precision);  
+		el = ScalarFormatter( ravely[iv], precision);
                 el = PadWithBlanks([wid], el);
 	} : el;
         } : genarray( shape( ravely), defcell);
@@ -480,12 +481,12 @@ char[+] format(double[+] y, int precision)
         } : genarray([rows], defcell);
   z = reshape(shpz, z);
  return(z);
-} 
+}
 
 DOINL
 char[.] format(double y, int[2] w)
 { /* Formatting for a double scalar */
-  /* This is temporary, pending use of the Burger/Dybvig algorithm 
+  /* This is temporary, pending use of the Burger/Dybvig algorithm
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
    * w[1] is the number of significant digits to be printed.
@@ -497,7 +498,7 @@ char[.] format(double y, int[2] w)
 
 DOINL
 char[+] format(double[+] y, int[2] w)
-{ /* Defined-width format on double non-scalar 
+{ /* Defined-width format on double non-scalar
    * w[0] is maximum legal result width. If result is wider than this,
    *      the result will be filled with asterixs. ('*')
    * w[1] is the number of significant digits to be printed.
@@ -548,7 +549,7 @@ char[.] format(type y, int[2] w)			\
 {							\
   z=format(toi(y),w);					\
   return( z);						\
-}							
+}
 
 #ifdef NEEDSTYPECONVERSIONS
 // These will not work until somebody writes suitable non-scalar type
