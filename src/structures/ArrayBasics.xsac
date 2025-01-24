@@ -121,7 +121,7 @@ BUILT_IN(GENARRAY)
 inline                                                                         \
 typ[o:oshp,i:ishp]                                                             \
 modarray(typ[o:oshp,i:ishp] arr, int[o] idx, typ[i:ishp] val)                  \
-    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, ishp))                  \
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))                  \
 {                                                                              \
     return with {                                                              \
         (idx <= iv <= idx) : val;                                              \
