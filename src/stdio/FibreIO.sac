@@ -1,317 +1,303 @@
 module FibreIO;
 
-
+use Array: all;
 use IOresources: all;
-use Array : { shape, sel, dim, tod, >= };
-use String : {string};
-use StringArray : {stringArray};
-use TermFile : {TermFile};
+use String: { string };
+use StringArray: { stringArray };
+use TermFile: { TermFile };
 
 export all;
 
-/*****************************************************************
- * FibreScan on File
- */
+/******************************************************************************
+ *
+ * FibreScan on File.
+ *
+ ******************************************************************************/
 
-external  int    FibreScanInt( File &stream);
-  #pragma linksign[0,1]
-  #pragma linkobj "src/FibreIO/ScanInt.o"
-  #pragma linkobj "src/FibreIO/lex.FibreScan.o"
-  #pragma linkobj "src/FibreIO/FibreScan.tab.o"
+external int FibreScanInt(File &stream);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/FibreIO/ScanInt.o"
+    #pragma linkobj "src/FibreIO/lex.FibreScan.o"
+    #pragma linkobj "src/FibreIO/FibreScan.tab.o"
 
-external  float  FibreScanFloat( File &stream);
-  #pragma linksign[0,1]
-  #pragma linkobj "src/FibreIO/ScanFlt.o"
+external float FibreScanFloat(File &stream);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/FibreIO/ScanFlt.o"
 
-external  double FibreScanDouble( File &stream);
-  #pragma linksign[0,1]
-  #pragma linkobj "src/FibreIO/ScanDbl.o"
+external double FibreScanDouble(File &stream);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/FibreIO/ScanDbl.o"
 
-external  int[*]  FibreScanIntArray( File &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanIntArr.o"
+external int[*] FibreScanIntArray(File &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanIntArr.o"
 
-external  float[*]  FibreScanFloatArray( File &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanFltArr.o"
+external float[*] FibreScanFloatArray(File &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
-external  double[*]  FibreScanDoubleArray( File &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanDblArr.o"
+external double[*] FibreScanDoubleArray(File &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-external stringArray  FibreScanStringArray( File &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanStringArr.o"
+external stringArray FibreScanStringArray(File &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanStringArr.o"
 
-/*****************************************************************
- * FibreScan on TermFile
- */
+/******************************************************************************
+ *
+ * FibreScan on TermFile.
+ *
+ ******************************************************************************/
 
-external  int    FibreScanInt( TermFile &stream);
-  #pragma linksign[0,1]
-  #pragma linkobj "src/FibreIO/ScanInt.o"
-  #pragma linkobj "src/FibreIO/lex.FibreScan.o"
-  #pragma linkobj "src/FibreIO/FibreScan.tab.o"
+external int FibreScanInt(TermFile &stream);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/FibreIO/ScanInt.o"
+    #pragma linkobj "src/FibreIO/lex.FibreScan.o"
+    #pragma linkobj "src/FibreIO/FibreScan.tab.o"
 
-external  float  FibreScanFloat( TermFile &stream);
-  #pragma linksign[0,1]
-  #pragma linkobj "src/FibreIO/ScanFlt.o"
+external float FibreScanFloat(TermFile &stream);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/FibreIO/ScanFlt.o"
 
-external  double FibreScanDouble( TermFile &stream);
-  #pragma linksign[0,1]
-  #pragma linkobj "src/FibreIO/ScanDbl.o"
+external double FibreScanDouble(TermFile &stream);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/FibreIO/ScanDbl.o"
 
+external int[*] FibreScanIntArray(TermFile &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanIntArr.o"
 
-external  int[*]  FibreScanIntArray( TermFile &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanIntArr.o"
+external float[*] FibreScanFloatArray(TermFile &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
-external  float[*]  FibreScanFloatArray( TermFile &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanFltArr.o"
+external double[*] FibreScanDoubleArray(TermFile &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-external  double[*]  FibreScanDoubleArray( TermFile &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanDblArr.o"
+external stringArray FibreScanStringArray(TermFile &stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanStringArr.o"
 
-external  stringArray  FibreScanStringArray( TermFile &stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanStringArr.o"
+/******************************************************************************
+ *
+ * FibreScan on String.
+ *
+ ******************************************************************************/
 
-/*****************************************************************
- * FibreScan on String
- */
+external int[*] FibreScanIntArrayStr(string stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanIntArr.o"
 
-external  int[*]  FibreScanIntArrayStr( string stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanIntArr.o"
+external float[*] FibreScanFloatArrayStr(string stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
-external  float[*]  FibreScanFloatArrayStr( string stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanFltArr.o"
+external double[*] FibreScanDoubleArrayStr(string stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
-external  double[*]  FibreScanDoubleArrayStr( string stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanDblArr.o"
+external stringArray FibreScanStringArrayStr(string stream);
+    #pragma refcounting [0]
+    #pragma linksign [1,2]
+    #pragma linkobj "src/FibreIO/ScanStringArr.o"
 
-external  stringArray  FibreScanStringArrayStr( string stream);
-  #pragma refcounting [0]
-  #pragma linksign[1,2]
-  #pragma linkobj "src/FibreIO/ScanStringArr.o"
+/******************************************************************************
+ *
+ * FibrePrint on File.
+ *
+ ******************************************************************************/
 
-/*****************************************************************
- * FibrePrint on File
- */
+external void FibrePrint(File &stream, int d, int[d] shp, int[d:shp] arr);
+    #pragma linkname "FibrePrintIntArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void
-FibrePrint( File &stream, int d, int[d] shp, int[d:shp] arr);
-  #pragma linkname "FibrePrintIntArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+external void FibrePrint(File &stream, int d, int[d] shp, float[d:shp] arr);
+    #pragma linkname "FibrePrintFloatArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void
-FibrePrint( File &stream, int d, int[d] shp, float[d:shp] arr);
-  #pragma linkname "FibrePrintFloatArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+external void FibrePrint(File &stream, int d, int[d] shp, double[d:shp] arr);
+    #pragma linkname "FibrePrintDoubleArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void
-FibrePrint( File &stream, int d, int[d] shp, double[d:shp] arr);
-  #pragma linkname "FibrePrintDoubleArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+external void FibrePrint(File &stream, int d, int[d] shp, stringArray arr);
+    #pragma linkname "FibrePrintStringArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void
-FibrePrint( File &stream, int d, int[d] shp, stringArray arr);
-  #pragma linkname "FibrePrintStringArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
-
-/*****************************************************************
+/******************************************************************************
+ *
  * FibrePrint on TermFile
- */
-
-//TODO add d >= 1
-external void
-FibrePrint( TermFile &stream, int d, int[d] shp, int[d:shp] arr);
-  #pragma linkname "FibrePrintIntArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+ *
+ ******************************************************************************/
 
 external void
-FibrePrint( TermFile &stream, int d, int[d] shp, float[d:shp] arr);
-  #pragma linkname "FibrePrintFloatArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+FibrePrint(TermFile &stream, int d, int[d] shp, int[d:shp] arr);
+    #pragma linkname "FibrePrintIntArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
 external void
-FibrePrint( TermFile &stream, int d, int[d] shp, double[d:shp] arr);
-  #pragma linkname "FibrePrintDoubleArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+FibrePrint(TermFile &stream, int d, int[d] shp, float[d:shp] arr);
+    #pragma linkname "FibrePrintFloatArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
 external void
-FibrePrint( TermFile &stream, int d, int[d] shp, stringArray arr);
-  #pragma linkname "FibrePrintStringArray"
-  #pragma linkobj "src/FibreIO/FibrePrint.o"
+FibrePrint(TermFile &stream, int d, int[d] shp, double[d:shp] arr);
+    #pragma linkname "FibrePrintDoubleArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
+external void
+FibrePrint(TermFile &stream, int d, int[d] shp, stringArray arr);
+    #pragma linkname "FibrePrintStringArray"
+    #pragma linkobj "src/FibreIO/FibrePrint.o"
 
+/******************************************************************************/
 
-/*****************************************************************/
-
-
-int[*]  FibreScanIntArray()
+int[*] FibreScanIntArray()
 {
-  return( FibreScanIntArray( stdin));
+  return FibreScanIntArray(stdin);
 }
 
-float[*]  FibreScanFloatArray()
+float[*] FibreScanFloatArray()
 {
-  return( FibreScanFloatArray( stdin));
+    return FibreScanFloatArray(stdin);
 }
 
-double[*]  FibreScanDoubleArray()
+double[*] FibreScanDoubleArray()
 {
-  return( FibreScanDoubleArray( stdin));
+    return FibreScanDoubleArray(stdin);
 }
 
 stringArray FibreScanStringArray()
 {
-  return( FibreScanStringArray( stdin));
+    return FibreScanStringArray(stdin);
 }
 
-/*****************************************************************/
+/******************************************************************************/
 
-
-inline void FibrePrint(File &stream, int[d:shp] arr) | (d >= 1)
+inline void FibrePrint(File &stream, int[d:shp] arr)
 {
-  FibrePrint(stream, d, shp, arr);
+    FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(File &stream, int arr)
 {
-  File::fprintf(stream, "%d\n", arr);
+    File::fprintf(stream, "%d\n", arr);
 }
 
-
-inline void FibrePrint(File &stream, float[d:shp] arr) | (d >= 1)
+inline void FibrePrint(File &stream, float[d:shp] arr)
 {
-  FibrePrint(stream, d, shp, arr);
+    FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(File &stream, float arr)
 {
-  File::fprintf(stream, "%.16f\n", tod(arr));
+    File::fprintf(stream, "%.16f\n", tod(arr));
 }
 
-
-inline void FibrePrint(File &stream, double[d:shp] arr) | (d >= 1)
+inline void FibrePrint(File &stream, double[d:shp] arr)
 {
-  FibrePrint(stream, d, shp, arr);
+    FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(File &stream, double arr)
 {
-  File::fprintf(stream, "%.16f\n", arr);
+    File::fprintf(stream, "%.16f\n", arr);
 }
-
 
 inline void FibrePrint(File &stream, stringArray arr)
 {
-  FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
+    FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
+/******************************************************************************/
 
-
-/*****************************************************************/
-
-
-inline void FibrePrint(TermFile &stream, int[d:shp] arr) | (d >= 1)
+inline void FibrePrint(TermFile &stream, int[d:shp] arr)
 {
-  FibrePrint(stream, d, shp, arr);
+    FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(TermFile &stream, int arr)
 {
-  TermFile::fprintf(stream, "%d\n", arr);
+    TermFile::fprintf(stream, "%d\n", arr);
 }
 
-
-inline void FibrePrint(TermFile &stream, float[d:shp] arr) | (d >= 1)
+inline void FibrePrint(TermFile &stream, float[d:shp] arr)
 {
-  FibrePrint(stream, d, shp, arr);
+    FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(TermFile &stream, float arr)
 {
-  TermFile::fprintf(stream, "%.16f\n", tod(arr));
+    TermFile::fprintf(stream, "%.16f\n", tod(arr));
 }
 
-
-inline void FibrePrint(TermFile &stream, double[d:shp] arr) | (d >= 1)
+inline void FibrePrint(TermFile &stream, double[d:shp] arr)
 {
-  FibrePrint(stream, d, shp, arr);
+    FibrePrint(stream, d, shp, arr);
 }
 
 inline void FibrePrint(TermFile &stream, double arr)
 {
-  TermFile::fprintf(stream, "%.16f\n", arr);
+    TermFile::fprintf(stream, "%.16f\n", arr);
 }
-
 
 inline void FibrePrint(TermFile &stream, stringArray arr)
 {
-  FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
+    FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
+/******************************************************************************/
 
-/*****************************************************************/
-
-inline void FibrePrint(int[d:shp] arr) | (d >= 1)
+inline void FibrePrint(int[d:shp] arr)
 {
-  FibrePrint(stdout, d, shp, arr);
+    FibrePrint(stdout, d, shp, arr);
 }
 
 inline void FibrePrint(int arr)
 {
-  TermFile::fprintf(stdout, "%d\n", arr);
+    TermFile::fprintf(stdout, "%d\n", arr);
 }
-
 
 inline void FibrePrint(float[d:shp] arr)
 {
-  FibrePrint(stdout, d, shp, arr);
+    FibrePrint(stdout, d, shp, arr);
 }
 
 inline void FibrePrint(float arr)
 {
-  TermFile::fprintf(stdout, "%.16f\n", tod(arr));
+    TermFile::fprintf(stdout, "%.16f\n", tod(arr));
 }
 
-
-inline void FibrePrint(double[+] arr)
+inline void FibrePrint(double[d:shp] arr)
 {
-  FibrePrint(stdout, dim(arr), shape(arr), arr);
+    FibrePrint(stdout, d, shp, arr);
 }
 
 inline void FibrePrint(double arr)
 {
-  TermFile::fprintf(stdout, "%.16f\n", arr);
+    TermFile::fprintf(stdout, "%.16f\n", arr);
 }
 
-
-inline void FibrePrint( StringArray::stringArray arr)
+inline void FibrePrint(StringArray::stringArray arr)
 {
-  FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
+    FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
-inline void FibrePrint( string scaler)
+inline void FibrePrint(string scaler)
 {
-  TermFile::printf("%s", scaler);
+    TermFile::printf("%s", scaler);
 }
 
 #define HASH #
@@ -320,94 +306,89 @@ inline void FibrePrint( string scaler)
 #define PREPENDPERCENT(x) %x
 #define SETFORMAT(formatting) QUOTEME(PREPENDPERCENT(formatting)\n)
 
-#define LINKSPECS(type, alias)						\
-									\
-external  type  FibreScan##alias( File &stream);			\
-  PRINTME(HASH)pragma linksign[0,1]					\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthers.o"		\
-									\
-external  type  FibreScan##alias( TermFile &stream);			\
-  PRINTME(HASH)pragma linksign[0,1]					\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthers.o"		\
-									\
-external  type[*]  FibreScan##alias##Array( File &stream);		\
-  PRINTME(HASH)pragma refcounting [0]					\
-  PRINTME(HASH)pragma linksign[1,2]					\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"             \
-									\
-external  type[*]  FibreScan##alias##Array( TermFile &stream);		\
-  PRINTME(HASH)pragma refcounting [0]					\
-  PRINTME(HASH)pragma linksign[1,2]					\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"	        \
-									\
-external  type[*]  FibreScan##alias##ArrayStr( string stream);		\
-  PRINTME(HASH)pragma refcounting [0]					\
-  PRINTME(HASH)pragma linksign[1,2]					\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"	        \
-									\
-external void FibrePrint( File &stream, int d, int[+] shp, 		\
-type[+] arr);								\
-  PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)	\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"		\
-									\
-external void FibrePrint( TermFile &stream, int d, int[+] shp, 	\
-type[+] arr);								\
-  PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)	\
-  PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"
+#define LINKSPECS(type, alias)                                                 \
+                                                                               \
+external type FibreScan##alias(File &stream);                                  \
+    PRINTME(HASH)pragma linksign [0,1]                                         \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthers.o"                     \
+                                                                               \
+external type FibreScan##alias(TermFile &stream);                              \
+    PRINTME(HASH)pragma linksign [0,1]                                         \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthers.o"                     \
+                                                                               \
+external type[*] FibreScan##alias##Array(File &stream);                        \
+    PRINTME(HASH)pragma refcounting [0]                                        \
+    PRINTME(HASH)pragma linksign [1,2]                                         \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"                  \
+                                                                               \
+external type[*] FibreScan##alias##Array(TermFile &stream);                    \
+    PRINTME(HASH)pragma refcounting [0]                                        \
+    PRINTME(HASH)pragma linksign [1,2]                                         \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"                  \
+                                                                               \
+external type[*] FibreScan##alias##ArrayStr(string stream);                    \
+    PRINTME(HASH)pragma refcounting [0]                                        \
+    PRINTME(HASH)pragma linksign [1,2]                                         \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/ScanOthersArr.o"                  \
+                                                                               \
+external void FibrePrint(File &stream, int d, int[+] shp, type[+] arr);        \
+    PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)             \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"                     \
+                                                                               \
+external void FibrePrint(TermFile &stream, int d, int[+] shp, type[+] arr);    \
+    PRINTME(HASH)pragma linkname QUOTEME(FibrePrint##alias##Array)             \
+    PRINTME(HASH)pragma linkobj "src/FibreIO/FibrePrint.o"
 
-
-#define FIBRESCAN(type,alias)						\
-									\
-type[*]  FibreScan##alias##Array()					\
-{									\
-  return( FibreScan##alias##Array( stdin));				\
+#define FIBRESCAN(type, alias)                                                 \
+type[*] FibreScan##alias##Array()                                              \
+{                                                                              \
+    return FibreScan##alias##Array(stdin);                                     \
 }
 
-#define FIBREPRINT(type,formatting)					\
-									\
-inline void FibrePrint(File &stream, type[d:shp] arr) | (d >= 1)			\
-{									\
-  FibrePrint(stream, d, shp, arr);			\
-}									\
-									\
-inline void FibrePrint(File &stream, type arr)				\
-{									\
-  File::fprintf(stream, SETFORMAT(formatting),  arr);			\
-}									\
-									\
-inline void FibrePrint(TermFile &stream, type[d:shp] arr) | (d >= 1)			\
-{									\
-  FibrePrint(stream, d, shp, arr);			\
-}									\
-									\
-inline void FibrePrint(TermFile &stream, type arr)			\
-{									\
-  TermFile::fprintf(stream, SETFORMAT(formatting), arr);		\
-}									\
-									\
-inline void FibrePrint(type[d:shp] arr) | (d >= 1)					\
-{									\
-  FibrePrint(stdout, d, shp, arr);			\
-}									\
-									\
-inline void FibrePrint(type arr)					\
-{									\
-  TermFile::fprintf(stdout, SETFORMAT(formatting), arr);		\
+#define FIBREPRINT(type,formatting)                                            \
+inline void FibrePrint(File &stream, type[d:shp] arr)                          \
+{                                                                              \
+    FibrePrint(stream, d, shp, arr);                                           \
+}                                                                              \
+                                                                               \
+inline void FibrePrint(File &stream, type arr)                                 \
+{                                                                              \
+    File::fprintf(stream, SETFORMAT(formatting),  arr);                        \
+}                                                                              \
+                                                                               \
+inline void FibrePrint(TermFile &stream, type[d:shp] arr)                      \
+{                                                                              \
+    FibrePrint(stream, d, shp, arr);                                           \
+}                                                                              \
+                                                                               \
+inline void FibrePrint(TermFile &stream, type arr)                             \
+{                                                                              \
+    TermFile::fprintf(stream, SETFORMAT(formatting), arr);                     \
+}                                                                              \
+                                                                               \
+inline void FibrePrint(type[d:shp] arr)                                        \
+{                                                                              \
+    FibrePrint(stdout, d, shp, arr);                                           \
+}                                                                              \
+                                                                               \
+inline void FibrePrint(type arr)                                               \
+{                                                                              \
+    TermFile::fprintf(stdout, SETFORMAT(formatting), arr);                     \
 }
 
-#define LINKSCANPRINT(type,alias,formatting)				\
-LINKSPECS(type,alias)							\
-FIBRESCAN(type,alias)							\
-FIBREPRINT(type,formatting)
+#define LINKSCANPRINT(type, alias, formatting)                                 \
+LINKSPECS(type, alias)                                                         \
+FIBRESCAN(type, alias)                                                         \
+FIBREPRINT(type, formatting)
 
 #ifdef FULLTYPES
-LINKSCANPRINT(byte,Byte,hd)
-LINKSCANPRINT(short,Short,hd)
-LINKSCANPRINT(long,Long,ld)
-LINKSCANPRINT(longlong,Longlong,lld)
-LINKSCANPRINT(ubyte,Ubyte,hu)
-LINKSCANPRINT(ushort,Ushort,hu)
-LINKSCANPRINT(uint,Uint,u)
-LINKSCANPRINT(ulong,Ulong,lu)
-LINKSCANPRINT(ulonglong,Ulonglong,llu)
+LINKSCANPRINT(byte, Byte, hd)
+LINKSCANPRINT(short, Short, hd)
+LINKSCANPRINT(long, Long, ld)
+LINKSCANPRINT(longlong, Longlong, lld)
+LINKSCANPRINT(ubyte, Ubyte, hu)
+LINKSCANPRINT(ushort, Ushort, hu)
+LINKSCANPRINT(uint, Uint, u)
+LINKSCANPRINT(ulong, Ulong, lu)
+LINKSCANPRINT(ulonglong, Ulonglong, llu)
 #endif /* FULLTYPES */
