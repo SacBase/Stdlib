@@ -2,115 +2,62 @@ class PGM;
 
 external classtype;
 
-use String:         { string };
-use ArrayBasics:    { shape };
-use File:           { File, fopen, fclose };
-use SysErr:         { fail };
-use RuntimeError:   { error };
-use ScalarArith:    { ==, > };
+use String: { string };
+use ArrayBasics: { shape };
+use File: { File, fopen, fclose };
+use SysErr: { fail };
+use ScalarArith: { ==, > };
 use ArrayTransform: { maxval };
 
 export all;
 
-int[.,.], int readPGM( string filename )
-{
-  pgm = openPGM( filename );
-  mval = PGMmaxval( pgm );
-  data = readPGMdata( pgm );
-  fp = PGMstream( pgm );
-  freePGM( pgm );
-  fclose( fp );
-  return (data, mval);
-}
-    /*
-     * Read a PGM image from file 'filename'.
-     * Return:
-     *     - the data as a two dimensional int array
-     *     - the maximum pixel value in the range [1, 65535].
-     *       Usually the maximum pixel value is 255,
-     *       but for 16-bit images it is 65535.
-     *       In very rare cases it has another value.
-     */
-
-int[.,.], int readPGM( File stream )
-{
-  pgm = parsePGM( stream );
-  mval = PGMmaxval( pgm );
-  data = readPGMdata( pgm );
-  freePGM( pgm );
-  return (data, mval);
-}
-    /*
-     * Read a PGM image from the open file stream 'stream'.
-     * Return:
-     *     - the data as a two dimensional int array
-     *     - the maximum pixel value in the range [1, 65535].
-     *       Usually the maximum pixel value is 255,
-     *       but for 16-bit images it is 65535.
-     *       In very rare cases it has another value.
-     */
-
-PGM openPGM( string name )
-{
-  err, fp = fopen( name, "rb");
-  if (fail(err) == true) {
-    error( (int)err, "openPGM: Failed to open file %s for reading",
-           name);
-  }
-  return parsePGM( fp);
-}
-    /*
-     * Open an existing PGM file using filename 'name'
-     * and read the PGM header.
-     */
-
-external PGM parsePGM( File& fp );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external PGM parsePGM(File& fp);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_parse"
     #pragma linksign [0,1]
     /*
      * Read the PGM header from an open file stream.
      */
 
-external void freePGM( PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external void freePGM(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_free"
     /*
      * Free the internal PGM data structure.
      */
 
-external int PGMwidth( PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external int PGMwidth(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_width"
     #pragma linksign [0,1]
     /*
      * Extract the width of the PGM image.
      */
 
-external int PGMheight( PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external int PGMheight(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_height"
     #pragma linksign [0,1]
     /*
      * Extract the height of the PGM image.
      */
 
-external int PGMmaxval( PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external int PGMmaxval(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_maxval"
     #pragma linksign [0,1]
     /*
      * Extract the maximum possible pixel value of the PGM image.
      */
 
-external int[.,.] readPGMdata( PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external int[.,.] readPGMdata(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_read_data"
     #pragma refcounting [0]
     #pragma linksign [1,2]
@@ -118,116 +65,166 @@ external int[.,.] readPGMdata( PGM& pgm );
      * Read the pixel data from file and return it as an image.
      */
 
-external File PGMstream( PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/pgm2array.o"
+external File PGMstream(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/pgm2array.o"
     #pragma linkname "SAC_PGM_stream"
     #pragma linksign [0,1]
     /*
      * Extract the file pointer from the PGM data structure.
      */
 
-external PGM newPGM( int [2] shp, int mval, bool binary, File& fp);
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/array2pgm.o"
+external PGM newPGM(int[2] shp, int mval, bool binary, File& fp);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/array2pgm.o"
     #pragma linkname "SAC_PGM_new"
     #pragma linksign [0, 1, 2, 3, 4]
     /*
      * Allocate a new PGM structure for writing.
      */
 
-external void writePGMheader( PGM& pgm);
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/array2pgm.o"
+external void writePGMheader(PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/array2pgm.o"
     #pragma linkname "SAC_PGM_write_header"
     /*
      * Write a new PGM header to file.
      */
 
-external void writePGMdata( int[.,.] data, PGM& pgm );
-    #pragma effect    FileSystem::TheFileSystem
-    #pragma linkobj  "src/PGM/array2pgm.o"
+external void writePGMdata(int[.,.] data, PGM& pgm);
+    #pragma effect FileSystem::TheFileSystem
+    #pragma linkobj "src/PGM/array2pgm.o"
     #pragma linkname "SAC_PGM_write_data"
     #pragma linksign [1, 2]
     /*
      * Write the PGM data to file.
      */
 
-void writePGM( int[.,.] image, int[2] shp, int mval,
-               bool binary, string name)
+/*
+ * Read a PGM image from file 'filename'.
+ * Return:
+ *     - the data as a two dimensional int array
+ *     - the maximum pixel value in the range [1, 65535].
+ *       Usually the maximum pixel value is 255,
+ *       but for 16-bit images it is 65535.
+ *       In very rare cases it has another value.
+ */
+int[.,.], int readPGM(string filename)
 {
-  err, fp = fopen( name, "wb");
-  if (fail(err) == true) {
-    error( (int)err, "writePGM: Failed to open file %s for reading",
-           name);
-  }
-  pgm = newPGM( shp, mval, binary, fp );
-  writePGMheader( pgm );
-  writePGMdata( image, pgm );
-  freePGM( pgm );
-  fclose(fp);
+    pgm = openPGM(filename);
+    mval = PGMmaxval(pgm);
+    data = readPGMdata(pgm);
+    fp = PGMstream(pgm);
+    freePGM(pgm);
+    fclose(fp);
+    return (data, mval);
 }
-    /*
-     * Write 'image' to file using the PGM image format:
-     * 'shp' gives the dimensions.
-     * 'mval' specifies the bitness: 255 for 8-bit, 65535 for 16-bit.
-     * 'binary' specifies binary mode if true, else text mode.
-     * 'name' gives the filename.
-     */
 
-void writePGM( int[.,.] image, int[2] shp, int mval,
-               bool binary, File stream )
+/*
+ * Read a PGM image from the open file stream 'stream'.
+ * Return:
+ *     - the data as a two dimensional int array
+ *     - the maximum pixel value in the range [1, 65535].
+ *       Usually the maximum pixel value is 255,
+ *       but for 16-bit images it is 65535.
+ *       In very rare cases it has another value.
+ */
+int[.,.], int readPGM(File stream)
 {
-  pgm = newPGM( shp, mval, binary, stream );
-  writePGMheader( pgm );
-  writePGMdata( image, pgm );
-  freePGM( pgm );
+    pgm = parsePGM(stream);
+    mval = PGMmaxval(pgm);
+    data = readPGMdata(pgm);
+    freePGM(pgm);
+    return (data, mval);
 }
-    /*
-     * Write 'image' to file using the PGM image format:
-     * 'shp' gives the dimensions.
-     * 'mval' specifies the bitness: 255 for 8-bit, 65535 for 16-bit.
-     * 'binary' specifies binary mode if true, else text mode.
-     * 'stream' gives a pointer to an opened file in write mode.
-     */
 
+/*
+ * Open an existing PGM file using filename 'name'
+ * and read the PGM header.
+ */
+PGM openPGM(string name)
+{
+    err, fp = fopen(name, "rb");
+
+    if (fail(err) == true) {
+        RuntimeError::error((int)err,
+            "openPGM: Failed to open file %s for reading",
+            name);
+    }
+
+    return parsePGM(fp);
+}
+
+/*
+ * Write 'image' to file using the PGM image format:
+ * 'shp' gives the dimensions.
+ * 'mval' specifies the bitness: 255 for 8-bit, 65535 for 16-bit.
+ * 'binary' specifies binary mode if true, else text mode.
+ * 'name' gives the filename.
+ */
+void writePGM(int[2:shp] image, int[2] shp, int mval, bool binary, string name)
+{
+    err, fp = fopen(name, "wb");
+
+    if (fail(err) == true) {
+        RuntimeError::error((int)err,
+            "writePGM: Failed to open file %s for reading",
+            name);
+    }
+
+    pgm = newPGM(shp, mval, binary, fp);
+    writePGMheader(pgm);
+    writePGMdata(image, pgm);
+    freePGM(pgm);
+    fclose(fp);
+}
+
+/*
+ * Write 'image' to file using the PGM image format:
+ * 'shp' gives the dimensions.
+ * 'mval' specifies the bitness: 255 for 8-bit, 65535 for 16-bit.
+ * 'binary' specifies binary mode if true, else text mode.
+ * 'stream' gives a pointer to an opened file in write mode.
+ */
+void writePGM(int[.,.] image, int[2] shp, int mval, bool binary, File stream)
+{
+    pgm = newPGM(shp, mval, binary, stream);
+    writePGMheader(pgm);
+    writePGMdata(image, pgm);
+    freePGM(pgm);
+}
 
 /*
  * Write an image to file in the PGM format.
  */
-inline void writePGM(int[.,.] img, int mval, bool binary, string filename)
+inline void writePGM(int[2:shp] img, int mval, bool binary, string filename)
 {
-    writePGM(img, shape(img), mval, binary, filename);
+    writePGM(img, shp, mval, binary, filename);
 }
-
 
 /*
  * Write an image to file in the binary PGM format.
  */
-inline void writePGM(int[.,.] img, int mval, string filename)
+inline void writePGM(int[2:shp] img, int mval, string filename)
 {
-    writePGM(img, shape(img), mval, true, filename);
+    writePGM(img, shp, mval, true, filename);
 }
-
 
 /*
  * Write an image to file in the PGM format
  * and calculate a suitable 'mval'.
  */
-inline void writePGM(int[.,.] img, bool binary, string filename)
+inline void writePGM(int[2:shp] img, bool binary, string filename)
 {
     mval = (maxval(img) > 255) ? 65535 : 255;
-    writePGM(img, shape(img), mval, binary, filename);
+    writePGM(img, shp, mval, binary, filename);
 }
-
 
 /*
  * Write an image to file in the binary PGM format
  * and calculate a suitable 'mval'.
  */
-inline void writePGM(int[.,.] img, string filename)
+inline void writePGM(int[2:shp] img, string filename)
 {
     writePGM(img, true, filename);
 }
-
-
