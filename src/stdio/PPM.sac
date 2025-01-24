@@ -1,6 +1,6 @@
 module PPM;
 
-use Color8: { color };
+use Color8: { color, dim, shape };
 use File: { File, fopen, fclose };
 use ScalarArith: { == };
 use String: { string };
