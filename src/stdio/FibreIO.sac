@@ -120,19 +120,19 @@ external stringArray FibreScanStringArrayStr(string stream);
  *
  ******************************************************************************/
 
-external void FibrePrint(File &stream, int d, int[d] shp, int[d:shp] arr);
+external void FibrePrint(File &stream, int d, int[.] shp, int[*] arr);
     #pragma linkname "FibrePrintIntArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint(File &stream, int d, int[d] shp, float[d:shp] arr);
+external void FibrePrint(File &stream, int d, int[.] shp, float[*] arr);
     #pragma linkname "FibrePrintFloatArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint(File &stream, int d, int[d] shp, double[d:shp] arr);
+external void FibrePrint(File &stream, int d, int[.] shp, double[*] arr);
     #pragma linkname "FibrePrintDoubleArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void FibrePrint(File &stream, int d, int[d] shp, stringArray arr);
+external void FibrePrint(File &stream, int d, int[.] shp, stringArray arr);
     #pragma linkname "FibrePrintStringArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -142,23 +142,20 @@ external void FibrePrint(File &stream, int d, int[d] shp, stringArray arr);
  *
  ******************************************************************************/
 
-external void
-FibrePrint(TermFile &stream, int d, int[d] shp, int[d:shp] arr);
+external void FibrePrint(TermFile &stream, int d, int[.] shp, int[*] arr);
     #pragma linkname "FibrePrintIntArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
 external void
-FibrePrint(TermFile &stream, int d, int[d] shp, float[d:shp] arr);
+FibrePrint(TermFile &stream, int d, int[.] shp, float[*] arr);
     #pragma linkname "FibrePrintFloatArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void
-FibrePrint(TermFile &stream, int d, int[d] shp, double[d:shp] arr);
+external void FibrePrint(TermFile &stream, int d, int[.] shp, double[*] arr);
     #pragma linkname "FibrePrintDoubleArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
-external void
-FibrePrint(TermFile &stream, int d, int[d] shp, stringArray arr);
+external void FibrePrint(TermFile &stream, int d, int[.] shp, stringArray arr);
     #pragma linkname "FibrePrintStringArray"
     #pragma linkobj "src/FibreIO/FibrePrint.o"
 
@@ -166,7 +163,7 @@ FibrePrint(TermFile &stream, int d, int[d] shp, stringArray arr);
 
 int[*] FibreScanIntArray()
 {
-  return FibreScanIntArray(stdin);
+    return FibreScanIntArray(stdin);
 }
 
 float[*] FibreScanFloatArray()

@@ -94,22 +94,21 @@ external int O_TRUNC();
  *
  ******************************************************************************/
 
-external double[d:shp]
-binfReadDoubleArray(BinFile &binstream, int d, int[.] shp);
+external double[*] binfReadDoubleArray(BinFile &stream, int d, int[.] shp);
     #pragma refcounting [0]
     #pragma linkname "SACbinfReadDoubleArray"
     #pragma linksign[1,2,3,4]
     #pragma linkobj "src/BinFile/binfReadDblArr.o"
     /*
      * Reads an array of dimension d and shape shp of doubles from
-     * file binstream. Caution: This function does not check whether
+     * file stream. Caution: This function does not check whether
      * it reads across the eof position.
      */
 
-external void
-binfWriteDoubleArray(BinFile &binstream, int d, int[d] shp, double[d:shp] arr);
+external void binfWriteDoubleArray(BinFile &stream, int d, int[.] shp,
+                                   double[*] arr);
     #pragma linkname "SACbinfWriteDoubleArray"
     #pragma linkobj "src/BinFile/binfWriteDblArr.o"
     /*
-     * Writes the array arr of dimension d and shape shp to file binstream.
+     * Writes the array arr of dimension d and shape shp to file stream.
      */
