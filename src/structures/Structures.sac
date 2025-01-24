@@ -1,20 +1,17 @@
 module Structures;
 
-import Array        : all;
-import Char         : all;
-import Bits         : all;
-import String       : all;
+import Array: all;
+import Bits: all;
+import Char: all;
+import String: all;
 #ifdef EXT_STDLIB
-import Complex      : all;
-import Quaternion   : all;
+import Complex: all;
+import Quaternion: all;
 #ifndef SAC_BACKEND_MUTC
-import List         : all;
-import Color8       : all;
-import Grey         : all;
+import Color8: all;
+import Grey: all;
+import List: all;
 #endif /* SAC_BACKEND_MUTC */
-#endif
+#endif /* EXT_STDLIB */
 
 export all;
-
-
-
