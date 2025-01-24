@@ -17,7 +17,7 @@ fun( bool)                \
 fun( char)
 
 #define SHOW( a) \
-void indentedShow( a[d:shp] arr) | (d >= 1)                                      \
+void indentedShow( a[d:shp] arr)                                                 \
 {                                                                                \
   cshape = to_string( format( shp));                                             \
   printf( "reshape( [ %s ] , [\n", cshape);                                      \
@@ -87,7 +87,7 @@ void PrintFunLeave( string modName, int line, string funName)
   PrintSeparator( "<  ");
   decIndent();
   decIndent( offset, strlen( funName) +2);
-} 
+}
 
 void PrintArgsDone( string modName, int line, string funName)
 {
