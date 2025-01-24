@@ -45,10 +45,10 @@ BUILT_IN(TAKE)
 
 /******************************************************************************
  *
- * @fn <a>[n:sv,i:ishp] take_apl(int[n] sv, typ[n:ohsp,i:ishp] A)
+ * @fn <a>[o:sv,i:ishp] take_apl(int[o] sv, <a>[o:oshp,i:ishp] A)
  *
- * @brief Takes a number of elements from the array in APL style
- *        , given a shape vector.
+ * @brief Takes a number of elements from the array in APL style,
+ *        given a shape vector.
  *
  * @remark take_apl supports overtake
  *         E.g., take([5], [2, 3]) =
@@ -57,7 +57,7 @@ BUILT_IN(TAKE)
  * @remark take_apl supports negative sv, taking the last elements
  *         E.g., take([-1], [2, 3]) =
  *           [3]
- *             , take([-5], [2, 3]) =
+ *         E.g., take([-5], [2, 3]) =
  *           [0, 0, 0, 2, 3]
  *
  * @remark take_apl supports lower-dimensional sv, padding the missing elements
@@ -103,8 +103,8 @@ BUILT_IN(TAKE_APL)
  *
  * @fn <a>[o:shp_res,i:ishp] drop(int[o] sv, <a>[o:oshp,i:ishp] A)
  *
- * @brief Drops a number of elements from the array in APL style
- *        , given a shape vector.
+ * @brief Drops a number of elements from the array in APL style,
+ *        given a shape vector.
  *
  * @remark drop does NOT support overdrop
  *         E.g., drop([5], [2, 3]) throws an error.
@@ -136,10 +136,10 @@ BUILT_IN(DROP)
 
 /******************************************************************************
  *
- * @fn <a>[n:shp_res,i:ishp] drop_apl(int[n] sv, <a>[n:oshp,i:ishp] A)
+ * @fn <a>[o:shp_res,i:ishp] drop_apl(int[o] sv, <a>[o:oshp,i:ishp] A)
  *
- * @brief Drops a number of elements from the array in APL style
- *        , given a shape vector.
+ * @brief Drops a number of elements from the array in APL style,
+ *        given a shape vector.
  *
  * @remark drop_apl supports overdrop
  *         E.g., drop([5], [2, 3]) =
@@ -158,7 +158,7 @@ BUILT_IN(DROP)
 
 #define DROP_APL(typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[n:shp_res,i:ishp] drop_apl(int[n] sv, typ[n:oshp,i:ishp] A)                \
+typ[o:shp_res,i:ishp] drop_apl(int[o] sv, typ[o:oshp,i:ishp] A)                \
 {                                                                              \
     /* Calculate shape of result array. */                                     \
     shp_res = _sub_VxV_(oshp, _abs_V_(sv));                                    \
@@ -173,7 +173,7 @@ BUILT_IN(DROP_APL)
 
 /******************************************************************************
  *
- * @fn <a>[n:shp] tile(int[n] shp, int[n] idx, <a>[n:shp_a] A)
+ * @fn <a>[d:shp] tile(int[d] shp, int[d] idx, <a>[d:shp_a] A)
  *
  * @brief Takes a tile from the array, of shape shp, starting at index idx.
  *
@@ -184,7 +184,7 @@ BUILT_IN(DROP_APL)
 
 #define TILE(typ, postfix, zval, oval)                                         \
 inline                                                                         \
-typ[n:shp] tile(int[n] shp, int[n] idx, typ[n:shp_a] A)                        \
+typ[d:shp] tile(int[d] shp, int[d] idx, typ[d:shp_a] A)                        \
     | _all_V_(_ge_VxS_(shp, 0))                                                \
     , _all_V_(_ge_VxS_(idx, 0))                                                \
     , _all_V_(_le_VxV_(_add_VxV_(shp, idx), shp_a))                            \
@@ -196,7 +196,7 @@ BUILT_IN(TILE)
 
 /******************************************************************************
  *
- * @fn <a>[n:shp] tile_apl(int[n] shp, int[n] idx, <a>[n:shp_a] A)
+ * @fn <a>[d:shp] tile_apl(int[d] shp, int[d] idx, <a>[d:shp_a] A)
  *
  * @brief Takes a tile from the array, of shape shp, starting at index idx.
  *
@@ -208,7 +208,7 @@ BUILT_IN(TILE)
 
 #define TILE_APL(typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[n:shp] tile_apl(int[n] shp, int[n] idx, typ[n:shp_a] A)                    \
+typ[d:shp] tile_apl(int[d] shp, int[d] idx, typ[d:shp_a] A)                    \
     | _all_V_(_ge_VxS_(shp, 0))                                                \
 {                                                                              \
     /* Start shows how many elements we prepend before the array. */           \
@@ -365,7 +365,7 @@ BUILT_IN(REVERSEAXIS)
 
 /******************************************************************************
  *
- * @fn <a>[d:shpT] transpose(<a>[d:shp] A)
+ * @fn <a>[d:shp_t] transpose(<a>[d:shp] A)
  *
  * @brief transposes the given array.
  *
@@ -451,18 +451,18 @@ typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
            | iv < oshp };                                                      \
 }
 
-#define ROTATE_V(typ, postfix, zval, oval)                                    \
+#define ROTATE_V(typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)              \
+typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
 {                                                                              \
   return { iv ->                                                               \
-      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(iv[i], counts[i]), oshp[i])         \
+      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(iv[i], counts[i]), oshp[i])            \
          | [i] < [n] } ]                                                       \
     | iv < oshp };                                                             \
 }
 
-#define ROTATE(typ, postfix, zval, oval)                                      \
-ROTATE_S(typ, postfix, zval, oval)                                            \
+#define ROTATE(typ, postfix, zval, oval)                                       \
+ROTATE_S(typ, postfix, zval, oval)                                             \
 ROTATE_V(typ, postfix, zval, oval)
 
 BUILT_IN(ROTATE)
@@ -529,23 +529,23 @@ typ name(typ[d:shp] A)                                                         \
     } : fold(fun, neutral);                                                    \
 }
 
-#define NUM_REDUCE(typ, postfix, zval, oval)                                  \
-REDUCE(sum, typ, ScalarArith::+, zval)                                        \
-REDUCE(prod, typ, ScalarArith::*, oval)                                       \
-REDUCE(maxval, typ, ScalarArith::max, min##typ())                             \
+#define NUM_REDUCE(typ, postfix, zval, oval)                                   \
+REDUCE(sum, typ, ScalarArith::+, zval)                                         \
+REDUCE(prod, typ, ScalarArith::*, oval)                                        \
+REDUCE(maxval, typ, ScalarArith::max, min##typ())                              \
 REDUCE(minval, typ, ScalarArith::min, max##typ())
 
 NUM(NUM_REDUCE)
 
 #define BOOL_REDUCE                                                            \
-REDUCE(all, bool, ScalarArith::&, true)                                       \
+REDUCE(all, bool, ScalarArith::&, true)                                        \
 REDUCE(any, bool, ScalarArith::|, false)
 
 BOOL_REDUCE
 
 /******************************************************************************
  *
- * @fn bool match(<a>[n:shpA] A, <a>[m:shpB] B)
+ * @fn bool match(<a>[n:shp_a] A, <a>[m:shp_b] B)
  *
  * @brief whether the given arrays are equal.
  *
@@ -553,12 +553,12 @@ BOOL_REDUCE
 
 #define MATCH_AxA(typ, postfix, zval, oval)                                    \
 inline                                                                         \
-bool match(typ[n:shpA] A, typ[m:shpB] B)                                       \
+bool match(typ[n:shp_a] A, typ[m:shp_b] B)                                     \
 {                                                                              \
     return _eq_SxS_(n, m)                                                      \
-        && _all_V_(_eq_VxV_(shpA, shpB))                                       \
+        && _all_V_(_eq_VxV_(shp_a, shp_b))                                     \
         && with {                                                              \
-            (_mul_SxV_(0, shpA) <= iv < shpA)                                  \
+            (_mul_SxV_(0, shp_a) <= iv < shp_a)                                \
                 : _eq_SxS_(_sel_VxA_(iv, A), _sel_VxA_(iv, B));                \
         } : foldfix(ScalarArith::&, true, false);                              \
 }
