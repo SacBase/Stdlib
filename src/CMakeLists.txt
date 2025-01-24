@@ -81,9 +81,14 @@ ADD_CUSTOM_COMMAND (
     COMMENT "Running ${BISON_EXECUTABLE} on `${BIS_SRC}'")
 
 SET (SAC2C_CC_FLAGS "")
+# On some systems we get an error `argument 2 value -3 is negative` in an
+# application of `__fgets_alias` originating from `fscanl.c/term_fscanl`.
+CHECK_SAC2C_CC_FLAG("-Wno-stringop-overflow" SAC2C_CC_FLAGS)
+# Although the following two flags should be set in sac2c, for now we ignore
+# these two errors here in StdLib. Once the new package is available we
+# can remove the following two lines.
 CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-tautological-compare" SAC2C_CC_FLAGS)
-CHECK_SAC2C_CC_FLAG("-Wno-stringop-overflow" SAC2C_CC_FLAGS)
 
 #flags needed for OSX (clang) as the generated code generates warning otherwise:
 SET (FLEX_SAC2C_CC_FLAGS "")
