@@ -40,14 +40,14 @@ int[.] shape(complex[*] arr)
 
 /******************************************************************************
  *
- * @fn complex[d:shp] sel(int[vlen] idx, complex[vlen:vshp,d:shp] arr)
+ * @fn complex[i:ishp] sel(int[o] idx, complex[o:oshp,i:ishp] arr)
  *
  * @brief Generalizes selections for scalar indices.
  *
  ******************************************************************************/
 inline
-complex[d:shp] sel(int[vlen] idx, complex[vlen:vshp,d:shp] arr)
-    | all(0 <= idx), all(idx < vshp)
+complex[i:ishp] sel(int[o] idx, complex[o:oshp,i:ishp] arr)
+    | all(0 <= idx), all(idx < oshp)
 {
     v = ((double[+])arr)[idx];
     return (complex[*])v;
@@ -57,7 +57,7 @@ inline
 complex[d:shp] sel(int idx, complex[n,d:shp] arr)
     | (0 <= idx), (idx < n)
 {
-    return sel([idx], arr);
+    return arr[[idx]];
 }
 
 /******************************************************************************
@@ -70,7 +70,7 @@ complex[d:shp] sel(int idx, complex[n,d:shp] arr)
  ******************************************************************************/
 inline
 complex[d:shp] reshape(int[d] shp, complex[o:oshp] arr)
-  | all(0 <= shp), prod(shp) == prod(oshp)
+    | all(0 <= shp), prod(shp) == prod(oshp)
 {
     v = reshape(shp ++ [2], (double[*])arr);
     return (complex[*])v;
@@ -91,16 +91,16 @@ complex[n:shp,m:vshp] genarray(int[n] shp, complex[m:vshp] val)
 
 /******************************************************************************
  *
- * @fn complex[o:outer,i:inner] modarray(complex[o:outer,i:inner] arr,
- *                                       int[o] idx, complex[i:inner] val)
+ * @fn complex[o:oshp,i:ishp] modarray(complex[o:oshp,i:ishp] arr,
+ *                                     int[o] idx, complex[i:ishp] val)
  *
  * @brief Modifies the element of array at position idx.
  *
  ******************************************************************************/
 inline
-complex[o:outer,i:inner] modarray(complex[o:outer,i:inner] arr,
-                                  int[o] idx, complex[i:inner] val)
-    | all(0 <= idx), all(idx < outer)
+complex[o:oshp,i:ishp] modarray(complex[o:oshp,i:ishp] arr,
+                                int[o] idx, complex[i:ishp] val)
+    | all(0 <= idx), all(idx < oshp)
 {
     return with {
         (idx <= iv <= idx) : val;
@@ -116,8 +116,7 @@ complex[o:outer,i:inner] modarray(complex[o:outer,i:inner] arr,
  *
  ******************************************************************************/
 inline
-complex[n,d:shp] modarray(complex[n,d:shp] arr,
-                          int idx, complex[d:shp] val)
+complex[n,d:shp] modarray(complex[n,d:shp] arr, int idx, complex[d:shp] val)
     | (0 <= idx), (idx < n)
 {
     return modarray(arr, [idx], val);

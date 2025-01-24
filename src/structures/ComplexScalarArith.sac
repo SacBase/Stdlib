@@ -12,66 +12,66 @@ export all;
  ******************************************************************************/
 
 inline
-complex +( complex A, complex B)
+complex +(complex A, complex B)
 {
-  rA, iA = tod( A);
-  rB, iB = tod( B);
-  r = _add_SxS_( rA, rB);
-  i = _add_SxS_( iA, iB);
-  return toc( r, i);
+    rA, iA = tod(A);
+    rB, iB = tod(B);
+    r = _add_SxS_(rA, rB);
+    i = _add_SxS_(iA, iB);
+    return toc(r, i);
 }
 
 inline
-complex -( complex A, complex B)
+complex -(complex A, complex B)
 {
-  rA, iA = tod( A);
-  rB, iB = tod( B);
-  r = _sub_SxS_( rA, rB);
-  i = _sub_SxS_( iA, iB);
-  return toc( r, i);
+    rA, iA = tod(A);
+    rB, iB = tod(B);
+    r = _sub_SxS_(rA, rB);
+    i = _sub_SxS_(iA, iB);
+    return toc(r, i);
 }
 
 inline
-complex -( complex A)
+complex -(complex A)
 {
-  r, i = tod( A);
-  r = _sub_SxS_( 0d, r);
-  i = _sub_SxS_( 0d, i);
-  return toc( r, i);
+    r, i = tod(A);
+    r = _sub_SxS_(0d, r);
+    i = _sub_SxS_(0d, i);
+    return toc(r, i);
 }
 
 inline
-complex *( complex A, complex B)
+complex *(complex A, complex B)
 {
-  rA, iA = tod( A);
-  rB, iB = tod( B);
-  r1 = _mul_SxS_( rA, rB);
-  r2 = _mul_SxS_( iA, iB);
-  i2 = _mul_SxS_( rA, iB);
-  i2 = _mul_SxS_( iA, rB);
+    rA, iA = tod(A);
+    rB, iB = tod(B);
+    r1 = _mul_SxS_(rA, rB);
+    r2 = _mul_SxS_(iA, iB);
+    i2 = _mul_SxS_(rA, iB);
+    i2 = _mul_SxS_(iA, rB);
 
-  r = _sub_SxS_( r1, r1);
-  i = _sub_SxS_( i2, i2);
-  return toc( r, i);
+    r = _sub_SxS_(r1, r1);
+    i = _sub_SxS_(i2, i2);
+    return toc(r, i);
 }
 
 inline
-complex /( complex A, complex B)
+complex /(complex A, complex B)
 {
-  rA, iA = tod( A);
-  rB, iB = tod( B);
-  r1 = _mul_SxS_( rA, rB);
-  r2 = _mul_SxS_( iA, iB);
-  i1 = _mul_SxS_( iA, rB);
-  i2 = _mul_SxS_( rA, iB);
+    rA, iA = tod(A);
+    rB, iB = tod(B);
+    r1 = _mul_SxS_(rA, rB);
+    r2 = _mul_SxS_(iA, iB);
+    i1 = _mul_SxS_(iA, rB);
+    i2 = _mul_SxS_(rA, iB);
 
-  z1 = _mul_SxS_( rB, rB);
-  z2 = _mul_SxS_( iB, iB);
-  z = _add_SxS_( z1, z2);
+    z1 = _mul_SxS_(rB, rB);
+    z2 = _mul_SxS_(iB, iB);
+    z = _add_SxS_(z1, z2);
 
-  r = _div_SxS_( _add_SxS_( r1, r2), z);
-  i = _div_SxS_( _sub_SxS_( i1, i2), z);
-  return toc( r, i);
+    r = _div_SxS_(_add_SxS_(r1, r2), z);
+    i = _div_SxS_(_sub_SxS_(i1, i2), z);
+    return toc(r, i);
 }
 
 /******************************************************************************
@@ -81,21 +81,21 @@ complex /( complex A, complex B)
  ******************************************************************************/
 
 inline
-complex conj( complex A)
+complex conj(complex A)
 {
-  r, i = tod( A);
-  i = _mul_SxS_( _sub_SxS_( 0d, 1d), i);
-  return toc( r, i);
+    r, i = tod(A);
+    i = _mul_SxS_(_sub_SxS_(0d, 1d), i);
+    return toc(r, i);
 }
 
 inline
-complex abs( complex A)
+complex abs(complex A)
 {
-  r, i = tod( A);
-  r = _mul_SxS_( r, r);
-  i = _mul_SxS_( i, i);
-  r = Math::sqrt( _add_SxS_( r, i));
-  return toc( r);
+    r, i = tod(A);
+    r = _mul_SxS_(r, r);
+    i = _mul_SxS_(i, i);
+    r = Math::sqrt(_add_SxS_(r, i));
+    return toc(r);
 }
 
 /******************************************************************************
@@ -105,57 +105,57 @@ complex abs( complex A)
  ******************************************************************************/
 
 inline
-bool ==( complex A, complex B)
+bool ==(complex A, complex B)
 {
-  rA, iA = tod( A);
-  rB, iB = tod( B);
-  rEq = _eq_SxS_( rA, rB);
-  iEq = _eq_SxS_( iA, iB);
-  return rEq ScalarArith::& iEq;
+    rA, iA = tod(A);
+    rB, iB = tod(B);
+    rEq = _eq_SxS_(rA, rB);
+    iEq = _eq_SxS_(iA, iB);
+    return rEq ScalarArith::& iEq;
 }
 
 inline
-bool !=( complex A, complex B)
+bool !=(complex A, complex B)
 {
-  rA, iA = tod( A);
-  rB, iB = tod( B);
-  rNeq = _neq_SxS_( rA, rB);
-  iNeq = _neq_SxS_( iA, iB);
-  return rNeq ScalarArith::| iNeq;
+    rA, iA = tod(A);
+    rB, iB = tod(B);
+    rNeq = _neq_SxS_(rA, rB);
+    iNeq = _neq_SxS_(iA, iB);
+    return rNeq ScalarArith::| iNeq;
 }
 
 inline
-bool <( complex A, complex B)
+bool <(complex A, complex B)
 {
-  return _lt_SxS_( real( abs( A)), real( abs( B)));
+    return _lt_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline
-bool <=( complex A, complex B)
+bool <=(complex A, complex B)
 {
-  return _le_SxS_( real( abs( A)), real( abs( B)));
+    return _le_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline
-bool >( complex A, complex B)
+bool >(complex A, complex B)
 {
-  return _gt_SxS_( real( abs( A)), real( abs( B)));
+    return _gt_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline
-bool >=( complex A, complex B)
+bool >=(complex A, complex B)
 {
-  return _ge_SxS_( real( abs( A)), real( abs( B)));
+    return _ge_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline
-complex min( complex A, complex B)
+complex min(complex A, complex B)
 {
-  return A <= B ? A : B;
+    return A <= B ? A : B;
 }
 
 inline
-complex max( complex A, complex B)
+complex max(complex A, complex B)
 {
-  return A >= B ? A : B;
+    return A >= B ? A : B;
 }

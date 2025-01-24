@@ -15,26 +15,24 @@ export all;
  *
  ******************************************************************************/
 
-complex
-sum( complex[d:shp] A)
+inline
+complex sum(complex[d:shp] arr)
 {
-   zval = ComplexBasics::toc( 0d, 0d);
-	res = with {
-            (_mul_SxV_( 0, shp) <= iv < shp) : A[ iv];
-         } : fold( ComplexArrayArith::+, zval);
-   return res;
+	return with {
+      (_mul_SxV_(0, shp) <= iv < shp) : arr[iv];
+   } : fold(ComplexArrayArith::+, ComplexBasics::toc(0d, 0d));
 }
 
-TAKE( complex)
+TAKE(complex)
 
-DROP( complex)
+DROP(complex)
 
-TILE( complex)
+TILE(complex)
 
-CAT( complex)
+CAT(complex)
 
-REVERSE( complex)
+REVERSE(complex)
 
-SHIFT( complex)
+SHIFT(complex)
 
-ROTATE( complex)
+ROTATE(complex)

@@ -15,15 +15,15 @@ typedef double[2] complex;
  ******************************************************************************/
 
 inline
-double real( complex A)
+double real(complex arr)
 {
-  return ((double[2])A)[0];
+    return ((double[2])arr)[0];
 }
 
 inline
-double imag( complex A)
+double imag(complex arr)
 {
-  return ((double[2])A)[1];
+    return ((double[2])arr)[1];
 }
 
 /******************************************************************************
@@ -33,45 +33,45 @@ double imag( complex A)
  ******************************************************************************/
 
 inline
-complex toc( int r, int i)
+complex toc(int r, int i)
 {
-  return (complex)[ScalarArith::tod( r), ScalarArith::tod( i)];
+    return (complex)[ScalarArith::tod(r), ScalarArith::tod(i)];
 }
 
 inline
-complex toc( float r, float i)
+complex toc(float r, float i)
 {
-  return (complex)[ScalarArith::tod( r), ScalarArith::tod( i)];
+    return (complex)[ScalarArith::tod(r), ScalarArith::tod(i)];
 }
 
 inline
-complex toc( double r, double i)
+complex toc(double r, double i)
 {
-  return (complex)[r, i];
+    return (complex)[r, i];
 }
 
 inline
-complex toc( double[2] A)
+complex toc(double[2] arr)
 {
-  return (complex)A;
+    return (complex)arr;
 }
 
 inline
-complex toc( int r)
+complex toc(int r)
 {
-  return (complex)[ScalarArith::tod( r), 0d];
+    return (complex)[ScalarArith::tod(r), 0d];
 }
 
 inline
-complex toc( float r)
+complex toc(float r)
 {
-  return (complex)[ScalarArith::tod( r), 0d];
+    return (complex)[ScalarArith::tod(r), 0d];
 }
 
 inline
-complex toc( double r)
+complex toc(double r)
 {
-  return (complex)[r, 0d];
+    return (complex)[r, 0d];
 }
 
 /******************************************************************************
@@ -81,68 +81,68 @@ complex toc( double r)
  ******************************************************************************/
 
 inline
-int, int toi( complex A)
+int, int toi(complex arr)
 {
-  r = ScalarArith::toi( real( A));
-  i = ScalarArith::toi( imag( A));
-  return (r, i);
+    r = ScalarArith::toi(real(arr));
+    i = ScalarArith::toi(imag(arr));
+    return (r, i);
 }
 
 inline
-float, float tof( complex A)
+float, float tof(complex arr)
 {
-  r = ScalarArith::tof( real( A));
-  i = ScalarArith::tof( imag( A));
-  return (r, i);
+    r = ScalarArith::tof(real(arr));
+    i = ScalarArith::tof(imag(arr));
+    return (r, i);
 }
 
 inline
-double, double tod( complex A)
+double, double tod(complex arr)
 {
-  r = real( A);
-  i = imag( A);
-  return (r, i);
+    r = real(arr);
+    i = imag(arr);
+    return (r, i);
 }
 
 inline
-double[2] todv( complex A)
+double[2] todv(complex arr)
 {
-  return [real( A), imag( A)];
+    return [real(arr), imag(arr)];
 }
 
 inline
-String::string tos( complex A)
+String::string tos(complex arr)
 {
-  r, i = tod( A);
-  res = String::sprintf( "%f + %fi\n", r, i);
-  return res;
+    r, i = tod(arr);
+    res = String::sprintf("%f + %fi\n", r, i);
+    return res;
 }
 
 inline
-int, int ptoi( complex A)
+int, int ptoi(complex arr)
 {
-  x, y = ptof( A);
-  r = ScalarArith::toi( x);
-  i = ScalarArith::toi( y);
-  return (r, i);
+    x, y = ptof(arr);
+    r = ScalarArith::toi(x);
+    i = ScalarArith::toi(y);
+    return (r, i);
 }
 
 inline
-float, float ptof( complex A)
+float, float ptof(complex arr)
 {
-  x, y = tof( A);
-  r = Math::sqrt( ScalarArith::tof( norm( A)));
-  i = Math::atan2( x, y);
-  return (r, i);
+    x, y = tof(arr);
+    r = Math::sqrt(ScalarArith::tof(norm(arr)));
+    i = Math::atan2(x, y);
+    return (r, i);
 }
 
 inline
-double, double ptod( complex A)
+double, double ptod(complex arr)
 {
-  x, y = tod( A);
-  r = Math::sqrt( norm( A));
-  i = Math::atan2( x, y);
-  return (r, i);
+    x, y = tod(arr);
+    r = Math::sqrt(norm(arr));
+    i = Math::atan2(x, y);
+    return (r, i);
 }
 
 /******************************************************************************
@@ -152,41 +152,41 @@ double, double ptod( complex A)
  ******************************************************************************/
 
 inline
-complex polar( double mag, double angle)
+complex polar(double mag, double angle)
 {
-  r = _mul_SxS_( mag, Math::cos( angle));
-  i = _mul_SxS_( mag, Math::sin( angle));
-  return toc( r, i);
+    r = _mul_SxS_(mag, Math::cos(angle));
+    i = _mul_SxS_(mag, Math::sin(angle));
+    return toc(r, i);
 }
 
 inline
-complex polar( double mag)
+complex polar(double mag)
 {
-  return toc( mag);
+    return toc(mag);
 }
 
 inline
-double normSq( complex A)
+double normSq(complex arr)
 {
-  r, i = tod( A);
-  x = _mul_SxS_( r, r);
-  y = _mul_SxS_( i, i);
-  res = _add_SxS_( x, y);
-  return res;
+    r, i = tod(arr);
+    x = _mul_SxS_(r, r);
+    y = _mul_SxS_(i, i);
+    res = _add_SxS_(x, y);
+    return res;
 }
 
 inline
-double norm( complex A)
+double norm(complex arr)
 {
-  return Math::sqrt( normSq( A));
+    return Math::sqrt(normSq(arr));
 }
 
 inline
-double arg( complex A)
+double arg(complex arr)
 {
-  r, i = tod( A);
-  res = Math::atan2( r, i);
-  return res;
+    r, i = tod(arr);
+    res = Math::atan2(r, i);
+    return res;
 }
 
 /******************************************************************************
@@ -198,31 +198,31 @@ double arg( complex A)
 inline
 complex i()
 {
-  return toc( 0d, 1d);
+    return toc(0d, 1d);
 }
 
 inline
 complex zero()
 {
-  return toc( 0d, 0d);
+    return toc(0d, 0d);
 }
 
 inline
-complex zero( complex[*] A)
+complex zero(complex[*] arr)
 {
-  // Provided for compatibility with UDT macro mechanism
-  return toc( 0d, 0d);
+    // Provided for compatibility with UDT macro mechanism
+    return toc(0d, 0d);
 }
 
 inline
 complex one()
 {
-  return toc( 1d, 0d);
+    return toc(1d, 0d);
 }
 
 inline
-complex one( complex[*] A)
+complex one(complex[*] arr)
 {
-  // Provided for compatibility with UDT macro mechanism
-  return toc( 1d, 0d);
+    // Provided for compatibility with UDT macro mechanism
+    return toc(1d, 0d);
 }
