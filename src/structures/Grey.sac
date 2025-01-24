@@ -1,67 +1,82 @@
 module Grey;
 
-use Array: {min, max} ;
-import ScalarArith: {tod, toi} ;
+#define OVERLOAD dim,shape,sel,reshape,tod,toi,+,-
+use Array: all except { OVERLOAD };
+import Array: { OVERLOAD };
 
 export all;
 
 typedef int grey;
 
-inline grey newGrey( int g)
-{
-  g = max(min(g, 255), 0);
+/******************************************************************************
+ *
+ * Array properties.
+ *
+ * @note `dim` and `shape` may not use type patterns, as type patterns rely
+ * on the existence of those functions for typedefs.
+ *
+ ******************************************************************************/
 
-  return( (grey)g);
+inline int dim(grey[*] arr)
+{
+    return dim((int[*])arr);
 }
 
-inline grey newGrey( double g)
+inline int[.] shape(grey[*] arr)
 {
-  i = toi( g);
-  i = max(min(i, 255), 0);
-
-  return( (grey)i);
+    return shape((int[*])arr);
 }
 
-inline int[*] toi( grey g)
+inline grey[i:ishp] sel(int[o] idx, grey[o:oshp,i:ishp] arr)
+    | all(0 <= idx), all(idx < oshp)
 {
-  return( (int[*]) g);
+    return (grey[*])((int[*])arr)[idx];
 }
 
-inline double[*] tod( grey g)
+inline grey[d:shp] reshape(int[d] shp, grey[_:shp_a] arr)
+    | prod(shp) == prod(shp_a)
 {
-  return( tod( (int[*]) g));
+    return (grey[*])_reshape_VxA_(shp, (int[*])arr);
 }
 
-inline grey[*] sel( int[.] idx, grey[*] a)
+/******************************************************************************
+ *
+ * Type conversions.
+ *
+ ******************************************************************************/
+
+inline grey tog(int g)
 {
-  res = Array::sel( idx, ((int[*])a));
-  return( (grey[*])res);
+    return (grey)max(min(g, 255), 0);
 }
 
-inline int dim( grey[*] a)
+inline grey tog(double g)
 {
-  return( Array::dim((int[*])a) );
+    return (grey)max(min(toi(g), 255), 0);
 }
 
-inline int[.] shape( grey[*] a)
+inline int[*] toi(grey g)
 {
-  return( Array::shape((int[*])a) );
+    return (int[*])g;
 }
 
-inline grey[*] reshape( int[.] shp, grey[*] a)
+inline double[*] tod(grey g)
 {
-  return(  (grey[*])_reshape_VxA_( shp, (int[*])a) );
+    return tod((int[*]) g);
 }
 
-inline grey + (grey g1, grey g2)
+/******************************************************************************
+ *
+ * Binary operations.
+ *
+ ******************************************************************************/
+
+inline grey +(grey g1, grey g2)
 {
-  ret = newGrey( toi( g1) ScalarArith::+ toi( g2));
-  return( ret);
+    return tog(toi(g1) + toi(g2));
 }
 
-inline grey - (grey g1, grey g2)
+inline grey -(grey g1, grey g2)
 {
-  ret = newGrey( toi( g1) ScalarArith::- toi( g2));
-  return( ret);
+    return tog(toi(g1) - toi(g2));
 }
-
