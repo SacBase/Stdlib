@@ -17,7 +17,7 @@ fun( bool)                \
 fun( char)
 
 #define SHOW( a) \
-void indentedShow( a[d:shp] arr)                                                 \
+void indentedShow( a[d:shp] arr) | (d >= 1)                                      \
 {                                                                                \
   cshape = to_string( format( shp));                                             \
   printf( "reshape( [ %s ] , [\n", cshape);                                      \
