@@ -87,7 +87,7 @@ void PrintFunLeave( string modName, int line, string funName)
   PrintSeparator( "<  ");
   decIndent();
   decIndent( offset, strlen( funName) +2);
-} 
+}
 
 void PrintArgsDone( string modName, int line, string funName)
 {

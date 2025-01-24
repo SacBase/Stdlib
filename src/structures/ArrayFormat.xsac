@@ -1,569 +1,634 @@
 module ArrayFormat;
 
 use Array: all;
-use MathArray: {log10};
-use String: {tochar, sprintf};
+use String: { tochar, sprintf };
 
-export {format};
+export { format };
 
 #include "Templates.mac"
 
-
-/********************************************************************************
+/******************************************************************************
  *
- * APL Array formatting functions
- *  These functions generate character representations of SAC arrays for APL-based code.
- *  The functions come in several classes:
- *  	Default formatting: Array elements are formatted to the minimum width
- * 	that does not lose precision.
- *      Defined formatting to specified precision, p: Array elements are
- *      formatted to p significant digits.
- *  	Defined formatting: Array elements are formatted to specified
- *	precision and width. If a result element does not fit within width,
- *	that element is replaced by '*'.
+ * APL Array formatting functions.
  *
- ********************************************************************************/
+ * These functions generate character representations of SAC arrays for
+ * APL-based code. The functions come in several classes:
+ *   - Default formatting: array elements are formatted to the minimum width
+ *     that does not lose precision.
+ *   - Defined formatting to specified precision, p: array elements are
+ *     formatted to p significant digits.
+ *   - Defined formatting: array elements are formatted to specified
+ *     precision and width. If a result element does not fit within width,
+ *     that element is replaced by '*'.
+ *
+ ******************************************************************************/
 
-
-/********************************************************************************
+/******************************************************************************
  *
- * Utility functions for Array formatting functions
+ * @fn char[d:shp] format(char[d:shp] arr)
  *
- ********************************************************************************/
-
+ * @brief Default format for any character array.
+ *
+ ******************************************************************************/
 inline
-char[.] formatrow(int[.] wid, int[.] m)
-{ // utility function for formatting a int vector to widths wid
- z = genarray([(sum(wid+1)-1)], ' ');
- // Can't use WL because widths may differ
- sink = 0;
- for(i=0; i < sel([0], shape(m)); i++) {
-	curm = sel([i], m);
-	curw = sel([i], wid);
-        curz = format(curm, [curw,1]);
-	lim  = sel([0], shape(curz));
-        for(src=0; src <lim; src++) {
-		z = modarray(z, src+sink,
-				sel([src], curz));
+char[d:shp] format(char[d:shp] arr)
+{
+    return arr;
+}
+
+/******************************************************************************
+ *
+ * @fn char[1] format(bool arr)
+ *
+ * @brief Default format for boolean scalar.
+ *
+ ******************************************************************************/
+inline
+char[1] format(bool arr)
+{
+    return [arr ? '1' : '0'];
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(bool[d:shp,n] arr)
+ *
+ * Default format for boolean non-scalars.
+ *
+ ******************************************************************************/
+inline
+char[d:shp,m] format(bool[d:shp,n] arr)
+    | m == max(2 * n - 1, 0)
+{
+    res = { iv -> arr[iv] ? ['1', ' '] : ['0', ' '] };
+    res = reshape(shp ++ [2 * n], res);
+    lastcol = genarray([d], 0) ++ [-1];
+    res = drop(lastcol, res);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(bool arr, int[2] w)
+ *
+ * @brief Defined-width and precision format on boolean scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(bool arr, int[2] w)
+{
+    return format(tod(arr), w);
+}
+
+/******************************************************************************
+ *
+ * @fn char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
+ *
+ * @brief Defined-width format on boolean non-scalar.
+ *
+ ******************************************************************************/
+inline
+char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
+    | m == max(2 * n - 1, 0)
+{
+    return format(tod(arr), w);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(int arr)
+ *
+ * @brief Default format on integer scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(int arr)
+{
+    return tochar(sprintf("%d", arr));
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(long arr)
+ *
+ * @brief Default format on long scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(long arr)
+{
+    return tochar(sprintf("%ld", arr));
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(int[d:shp,n] arr)
+ *
+ * @brief Default format on integer non-scalar.
+ *
+ * Refer to UTThorn.dws <thint> for APL model of this.
+ *
+ ******************************************************************************/
+inline
+char[+] format(int[d:shp,n] arr)
+{
+    shpp = prod(shp);
+
+    if (shpp == 0 || n == 0) {
+        res = genarray(shp, ' ');
+    } else {
+        m = reshape([shpp, n], arr);
+
+        // Large negative number may need extra column for minus sign
+        minm = minsl1(m);
+        maxneg = log10(abs(minm));
+        widths = log10(maxsl1(abs(m)));
+        widths += toi(minm < 0) * toi(maxneg >= widths);
+        zcols = sum(widths + 1) - 1;
+
+        res = { [i] -> formatrow(widths, m[i]) | [i] < [shpp] };
+        res = reshape(shp ++ [zcols], res);
+    }
+
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(int arr, int precision)
+ *
+ * @brief Defined-precision format on integer scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(int arr, int precision)
+{
+    return format(tod(arr), precision);
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(int[+] arr, int precision)
+ *
+ * @brief Precision-significant digit format on integer non-scalar.
+ *
+ ******************************************************************************/
+inline
+char[+] format(int[+] arr, int precision)
+{
+    return format(tod(arr), precision);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(int arr, int[2] w)
+ *
+ * @brief Defined-width and precision format on integer scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(int arr, int[2] w)
+{
+    res = tochar(sprintf("%*.*d", w[0], w[1], arr));
+    res = overflowCheck(res, w[0]);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(float arr)
+ *
+ * @brief Default format on float scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(float arr)
+{
+    return format(tod(arr), 15);
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(float[+] arr)
+ *
+ * @brief Default format on float non-scalar.
+ *
+ ******************************************************************************/
+inline
+char[+] format(float[+] arr)
+{
+    return format(tod(arr), 15);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(float arr, int precision)
+ *
+ * @brief Defined-precision format on floating scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(float arr, int precision)
+{
+    return format(tod(arr), precision);
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(float[+] arr, int precision)
+ *
+ * @brief Precision-significant digit format on floating non-scalar.
+ *
+ ******************************************************************************/
+inline
+char[+] format(float[+] arr, int precision)
+{
+    return format(tod(arr), precision);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(float arr, int[2] w)
+ *
+ * @brief Defined-width and precision format on floating scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(float arr, int[2] w)
+{
+    return format(tod(arr), w);
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(float[+] arr, int[2] w)
+ *
+ * @brief Defined-width format on float non-scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[+] format(float[+] arr, int[2] w)
+{
+    return format(tod(arr), w);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(double arr)
+ *
+ * @brief Default format on double scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(double arr)
+{
+    return format(arr, 15);
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(double[+] arr)
+ *
+ * @brief Default format on double non-scalar.
+ *
+ * Refer to UTThorn.dws <threal> for APL model of this.
+ *
+ ******************************************************************************/
+inline
+char[+] format(double[+] arr)
+{
+    return format(arr, 15);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(double arr, int precision)
+ *
+ * @brief Formatting for a double scalar.
+ *
+ ******************************************************************************/
+inline
+char[.] format(double arr, int precision)
+{
+    res = scalarFormatter(arr, precision);
+    res = padWithBlanks(precision + 7, res);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(double[d:shp] arr, int precision)
+ *
+ * @brief Precision-significant digit format on double non-scalar.
+ *
+ * @note Refer to UTThorn.dws <threal> for APL model of this.
+ *
+ ******************************************************************************/
+inline
+char[+] format(double[d:shp,n] arr, int precision)
+{
+    shpp = prod(shp);
+
+    if (shpp == 0 || n == 0) {
+        res = genarray(shp, ' ');
+    } else {
+        ravel = reshape([shpp * n], arr);
+
+        // Format each array element
+        // See scalarFormatter for why we do 'precision + 7'
+        fry = { [i] -> padWithBlanks(precision + 7,
+                                     scalarFormatter(ravel[i], precision)) };
+
+        // Determine width of each result column
+        // First, chars left of decimal point
+        lodp = { [i] -> thCharsTo([' ', '.'], fry[i]) };
+        // Decimal point and # non-blankchars to right of decimal point
+        rodp = { [i] -> thCharsTo([' ', ' '], drop([lodp[i]], fry[i])) };
+
+        lodpmax = maxsl1(reshape([shpp, n], lodp));
+        rodpmax = maxsl1(reshape([shpp, n], rodp));
+        widths = lodpmax + rodpmax;
+        // Room for decimal point and blank
+        zcols = sum(widths + 2) - 1;
+
+        res = { [i] -> alignrow(fry, i, widths, lodp, lodpmax, zcols)
+              | [i] < [shpp] };
+        res = reshape(shp ++ [zcols], res);
+    }
+
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(double arr, int[2] w)
+ *
+ * @brief Formatting for a double scalar.
+ *
+ * @note This is temporary, pending use of the Burger/Dybvig algorithm.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(double arr, int[2] w)
+{
+    res = tochar(sprintf("%*.*g", w[0], w[1], arr));
+    res = overflowCheck(res, w[0]);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(double[d:shp] arr, int[2] w)
+ *
+ * @brief Defined-width format on double non-scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[+] format(double[d:shp] arr, int[2] w)
+{
+    res = { iv -> format(arr[iv], w) | iv < shp };
+    zshp = shape(res);
+    zshp = drop([-2], zshp) ++ [prod(take([-2], zshp))];
+    res = reshape(zshp, res);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * Private helper functions for formatting.
+ *
+ ******************************************************************************/
+
+/******************************************************************************
+ *
+ * @fn char[olen] formatrow(int[vlen] wid, int[vlen] arr)
+ *
+ * @brief Utility function for formatting an int vector to widths wid.
+ *
+ ******************************************************************************/
+inline
+char[olen] formatrow(int[vlen] wid, int[vlen] arr)
+{
+    olen = sum(wid + 1) - 1;
+    res = genarray([olen], ' ');
+
+    // Can't use WL because widths may differ
+    sink = 0;
+    for (i = 0; i < vlen; i++) {
+        w = [wid[i], 1];
+        curz = format(arr[i], w);
+        lim  = shape(curz)[0];
+
+        for (src = 0; src < lim; src++) {
+            res = modarray(res, src + sink, curz[src]);
         }
-	sink++; // Inter-element blank
-        sink = sink + sel( [i], wid);
- }
- return(z);
+
+        // Inter-element blank
+        sink += wid[i] + 1;
+    }
+
+    return res;
 }
 
-int[*] pmtl( int[*] y)
-{ //Poor man's 10-logarithm, used to compute column widths
-  // Avoid 10 log 0!
-  z = 1 +  toi(log10(max(2.0,tod(y))));
-return(z);
+/******************************************************************************
+ *
+ * @fn int[d:shp] log10(int[d:shp] arr)
+ *
+ * @brief Poor man's 10-logarithm, used to compute column widths.
+ *
+ ******************************************************************************/
+int[d:shp] log10(int[d:shp] arr)
+{
+    // Avoid 10 log 0!
+    return toi(MathArray::log10(tod(max(arr, 2)))) + 1;
 }
 
+/******************************************************************************
+ *
+ * @fn int[n] maxsl1(int[n,m] arr)
+ *
+ * @brief First-axis max-reduce rank-2 matrix.
+ *
+ ******************************************************************************/
 inline
-int[.] maxsl1(int[.,.] y)
-{ /* first-axis max-reduce rank-2 matrix */
-  z = with {
-      ([0] <= iv < take([1], shape(y))) : sel( iv, y); 
-        } : fold(max, minint());
-  return(z);
+int[n] maxsl1(int[n,m] arr)
+{
+    return with {
+        ([0] <= iv < [n]) : arr[iv];
+    } : fold(max, Constants::minint());
 }
 
+/******************************************************************************
+ *
+ * @fn int[n] minsl1(int[n,m] arr)
+ *
+ * @brief First-axis min-reduce rank-2 matrix.
+ *
+ ******************************************************************************/
 inline
-int[.] minsl1(int[.,.] y)
-{ /* first-axis min-reduce rank-2 matrix */
-  z = with {
-      ([0] <= iv < take([1], shape(y))) : sel( iv, y); 
-        } : fold(min, maxint());
-  return(z);
+int[n] minsl1(int[n,m] arr)
+{
+    return with {
+        ([0] <= iv < [n]) : arr[iv];
+    } : fold(min, Constants::maxint());
 }
 
-inline
-char[.] PadWithBlanks( int[1] wid, char[.] el)
-{  // SAC does not have overtake, so this does the job
-  z = take( wid, el ++ genarray( wid, ' '));
-  return( z);
-}
+/******************************************************************************
+ *
+ * @fn char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
+ *                           int[.] lodp, int[.] lodpmax, int zcols)
+ *
+ * @brief Align one row of a floating-point matrix.
+ *
+ ******************************************************************************/
+char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
+                     int[.] lodp, int[.] lodpmax, int zcols)
+{
+    res = genarray([zcols], ' ');
 
-char[.] alignrow(char[.,.] fry, int[1] iv, int[.] widths, int[.] lodp,
-                        int[.] lodpmax, int zcols)
-{ /* Align one row of a floating-point matrix */
-
- cols = shape(widths)[0];
- z = genarray([zcols], ' ');
- zci = 0;
- for( ci=0; ci<cols; ci++) {
-        fi = ci+cols*iv[0];             /* Source item index */
-        sc = lodp[[fi]] -lodpmax[[ci]]; /* Shift count to align decimal */
-        sefe = thcharsto([' ',' '], fry[[fi]]);
+    zci = 0;
+    for (ci = 0; ci < cols; ci++) {
+        fi = ci + cols * i;           // Source item index
+        sc = lodp[fi] - lodpmax[ci];  // Shift count to align decimal
+        sefe = thCharsTo([' ', ' '], fry[fi]);
         sz = sefe + abs(sc);
-        zit = PadWithBlanks([sz],rotate([-sc],fry[[fi]]));
-        z, junk = thrnAppend(z, zci, zit);
-        zci = zci + widths[ci] + 1;
+        zit = padWithBlanks(sz, rotate([-sc], fry[fi]));
+        res, junk = thrnAppend(res, zci, zit);
+        zci += widths[ci] + 1;
+    }
+
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[wid] padWithBlanks(int wid, char[n] arr)
+ *
+ * @brief SAC does not have overtake, so this does the job.
+ *
+ ******************************************************************************/
+inline
+char[wid] padWithBlanks(int wid, char[n] arr)
+{
+    maxidx = max(wid, n);
+    return with {
+        ([0] <= iv < [maxidx]) : arr[iv];
+    } : genarray([wid], ' ');
+}
+
+/******************************************************************************
+ *
+ * @fn int thCharsTo(char[n] ch, char[lim] fry)
+ *
+ * @brief Find chars left of decimal point (or end).
+ *        I.e., (fry member ch) iota 1.
+ *
+ ******************************************************************************/
+inline
+int thCharsTo(char[n] ch, char[lim] fry)
+    | n > 1
+{
+    res = lim;
+    for (i = 0; i < lim; i++) {
+        if (fry[i] == ch[0] || fry[i] == ch[1]) {
+            res = i;
+            i = lim;
         }
- return(z);
+    }
+
+    return res;
 }
 
+/******************************************************************************
+ *
+ * @fn char[d], int thrnAppend(char[d] vec, int sink, char[n] arr)
+ *
+ * @brief Indexed assign array into vec for next result element.
+ *
+ ******************************************************************************/
 inline
-int thcharsto(char[.] ch, char[.] fry)
-{ /* Find chars left of decimal point (or end) */
-  /* I.e.,  (fry member ch) iota 1 */
- lim = (shape(fry))[0];
- z = lim;
- for(i=0; i<lim; i++) {
-        if ((fry[[i]] == ch[[0]]) || (fry[[i]] == ch[[1]])) {
-                z = i;
-                i = lim;
-        }
- }
- return(z);
-}
-
-char[.] ScalarFormatter(double y, int precision)
-{ /* Primitive double scalar formatter, because sprintf 
-   * gives wrong answers. */
-/* FIXME - write proper formatter, using Steele/Burger formatting */
- z = String::tochar(String::sprintf("%.*g", precision, y));
- z = KillPlusSign(z);
- return(z);
-
-#ifdef FORMATWIDTH
- /* We expect worst-case format to be:   "-1.234e-308 " */
- /* This leads to 7 in next lines:        | |   ||||||  */
- if ( (precision + 7) < shpz) {
-        show(tochar("ScalarFormatter expected shorter result"));
-        show(shpz); print(precision+7);
- }
- z = PadWithBlanks([precision + 7], z); /* Avoid strange bugs in calls from WLs */
- return(z, shpz)
-#endif // FORMATWIDTH
-}
-
-inline
-char[.], int ScalarFormatterPad(double y, int precision)
-{ /* Primitive double scalar formatter, because sprintf is useless */
-/* FIXME - write proper formatter, using Steele/Burger formatting */
- z = ScalarFormatter( y, precision);
- shpz = shape(z)[0];
-
- /* We expect worst-case format to be:   "-1.234e-308 " */
- /* This leads to 7 in next line:         | |   ||||||  */
-#ifdef DEBUGME
- if ( (precision + 7) < shpz) {
-        show(tochar("ScalarFormatter expected shorter result"));
-        show(shpz); print(precision+7);
- }
-#endif
- z = PadWithBlanks([precision + 7], z); /* Avoid strange bugs in calls from WLs */
- return(z, shpz);
-}
-
-inline
-char[.] KillPlusSign(char[.] y)
-{ /* Kill "+" in sprintf result for a formatted scalar */
-  /* This is "(y != '+')compress y", the hard way */
- z = y;
- for( sink=1, src=1; src<(shape(y))[0]; src++) {
-        z[sink] = y[src];
-        sink =  (z[sink] != '+') ? sink + 1 : sink;
-        }
- z = take([sink], z);
- return(z);
-}
-
-inline
-char[.], int thrnAppend(char[.] vec, int sink, char[.] el)
-{ // Indexed assign el into vec for next result element
-  z = vec;
-  count = shape(el)[0];
-  for( src=0; src<count; src++) {
-        z[[sink]] = el[[src]];
+char[d], int thrnAppend(char[d] vec, int sink, char[n] arr)
+{
+    res = vec;
+    for (src = 0; src < n; src++) {
+        res[sink] = arr[src];
         sink++;
-  }
- return(z,sink);
+    }
+
+    return (res, sink);
 }
 
+/******************************************************************************
+ *
+ * @fn char[.] scalarFormatter(double arr, int precision)
+ *
+ * @brief Primitive double scalar formatter, because sprintf gives wrong answers.
+ *
+ * @todo Write proper formatter, using Steele/Burger formatting.
+ *
+ ******************************************************************************/
+char[.] scalarFormatter(double arr, int precision)
+{
+    res = tochar(sprintf("%.*g", precision, arr));
+    res = killPlusSign(res);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] killPlusSign(char[n] arr)
+ *
+ * @brief Kill "+" in sprintf result for a formatted scalar.
+ *        This is "(arr != '+') compress arr", the hard way
+ *
+ ******************************************************************************/
 inline
-char[.] OverflowCheck(char[.] txt, int wid)
-{ // Check for txt overflowing wid
-  z = (wid< shape(txt)[0]) ? (genarray([wid],'*')) : txt;
-  return(z);
-}
-
-/********************************************************************************
- *
- * Character formatting functions
- *
- ********************************************************************************/
+char[.] killPlusSign(char[n] arr)
+{
+    res = arr;
+    sink = 1;
+    for (src = 1; src < n; src++) {
+        res[sink] = arr[src];
+        sink += toi(res[sink] != '+');
+    }
 
+    res = take([sink], res);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] overflowCheck(char[n] arr, int wid)
+ *
+ * @brief Check for txt overflowing wid.
+ *
+ ******************************************************************************/
 inline
-char[*] format(char[*] y)
-{ // Default format for any character array
-  return(y);
+char[.] overflowCheck(char[n] arr, int wid)
+{
+    return wid < n ? genarray([wid], '*') : arr;
 }
-
-
-/********************************************************************************
- *
- * Boolean formatting functions
- *
- ********************************************************************************/
-
-inline
-char[1] format(bool y)
-{ // Default format for Boolean scalar
-  z = y ? '1' : '0';
-  return([z]);
-}
-
-inline
-char[+] format(bool[+] y)
-{ // Default format for Boolean non-scalars
-  z = with {
-        (. <= iv <= .) : sel( iv, y) ? ['1',' '] : ['0',' '];
-        } : genarray(shape( y));
-  zs = drop([_sub_SxS_(0,2)], 
-		shape( z)) ++ [prod( take([_sub_SxS_(0,2)], shape( z)))];
-  z = reshape( zs, z);
-  lastcol = genarray([dim(z)], 0);
-  lastcol = modarray( lastcol, _sub_SxS_(dim(z),1), _sub_SxS_(0,1));
-  z = drop(lastcol, z);
-  return( z);
-}
-
-char[.] format(bool y, int precision)
-{ /* Defined-precision format on Boolean scalar */
-  z = format(tod(y), precision);
-  return(z);
-}
-
-char[+] format(bool[+] y, int precision)
-{ /* precision-significant digit format on boolean non-scalar */
- return(format(tod(y), precision));
-}
-
-char[.] format(bool y, int[2] w)
-{ /* Defined-width and precision format on boolean scalar 
-   * w[0] is maximum legal result width. If result is wider than this,
-   *      the result will be filled with asterixs. ('*')
-   * w[1] is the number of significant digits to be printed.
-   */
- z = format(tod(y), w);
- return( z);
-}
-
-char[+] format(bool[+] y, int[2] w)
-{ /* Defined-width format on boolean non-scalar */
- z = format(tod(y), w);
- return(z);
-} 
-
-
-/********************************************************************************
- *
- * Integer formatting functions
- *
- *   This includes int, uint, long, and ulong
- *
- ********************************************************************************/
-
-char[.] format(int y)
-{ /* Default format on integer scalar */
- z = tochar(sprintf("%d",y));
-
-#ifdef PEDANTIC
- /* This can be discarded, I think. */
- w = pmtl((ArrayArith::abs(y))); /* field width, including sign */
- w = w + toi(y < 0);
- /* Primitive integer scalar formatter, because sprintf is useless */
- /* See model DthornInt in WS UTThornInt.dws */
- z = genarray([w], ' ');
- z = modarray( z, [_sub_SxS_(w, 1)], '0'); /* Handle format 0 */
- sig = y < 0;
-  /* We format all numbers as negative, to avoid integer overflow on (-2)*31  */
- cury = sig ? y : _sub_SxS_(0,y);
- i = _sub_SxS_(w,1);
- while ((cury != 0) && (i >= 0)) {
-        nexty = cury /10; /* truncate toward zero */
-        dig = abs(_sub_SxS_(cury,(nexty *10)));
-        z = modarray( z, [i], sel( [dig], 
-		['0','1','2','3','4','5','6','7','8','9']));
-        cury = nexty;
-	i = _sub_SxS_(i,1);
-  }
-  i = max(i,0);
-  z = modarray( z, [i], sig && (i >= 0) ? '-' : sel([i], z));
-#endif // PEDANTIC
-
- return( z);
-}
-
-char[.] format(long y)
-{ /* Default format on long scalar */
- z = tochar(sprintf("%ld",y));
- return( z);
-}
-     
-char[+] format(int[+] y)
-{ /* Default format on integer non-scalar */
-  /* Refer to UTThorn.dws <thint> for APL model of this */
-
-  shpm = [prod(drop([_sub_SxS_(0,1)], 
-		shape(y)))] ++ 
-		take([_sub_SxS_(0,1)], shape(y));
-  if ( 0 == prod( shpm)) {
-	z = genarray(shape(y), ' ');
-  } else {
-  m = reshape(shpm,y);
-  widths = pmtl(maxsl1(ArrayArith::abs(m)));
-  /* Large negative number may need extra column for minus sign */
-  maxneg = minsl1(m);
-  neg = toi(maxneg < 0);
-  maxneg2 = pmtl((ArrayArith::abs(maxneg)));
-  widths = widths + neg * toi(maxneg2 >= widths);
-  zcols = sum(widths + 1)-1;
-  zdef = genarray([zcols], ' ');
-
-  z = with{
-        (. <= iv <= .) : formatrow( widths, sel (iv, m));
-        } : genarray(take([1],shape(m)), zdef);
-
-  shpz = drop([_sub_SxS_(0,1)], shape(y)) 
-		++ take([_sub_SxS_(0,1)], shape(z));
-  z = reshape(shpz, z);
- }
-  return(z);
-}
-
-char[.] format(int y, int precision)
-{ /* Defined-precision format on integer scalar */
-  z = format(tod(y), precision);
- return( z);
-}
-
-char[+] format(int[+] y, int precision)
-{ /* precision-significant digit format on integer non-scalar */
- return(format(tod(y), precision));
-}
-
-char[.] format(int y, int[2] w)
-{ /* Defined-width and precision format on integer scalar 
-   * w[0] is maximum legal result width. If result is wider than this,
-   *      the result will be filled with asterixs. ('*')
-   * w[1] is the number of significant digits to be printed.
-   */
- z = String::tochar(String::sprintf("%*.*d", w[[0]], w[[1]], y));
- z = OverflowCheck(z, w[[0]]);
- return( z);
-}
-
-
-/********************************************************************************
- *
- * Float formatting functions
- *
- ********************************************************************************/
-
-char[.] format(float y)
-{ /* Default format on float scalar */
-  precision = 15;
-  return(format(tod(y), precision));
-}
-
-char[+] format(float[+] y)
-{ /* Default format on float non-scalar */
-  precision = 15;
-  return(format(tod(y), precision));
-} 
-
-char[.] format(float y, int precision)
-{ /* Defined-precision format on floating scalar */
- z = format(tod(y), precision);
- return(z);
-}
-
-char[+] format(float[+] y, int precision)
-{ /* precision-significant digit format on floating non-scalar */
- return(format(tod(y), precision));
-}
-
-char[.] format(float y, int[2] w)
-{ /* Defined-width and precision format on floating scalar 
-   * w[0] is maximum legal result width. If result is wider than this,
-   *      the result will be filled with asterixs. ('*')
-   * w[1] is the number of significant digits to be printed.
-   */
- z = format(tod(y), w);
- return( z);
-}
-
-char[+] format(float[+] y, int[2] w)
-{ /* Defined-width format on float non-scalar 
-   * w[0] is maximum legal result width. If result is wider than this,
-   *      the result will be filled with asterixs. ('*')
-   * w[1] is the number of significant digits to be printed.
-   */
- z = format(tod(y), w);
- return(z);
-} 
-
-
-
-/********************************************************************************
- *
- * Double formatting functions
- *
- ********************************************************************************/
-
-#define DOINL inline
-// This is a crude workaround for sac2c Issue #2333,
-// which Bodo suggests requires major redesign of modules.
-
-DOINL
-char[.] format(double y)
-{ /* Default format on double scalar */
-  precision = 15;
-  return(format(y, precision));
-}
-
-DOINL
-char[+] format(double[+] y)
-{ /* Default format on double non-scalar */
-   /* Refer to UTThorn.dws <threal> for APL model of this */
-  precision = 15;
-  return(format(y, precision));
-}
-
-DOINL
-char[.] format(double y, int precision)
-{ /* Formatting for a double scalar */
- z = ScalarFormatter(y, precision);
- z = PadWithBlanks([precision + 7], z);
- return(z);
-}
-
-DOINL
-char[+] format(double[+] y, int precision)
-{ /* precision-significant digit format on double non-scalar */
-   /* Refer to UTThorn.dws <threal> for APL model of this */
-  rows = prod(drop([-1], shape(y)));
-  cols = take([-1],[1]++shape(y))[0];
-  ravely = reshape([prod(shape(y))], y);
-  /* formatted results and their shapes */
-  /* See ScalarFormatter for why the value 7 appears in next line */
-  wid = precision + 7;
-  defcell = genarray([wid], ' ');
-  fry = with {          /* Format each array element */
-	(. <= iv <= .) {
-		el = ScalarFormatter( ravely[iv], precision);  
-                el = PadWithBlanks([wid], el);
-	} : el;
-        } : genarray( shape( ravely), defcell);
-
-  /* Determine width of each result column */
-  /* First, chars left of decimal point */
-  lodp  = with{
-        (. <= iv <= .) : thcharsto([' ','.'], fry[iv]);
-        } : genarray(take([1], shape(fry)), 0);
-  /* decimal point and # non-blankchars to right of decimal point */
-  rodp  = with{
-        (. <= iv <= .) : thcharsto([' ',' '], drop([lodp[iv]], fry[iv]));
-        } : genarray(take([1], shape(fry)), 0);
-  lodpmax = maxsl1(reshape([rows,cols], lodp));
-  rodpmax = maxsl1(reshape([rows,cols], rodp));
-  widths = lodpmax + rodpmax;
-  zcols = sum(widths+2)-1; // room for decimal point and blank
-  shpz = drop([-1], shape(y)) ++ [zcols];
-  defcell = genarray([zcols], ' ');
-
-  z = with{
-        (. <= iv <= .) : alignrow(fry, iv, widths, lodp, lodpmax, zcols);
-        } : genarray([rows], defcell);
-  z = reshape(shpz, z);
- return(z);
-} 
-
-DOINL
-char[.] format(double y, int[2] w)
-{ /* Formatting for a double scalar */
-  /* This is temporary, pending use of the Burger/Dybvig algorithm 
-   * w[0] is maximum legal result width. If result is wider than this,
-   *      the result will be filled with asterixs. ('*')
-   * w[1] is the number of significant digits to be printed.
-   */
- z = String::tochar(String::sprintf("%*.*g", w[[0]], w[[1]], y));
- z = OverflowCheck(z, w[[0]]);
- return(z);
-}
-
-DOINL
-char[+] format(double[+] y, int[2] w)
-{ /* Defined-width format on double non-scalar 
-   * w[0] is maximum legal result width. If result is wider than this,
-   *      the result will be filled with asterixs. ('*')
-   * w[1] is the number of significant digits to be printed.
-   */
- defcell = genarray([w[[0]]], ' ');
- z = with{
-	(. <= iv <= .) : format(y[iv], w);
-	} : genarray(shape(y), defcell);
- zshp = drop([-2], shape(z)) ++ [prod(take([-2], shape(z)))];
- z = reshape(zshp, z);
- return(z);
-}
-
-/********************************************************************************
- *
- * Generic type-driven formatting
- *
- ********************************************************************************/
-
-#ifdef FULLTYPES
-
-#define FORMAT_INT_SUBTYPES(type)			\
-char[.] format(type y)					\
-{							\
-  z=format(toi(y));					\
-  return( z);						\
-}							\
-     							\
-char[+] format(type[+] y)				\
-{							\
-  z=format(toi(y));					\
-  return(z);						\
-}							\
-							\
-char[.] format(type y, int precision)			\
-{ 							\
-  z=format(toi(y),precision);				\
-  return( z);						\
-}							\
-							\
-char[+] format(type[+] y, int precision)		\
-{							\
-  z=format(toi(y),precision);				\
-  return(z);						\
-}							\
-							\
-char[.] format(type y, int[2] w)			\
-{							\
-  z=format(toi(y),w);					\
-  return( z);						\
-}							
-
-#ifdef NEEDSTYPECONVERSIONS
-// These will not work until somebody writes suitable non-scalar type
-// conversion functions for the following.
-// BUG !! needs type conversions to int for these...  FORMAT_INT_SUBTYPES(byte)
-// BUG !! FORMAT_INT_SUBTYPES(ubyte)
-// BUG !! FORMAT_INT_SUBTYPES(short)
-// BUG !! FORMAT_INT_SUBTYPES(ushort)
-// BUG !! FORMAT_INT_SUBTYPES(uint)
-FORMAT_INT_SUBTYPES(int)
-FORMAT_INT_SUBTYPES(longlong)
-FORMAT_INT_SUBTYPES(ulonglong)
-FORMAT_INT_SUBTYPES(long)
-FORMAT_INT_SUBTYPES(ulong)
-#endif // NEEDSTYPECONVERSIONS
-
-#endif // FULLTYPES
-
