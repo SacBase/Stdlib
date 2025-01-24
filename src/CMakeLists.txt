@@ -80,6 +80,10 @@ ADD_CUSTOM_COMMAND (
     DEPENDS "${BIS_SRC}"
     COMMENT "Running ${BISON_EXECUTABLE} on `${BIS_SRC}'")
 
+SET (SAC2C_CC_FLAGS "")
+CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" SAC2C_CC_FLAGS)
+CHECK_SAC2C_CC_FLAG("-Wno-tautological-compare" SAC2C_CC_FLAGS)
+
 #flags needed for OSX (clang) as the generated code generates warning otherwise:
 SET (FLEX_SAC2C_CC_FLAGS "")
 CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" FLEX_SAC2C_CC_FLAGS) #needed on CentOS7
@@ -375,6 +379,7 @@ FOREACH (name ${C_DEPS_SRC})
     COMMAND
         ${SAC2C} -Xp -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
                  -Xp -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+                 ${SAC2C_CC_FLAGS}
                  -v0 -noprelude -cc ccrmod -o "${dst}" "${src}"
     WORKING_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
@@ -476,7 +481,7 @@ FOREACH (name ${SAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} -o ${DLL_BUILD_DIR} "${src}"
+            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
         MAIN_DEPENDENCY "${src}"
