@@ -243,7 +243,7 @@ inline color[d:shp] -(color[d:shp] arr, color[d:shp] b)
 
 inline color *(color c, double x)
 {
-    r, g, b = rgb(a);
+    r, g, b = rgb(c);
     return newColor(toi(tod(r) * x), toi(tod(b) * x), toi(tod(b) * x));
 }
 
