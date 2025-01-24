@@ -1,111 +1,102 @@
 module Quaternion;
 
+#define OVERLOAD dim,shape,sel,tod,+,*,-
+use Array: all except { OVERLOAD };
+import Array: { OVERLOAD };
+
 export all;
-
-
-use Array:all except {tod,shape,dim,sel,+,*,-};
-/*
- *  we should not import the versions from Array
- *  as we will export everything....
- */
-import Array:{tod,shape,dim,sel,+,*,-};
 
 typedef double[4] quaternion;
 
-// type conversions
-inline
-quaternion[*] toq( double[+] q)
+/******************************************************************************
+ *
+ * Array properties.
+ *
+ * @note These functions may not use type patterns, as type patterns rely
+ * on the existence of these functions.
+ *
+ ******************************************************************************/
+
+inline int dim(quaternion[*] arr)
 {
-  return (quaternion[*]) q;
+    return dim((double[+])arr) - 1;
 }
 
-inline
-quaternion[*] toq( int[+] q)
+inline int[.] shape(quaternion[*] arr)
 {
-  return (quaternion[*]) tod(q);
+    return drop([-1], shape((double[+])arr));
 }
 
-inline
-double[+] tod( quaternion[*] q)
+inline quaternion[*] sel(int[.] idx, quaternion[*] arr)
 {
-  res = (double[+])q;
-  // the next line ensures type conformity to be checked....
-  // this is ugly :-( but works :-)
-  res = reshape( modarray( shape(res), dim(res) - 1, 4), res);
-  return res;
+    return (quaternion[*])((double[*])arr)[idx];
 }
 
-// Array properties
-inline
-int[.] shape( quaternion[*] q)
+/******************************************************************************
+ *
+ * Type conversions.
+ *
+ ******************************************************************************/
+
+inline quaternion[d:shp] toq(double[d:shp,4] arr)
 {
-  return drop( [-1], shape((double[+])q));
+    return (quaternion[*])arr;
 }
 
-inline
-int dim( quaternion[*] q)
+inline quaternion[d:shp] toq(int[d:shp,4] arr)
 {
-  return dim((double[+])q)-1;
+    return (quaternion[*])tod(arr);
 }
 
-// Array selection
-inline
-quaternion[*] sel( int[.] v, quaternion[*] a)
+inline double[d:shp,4] tod(quaternion[d:shp] arr)
 {
-  return (quaternion[*])((double[*])a)[v];
+    return (double[+])arr;
 }
 
-// Scalar functions
-inline
-quaternion[*] +(double a, quaternion[*] b)
+/******************************************************************************
+ *
+ * Binary operations on quaternions.
+ *
+ ******************************************************************************/
+
+inline quaternion[d:shp] +(double a, quaternion[d:shp] b)
 {
-  return (quaternion[*])(a +(double[+])b);
+    return (quaternion[*])(a + (double[+])b);
 }
 
-inline
-quaternion[*] +(quaternion[*] a, quaternion[*] b)
+inline quaternion[d:shp] +(quaternion[d:shp] a, double b)
 {
-  return (quaternion[*])((double[+])a +(double[+])b);
+    return (quaternion[*])((double[+])a + b);
 }
 
-inline
-quaternion[*] +(quaternion[*] a, double b)
+inline quaternion[d:shp] +(quaternion[d:shp] a, quaternion[d:shp] b)
 {
-  return (quaternion[*])((double[+])a +b);
+    return (quaternion[*])((double[+])a + (double[+])b);
 }
 
-inline
-quaternion[+] *(quaternion a, quaternion[+] b)
+/******************************************************************************/
+
+inline quaternion *(quaternion a, quaternion b)
 {
-   return with {
-            (. <= iv <=.) : a*b[iv];
-          } : genarray( shape(b), toq([0d,0d,0d,0d]));
+    ad = (double[4])a;
+    bd = (double[4])b;
+    return (quaternion)[ad[0]*bd[0] - ad[1]*bd[1] - ad[2]*bd[2] - ad[3]*bd[3],
+                        ad[0]*bd[1] + ad[1]*bd[0] + ad[2]*bd[3] - ad[3]*bd[2],
+                        ad[0]*bd[2] - ad[1]*bd[3] + ad[2]*bd[0] + ad[3]*bd[1],
+                        ad[0]*bd[3] + ad[1]*bd[2] - ad[2]*bd[1] + ad[3]*bd[0]];
 }
 
-inline
-quaternion[+] *(quaternion[+] a, quaternion b)
+inline quaternion[d:shp] *(quaternion a, quaternion[d:shp] b)
 {
-   return with {
-            (. <= iv <=.) : a[iv]*b;
-          } : genarray( shape(a), toq([0d,0d,0d,0d]));
+    return { iv -> a * b[iv] | iv < shp };
 }
 
-inline
-quaternion[+] *(quaternion[+] a, quaternion[+] b)
+inline quaternion[d:shp] *(quaternion[d:shp] a, quaternion b)
 {
-   return with {
-            (. <= iv <=.) : a[iv]*b[iv];
-          } : genarray( shape(a), toq([0d,0d,0d,0d]));
+    return { iv -> a[iv] * b | iv < shp };
 }
 
-inline
-quaternion *(quaternion a, quaternion b)
+inline quaternion[d:shp] *(quaternion[d:shp] a, quaternion[d:shp] b)
 {
-  ad = (double[4])a;
-  bd = (double[4])b;
-  return (quaternion)[ ad[0]*bd[0]-ad[1]*bd[1] -ad[2]*bd[2] -ad[3]*bd[3],
-                       ad[0]*bd[1]+ad[1]*bd[0] +ad[2]*bd[3] -ad[3]*bd[2],
-                       ad[0]*bd[2]-ad[1]*bd[3] +ad[2]*bd[0] +ad[3]*bd[1],
-                       ad[0]*bd[3]+ad[1]*bd[2] -ad[2]*bd[1] +ad[3]*bd[0] ];
+    return { iv -> a[iv] * b[iv] | iv < shp };
 }
-
