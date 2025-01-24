@@ -1,1 +1,5 @@
-build
+# IDE generated files
+.vscode/
+
+# CMake
+build/
