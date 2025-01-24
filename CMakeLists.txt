@@ -26,6 +26,7 @@ SET (SAC2C_CPP_INC
      -cppI${PROJECT_BINARY_DIR}/include
      -cppI${PROJECT_SOURCE_DIR}/include)
 
+LIST (APPEND SAC2C_EXTRA_INC -Wno-tautological-compare)
 LIST (APPEND SAC2C_EXTRA_INC -Wno-sign-compare)
 
 IF (FULLTYPES)
