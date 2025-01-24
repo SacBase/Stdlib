@@ -12,7 +12,7 @@ typedef double[4] quaternion;
  *
  * Array properties.
  *
- * @note These functions may not use type patterns, as type patterns rely
+ * @note `dim` and `shape` may not use type patterns, as type patterns rely
  * on the existence of these functions.
  *
  ******************************************************************************/
@@ -27,7 +27,8 @@ inline int[.] shape(quaternion[*] arr)
     return drop([-1], shape((double[+])arr));
 }
 
-inline quaternion[*] sel(int[.] idx, quaternion[*] arr)
+inline quaternion[i:ishp] sel(int[o] idx, quaternion[o:oshp,i:ishp] arr)
+    | all(0 <= idx), all(idx < oshp)
 {
     return (quaternion[*])((double[*])arr)[idx];
 }
