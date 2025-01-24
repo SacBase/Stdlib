@@ -236,7 +236,7 @@ inline color -(color a, color b)
     return newColor(r1 - r2, g1 - g2, b1 - b2);
 }
 
-inline color[d:shp] -(color[d:shp] arr, color[d:shp] b)
+inline color[d:shp] -(color[d:shp] a, color[d:shp] b)
 {
     return { iv -> a[iv] - b[iv] | iv < shp };
 }
