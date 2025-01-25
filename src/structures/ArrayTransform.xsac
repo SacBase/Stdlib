@@ -1,7 +1,7 @@
 module ArrayTransform;
 
 use ArrayBasics: {shape,sel, genarray};
-use ArrayArith: {<,==,>,&,|,abs,+,-,*,min,max};
+use ArrayArith: {<,==,>,&,|,abs,zero,+,-,*,min,max};
 import Constants: all;
 
 export all;

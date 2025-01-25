@@ -1,5 +1,6 @@
 module ArrayArith;
 
+import ScalarArith: all;
 use ArrayBasics: { sel };
 
 export all;
