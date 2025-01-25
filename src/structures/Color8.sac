@@ -25,7 +25,7 @@ inline int dim(color[*] arr)
 
 inline int[.] shape(color[*] arr)
 {
-    return drop(-1, shape((int[*])arr));
+    return drop([-1], shape((int[*])arr));
 }
 
 inline color[i:ishp] sel(int[o] idx, color[o:oshp,i:ishp] arr)
