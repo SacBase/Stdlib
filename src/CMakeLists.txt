@@ -90,6 +90,7 @@ CHECK_SAC2C_CC_FLAG("-Wno-stringop-overflow" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-tautological-compare" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-comma" SAC2C_CC_FLAGS)
+CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" SAC2C_CC_FLAGS)
 
 #flags needed for OSX (clang) as the generated code generates warning otherwise:
 SET (FLEX_SAC2C_CC_FLAGS "")
