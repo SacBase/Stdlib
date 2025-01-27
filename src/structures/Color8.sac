@@ -84,7 +84,7 @@ inline double[*] tod( color[*] c)
 
 inline color[256] Weights2Clut( double[256] w, color c1, color c2)
 {
-  return( ( color[256]) toi( { iv -> w[iv] * tod((int[3]) c1) } 
+  return( ( color[256]) toi( { iv -> w[iv] * tod((int[3]) c1) }
                                + { iv -> (1d - w[iv]) * tod((int[3]) c2) } ));
 }
 
@@ -106,17 +106,17 @@ inline color[256] genLogarithmicClut( double from, double to,
   steps = genSteps( from, to);
 
   weights = (log( steps) - log( from)) / (log( to) - log( from));
-  
+
   return( Weights2Clut( weights, c1, c2));
 }
 
-inline color[256] genExponentialClut( double from, double to, 
+inline color[256] genExponentialClut( double from, double to,
                                       color c1, color c2)
 {
   steps = genSteps( from, to);
 
   weights = (exp( steps) - exp( from)) / (exp( to) - exp( from));
-  
+
   return( Weights2Clut( weights, c1, c2));
 }
 
@@ -150,7 +150,7 @@ inline color Hsb2Rgb( int h_in , int s_in, int b_in )
     s = tod( s_in ) / 100d;
     b = tod( b_in ) / 100d;
 
-    i = toi( h ) % 6; 
+    i = toi( h ) % 6;
     f = h - tod( i );
 
     if ( ( i % 2 ) == 0 )
@@ -225,7 +225,7 @@ int[.] shape( color[*] a)
 inline
 color[*] reshape( int[.] shp, color[*] a)
 {
-  return(  (color[*])_reshape_VxA_( shp ++ [3], (int[*])a) );
+  return(  (color[*])_reshape_VxA_( _cat_VxV_(shp, [3]), (int[*])a) );
 }
 
 
@@ -243,7 +243,7 @@ color[*] + (color[*] a, color[*] b)
 {
   res = with{
           ( . <= iv <= . ) : a[iv] + b[iv];
-        } : genarray( shape( a), black()); 
+        } : genarray( shape( a), black());
 
   return( res);
 }
@@ -262,7 +262,7 @@ color[*] - (color[*] a, color[*] b)
 {
   res = with{
           ( . <= iv <= . ) : a[iv] -  b[iv];
-        } : genarray( shape( a), white()); 
+        } : genarray( shape( a), white());
 
   return( res);
 }
@@ -281,7 +281,7 @@ color[*] * (color[*] c, double x)
 {
   res = with{
           ( . <= iv <= . ) : c[iv] * x;
-        } : genarray( shape( c), white()); 
+        } : genarray( shape( c), white());
 
   return( res);
 }
