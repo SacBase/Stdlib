@@ -1,9 +1,7 @@
 module ComplexArrayBasics;
 
+use Array: { all, <, <=, == };
 use ComplexBasics: { complex };
-#define OVERLOADS dim,shape,sel,reshape,genarray,modarray
-use Array: all except { OVERLOADS };
-import Array: { OVERLOADS };
 
 export all;
 
@@ -15,11 +13,15 @@ export all;
  *
  * @brief Yields an array's dimensionality (rank).
  *
+ * @note The definition of `dim` and `shape` for user-defined types may not use
+ * type patterns, as type patterns rely on the existence of these functions
+ * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
+ * are not defined for user-defined types.
+ *
  ******************************************************************************/
 inline int dim(complex[*] arr)
 {
-    d = dim((double[+])arr);
-    return d - 1;
+    return Array::dim((double[+])arr) Array::- 1;
 }
 
 /******************************************************************************
@@ -28,11 +30,15 @@ inline int dim(complex[*] arr)
  *
  * @brief Yields an array's shape vector.
  *
+ * @note The definition of `dim` and `shape` for user-defined types may not use
+ * type patterns, as type patterns rely on the existence of these functions
+ * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
+ * are not defined for user-defined types.
+ *
  ******************************************************************************/
 inline int[.] shape(complex[*] arr)
 {
-    shp = shape((double[+])arr);
-    return drop([-1], shp);
+    return Array::drop([Array::-1], Array::shape((double[+])arr));
 }
 
 /******************************************************************************
@@ -45,8 +51,7 @@ inline int[.] shape(complex[*] arr)
 inline complex[i:ishp] sel(int[o] idx, complex[o:oshp,i:ishp] arr)
     | all(0 <= idx), all(idx < oshp)
 {
-    v = ((double[+])arr)[idx];
-    return (complex[*])v;
+    return (complex[*])Array::sel([idx], (double[+])arr);
 }
 
 inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
@@ -64,10 +69,9 @@ inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
  *
  ******************************************************************************/
 inline complex[d:shp] reshape(int[d] shp, complex[o:oshp] arr)
-    | all(0 <= shp), prod(shp) == prod(oshp)
+    | all(0 <= shp), Array::prod(shp) == Array::prod(oshp)
 {
-    v = reshape(shp ++ [2], (double[*])arr);
-    return (complex[*])v;
+    return (complex[*])Array::reshape(shp Array::++ [2], (double[*])arr);
 }
 
 /******************************************************************************
