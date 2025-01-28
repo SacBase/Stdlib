@@ -1,6 +1,6 @@
 module Grey;
 
-use Array: all except { dim,shape,sel,reshape,tod,toi,+,- };
+use Array: { all, <, <=, == };
 
 export all;
 
@@ -10,8 +10,10 @@ typedef int grey;
  *
  * Array properties.
  *
- * @note `dim` and `shape` may not use type patterns, as type patterns rely
- * on the existence of those functions for typedefs.
+ * @note The definition of `dim` and `shape` for user-defined types may not use
+ * type patterns, as type patterns rely on the existence of these functions
+ * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
+ * are not defined for user-defined types.
  *
  ******************************************************************************/
 
@@ -32,7 +34,7 @@ inline grey[i:ishp] sel(int[o] idx, grey[o:oshp,i:ishp] arr)
 }
 
 inline grey[d:shp] reshape(int[d] shp, grey[_:shp_a] arr)
-    | prod(shp) == prod(shp_a)
+    | Array::prod(shp) == Array::prod(shp_a)
 {
     return (grey[*])Array::reshape(shp, (int[*])arr);
 }
@@ -45,12 +47,12 @@ inline grey[d:shp] reshape(int[d] shp, grey[_:shp_a] arr)
 
 inline grey tog(int g)
 {
-    return (grey)max(min(g, 255), 0);
+    return (grey)Array::max(Array::min(g, 255), 0);
 }
 
 inline grey tog(double g)
 {
-    return (grey)max(min(Array::toi(g), 255), 0);
+    return (grey)Array::max(Array::min(Array::toi(g), 255), 0);
 }
 
 inline int toi(grey g)
