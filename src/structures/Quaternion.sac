@@ -1,8 +1,6 @@
 module Quaternion;
 
-#define OVERLOAD dim,shape,sel,tod,+,*,-
-use Array: all except { OVERLOAD };
-import Array: { OVERLOAD };
+use Array: { drop, all, <=, < };
 
 export all;
 
@@ -19,18 +17,24 @@ typedef double[4] quaternion;
 
 inline int dim(quaternion[*] arr)
 {
-    return dim((double[+])arr) - 1;
+    return Array::dim((double[+])arr) Array::- 1;
 }
 
 inline int[.] shape(quaternion[*] arr)
 {
-    return drop([-1], shape((double[+])arr));
+    return drop([Array::-1], Array::shape((double[+])arr));
 }
 
 inline quaternion[i:ishp] sel(int[o] idx, quaternion[o:oshp,i:ishp] arr)
     | all(0 <= idx), all(idx < oshp)
 {
-    return (quaternion[*])((double[*])arr)[idx];
+    return (quaternion[*])Array::sel(idx, (double[*])arr);
+}
+
+inline quaternion[d:shp] sel(int idx, quaternion[n,d:shp] arr)
+    | (0 <= idx), (idx < n)
+{
+    return arr[[idx]];
 }
 
 /******************************************************************************
@@ -46,7 +50,7 @@ inline quaternion[d:shp] toq(double[d:shp,4] arr)
 
 inline quaternion[d:shp] toq(int[d:shp,4] arr)
 {
-    return (quaternion[*])tod(arr);
+    return (quaternion[*])Array::tod(arr);
 }
 
 inline double[d:shp,4] tod(quaternion[d:shp] arr)
@@ -62,17 +66,17 @@ inline double[d:shp,4] tod(quaternion[d:shp] arr)
 
 inline quaternion[d:shp] +(double a, quaternion[d:shp] b)
 {
-    return (quaternion[*])(a + (double[+])b);
+    return (quaternion[*])(a Array::+ (double[+])b);
 }
 
 inline quaternion[d:shp] +(quaternion[d:shp] a, double b)
 {
-    return (quaternion[*])((double[+])a + b);
+    return (quaternion[*])((double[+])a Array::+ b);
 }
 
 inline quaternion[d:shp] +(quaternion[d:shp] a, quaternion[d:shp] b)
 {
-    return (quaternion[*])((double[+])a + (double[+])b);
+    return (quaternion[*])((double[+])a Array::+ (double[+])b);
 }
 
 /******************************************************************************/
@@ -80,11 +84,23 @@ inline quaternion[d:shp] +(quaternion[d:shp] a, quaternion[d:shp] b)
 inline quaternion *(quaternion a, quaternion b)
 {
     ad = (double[4])a;
+    ad0 = Array::sel([0], ad);
+    ad1 = Array::sel([1], ad);
+    ad2 = Array::sel([2], ad);
+    ad3 = Array::sel([3], ad);
+
     bd = (double[4])b;
-    return (quaternion)[ad[0]*bd[0] - ad[1]*bd[1] - ad[2]*bd[2] - ad[3]*bd[3],
-                        ad[0]*bd[1] + ad[1]*bd[0] + ad[2]*bd[3] - ad[3]*bd[2],
-                        ad[0]*bd[2] - ad[1]*bd[3] + ad[2]*bd[0] + ad[3]*bd[1],
-                        ad[0]*bd[3] + ad[1]*bd[2] - ad[2]*bd[1] + ad[3]*bd[0]];
+    bd0 = Array::sel([0], bd);
+    bd1 = Array::sel([1], bd);
+    bd2 = Array::sel([2], bd);
+    bd3 = Array::sel([3], bd);
+
+    return (quaternion)[
+        ad0 Array::* bd0 Array::- ad1 Array::* bd1 Array::- ad2 Array::* bd2 Array::- ad3 Array::* bd3,
+        ad0 Array::* bd1 Array::+ ad1 Array::* bd0 Array::+ ad2 Array::* bd3 Array::- ad3 Array::* bd2,
+        ad0 Array::* bd2 Array::- ad1 Array::* bd3 Array::+ ad2 Array::* bd0 Array::+ ad3 Array::* bd1,
+        ad0 Array::* bd3 Array::+ ad1 Array::* bd2 Array::- ad2 Array::* bd1 Array::+ ad3 Array::* bd0
+    ];
 }
 
 inline quaternion[d:shp] *(quaternion a, quaternion[d:shp] b)
