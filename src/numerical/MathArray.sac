@@ -13,15 +13,15 @@ export all;
  ******************************************************************************/
 
 #define MAP_A(op, typ)                                                         \
-inline typ[d:shp] op(typ[d:shp] arr)                                           \
+inline typ[n,d:shp] op(typ[n,d:shp] arr)                                       \
 {                                                                              \
-    return { iv -> Math::op(_sel_VxA_(iv, arr)) | iv < shp };                  \
+    return { iv -> Math::op(_sel_VxA_(iv, arr)) };                             \
 }
 
 #define MAP_AxS(op, typ)                                                       \
-inline typ[d:shp] op(typ[d:shp] arr, typ x)                                    \
+inline typ[n,d:shp] op(typ[n,d:shp] arr, typ x)                                \
 {                                                                              \
-    return { iv -> Math::op(_sel_VxA_(iv, arr), x) | iv < shp };               \
+    return { iv -> Math::op(_sel_VxA_(iv, arr), x) };                          \
 }
 
 #define MAP_REAL(fun, op)                                                      \
