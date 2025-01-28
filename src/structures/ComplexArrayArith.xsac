@@ -1,8 +1,8 @@
 module ComplexArrayArith;
 
-use ComplexBasics: all;
-use ComplexScalarArith: all;
-use ComplexArrayBasics: all;
+import ComplexBasics: all;
+import ComplexScalarArith: all;
+import ComplexArrayBasics: { dim, shape, sel };
 
 export all;
 
