@@ -545,55 +545,6 @@ BOOL_REDUCE
 
 /******************************************************************************
  *
- * @fn bool match(<a>[n:shp_a] A, <a>[m:shp_b] B)
- *
- * @brief whether the given arrays are equal.
- *
- ******************************************************************************/
-
-#define MATCH_AxA(typ, postfix, zval, oval)                                    \
-inline                                                                         \
-bool match(typ[n:shp_a] A, typ[m:shp_b] B)                                     \
-{                                                                              \
-    return _eq_SxS_(n, m)                                                      \
-        && _all_V_(_eq_VxV_(shp_a, shp_b))                                     \
-        && with {                                                              \
-            (_mul_SxV_(0, shp_a) <= iv < shp_a)                                \
-                : _eq_SxS_(_sel_VxA_(iv, A), _sel_VxA_(iv, B));                \
-        } : foldfix(ScalarArith::&, true, false);                              \
-}
-
-#define MATCH_AxS(typ, postfix, zval, oval)                                    \
-inline                                                                         \
-bool match(typ[+] A, typ B)                                                    \
-{                                                                              \
-    return false;                                                              \
-}
-
-#define MATCH_SxA(typ, postfix, zval, oval)                                    \
-inline                                                                         \
-bool match(typ A, typ[+] B)                                                    \
-{                                                                              \
-    return false;                                                              \
-}
-
-#define MATCH_SxS(typ, postfix, zval, oval)                                    \
-inline                                                                         \
-bool match(typ A, typ B)                                                       \
-{                                                                              \
-    return _eq_SxS_(A, B);                                                     \
-}
-
-#define MATCH(typ, postfix, zval, oval)                                        \
-MATCH_AxA(typ, postfix, zval, oval)                                            \
-MATCH_AxS(typ, postfix, zval, oval)                                            \
-MATCH_SxA(typ, postfix, zval, oval)                                            \
-MATCH_SxS(typ, postfix, zval, oval)
-
-BUILT_IN(MATCH)
-
-/******************************************************************************
- *
  * @fn <a>[n] mask(bool[n] p, <a>[n] A, <a>[n] B)
  *
  * @brief mask has the same semantics as where, but it does not use WLs.
