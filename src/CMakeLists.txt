@@ -277,10 +277,6 @@ SET (C_DEPS_SRC
     stdio/src/TermFile/fscans.c
     stdio/src/TermFile/fscanl.c
     stdio/src/TermFile/fprintf.c
-    stdio/src/PPM/ppm2array.c
-    stdio/src/PPM/array2ppm.c
-    stdio/src/PGM/pgm2array.c
-    stdio/src/PGM/array2pgm.c
     stdio/src/File/rm.c
     stdio/src/File/mkstemp.c
     stdio/src/File/fscans.c
