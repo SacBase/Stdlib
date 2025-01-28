@@ -4,6 +4,6 @@ import Math: all;
 import MathArray: all;
 #ifdef EXT_STDLIB
 import ComplexMath: all;
-#endif /* EXT_STDLIB  */
-export all;
+#endif /* EXT_STDLIB */
 
+export all;
