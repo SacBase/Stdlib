@@ -51,7 +51,7 @@ inline int[.] shape(complex[*] arr)
 inline complex[i:ishp] sel(int[o] idx, complex[o:oshp,i:ishp] arr)
     | all(0 <= idx), all(idx < oshp)
 {
-    return (complex[*])Array::sel([idx], (double[+])arr);
+    return (complex[*])Array::sel(idx, (double[+])arr);
 }
 
 inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
