@@ -12,12 +12,12 @@ typedef double[2] complex;
 
 inline double real(complex c)
 {
-    return Array::sel([0], (double[2])c);
+    return ArrayBasics::sel([0], (double[2])c);
 }
 
 inline double imag(complex c)
 {
-    return Array::sel([1], (double[2])c);
+    return ArrayBasics::sel([1], (double[2])c);
 }
 
 /******************************************************************************
