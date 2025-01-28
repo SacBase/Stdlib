@@ -1,8 +1,6 @@
 module Grey;
 
-#define OVERLOAD dim,shape,sel,reshape,tod,toi,+,-
-use Array: all except { OVERLOAD };
-import Array: { OVERLOAD };
+use Array: all except { dim,shape,sel,reshape,tod,toi,+,- };
 
 export all;
 
@@ -19,24 +17,24 @@ typedef int grey;
 
 inline int dim(grey[*] arr)
 {
-    return dim((int[*])arr);
+    return Array::dim((int[*])arr);
 }
 
 inline int[.] shape(grey[*] arr)
 {
-    return shape((int[*])arr);
+    return Array::shape((int[*])arr);
 }
 
 inline grey[i:ishp] sel(int[o] idx, grey[o:oshp,i:ishp] arr)
     | all(0 <= idx), all(idx < oshp)
 {
-    return (grey[*])((int[*])arr)[idx];
+    return (grey[*])Array::sel(idx, (int[*])arr);
 }
 
 inline grey[d:shp] reshape(int[d] shp, grey[_:shp_a] arr)
     | prod(shp) == prod(shp_a)
 {
-    return (grey[*])_reshape_VxA_(shp, (int[*])arr);
+    return (grey[*])Array::reshape(shp, (int[*])arr);
 }
 
 /******************************************************************************
@@ -52,17 +50,17 @@ inline grey tog(int g)
 
 inline grey tog(double g)
 {
-    return (grey)max(min(toi(g), 255), 0);
+    return (grey)max(min(Array::toi(g), 255), 0);
 }
 
-inline int[*] toi(grey g)
+inline int toi(grey g)
 {
-    return (int[*])g;
+    return (int)g;
 }
 
-inline double[*] tod(grey g)
+inline double tod(grey g)
 {
-    return tod((int[*]) g);
+    return Array::tod((int)g);
 }
 
 /******************************************************************************
@@ -73,10 +71,10 @@ inline double[*] tod(grey g)
 
 inline grey +(grey g1, grey g2)
 {
-    return tog(toi(g1) + toi(g2));
+    return tog(toi(g1) Array::+ toi(g2));
 }
 
 inline grey -(grey g1, grey g2)
 {
-    return tog(toi(g1) - toi(g2));
+    return tog(toi(g1) Array::- toi(g2));
 }
