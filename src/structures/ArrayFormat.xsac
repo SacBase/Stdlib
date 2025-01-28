@@ -1,6 +1,10 @@
 module ArrayFormat;
 
-use Array: all;
+use ArrayArith: all;
+use ArrayBasics: all;
+use ArrayTransform: all;
+use Constants: all;
+use ScalarArith: all;
 use String: { tochar, sprintf };
 
 export { format };
