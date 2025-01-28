@@ -584,12 +584,12 @@ typ name( typ[*] arr_a)                                             \
   return( res);                                                     \
 }
 
-#define SUM( typ, postfix, zval, oval) REDUCE( sum, typ, +, zval)
-#define PROD( typ, postfix, zval, oval) REDUCE( prod, typ, *, oval)
-#define ALL REDUCE( all, bool, &, true)
-#define ANY REDUCE( any, bool, |, false)
-#define MAXVAL( typ, postfix, zval, oval) REDUCE( maxval, typ, max, min##typ())
-#define MINVAL( typ, postfix, zval, oval) REDUCE( minval, typ, min, max##typ())
+#define SUM( typ, postfix, zval, oval) REDUCE( sum, typ, ScalarArith::+, zval)
+#define PROD( typ, postfix, zval, oval) REDUCE( prod, typ, ScalarArith::*, oval)
+#define ALL REDUCE( all, bool, ScalarArith::&, true)
+#define ANY REDUCE( any, bool, ScalarArith::|, false)
+#define MAXVAL( typ, postfix, zval, oval) REDUCE( maxval, typ, ScalarArith::max, min##typ())
+#define MINVAL( typ, postfix, zval, oval) REDUCE( minval, typ, ScalarArith::min, max##typ())
 
 NUM( SUM)
 NUM( PROD)
