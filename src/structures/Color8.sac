@@ -1,8 +1,6 @@
 module Color8;
 
-#define OVERLOAD dim,shape,sel,reshape,tod,toi,+,-,*
-use Array: all except { OVERLOAD };
-import Array: { OVERLOAD };
+use Array: all except { dim,shape,sel,reshape,tod,toi,+,-,* };
 use MathArray: all;
 
 export all except { Weights2Clut, genSteps };
@@ -20,18 +18,18 @@ typedef int[3] color;
 
 inline int dim(color[*] arr)
 {
-    return dim((int[*])arr) - 1;
+    return Array::dim((int[*])arr) Array::- 1;
 }
 
 inline int[.] shape(color[*] arr)
 {
-    return drop([-1], shape((int[*])arr));
+    return drop([Array::-1], Array::shape((int[*])arr));
 }
 
 inline color[i:ishp] sel(int[o] idx, color[o:oshp,i:ishp] arr)
     | all(0 <= idx), all(idx < oshp)
 {
-    return (color[*])((int[*])arr)[idx];
+    return (color[*])Array::sel(idx, (int[*])arr);
 }
 
 inline color[d:shp] sel(int idx, color[n,d:shp] arr)
@@ -44,7 +42,7 @@ inline
 color[d:shp] reshape(int[d] shp, color[_:shp_a] arr)
     | prod(shp) == prod(shp_a)
 {
-    return (color[*])reshape(shp ++ [3], (int[*])arr);
+    return (color[*])Array::reshape(shp ++ [3], (int[*])arr);
 }
 
 /******************************************************************************
@@ -78,27 +76,27 @@ inline int[d:shp,3] toi(color[d:shp] c)
 
 inline double[3] tod(color c)
 {
-    return tod((int[3])c);
+    return Array::tod((int[3])c);
 }
 
 inline double[d:shp,3] tod(color[d:shp] c)
 {
-    return tod((int[*])c);
+    return Array::tod((int[*])c);
 }
 
 inline int red(color c)
 {
-    return ((int[3])c)[0];
+    return Array::sel([0], (int[3])c);
 }
 
 inline int green(color c)
 {
-    return ((int[3])c)[1];
+    return Array::sel([1], (int[3])c);
 }
 
 inline int blue(color c)
 {
-    return ((int[3])c)[2];
+    return Array::sel([2], (int[3])c);
 }
 
 inline int, int, int rgb(color c)
@@ -114,13 +112,14 @@ inline int, int, int rgb(color c)
 
 inline color[256] Weights2Clut(double[256] w, color c1, color c2)
 {
-    return (color[256])toi({ iv -> w[iv] * tod(c1) }
-                           + { iv -> (1d - w[iv]) * tod(c2) });
+    w1 = { iv -> Array::sel(iv, w) Array::* tod(c1) | iv < [256] };
+    w2 = { iv -> (1d Array::- Array::sel(iv, w)) Array::* tod(c2) | iv < [256] };
+    return (color[256])Array::toi(w1 Array::+ w2);
 }
 
 inline double[256] genSteps(double from, double to)
 {
-    return from + tod(iota(256)) / 256d * (to - from);
+    return from Array::+ Array::tod(iota(256)) / 256d Array::* (to Array::- from);
 }
 
 inline color[256] genLinearClut(color c1, color c2)
@@ -132,14 +131,14 @@ inline color[256] genLinearClut(color c1, color c2)
 inline color[256] genLogarithmicClut(double from, double to, color c1, color c2)
 {
     steps = genSteps(from, to);
-    weights = (log(steps) - log(from)) / (log(to) - log(from));
+    weights = (log(steps) Array::- log(from)) / (log(to) Array::- log(from));
     return Weights2Clut(weights, c1, c2);
 }
 
 inline color[256] genExponentialClut(double from, double to, color c1, color c2)
 {
     steps = genSteps(from, to);
-    weights = (exp(steps) - exp(from)) / (exp(to) - exp(from));
+    weights = (exp(steps) Array::- exp(from)) / (exp(to) Array::- exp(from));
     return Weights2Clut(weights, c1, c2);
 }
 
@@ -167,22 +166,23 @@ inline color Hsb2Rgb(int h_in, int s_in, int b_in)
         c = newColor(b_in, b_in, b_in);
     else
     {
-        h = tod(h_in) / 60d;
-        s = tod(s_in) / 100d;
-        b = tod(b_in) / 100d;
+        h = Array::tod(h_in) / 60d;
+        s = Array::tod(s_in) / 100d;
+        b = Array::tod(b_in) / 100d;
 
-        i = toi(h) % 6;
-        f = h - tod(i);
+        i = Array::toi(h) % 6;
+        f = h Array::- Array::tod(i);
 
-        if ((i % 2) == 0)
-            f = 1d - f;
+        if ((i % 2) == 0) {
+            f = 1d Array::- f;
+        }
 
-        m = b * (1d - s);
-        n = b * (1d - s * f);
+        m = b Array::* (1d Array::- s);
+        n = b Array::* (1d Array::- s Array::* f);
 
-        b = toi(b * 255d);
-        m = toi(m * 255d);
-        n = toi(n * 255d);
+        b = Array::toi(b Array::* 255d);
+        m = Array::toi(m Array::* 255d);
+        n = Array::toi(n Array::* 255d);
 
         if (0 == i)
             c = newColor(b, n, m);
@@ -203,12 +203,12 @@ inline color Hsb2Rgb(int h_in, int s_in, int b_in)
 
 inline color[d:shp] Hsb2Rgb(int[d:shp] h, int s, int b)
 {
-    return { iv -> Hsb2Rgb(h[iv], s, b) | iv < shp };
+    return { iv -> Hsb2Rgb(Array::sel(iv, h), s, b) | iv < shp };
 }
 
 inline color[d:shp] Hsb2Rgb(int[d:shp] h, int[d:shp] s, int[d:shp] b)
 {
-    return { iv -> Hsb2Rgb(h[iv], s[iv], b[iv]) | iv < shp };
+    return { iv -> Hsb2Rgb(Array::sel(iv, h), Array::sel(iv, s), Array::sel(iv, b)) | iv < shp };
 }
 
 /******************************************************************************
@@ -221,7 +221,7 @@ inline color +(color a, color b)
 {
     r1, g1, b1 = rgb(a);
     r2, g2, b2 = rgb(b);
-    return newColor(r1 + r2, g1 + g2, b1 + b2);
+    return newColor(r1 Array::+ r2, g1 Array::+ g2, b1 Array::+ b2);
 }
 
 inline color[d:shp] + (color[d:shp] a, color[d:shp] b)
@@ -233,7 +233,7 @@ inline color -(color a, color b)
 {
     r1, g1, b1 = rgb(a);
     r2, g2, b2 = rgb(b);
-    return newColor(r1 - r2, g1 - g2, b1 - b2);
+    return newColor(r1 Array::- r2, g1 Array::- g2, b1 Array::- b2);
 }
 
 inline color[d:shp] -(color[d:shp] a, color[d:shp] b)
@@ -244,7 +244,11 @@ inline color[d:shp] -(color[d:shp] a, color[d:shp] b)
 inline color *(color c, double x)
 {
     r, g, b = rgb(c);
-    return newColor(toi(tod(r) * x), toi(tod(b) * x), toi(tod(b) * x));
+    return newColor(
+        Array::toi(Array::tod(r) Array::* x),
+        Array::toi(Array::tod(b) Array::* x),
+        Array::toi(Array::tod(b) Array::* x)
+    );
 }
 
 inline color[d:shp] *(color[d:shp] c, double x)
