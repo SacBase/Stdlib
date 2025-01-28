@@ -7,8 +7,7 @@ export all;
 
 #else
 
-import Array: { shape, sel, &, !=, ==, +, >=, >, <=, <, ++ };
-import Char: all;
+use Array: { ++ };
 
 export all except { indent };
 
@@ -18,18 +17,17 @@ external typedef string;
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/copystr.o"
 
-// TODO: _eq_SxS_(n, _add_SxS_(LENGTH, 1));
 external string to_string(char[n] A, int LENGTH);
     #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/tostring.o"
     /* Convert character array to string. */
 
-external string strmod(string S, int P, char C);
+external string strmod(string str, int P, char C);
     #pragma linksign [1,2,3,4]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/strmod.o"
-    /* Change position P of string S to character C. */
+    /* Change position P of string str to character C. */
 
 external string strins(string S1, int P, string S2);
     #pragma linkobj "src/String/strins.o"
@@ -42,10 +40,10 @@ external string strovwt(string S1, int P, string S2);
     #pragma linkobj "src/String/strovwt.o"
     /* Overwrite string S2 with string S1 starting at position P. */
 
-external char strsel(string S, int P);
-    #pragma linksign[ 0,1,2]
+external char strsel(string str, int P);
+    #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strsel.o"
-    /* Select character P of string S. */
+    /* Select character P of string str. */
 
 external string strcat(string S1, string S2);
     #pragma linkname "SACstrcat"
@@ -53,7 +51,7 @@ external string strcat(string S1, string S2);
     #pragma linkobj "src/String/strcat.o"
     /* Concatenate strings S1 and S2. */
 
-external string + (string S1, string S2);
+external string +(string S1, string S2);
     #pragma linkname "SACstrcat"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strcat.o"
@@ -97,28 +95,28 @@ external int strncasecmp(string S1, string S2, int N);
        Result is negative if S1 < S2 alphabetically, positive if S1 > S2
        and zero if S1 == S2, all modulo case. */
 
-external int strlen(string S);
-    #pragma linksign[ 0,1]
+external int strlen(string str);
+    #pragma linksign [0,1]
     #pragma linkname "SACstrlen"
     #pragma linkobj "src/String/strlen.o"
-    /* Return the length of string S. */
+    /* Return the length of string str. */
 
-external string strtake(string S, int N);
+external string strtake(string str, int N);
     #pragma linksign [1,2,3]
     #pragma refcounting [0,1]
     #pragma linkobj "src/String/strtake.o"
-    /* Return the first N characters of string S. */
+    /* Return the first N characters of string str. */
 
-external string strdrop(string S, int N);
+external string strdrop(string str, int N);
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strdrop.o"
-    /* Return all but the first N characters of string S. */
+    /* Return all but the first N characters of string str. */
 
-external string strext(string S, int FIRST, int LEN);
+external string strext(string str, int FIRST, int LEN);
     #pragma linksign [0,1,2,3]
     #pragma linkobj "src/String/strext.o"
     /* Extract the substring beginning at character FIRST with length
-       LEN from string S. */
+       LEN from string str. */
 
 external string sprintf(string FORMAT, ...);
     #pragma linkname "SACsprintf"
@@ -128,11 +126,11 @@ external string sprintf(string FORMAT, ...);
        variable number of arguments similar to the printf and fprintf
        functions. */
 
-external int, ... sscanf(string S, string FORMAT);
+external int, ... sscanf(string str, string FORMAT);
     #pragma linkname "SACsscanf"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/sscanf.o"
-    /* Scan the string S concerning the format string FORMAT.
+    /* Scan the string str concerning the format string FORMAT.
        The format string is the same as for fscanf.
        The int result gives the maximum number of successfully performed
        conversions.
@@ -140,42 +138,42 @@ external int, ... sscanf(string S, string FORMAT);
                 strings are not supported and may cause runtime
                 errors. Use sscanf_str instead. */
 
-external string sscanf_str(string S, string FORMAT);
+external string sscanf_str(string str, string FORMAT);
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/sscanfstr.o"
-    /* Scan the string S concerning the format string FORMAT.
+    /* Scan the string str concerning the format string FORMAT.
        FORMAT must have exactly one string conversion specifier.
        The scanned substring is returned. */
 
-external int strchr(string S, char C);
+external int strchr(string str, char C);
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strchr.o"
     #pragma linkname "SACstrchr"
     /* Return the position of the first occurrence of character C
-       in string S. The result is -1 if character C does not occurr
+       in string str. The result is -1 if character C does not occurr
        at all. */
 
-external int strrchr(string S, char C);
+external int strrchr(string str, char C);
     #pragma linkname "SACstrrchr"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strrchr.o"
     /* Return the position of the last occurrence of character C
-       in string S. The result is -1 if character C does not occurr
+       in string str. The result is -1 if character C does not occurr
        at all. */
 
-external int strcspn(string S, string REJECT);
+external int strcspn(string str, string REJECT);
     #pragma linkname "SACstrcspn"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strcspn.o"
-    /* Return the length of the initial segment of S which
-       consists entirely of characters not in REJECT.  */
+    /* Return the length of the initial segment of str which
+       consists entirely of characters not in REJECT. */
 
-external int strspn(string S, string ACCEPT);
+external int strspn(string str, string ACCEPT);
     #pragma linkname "SACstrspn"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strspn.o"
-    /* Return the length of the initial segment of S which
-       consists entirely of characters in ACCEPT.  */
+    /* Return the length of the initial segment of str which
+       consists entirely of characters in ACCEPT. */
 
 external int strstr(string HAYSTACK, string NEEDLE);
     #pragma linkname "SACstrstr"
@@ -183,111 +181,111 @@ external int strstr(string HAYSTACK, string NEEDLE);
     #pragma linkobj "src/String/strstr.o"
     /* Find the first occurrence of the string NEEDLE in the
        string HAYSTACK. Return the index to this occurrence.
-       If NEEDLE could not be found then return -1.  */
+       If NEEDLE could not be found then return -1. */
 
-external string, string strtok(string S, string SEP);
+external string, string strtok(string str, string SEP);
     #pragma linkname "SACstrtok"
     #pragma linksign [0,1,2,3]
     #pragma linkobj "src/String/strtok.o"
-    /* Split string S into a token and the remainder string
-       using the characters from SEP as delimiters. If S starts
+    /* Split string str into a token and the remainder string
+       using the characters from SEP as delimiters. If str starts
        with characters from SEP then these are skipped until
        a character not in SEP is found. */
 
-external string chomp(string S);
+external string chomp(string str);
     #pragma linkname "SACchomp"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/trim.o"
-    /* Remove trailing line terminators from S. */
+    /* Remove trailing line terminators from str. */
 
-external string rtrim(string S);
+external string rtrim(string str);
     #pragma linkname "SACrtrim"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/trim.o"
-    /* Remove trailing whitespace from S. */
+    /* Remove trailing whitespace from str. */
 
-external string ltrim(string S);
+external string ltrim(string str);
     #pragma linkname "SACltrim"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/trim.o"
-    /* Remove leading whitespace from S. */
+    /* Remove leading whitespace from str. */
 
-external string trim(string S);
+external string trim(string str);
     #pragma linkname "SACtrim"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/trim.o"
-    /* Remove leading and trailing whitespace from S. */
+    /* Remove leading and trailing whitespace from str. */
 
-external int, string strtoi(string S, int BASE);
+external int, string strtoi(string str, int BASE);
     #pragma linkname "SACstrtoi"
     #pragma linksign [0,1,2,3]
     #pragma linkobj "src/String/strtoi.o"
-    /* Convert the string S into an integer value. BASE specifies the format
+    /* Convert the string str into an integer value. BASE specifies the format
        and must be in the range from 2 to 32. This feature allows for
        scanning hexadecimal or octal numbers as well as decimal
        representations. The string result contains the remainder of the
        input string. */
 
-external float, string strtof(string S);
+external float, string strtof(string str);
     #pragma linkname "SACstrtof"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strtof.o"
-    /* Convert the string S into a float value. The string result
+    /* Convert the string str into a float value. The string result
        contains the remainder of the input string. */
 
-external double, string strtod(string S);
+external double, string strtod(string str);
     #pragma linkname "SACstrtod"
     #pragma linksign [0,1,2]
     #pragma linkobj "src/String/strtod.o"
-    /* Convert the string S into a double value. The string result
+    /* Convert the string str into a double value. The string result
        contains the remainder of the input string. */
 
-external int toi(string S);
+external int toi(string str);
     #pragma linkname "SACtoi"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/strtoi.o"
-    /* Convert the string S into an integer value. In contrast to strtoi
+    /* Convert the string str into an integer value. In contrast to strtoi
        the number must always be in decimal representation. */
 
-external float tof(string S);
+external float tof(string str);
     #pragma linkname "SACtof"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/strtof.o"
-    /* Convert the string S into a float value. */
+    /* Convert the string str into a float value. */
 
-external double tod(string S);
+external double tod(string str);
     #pragma linkname "SACtod"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/strtod.o"
-    /* Convert the string S into a double value. */
+    /* Convert the string str into a double value. */
 
 external string tos(int N);
     #pragma linkname "SACitos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/itos.o"
-    /* Convert integer into string.  */
+    /* Convert integer into string. */
 
 external string tos(float N);
     #pragma linkname "SACftos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/ftos.o"
-    /* Convert float into string.    */
+    /* Convert float into string. */
 
 external string tos(double N);
     #pragma linkname "SACdtos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/dtos.o"
-    /* Convert double into string.   */
+    /* Convert double into string. */
 
 external string tos(bool B);
     #pragma linkname "SACbtos"
     #pragma linksign [0,1]
     #pragma linkobj "src/String/btos.o"
-    /* Convert boolean into string.  */
+    /* Convert boolean into string. */
 
 inline string indent(int indent, string str)
 {
-    while (indent > 0){
+    while (indent Array::> 0){
         str = strcat("  ", str);
     }
     return str;
@@ -296,7 +294,7 @@ inline string indent(int indent, string str)
 #define TOS(type)                                                              \
 inline string tos(type[+] in)                                                  \
 {                                                                              \
-    return(tos(in, 0));                                                        \
+    return tos(in, 0);                                                         \
 }                                                                              \
                                                                                \
 inline string tos(type in, int indent)                                         \
@@ -307,12 +305,12 @@ inline string tos(type in, int indent)                                         \
 inline string tos(type[n,d:shp] in, int indent)                                \
 {                                                                              \
     res = "[\n";                                                               \
-    for (i = 0; i < n; i++){                                                   \
-        res = strcat(res, tos(in[i], indent + 1));                             \
+    for (i = 0; i Array::< n; i = i Array::+ 1) {                              \
+        res = strcat(res, tos(Array::sel([i], in), indent Array::+ 1));        \
     }                                                                          \
     res = strcat(res, indent(indent, "]\n"));                                  \
     return res;                                                                \
-}                                                                              \
+}
 
 TOS(int)
 TOS(float)
@@ -321,35 +319,33 @@ TOS(bool)
 
 inline string to_string(char[len] arr)
 {
-  return to_string(_cat_VxV_(arr, ['\0']), len);
+    return to_string(arr ++ ['\0'], len);
 }
 
-inline char[.] tochar(string s)
+inline char[.] tochar(string str)
 {
-    return with {
-        (. <= [i] <= .) : strsel(s, i);
-    } : genarray([strlen(s)], ' ');
+    return { [i] -> strsel(str, i) | [i] < [strlen(str)] };
 }
 
-inline char sel(int[.] index, string s)
+inline char sel(int[.] idx, string str)
 {
-    return strsel(s, index[[0]]);
+    return strsel(str, Array::sel([0], idx));
 }
 
-inline string modarray(string s, int[1] index, char c)
+inline string modarray(string str, int[1] idx, char c)
 {
-    return strmod(s, index[[0]], c);
+    return strmod(str, Array::sel([0], idx), c);
 }
 
-inline string modarray(string s1, int[1] index, string s2)
+inline string modarray(string s1, int[1] idx, string s2)
 {
-  return strovwt(s1, index[[0]], s2);
+    return strovwt(s1, Array::sel([0], idx), s2);
 }
 
 #define COMPARE_STRINGS(cmp)                                                   \
 inline bool cmp(string A, string B)                                            \
 {                                                                              \
-    return strcmp(A, B) cmp 0;                                                 \
+    return strcmp(A, B) Array::cmp 0;                                          \
 }
 
 COMPARE_STRINGS(==)
@@ -360,13 +356,13 @@ COMPARE_STRINGS(>)
 COMPARE_STRINGS(>=)
 
 #define TEST_STRING(pred)                                                      \
-inline  bool pred(string S)                                                    \
+inline  bool pred(string str)                                                  \
 {                                                                              \
     res = false;                                                               \
-    len = strlen(S);                                                           \
-    for (i = 0; i < len && res; i += 1) {                                      \
-        c = S[[i]];                                                            \
-        res = pred(c);                                                         \
+    len = strlen(str);                                                         \
+    for (i = 0; _and_SxS_(i Array::< len, res); i = i Array::+ 1) {            \
+        c = str[[i]];                                                          \
+        res = Char::pred(c);                                                   \
     }                                                                          \
     return res;                                                                \
 }
@@ -384,17 +380,16 @@ TEST_STRING(isgraph)
 TEST_STRING(iscntrl)
 
 #define CONVERT_STRING(pred, convert)                                          \
-inline string convert(string S)                                                \
+inline string convert(string str)                                              \
 {                                                                              \
-    s = S;                                                                     \
-    for (i = 0; i < strlen(s); i += 1) {                                       \
-        c = s[[i]];                                                            \
-        if (pred(c))                                                           \
+    for (i = 0; i Array::< strlen(str); i = i Array::+ 1) {                    \
+        c = str[[i]];                                                          \
+        if (Char::pred(c))                                                     \
         {                                                                      \
-            s = strmod(s, i, convert(c));                                      \
+            str = strmod(str, i, Char::convert(c));                            \
         }                                                                      \
     }                                                                          \
-    return s;                                                                  \
+    return str;                                                                \
 }
 
 CONVERT_STRING(isupper, tolower)
