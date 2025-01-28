@@ -1,7 +1,7 @@
 module Color8;
 
 use Array: { all, <, <=, == };
-use MathArray: { exp, log };
+use Math: { exp, log };
 
 export all except { Weights2Clut, genSteps };
 
