@@ -340,8 +340,7 @@ BUILT_IN(CATENATE)
 inline                                                                         \
 typ[n,d:shp] reverse(typ[n,d:shp] A)                                           \
 {                                                                              \
-    max = _sub_SxS_(n, 1);                                                     \
-    return { [i] -> A[_sub_SxS_(max, i)] | [i] <= [max] };                     \
+    return { [i] -> A[_sub_SxS_(_sub_SxS_(n, 1), i)] | [i] < [n] };            \
 }
 
 BUILT_IN(REVERSE)
