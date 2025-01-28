@@ -1,6 +1,6 @@
 module Quaternion;
 
-use Array: { drop, all, <=, < };
+use Array: { all, <=, < };
 
 export all;
 
@@ -10,8 +10,10 @@ typedef double[4] quaternion;
  *
  * Array properties.
  *
- * @note `dim` and `shape` may not use type patterns, as type patterns rely
- * on the existence of these functions.
+ * @note The definition of `dim` and `shape` for user-defined types may not use
+ * type patterns, as type patterns rely on the existence of these functions
+ * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
+ * are not defined for user-defined types.
  *
  ******************************************************************************/
 
@@ -22,7 +24,7 @@ inline int dim(quaternion[*] arr)
 
 inline int[.] shape(quaternion[*] arr)
 {
-    return drop([Array::-1], Array::shape((double[+])arr));
+    return Array::drop([Array::-1], Array::shape((double[+])arr));
 }
 
 inline quaternion[i:ishp] sel(int[o] idx, quaternion[o:oshp,i:ishp] arr)
