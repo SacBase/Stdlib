@@ -38,21 +38,24 @@ export all;
 inline                                                                         \
 b[d:shp] name(a[d:shp] A, a[d:shp] B)                                          \
 {                                                                              \
-    return { iv -> op(Array::sel(iv, A), Array::sel(iv, B)) | iv < shp };      \
+    return { iv -> op(ArrayBasics::sel(iv, A), ArrayBasics::sel(iv, B))        \
+           | iv < shp };                                                       \
 }
 
 #define MAP_BIN_AxS(name, op, a, b)                                            \
 inline                                                                         \
 b[d:shp] name(a[d:shp] A, a B)                                                 \
 {                                                                              \
-    return { iv -> op(Array::sel(iv, A), B) | iv < shp };                      \
+    return { iv -> op(ArrayBasics::sel(iv, A), B)                              \
+           | iv < shp };                                                       \
 }
 
 #define MAP_BIN_SxA(name, op, a, b)                                            \
 inline                                                                         \
 b[d:shp] name(a A, a[d:shp] B)                                                 \
 {                                                                              \
-    return { iv -> op(A, Array::sel(iv, B)) | iv < shp };                      \
+    return { iv -> op(A, ArrayBasics::sel(iv, B))                              \
+           | iv < shp };                                                       \
 }
 
 /******************************************************************************/
@@ -88,7 +91,8 @@ int[n] (name)(int A, int[n] B)                                                 \
 inline                                                                         \
 b[d:shp] name(a[d:shp] A)                                                      \
 {                                                                              \
-    return { iv -> op(Array::sel(iv, A)) | iv < shp };                         \
+    return { iv -> op(ArrayBasics::sel(iv, A))                                 \
+           | iv < shp };                                                       \
 }
 
 #define MAP_MON_AxS(name, op, a, b)
