@@ -1,15 +1,15 @@
 # This file describes the list of all the *.sac and *.xsac files
 # and annotation whether a file belongs to the Core build or
 # to the Extended build of the standard library.
-# 
+#
 # The syntax of the file is:
 #       <filename><spaces>(Core|Ext)
-# 
+#
 # The filename is specified relatively to src directory.
 
 # The xsac files:
 structures/ScalarArith.xsac                Core
-structures/ComplexArrayTransform.xsac      Ext 
+structures/ComplexArrayTransform.xsac      Ext
 structures/ComplexArrayBasics.xsac         Ext
 structures/ComplexArrayArith.xsac          Ext
 structures/ArrayTransform.xsac             Core
@@ -19,7 +19,7 @@ structures/ArrayArith.xsac                 Core
 stdio/ArrayIO.xsac                         Core
 
 # The sac files:
-utrace/UTrace.sac                          Core 
+utrace/UTrace.sac                          Core
 utrace/Indent.sac                          Core
 system/World.sac                           Core
 system/TimeStamp.sac                       Core
@@ -53,8 +53,6 @@ structures/Bits.sac                        Core
 structures/String.sac                      Core
 stdio/TermFile.sac                         Core
 stdio/ScalarIO.sac                         Core
-stdio/PPM.sac                              Ext
-stdio/PGM.sac                              Ext
 stdio/ListIO.sac                           Ext
 stdio/IOresources.sac                      Core
 stdio/GreyIO.sac                           Ext
@@ -64,7 +62,7 @@ stdio/Color8IO.sac                         Ext
 stdio/BinFile.sac                          Core
 stdio/StdIO.sac                            Core
 stdio/File.sac                             Core
-# This file relies on the SDL which we keep 
+# This file relies on the SDL which we keep
 # in a separate module these days.
 #stdio/BMP.sac                              Ext
 numerical/ComplexMath.sac                  Ext
