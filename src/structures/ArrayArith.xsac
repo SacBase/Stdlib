@@ -1,5 +1,7 @@
 module ArrayArith;
 
+import ScalarArith: all;
+
 export all;
 
 #include "Templates.mac"
