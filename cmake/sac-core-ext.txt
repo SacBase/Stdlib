@@ -42,7 +42,6 @@ structures/Structures.sac                  Core
 structures/StringArray.sac                 Ext
 structures/Color8.sac                      Ext
 structures/List.sac                        Ext
-structures/Grey.sac                        Ext
 structures/Constants.sac                   Core
 structures/ComplexScalarArith.sac          Ext
 structures/ComplexBasics.sac               Ext
@@ -55,16 +54,12 @@ stdio/TermFile.sac                         Core
 stdio/ScalarIO.sac                         Core
 stdio/ListIO.sac                           Ext
 stdio/IOresources.sac                      Core
-stdio/GreyIO.sac                           Ext
 stdio/FibreIO.sac                          Ext
 stdio/ComplexIO.sac                        Ext
 stdio/Color8IO.sac                         Ext
 stdio/BinFile.sac                          Core
 stdio/StdIO.sac                            Core
 stdio/File.sac                             Core
-# This file relies on the SDL which we keep
-# in a separate module these days.
-#stdio/BMP.sac                              Ext
 numerical/ComplexMath.sac                  Ext
 numerical/Numerical.sac                    Core
 numerical/MathArray.sac                    Core
