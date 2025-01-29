@@ -1,7 +1,5 @@
 module Quaternion;
 
-use Array: { all, <=, < };
-
 export all;
 
 typedef double[4] quaternion;
@@ -28,13 +26,13 @@ inline int[.] shape(quaternion[*] arr)
 }
 
 inline quaternion[i:ishp] sel(int[o] idx, quaternion[o:oshp,i:ishp] arr)
-    | all(0 <= idx), all(idx < oshp)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
 {
     return (quaternion[*])Array::sel(idx, (double[*])arr);
 }
 
 inline quaternion[d:shp] sel(int idx, quaternion[n,d:shp] arr)
-    | (0 <= idx), (idx < n)
+    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
 {
     return arr[[idx]];
 }

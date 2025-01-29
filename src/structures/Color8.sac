@@ -1,6 +1,6 @@
 module Color8;
 
-use Array: { all, <, <=, == };
+use ScalarArith: { == };
 use Numerical: { exp, log };
 
 export all except { Weights2Clut, genSteps };
@@ -29,13 +29,13 @@ inline int[.] shape(color[*] arr)
 }
 
 inline color[i:ishp] sel(int[o] idx, color[o:oshp,i:ishp] arr)
-    | all(0 <= idx), all(idx < oshp)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
 {
     return (color[*])Array::sel(idx, (int[*])arr);
 }
 
 inline color[d:shp] sel(int idx, color[n,d:shp] arr)
-    | (0 <= idx), (idx < n)
+    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
 {
     return arr[[idx]];
 }
