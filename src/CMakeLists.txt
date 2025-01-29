@@ -319,9 +319,9 @@ SET (C_DEPS_SRC
     numerical/src/Math/isnan.c
     numerical/src/Math/isinf.c
     numerical/src/Math/isfinite.c
-    classes/random/src/Random/Random.c
-    classes/random/src/Rand48/Rand48.c
-    classes/random/src/Rand/Rand.c
+    random/src/Random/Random.c
+    random/src/Rand48/Rand48.c
+    random/src/Rand/Rand.c
     auxiliary/src/C99Benchmarking/bench.c
 )
 
