@@ -76,5 +76,4 @@ classes/random/Rand.sac                    Core
 classes/auxiliary/Counter.sac              Ext
 auxiliary/Interval.sac                     Ext
 auxiliary/Hiding.sac                       Ext
-auxiliary/C99Benchmarking.sac              Ext
 auxiliary/Benchmarking.sac                 Ext
