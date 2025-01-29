@@ -1,139 +1,136 @@
 module UTrace;
 
-export all except {PrintSeparator,PrintHeader,Indent};
+export all except { PrintSeparator, PrintHeader, Indent };
 
 use StdIO: all;
 use Structures: all;
 use ArrayFormat: all;
 use Indent: all;
 
-objdef Indent offset = newIndent( 0);
+objdef Indent offset = newIndent(0);
 
-#define BUILT_IN( fun)    \
-fun( int)                 \
-fun( float)               \
-fun( double)              \
-fun( bool)                \
-fun( char)
+#define BUILT_IN(fun)                                                          \
+fun(int)                                                                       \
+fun(float)                                                                     \
+fun(double)                                                                    \
+fun(bool)                                                                      \
+fun(char)
 
-#define SHOW( a) \
-void indentedShow( a[d:shp] arr)                                                 \
-{                                                                                \
-  cshape = to_string( format( shp));                                             \
-  printf( "reshape( [ %s ] , [\n", cshape);                                      \
-                                                                                 \
-  spaces = genarray( [getIndent() + getIndent( offset) + strlen( cshape) + 18],  \
-                     ' ');                                                       \
-  carr = format( arr);                                                           \
-  ext_carr = with {                                                              \
-               ( . <= iv <= . ) : _cat_VxV_(spaces, carr[ iv]);                  \
-             } : genarray( drop( [-1], shape( carr)),                            \
-                           _cat_VxV_(spaces, genarray( take( [-1], shape( carr)), ' ')));\
-                                                                                 \
-  show( ext_carr);                                                               \
-  incIndent( offset, strlen( cshape) + 16);                                      \
-  doIndent( "   ");                                                              \
-  doIndent( offset, " ");                                                        \
-  printf( "])\n");                                                               \
-  decIndent( offset, strlen( cshape) + 16);                                      \
-}                                                                                \
-                                                                                 \
-void indentedShow( a[n,m] arr)                                                   \
-{                                                                                \
-  spaces = genarray( [getIndent() + getIndent( offset)], ' ');                   \
-  carr = format( arr);                                                           \
-  ext_carr = { [i] -> ( _eq_SxS_(i, 0) ? _cat_VxV_(carr[[i]], spaces) : _cat_VxV_(spaces, carr[[i]])) | [i] < [n] };\
-  show( ext_carr);                                                               \
-}                                                                                \
-                                                                                 \
-void indentedShow( a[.] arr)                                                     \
-{                                                                                \
-  show( arr);                                                                    \
-}                                                                                \
-                                                                                 \
-void indentedShow( a arr)                                                        \
-{                                                                                \
-  show( arr);                                                                    \
+#define SHOW(a) \
+void indentedShow(a[d:shp] arr)                                                \
+{                                                                              \
+    cshape = to_string(format(shp));                                           \
+    printf("reshape([ %s ] , [\n", cshape);                                    \
+                                                                               \
+    spaces = genarray([getIndent() + getIndent(offset) + strlen(cshape) + 18], \
+                        ' ');                                                  \
+    carr = format(arr);                                                        \
+    ext_carr = with {                                                          \
+        (. <= iv <= . ) : spaces Array::++ carr[iv];                           \
+    } : genarray(drop([-1], shape(carr)),                                      \
+                 (spaces Array::++ genarray(take([-1], shape(carr)), ' ')));   \
+                                                                               \
+    show(ext_carr);                                                            \
+    incIndent(offset, strlen(cshape) + 16);                                    \
+    doIndent("   ");                                                           \
+    doIndent(offset, " ");                                                     \
+    printf("])\n");                                                            \
+    decIndent(offset, strlen(cshape) + 16);                                    \
+}                                                                              \
+                                                                               \
+void indentedShow(a[n,m] arr)                                                  \
+{                                                                              \
+    spaces = genarray([getIndent() + getIndent(offset)], ' ');                 \
+    carr = format(arr);                                                        \
+    ext_carr = { [i] -> _eq_SxS_(i, 0)                                         \
+                            ? carr[[i]] Array::++ spaces                       \
+                            : spaces Array::++ carr[[i]] };                    \
+    show(ext_carr);                                                            \
+}                                                                              \
+                                                                               \
+void indentedShow(a[.] arr)                                                    \
+{                                                                              \
+    show(arr);                                                                 \
+}                                                                              \
+                                                                               \
+void indentedShow(a arr)                                                       \
+{                                                                              \
+    show(arr);                                                                 \
 }
 
+BUILT_IN(SHOW)
 
+/******************************************************************************/
 
-
-void PrintSeparator( string pattern)
+void PrintSeparator(string pattern)
 {
-  doIndent( pattern);
-  printf( "----------------------------------------------\n");
+    doIndent(pattern);
+    printf("----------------------------------------------\n");
 }
 
-void PrintHeader( string modName, int line)
+void PrintHeader(string modName, int line)
 {
-  doIndent( "   ");
-  printf( "%-15s: line %3d: ", modName, line);
-  setIndent( offset, 15+2+5+3+2);
+    doIndent("   ");
+    printf("%-15s: line %3d: ", modName, line);
+    setIndent(offset, 15+2+5+3+2);
 }
 
-
-void PrintFunEnter( string modName, int line, string funName)
+void PrintFunEnter(string modName, int line, string funName)
 {
-  incIndent();
-  PrintSeparator( ">  ");
-  PrintHeader( modName, line);
-  printf( "%s (\n",  funName);
-  incIndent( offset, strlen( funName) + 3);
+    incIndent();
+    PrintSeparator(">  ");
+    PrintHeader(modName, line);
+    printf("%s (\n",  funName);
+    incIndent(offset, strlen(funName) + 3);
 }
 
-void PrintFunLeave( string modName, int line, string funName)
+void PrintFunLeave(string modName, int line, string funName)
 {
-  PrintSeparator( "<  ");
-  decIndent();
-  decIndent( offset, strlen( funName) +2);
+    PrintSeparator("<  ");
+    decIndent();
+    decIndent(offset, strlen(funName) + 2);
 }
 
-void PrintArgsDone( string modName, int line, string funName)
+void PrintArgsDone(string modName, int line, string funName)
 {
-  doIndent( "   ");
-  doIndent( offset, " ");
-  printf( ");\n");
+    doIndent("   ");
+    doIndent(offset, " ");
+    printf(");\n");
 }
 
-#define PRINT_ARG(a) \
-void PrintArg( string modName, int line, string var, a[*] x) \
-{                                                            \
-  doIndent( "   ");                                          \
-  doIndent( offset, " ");                                    \
-  printf( " %s = ", var);                                    \
-                                                             \
-  incIndent( offset, strlen( var) + 4);                      \
-  indentedShow( x);                                          \
-  decIndent( offset, strlen( var) + 4);                      \
+#define PRINT_ARG(a)                                                           \
+void PrintArg(string modName, int line, string var, a[*] arr)                  \
+{                                                                              \
+    doIndent("   ");                                                           \
+    doIndent(offset, " ");                                                     \
+    printf(" %s = ", var);                                                     \
+    incIndent(offset, strlen(var) + 4);                                        \
+    indentedShow(arr);                                                         \
+    decIndent(offset, strlen(var) + 4);                                        \
 }
 
-#define PRINT_ASSIGN( a) \
-void PrintAssign( string modName, int line, string var, a[*] x)   \
-{                                                                 \
-  PrintHeader( modName, line);                                    \
-                                                                  \
-  printf( "%s = ", var);                                          \
-                                                                  \
-  incIndent( offset, strlen( var) +3);                            \
-  indentedShow(x);                                                \
-  decIndent( offset, strlen( var) +3);                            \
+BUILT_IN(PRINT_ARG)
+
+#define PRINT_ASSIGN(a)                                                        \
+void PrintAssign(string modName, int line, string var, a[*] arr)               \
+{                                                                              \
+    PrintHeader(modName, line);                                                \
+    printf("%s = ", var);                                                      \
+    incIndent(offset, strlen(var) +3);                                         \
+    indentedShow(arr);                                                         \
+    decIndent(offset, strlen(var) +3);                                         \
 }
 
+BUILT_IN(PRINT_ASSIGN)
 
-#define PRINT_RETURN( a) \
-void PrintReturn( string modName, int line, a[*] x) \
-{                                                   \
-  PrintHeader( modName, line);                      \
-  printf( "returning ");                            \
-                                                    \
-  incIndent( offset, 10);                           \
-  indentedShow(x);                                  \
-  decIndent( offset, 10);                           \
+#define PRINT_RETURN(a)                                                        \
+void PrintReturn(string modName, int line, a[*] arr)                           \
+{                                                                              \
+    PrintHeader(modName, line);                                                \
+    printf("returning ");                                                      \
+    incIndent(offset, 10);                                                     \
+    indentedShow(arr);                                                         \
+    decIndent(offset, 10);                                                     \
 }
 
-BUILT_IN( SHOW)
-BUILT_IN( PRINT_ARG)
-BUILT_IN( PRINT_ASSIGN)
-BUILT_IN( PRINT_RETURN)
-
+BUILT_IN(PRINT_RETURN)
