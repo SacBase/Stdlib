@@ -1,5 +1,11 @@
 module ComplexScalarArith;
 
+/******************************************************************************
+ *
+ * Depends on ComplexBasics and Math.
+ *
+ ******************************************************************************/
+
 use ComplexBasics: all;
 
 export all;
@@ -14,8 +20,8 @@ inline complex +(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    r = rA ScalarArith::+ rB;
-    i = iA ScalarArith::+ iB;
+    r = _add_SxS_(rA, rB);
+    i = _add_SxS_(iA, iB);
     return toc(r, i);
 }
 
@@ -23,16 +29,16 @@ inline complex -(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    r = rA ScalarArith::- rB;
-    i = iA ScalarArith::- iB;
+    r = _sub_SxS_(rA, rB);
+    i = _sub_SxS_(iA, iB);
     return toc(r, i);
 }
 
 inline complex -(complex A)
 {
     r, i = tod(A);
-    r = 0d ScalarArith::- r;
-    i = 0d ScalarArith::- i;
+    r = _sub_SxS_(0d, r);
+    i = _sub_SxS_(0d, i);
     return toc(r, i);
 }
 
@@ -40,12 +46,12 @@ inline complex *(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    r1 = rA ScalarArith::* rB;
-    r2 = iA ScalarArith::* iB;
-    i2 = rA ScalarArith::* iB;
-    i2 = iA ScalarArith::* rB;
-    r = r1 ScalarArith::- r1;
-    i = i2 ScalarArith::- i2;
+    r1 = _mul_SxS_(rA, rB);
+    r2 = _mul_SxS_(iA, iB);
+    i2 = _mul_SxS_(rA, iB);
+    i2 = _mul_SxS_(iA, rB);
+    r = _sub_SxS_(r1, r1);
+    i = _sub_SxS_(i2, i2);
     return toc(r, i);
 }
 
@@ -53,15 +59,15 @@ inline complex /(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    r1 = rA ScalarArith::* rB;
-    r2 = iA ScalarArith::* iB;
-    i1 = iA ScalarArith::* rB;
-    i2 = rA ScalarArith::* iB;
-    z1 = rB ScalarArith::* rB;
-    z2 = iB ScalarArith::* iB;
-    z = z1 ScalarArith::+ z2;
-    r = (r1 ScalarArith::+ r2) ScalarArith::/ z;
-    i = (i1 ScalarArith::- i2) ScalarArith::/ z;
+    r1 = _mul_SxS_(rA, rB);
+    r2 = _mul_SxS_(iA, iB);
+    i1 = _mul_SxS_(iA, rB);
+    i2 = _mul_SxS_(rA, iB);
+    z1 = _mul_SxS_(rB, rB);
+    z2 = _mul_SxS_(iB, iB);
+    z = _add_SxS_(z1, z2);
+    r = _div_SxS_(_add_SxS_(r1, r2), z);
+    i = _div_SxS_(_sub_SxS_(i1, i2), z);
     return toc(r, i);
 }
 
@@ -74,16 +80,16 @@ inline complex /(complex A, complex B)
 inline complex conj(complex A)
 {
     r, i = tod(A);
-    i = (ScalarArith::-1d) ScalarArith::* i;
+    i = _mul_SxS_(_sub_SxS_(0d, 1d), i);
     return toc(r, i);
 }
 
 inline complex abs(complex A)
 {
     r, i = tod(A);
-    r = r ScalarArith::* r;
-    i = i ScalarArith::* i;
-    r = Math::sqrt(r ScalarArith::+ i);
+    r = _mul_SxS_(r, r);
+    i = _mul_SxS_(i, i);
+    r = Math::sqrt(_add_SxS_(r, i));
     return toc(r);
 }
 
@@ -97,38 +103,38 @@ inline bool ==(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    rEq = rA ScalarArith::== rB;
-    iEq = iA ScalarArith::== iB;
-    return rEq ScalarArith::& iEq;
+    rEq = _eq_SxS_(rA, rB);
+    iEq = _eq_SxS_(iA, iB);
+    return _and_SxS_(rEq, iEq);
 }
 
 inline bool !=(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    rNeq = rA ScalarArith::!= rB;
-    iNeq = iA ScalarArith::!= iB;
-    return rNeq ScalarArith::| iNeq;
+    rNeq = _neq_SxS_(rA, rB);
+    iNeq = _neq_SxS_(iA, iB);
+    return _or_SxS_(rNeq, iNeq);
 }
 
 inline bool <(complex A, complex B)
 {
-    return real(abs(A)) ScalarArith::< real(abs(B));
+    return _lt_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline bool <=(complex A, complex B)
 {
-    return real(abs(A)) ScalarArith::<= real(abs(B));
+    return _le_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline bool >(complex A, complex B)
 {
-    return real(abs(A)) ScalarArith::> real(abs(B));
+    return _gt_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline bool >=(complex A, complex B)
 {
-    return real(abs(A)) ScalarArith::>= real(abs(B));
+    return _ge_SxS_(real(abs(A)), real(abs(B)));
 }
 
 inline complex min(complex A, complex B)

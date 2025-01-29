@@ -1,6 +1,11 @@
 module ComplexArrayBasics;
 
-use Array: { all, <, <=, == };
+/******************************************************************************
+ *
+ * Depends on ComplexBasics and ArrayTransform.
+ *
+ ******************************************************************************/
+
 use ComplexBasics: { complex };
 
 export all;
@@ -21,7 +26,7 @@ export all;
  ******************************************************************************/
 inline int dim(complex[*] arr)
 {
-    return Array::dim((double[+])arr) Array::- 1;
+    return _sub_SxS_(_dim_A_((double[+])arr), 1);
 }
 
 /******************************************************************************
@@ -38,7 +43,7 @@ inline int dim(complex[*] arr)
  ******************************************************************************/
 inline int[.] shape(complex[*] arr)
 {
-    return Array::drop([Array::-1], Array::shape((double[+])arr));
+    return _drop_SxV_(_sub_SxS_(0, 1), _shape_A_((double[+])arr));
 }
 
 /******************************************************************************
@@ -49,13 +54,15 @@ inline int[.] shape(complex[*] arr)
  *
  ******************************************************************************/
 inline complex[i:ishp] sel(int[o] idx, complex[o:oshp,i:ishp] arr)
-    | all(0 <= idx), all(idx < oshp)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
 {
-    return (complex[*])Array::sel(idx, (double[+])arr);
+    r = _sel_VxA_(_cat_VxV_(idx, [0]), (double[+])arr);
+    i = _sel_VxA_(_cat_VxV_(idx, [1]), (double[+])arr);
+    return (complex[*])[r, i];
 }
 
 inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
-    | (0 <= idx), (idx < n)
+    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
 {
     return arr[[idx]];
 }
@@ -69,9 +76,10 @@ inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
  *
  ******************************************************************************/
 inline complex[d:shp] reshape(int[d] shp, complex[o:oshp] arr)
-    | all(0 <= shp), Array::prod(shp) == Array::prod(oshp)
+    | _all_V_(_le_SxV_(0, shp))
+    , _eq_SxS_(ArrayTransform::prod(shp), ArrayTransform::prod(oshp))
 {
-    return (complex[*])Array::reshape(shp Array::++ [2], (double[*])arr);
+    return (complex[*])_reshape_VxA_(_cat_VxV_(shp, [2]), (double[*])arr);
 }
 
 /******************************************************************************
@@ -96,7 +104,7 @@ inline complex[n:shp,m:vshp] genarray(int[n] shp, complex[m:vshp] val)
  ******************************************************************************/
 inline complex[o:oshp,i:ishp] modarray(complex[o:oshp,i:ishp] arr,
                                        int[o] idx, complex[i:ishp] val)
-    | all(0 <= idx), all(idx < oshp)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
 {
     return with {
         (idx <= iv <= idx) : val;
@@ -113,7 +121,7 @@ inline complex[o:oshp,i:ishp] modarray(complex[o:oshp,i:ishp] arr,
  ******************************************************************************/
 inline complex[n,d:shp] modarray(complex[n,d:shp] arr, int idx,
                                  complex[d:shp] val)
-    | (0 <= idx), (idx < n)
+    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
 {
     return modarray(arr, [idx], val);
 }
