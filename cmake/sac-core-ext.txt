@@ -69,11 +69,10 @@ numerical/ComplexMath.sac                  Ext
 numerical/Numerical.sac                    Core
 numerical/MathArray.sac                    Core
 numerical/Math.sac                         Core
-classes/random/Random.sac                  Core
-classes/random/RandLC.sac                  Core
-classes/random/Rand48.sac                  Core
-classes/random/Rand.sac                    Core
-classes/auxiliary/Counter.sac              Ext
+random/Random.sac                          Core
+random/RandLC.sac                          Core
+random/Rand48.sac                          Core
+random/Rand.sac                            Core
 auxiliary/Interval.sac                     Ext
 auxiliary/Hiding.sac                       Ext
 auxiliary/C99Benchmarking.sac              Ext
