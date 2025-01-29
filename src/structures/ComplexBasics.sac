@@ -1,5 +1,11 @@
 module ComplexBasics;
 
+/******************************************************************************
+ *
+ * Depends on ScalarArith, String, and Math.
+ *
+ ******************************************************************************/
+
 export all;
 
 typedef double[2] complex;
@@ -12,12 +18,12 @@ typedef double[2] complex;
 
 inline double real(complex c)
 {
-    return ArrayBasics::sel([0], (double[2])c);
+    return _sel_VxA_([0], (double[2])c);
 }
 
 inline double imag(complex c)
 {
-    return ArrayBasics::sel([1], (double[2])c);
+    return _sel_VxA_([1], (double[2])c);
 }
 
 /******************************************************************************
@@ -132,8 +138,8 @@ inline double, double ptod(complex c)
 
 inline complex polar(double mag, double angle)
 {
-    r = mag ScalarArith::* Math::cos(angle);
-    i = mag ScalarArith::* Math::sin(angle);
+    r = _mul_SxS_(mag, Math::cos(angle));
+    i = _mul_SxS_(mag, Math::sin(angle));
     return toc(r, i);
 }
 
@@ -145,9 +151,9 @@ inline complex polar(double mag)
 inline double normSq(complex c)
 {
     r, i = tod(c);
-    x = r ScalarArith::* r;
-    y = i ScalarArith::* i;
-    res = x ScalarArith::+ y;
+    x = _mul_SxS_(r, r);
+    y = _mul_SxS_(i, i);
+    res = _add_SxS_(x, y);
     return res;
 }
 

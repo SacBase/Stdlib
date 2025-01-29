@@ -17,7 +17,7 @@ fun( bool)                \
 fun( char)
 
 #define SHOW( a) \
-void indentedShow( a[d:shp] arr) | (d >= 1)                                      \
+void indentedShow( a[d:shp] arr)                                                 \
 {                                                                                \
   cshape = to_string( format( shp));                                             \
   printf( "reshape( [ %s ] , [\n", cshape);                                      \
@@ -38,11 +38,11 @@ void indentedShow( a[d:shp] arr) | (d >= 1)                                     
   decIndent( offset, strlen( cshape) + 16);                                      \
 }                                                                                \
                                                                                  \
-void indentedShow( a[.,.] arr)                                                   \
+void indentedShow( a[n,m] arr)                                                   \
 {                                                                                \
   spaces = genarray( [getIndent() + getIndent( offset)], ' ');                   \
   carr = format( arr);                                                           \
-  ext_carr = { [i] -> ( i==0 ? _cat_VxV_(carr[[i]], spaces) : _cat_VxV_(spaces, carr[[i]])) };\
+  ext_carr = { [i] -> ( _eq_SxS_(i, 0) ? _cat_VxV_(carr[[i]], spaces) : _cat_VxV_(spaces, carr[[i]])) | [i] < [n] };\
   show( ext_carr);                                                               \
 }                                                                                \
                                                                                  \
