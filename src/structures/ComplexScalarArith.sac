@@ -6,7 +6,8 @@ module ComplexScalarArith;
  *
  ******************************************************************************/
 
-use ComplexBasics: all;
+use ComplexBasics: { complex, toc, tod, real };
+use Math: { sqrt };
 
 export all;
 
@@ -89,7 +90,7 @@ inline complex abs(complex A)
     r, i = tod(A);
     r = _mul_SxS_(r, r);
     i = _mul_SxS_(i, i);
-    r = Math::sqrt(_add_SxS_(r, i));
+    r = sqrt(_add_SxS_(r, i));
     return toc(r);
 }
 

@@ -2,9 +2,11 @@ module ComplexBasics;
 
 /******************************************************************************
  *
- * Depends on ScalarArith, String, and Math.
+ * Depends on ScalarArith and Math.
  *
  ******************************************************************************/
+
+use Math: { sin, cos, sqrt, atan2 };
 
 export all;
 
@@ -99,13 +101,6 @@ inline double[2] todv(complex c)
     return [real(c), imag(c)];
 }
 
-inline String::string tos(complex c)
-{
-    r, i = tod(c);
-    res = String::sprintf("%f + %fi\n", r, i);
-    return res;
-}
-
 inline int, int ptoi(complex c)
 {
     x, y = ptof(c);
@@ -117,16 +112,16 @@ inline int, int ptoi(complex c)
 inline float, float ptof(complex c)
 {
     x, y = tof(c);
-    r = Math::sqrt(ScalarArith::tof(norm(c)));
-    i = Math::atan2(x, y);
+    r = sqrt(ScalarArith::tof(norm(c)));
+    i = atan2(x, y);
     return (r, i);
 }
 
 inline double, double ptod(complex c)
 {
     x, y = tod(c);
-    r = Math::sqrt(norm(c));
-    i = Math::atan2(x, y);
+    r = sqrt(norm(c));
+    i = atan2(x, y);
     return (r, i);
 }
 
@@ -138,8 +133,8 @@ inline double, double ptod(complex c)
 
 inline complex polar(double mag, double angle)
 {
-    r = _mul_SxS_(mag, Math::cos(angle));
-    i = _mul_SxS_(mag, Math::sin(angle));
+    r = _mul_SxS_(mag, cos(angle));
+    i = _mul_SxS_(mag, sin(angle));
     return toc(r, i);
 }
 
@@ -159,13 +154,13 @@ inline double normSq(complex c)
 
 inline double norm(complex c)
 {
-    return Math::sqrt(normSq(c));
+    return sqrt(normSq(c));
 }
 
 inline double arg(complex c)
 {
     r, i = tod(c);
-    res = Math::atan2(r, i);
+    res = atan2(r, i);
     return res;
 }
 
