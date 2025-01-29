@@ -2,78 +2,84 @@ class Indent;
 
 classtype int;
 
+/******************************************************************************
+ *
+ * Depends on String and TermFile.
+ *
+ ******************************************************************************/
+
+use String: { string, strlen, tochar, to_string };
+use TermFile: { printf };
+
 export all;
-use StdIO: all;
-use Structures: all;
 
-objdef Indent indent = to_Indent( 0);
+objdef Indent indent = to_Indent(0);
 
-Indent newIndent( int value)
+Indent newIndent(int value)
 {
-  return( to_Indent( value));
+    return to_Indent(value);
 }
 
-int getIndent( )
+int getIndent()
 {
-  return( getIndent( indent));
+    return getIndent(indent);
 }
 
-int getIndent( Indent & i)
+int getIndent(Indent &i)
 {
-  val = from_Indent( i);
-  i = to_Indent( val);
-  return( val);
+    val = from_Indent(i);
+    i = to_Indent(val);
+    return val;
 }
 
-void setIndent( Indent & i, int val)
+void setIndent(Indent &i, int val)
 {
-  i = to_Indent( val);
+    i = to_Indent(val);
 }
 
-void doIndent( string pattern)
+void doIndent(string pattern)
 {
-  doIndent( indent, pattern);
+    doIndent(indent, pattern);
 }
 
-void doIndent( Indent & i, string pattern)
+void doIndent(Indent &i, string pattern)
 {
-  indents = reshape( [strlen( pattern) * getIndent( i)],
-                    genarray( [getIndent( i)], tochar(pattern)));
-  printf( to_string( indents));
+    val = getIndent(i);
+    indents = _reshape_VxA_([_mul_SxS_(strlen(pattern), val)],
+                            { iv -> tochar(pattern) | iv < [val] });
+    printf(to_string(indents));
 }
 
-
-void incIndent(  Indent & i)
+void incIndent(Indent &i)
 {
-  val = from_Indent( i);
-  i = to_Indent( val+1);
+    val = from_Indent(i);
+    i = to_Indent(_add_SxS_(val, 1));
 }
 
-void incIndent(  Indent & i, int offset)
+void incIndent(Indent &i, int offset)
 {
-  val = from_Indent( i);
-  i = to_Indent( val+offset);
+    val = from_Indent(i);
+    i = to_Indent(_add_SxS_(val, offset));
 }
 
 void incIndent()
 {
-  incIndent( indent);
+    incIndent(indent);
 }
 
-void decIndent(  Indent & i)
+void decIndent(Indent &i)
 {
-  val = from_Indent( i);
-  i = to_Indent( val-1);
+    val = from_Indent(i);
+    i = to_Indent(_sub_SxS_(val, 1));
 }
 
-void decIndent(  Indent & i, int offset)
+void decIndent(Indent &i, int offset)
 {
-  val = from_Indent( i);
-  i = to_Indent( val-offset);
+    val = from_Indent(i);
+    i = to_Indent(_sub_SxS_(val, offset));
 }
 
 void decIndent()
 {
-  decIndent( indent);
+    decIndent(indent);
 }
-
