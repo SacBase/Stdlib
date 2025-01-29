@@ -638,7 +638,7 @@ bool match( typ[+] arr_a, typ[+] arr_b)					                        \
          res = with {							                                      \
           ( _mul_SxV_(0,_shape_A_( arr_a)) <= iv < _shape_A_( arr_a) )  \
           : _eq_SxS_(_sel_VxA_(iv, arr_a), _sel_VxA_(iv, arr_b)) ;  	  \
-          } : foldfix( &, true, false );                               	\
+          } : foldfix( ScalarArith::&, true, false );                   \
  } else {								                                                \
 	res = false;							                                            \
    }									                                                  \
