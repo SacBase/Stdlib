@@ -189,7 +189,7 @@ typ[d:shp] tile(int[d] shp, int[d] idx, typ[d:shp_a] A)                        \
     , _all_V_(_ge_VxS_(idx, 0))                                                \
     , _all_V_(_le_VxV_(_add_VxV_(shp, idx), shp_a))                            \
 {                                                                              \
-    return { iv -> A[_add_VxV_(idx, iv)] | iv < shp };                         \
+    return { iv -> _sel_VxA_(_add_VxV_(idx, iv), A) | iv < shp };              \
 }
 
 BUILT_IN(TILE)
@@ -220,7 +220,7 @@ typ[d:shp] tile_apl(int[d] shp, int[d] idx, typ[d:shp_a] A)                    \
     stop = _min_VxV_(shp, _sub_VxV_(shp_a, idx));                              \
     /* The result is calculated in 2 steps: */                                 \
     return { /* 1: select the required elements of the array */                \
-             iv -> A[_add_VxV_(idx, iv)] | start <= iv < stop;                 \
+             iv -> _sel_VxA_(_add_VxV_(idx, iv), A) | start <= iv < stop;      \
              /* 2: add zeros around (if needed) */                             \
              iv -> zval | iv < shp};                                           \
 }
@@ -376,7 +376,7 @@ typ[d:shp_t] transpose(typ[d:shp] A)                                           \
     | _all_V_(_eq_VxV_(reverse(shp), shp_t))                                   \
 {                                                                              \
     shp_t = reverse(shp);                                                      \
-    return { iv -> A[reverse(iv)] | iv < shp_t };                              \
+    return { iv -> _sel_VxA_(reverse(iv), A) | iv < shp_t };                   \
 }
 
 BUILT_IN(TRANSPOSE)
@@ -408,7 +408,7 @@ typ[o:oshp,n,i:ishp] shift(int o, int count, typ boundary,                     \
 inline                                                                         \
 typ[o:oshp,i:ishp] shift(int[o] counts, typ boundary, typ[o:oshp,i:ishp] A)    \
 {                                                                              \
-    counts_ext = _cat_VxV_(counts, genarray([i], 0));                          \
+    counts_ext = _cat_VxV_(counts, _mul_SxV_(0, ishp));                          \
     shp = _cat_VxV_(oshp, ishp);                                               \
     idx = _neg_V_(counts_ext);                                                 \
     return tile_apl(shp, idx, A);                                              \
@@ -479,28 +479,28 @@ BUILT_IN(ROTATE)
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ[d:shp] B)                    \
 {                                                                              \
-    return { iv -> p[iv] ? A[iv] : B[iv] };                                    \
+    return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : _sel_VxA_(iv, B) };   \
 }
 
 #define WHERE_AxS(typ, postfix, zval, oval)                                    \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ B)                           \
 {                                                                              \
-    return { iv -> p[iv] ? A[iv] : B };                                        \
+    return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : B };                  \
 }
 
 #define WHERE_SxA(typ, postfix, zval, oval)                                    \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ A, typ[d:shp] B)                           \
 {                                                                              \
-    return { iv -> p[iv] ? A : B[iv] };                                        \
+    return { iv -> _sel_VxA_(iv, p) ? A : _sel_VxA_(iv, B) };                  \
 }
 
 #define WHERE_SxS(typ, postfix, zval, oval)                                    \
 inline                                                                         \
 typ[b:shp] where(bool[b:shp] p, typ A, typ B)                                  \
 {                                                                              \
-    return { iv -> p[iv] ? A : B };                                            \
+    return { iv -> _sel_VxA_(iv, p) ? A : B };                                 \
 }
 
 #define WHERE(typ, postfix, zval, oval)                                        \
@@ -524,7 +524,7 @@ inline                                                                         \
 typ name(typ[d:shp] A)                                                         \
 {                                                                              \
     return with {                                                              \
-        (_mul_SxV_(0, shp) <= iv < shp) : A[iv];                               \
+        (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, A);                    \
     } : fold(fun, neutral);                                                    \
 }
 
