@@ -3,6 +3,9 @@ module ComplexArrayTransform;
 use ComplexArrayBasics: { dim, shape, sel };
 use ComplexBasics: { zero, complex };
 
+import ComplexScalarArith: { + };
+import ComplexArrayBasics: { + };
+
 export all;
 
 #include "UDTtemplates.mac"
