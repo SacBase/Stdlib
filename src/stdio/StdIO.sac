@@ -1,24 +1,19 @@
 module StdIO;
 
-#ifdef SAC_BACKEND_MUTC 
-import MutcIO:    all;
-#else /* SAC_BACKEND_MUTC  */
-import File:      all;
-import TermFile:  all;
-import BinFile:   all;
-
-import ScalarIO:  all;
-import ArrayIO:   all;
+#ifdef SAC_BACKEND_MUTC
+import MutcIO: all;
+#else /* SAC_BACKEND_MUTC */
+import File: all;
+import TermFile: all;
+import BinFile: all;
+import ScalarIO: all;
+import ArrayIO: all;
 #ifdef EXT_STDLIB
-import FibreIO:   all;
-import ListIO:    all;
+import FibreIO: all;
+import ListIO: all;
 import ComplexIO: all;
-import Color8IO:  all;
-import GreyIO:    all;
-#endif /* EXT_STDLIB  */
-#endif /* SAC_BACKEND_MUTC  */
+import Color8IO: all;
+#endif /* EXT_STDLIB */
+#endif /* SAC_BACKEND_MUTC */
 
 export all;
-
-
-

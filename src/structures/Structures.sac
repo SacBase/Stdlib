@@ -9,7 +9,6 @@ import Complex: all;
 import Quaternion: all;
 #ifndef SAC_BACKEND_MUTC
 import Color8: all;
-import Grey: all;
 import List: all;
 #endif /* SAC_BACKEND_MUTC */
 #endif /* EXT_STDLIB */
