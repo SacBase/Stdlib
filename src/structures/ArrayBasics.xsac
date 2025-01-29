@@ -59,9 +59,9 @@ typ[i:ishp] sel(int[o] idx, typ[o:oshp,i:ishp] arr)                            \
 #define SEL_SxA(typ, postfix, zval, oval)                                      \
 inline                                                                         \
 typ[d:shp] sel(int idx, typ[n,d:shp] arr)                                      \
-    | _le_SxS_(0, idx), _lt_SxS_(idx, n)                                       \
+    | _le_SxS_(0, idx)/*, _lt_SxS_(idx, n)*/                                   \
 {                                                                              \
-    return sel([idx], arr);                                                    \
+    return arr[[idx]];                                                         \
 }
 
 #define SEL(typ, postfix, zval, oval)                                          \
