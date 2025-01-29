@@ -18,7 +18,7 @@ complex sum(complex[d:shp] arr)
 {
 	return with {
       (_mul_SxV_(0, shp) <= iv < shp) : arr[iv];
-   } : fold(ComplexArrayArith::+, ComplexBasics::toc(0d, 0d));
+   } : fold(ComplexScalarArith::+, (complex)[0d, 0d]);
 }
 
 TAKE(complex)
