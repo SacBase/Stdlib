@@ -1,6 +1,13 @@
 module ArrayFormat;
 
+/******************************************************************************
+ *
+ * Depends on Array, MathArray, Constants, and String.
+ *
+ ******************************************************************************/
+
 use Array: all;
+use Constants: { minint, maxint };
 use String: { tochar, sprintf };
 
 export { format };
@@ -479,7 +486,7 @@ int[n] maxsl1(int[n,m] arr)
 {
     return with {
         ([0] <= iv < [n]) : arr[iv];
-    } : fold(max, Constants::minint());
+    } : fold(max, genarray([m], minint()));
 }
 
 /******************************************************************************
@@ -494,7 +501,7 @@ int[n] minsl1(int[n,m] arr)
 {
     return with {
         ([0] <= iv < [n]) : arr[iv];
-    } : fold(min, Constants::maxint());
+    } : fold(min, genarray([m], maxint()));
 }
 
 /******************************************************************************

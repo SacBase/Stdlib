@@ -242,7 +242,6 @@ SET (C_DEPS_SRC
     structures/src/List/drop.c
     structures/src/List/cons.c
     structures/src/List/append.c
-    structures/src/Format/wordsize.c
     structures/src/Constants/tinydouble.c
     structures/src/Constants/minmax.c
     structures/src/Constants/minint.c
