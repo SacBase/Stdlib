@@ -1,293 +1,398 @@
-module Color8;
+module String;
 
-use Numerical: { exp, log };
+#ifdef SAC_BACKEND_MUTC
 
-export all except { Weights2Clut, genSteps };
+import MutcString: all;
+export all;
 
-typedef int[3] color;
+#else
 
-/******************************************************************************
- *
- * Array properties.
- *
- * @note The definition of `dim` and `shape` for user-defined types may not use
- * type patterns, as type patterns rely on the existence of these functions
- * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
- * are not defined for user-defined types.
- *
- ******************************************************************************/
+use Array: { ++ };
 
-inline int dim(color[*] arr)
+export all except { indent };
+
+external typedef string;
+    #pragma freefun "free_string"
+    #pragma linkobj "src/String/freestr.o"
+    #pragma copyfun "copy_string"
+    #pragma linkobj "src/String/copystr.o"
+
+external string to_string(char[n] A, int LENGTH);
+    #pragma linksign [1,2,3]
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/tostring.o"
+    /* Convert character array to string. */
+
+external string strmod(string str, int P, char C);
+    #pragma linksign [1,2,3,4]
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/strmod.o"
+    /* Change position P of string str to character C. */
+
+external string strins(string S1, int P, string S2);
+    #pragma linkobj "src/String/strins.o"
+    #pragma linksign [0,1,2,3]
+    /* Insert string S2 into string S1 starting at position P. */
+
+external string strovwt(string S1, int P, string S2);
+    #pragma linksign [1,2,3,4]
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/strovwt.o"
+    /* Overwrite string S2 with string S1 starting at position P. */
+
+external char strsel(string str, int P);
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strsel.o"
+    /* Select character P of string str. */
+
+external string strcat(string S1, string S2);
+    #pragma linkname "SACstrcat"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcat.o"
+    /* Concatenate strings S1 and S2. */
+
+external string +(string S1, string S2);
+    #pragma linkname "SACstrcat"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcat.o"
+    /* Infix version of strcat. */
+
+external string strncat(string S1, string S2, int N);
+    #pragma linkname "SACstrncat"
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strncat.o"
+    /* Concatenate string S1 and the first N characters of string S2. */
+
+external int strcmp(string S1, string S2);
+    #pragma linkname "SACstrcmp"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcmp.o"
+    /* Compare strings S1 and S2.
+       Result is negative if S1 < S2, positive if S1 > S2
+       and zero if S1 == S2. */
+
+external int strncmp(string S1, string S2, int N);
+    #pragma linkname "SACstrncmp"
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strncmp.o"
+    /* Compare the first N characters of strings S1 and S2.
+       Result is negative if S1 < S2, positive if S1 > S2
+       and zero if S1 == S2. */
+
+external int strcasecmp(string S1, string S2);
+    #pragma linkname "SACstrcasecmp"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcasecmp.o"
+    /* Compare strings S1 and S2 while ignoring upper/lower case.
+       Result is negative if S1 < S2 alphabetically, positive if S1 > S2
+       and zero if S1 == S2, all modulo case. */
+
+external int strncasecmp(string S1, string S2, int N);
+    #pragma linkname "SACstrncasecmp"
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strncasecmp.o"
+    /* Compare the first N characters of strings S1 and S2 ignoring case.
+       Result is negative if S1 < S2 alphabetically, positive if S1 > S2
+       and zero if S1 == S2, all modulo case. */
+
+external int strlen(string str);
+    #pragma linksign [0,1]
+    #pragma linkname "SACstrlen"
+    #pragma linkobj "src/String/strlen.o"
+    /* Return the length of string str. */
+
+external string strtake(string str, int N);
+    #pragma linksign [1,2,3]
+    #pragma refcounting [0,1]
+    #pragma linkobj "src/String/strtake.o"
+    /* Return the first N characters of string str. */
+
+external string strdrop(string str, int N);
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strdrop.o"
+    /* Return all but the first N characters of string str. */
+
+external string strext(string str, int FIRST, int LEN);
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strext.o"
+    /* Extract the substring beginning at character FIRST with length
+       LEN from string str. */
+
+external string sprintf(string FORMAT, ...);
+    #pragma linkname "SACsprintf"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/sprintf.o"
+    /* Generate a string depending on the format string and a
+       variable number of arguments similar to the printf and fprintf
+       functions. */
+
+external int, ... sscanf(string str, string FORMAT);
+    #pragma linkname "SACsscanf"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/sscanf.o"
+    /* Scan the string str concerning the format string FORMAT.
+       The format string is the same as for fscanf.
+       The int result gives the maximum number of successfully performed
+       conversions.
+       CAUTION: In contrast to C, conversion specifiers related to
+                strings are not supported and may cause runtime
+                errors. Use sscanf_str instead. */
+
+external string sscanf_str(string str, string FORMAT);
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/sscanfstr.o"
+    /* Scan the string str concerning the format string FORMAT.
+       FORMAT must have exactly one string conversion specifier.
+       The scanned substring is returned. */
+
+external int strchr(string str, char C);
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strchr.o"
+    #pragma linkname "SACstrchr"
+    /* Return the position of the first occurrence of character C
+       in string str. The result is -1 if character C does not occurr
+       at all. */
+
+external int strrchr(string str, char C);
+    #pragma linkname "SACstrrchr"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strrchr.o"
+    /* Return the position of the last occurrence of character C
+       in string str. The result is -1 if character C does not occurr
+       at all. */
+
+external int strcspn(string str, string REJECT);
+    #pragma linkname "SACstrcspn"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strcspn.o"
+    /* Return the length of the initial segment of str which
+       consists entirely of characters not in REJECT. */
+
+external int strspn(string str, string ACCEPT);
+    #pragma linkname "SACstrspn"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strspn.o"
+    /* Return the length of the initial segment of str which
+       consists entirely of characters in ACCEPT. */
+
+external int strstr(string HAYSTACK, string NEEDLE);
+    #pragma linkname "SACstrstr"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strstr.o"
+    /* Find the first occurrence of the string NEEDLE in the
+       string HAYSTACK. Return the index to this occurrence.
+       If NEEDLE could not be found then return -1. */
+
+external string, string strtok(string str, string SEP);
+    #pragma linkname "SACstrtok"
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strtok.o"
+    /* Split string str into a token and the remainder string
+       using the characters from SEP as delimiters. If str starts
+       with characters from SEP then these are skipped until
+       a character not in SEP is found. */
+
+external string chomp(string str);
+    #pragma linkname "SACchomp"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove trailing line terminators from str. */
+
+external string rtrim(string str);
+    #pragma linkname "SACrtrim"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove trailing whitespace from str. */
+
+external string ltrim(string str);
+    #pragma linkname "SACltrim"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove leading whitespace from str. */
+
+external string trim(string str);
+    #pragma linkname "SACtrim"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/trim.o"
+    /* Remove leading and trailing whitespace from str. */
+
+external int, string strtoi(string str, int BASE);
+    #pragma linkname "SACstrtoi"
+    #pragma linksign [0,1,2,3]
+    #pragma linkobj "src/String/strtoi.o"
+    /* Convert the string str into an integer value. BASE specifies the format
+       and must be in the range from 2 to 32. This feature allows for
+       scanning hexadecimal or octal numbers as well as decimal
+       representations. The string result contains the remainder of the
+       input string. */
+
+external float, string strtof(string str);
+    #pragma linkname "SACstrtof"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strtof.o"
+    /* Convert the string str into a float value. The string result
+       contains the remainder of the input string. */
+
+external double, string strtod(string str);
+    #pragma linkname "SACstrtod"
+    #pragma linksign [0,1,2]
+    #pragma linkobj "src/String/strtod.o"
+    /* Convert the string str into a double value. The string result
+       contains the remainder of the input string. */
+
+external int toi(string str);
+    #pragma linkname "SACtoi"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/strtoi.o"
+    /* Convert the string str into an integer value. In contrast to strtoi
+       the number must always be in decimal representation. */
+
+external float tof(string str);
+    #pragma linkname "SACtof"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/strtof.o"
+    /* Convert the string str into a float value. */
+
+external double tod(string str);
+    #pragma linkname "SACtod"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/strtod.o"
+    /* Convert the string str into a double value. */
+
+external string tos(int N);
+    #pragma linkname "SACitos"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/itos.o"
+    /* Convert integer into string. */
+
+external string tos(float N);
+    #pragma linkname "SACftos"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/ftos.o"
+    /* Convert float into string. */
+
+external string tos(double N);
+    #pragma linkname "SACdtos"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/dtos.o"
+    /* Convert double into string. */
+
+external string tos(bool B);
+    #pragma linkname "SACbtos"
+    #pragma linksign [0,1]
+    #pragma linkobj "src/String/btos.o"
+    /* Convert boolean into string. */
+
+inline string indent(int indent, string str)
 {
-    return _sub_SxS_(_dim_A_((int[+])arr), 1);
-}
-
-inline int[.] shape(color[*] arr)
-{
-    return _drop_SxV_(_sub_SxS_(0, 1), _shape_A_((int[+])arr));
-}
-
-inline color[i:ishp] sel(int[o] idx, color[o:oshp,i:ishp] arr)
-    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
-{
-    return (color[*])Array::sel(idx, (int[+])arr);
-}
-
-inline color[d:shp] sel(int idx, color[n,d:shp] arr)
-    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
-{
-    return arr[[idx]];
-}
-
-inline
-color[d:shp] reshape(int[d] shp, color[_:shp_a] arr)
-    | _eq_SxS_(Array::prod(shp), Array::prod(shp_a))
-{
-    return (color[*])_reshape_VxA_(_cat_VxV_(shp, [3]), (int[*])arr);
-}
-
-/******************************************************************************
- *
- * Type conversions.
- *
- ******************************************************************************/
-
-inline color newColor(int[3] c)
-{
-    min_col = [0, 0, 0];
-    max_col = [255, 255, 255];
-    c = _max_VxV_(_min_VxV_(c, max_col), min_col);
-    return (color)c;
-}
-
-inline color newColor(int r, int g, int b)
-{
-    return newColor([r,g,b]);
-}
-
-inline int[3] toi(color c)
-{
-    return (int[3])c;
-}
-
-inline int[d:shp,3] toi(color[d:shp] c)
-{
-    return (int[*])c;
-}
-
-inline double[3] tod(color c)
-{
-    return Array::tod((int[3])c);
-}
-
-inline double[d:shp,3] tod(color[d:shp] c)
-{
-    return Array::tod((int[+])c);
-}
-
-inline int red(color c)
-{
-    return _sel_VxA_([0], (int[3])c);
-}
-
-inline int green(color c)
-{
-    return _sel_VxA_([1], (int[3])c);
-}
-
-inline int blue(color c)
-{
-    return _sel_VxA_([2], (int[3])c);
-}
-
-inline int, int, int rgb(color c)
-{
-    return (red(c), green(c), blue(c));
-}
-
-/******************************************************************************
- *
- * Color operations.
- *
- ******************************************************************************/
-
-inline double[256] genSteps(double from, double to)
-{
-    return _add_SxV_(from,
-                     _div_VxS_(Array::tod(Array::iota(256)),
-                               _mul_SxS_(256d, _sub_SxS_(to, from))));
-}
-
-inline color[256] Weights2Clut(double[256] w, color c1, color c2)
-{
-    w1 = { iv ->             (_sel_VxA_(iv, w) Array::* tod(c1)) | iv < [256] };
-    w2 = { iv -> 1d Array::- (_sel_VxA_(iv, w) Array::* tod(c2)) | iv < [256] };
-    return (color[256])Array::toi(w1 Array::+ w2);
-}
-
-inline color[256] genLinearClut(color c1, color c2)
-{
-    weights = genSteps(0d, 1d);
-    return Weights2Clut(weights, c1, c2);
-}
-
-inline color[256] genLogarithmicClut(double from, double to, color c1, color c2)
-{
-    steps = genSteps(from, to);
-    weights = _div_VxS_(_sub_VxS_(log(steps), log(from)),
-                        _sub_SxS_(log(to), log(from)));
-    return Weights2Clut(weights, c1, c2);
-}
-
-inline color[256] genExponentialClut(double from, double to, color c1, color c2)
-{
-    steps = genSteps(from, to);
-    weights = _div_VxS_(_sub_VxS_(exp(steps), exp(from)),
-                        _sub_SxS_(exp(to), exp(from)));
-    return Weights2Clut(weights, c1, c2);
-}
-
-inline color[256] genAlternatingClut(color c1, color c2)
-{
-    return with {
-        ( . <= [i] <= . step [2]) : c1;
-    } : genarray([256], c2);
-}
-
-/*
- * h_in is the hue in degrees [0:360]
- * s_in is the saturation in % [0:100]
- * b_in is the brightness in % [0:100]
- */
-inline color Hsb2Rgb(int h_in, int s_in, int b_in)
-{
-    c = black();
-
-    if (_eq_SxS_(b_in, 0)) {
-        c = black();
-    } else if (_eq_SxS_(b_in, 100) && _eq_SxS_(s_in, 0)) {
-        c = white();
-    } else if (_eq_SxS_(s_in, 0)) {
-        c = newColor(b_in, b_in, b_in);
-    } else {
-        h = _div_SxS_(Array::tod(h_in), 60d);
-        s = _div_SxS_(Array::tod(s_in), 100d);
-        b = _div_SxS_(Array::tod(b_in), 100d);
-
-        i = _mod_SxS_(Array::toi(h), 6);
-        f = _sub_SxS_(h, Array::tod(i));
-
-        if (_eq_SxS_(_mod_SxS_(i, 2), 0)) {
-            f = _sub_SxS_(1d, f);
-        }
-
-        m = _mul_SxS_(b, _sub_SxS_(1d, s));
-        n = _mul_SxS_(b, _sub_SxS_(1d, _mul_SxS_(s, f)));
-
-        b = Array::toi(_mul_SxS_(b, 255d));
-        m = Array::toi(_mul_SxS_(m, 255d));
-        n = Array::toi(_mul_SxS_(n, 255d));
-
-        if (_eq_SxS_(0, i)) {
-            c = newColor(b, n, m);
-        } else if (_eq_SxS_(1, i)) {
-            c = newColor(n, b, m);
-        } else if (_eq_SxS_(2, i)) {
-            c = newColor(m, b, n);
-        } else if (_eq_SxS_(3, i)) {
-            c = newColor(m, n, b);
-        } else if (_eq_SxS_(4, i)) {
-            c = newColor(n, m, b);
-        } else if (_eq_SxS_(5, i)) {
-            c = newColor(b, m, n);
-        }
+    while (indent Array::> 0){
+        str = strcat("  ", str);
     }
-
-    return c;
+    return str;
 }
 
-inline color[d:shp] Hsb2Rgb(int[d:shp] h, int s, int b)
+#define TOS(type)                                                              \
+inline string tos(type[+] in)                                                  \
+{                                                                              \
+    return tos(in, 0);                                                         \
+}                                                                              \
+                                                                               \
+inline string tos(type in, int indent)                                         \
+{                                                                              \
+    return indent(indent, tos(in));                                            \
+}                                                                              \
+                                                                               \
+inline string tos(type[n,d:shp] in, int indent)                                \
+{                                                                              \
+    res = "[\n";                                                               \
+    for (i = 0; i Array::< n; i = i Array::+ 1) {                              \
+        res = strcat(res, tos(Array::sel([i], in), indent Array::+ 1));        \
+    }                                                                          \
+    res = strcat(res, indent(indent, "]\n"));                                  \
+    return res;                                                                \
+}
+
+TOS(int)
+TOS(float)
+TOS(double)
+TOS(bool)
+
+inline string to_string(char[len] arr)
 {
-    return { iv -> Hsb2Rgb(_sel_VxA_(iv, h), s, b) | iv < shp };
+    return to_string(arr ++ ['\0'], len);
 }
 
-inline color[d:shp] Hsb2Rgb(int[d:shp] h, int[d:shp] s, int[d:shp] b)
+inline char[.] tochar(string str)
 {
-    return { iv -> Hsb2Rgb(_sel_VxA_(iv, h), _sel_VxA_(iv, s), _sel_VxA_(iv, b)) | iv < shp };
+    return { [i] -> strsel(str, i) | [i] < [strlen(str)] };
 }
 
-/******************************************************************************
- *
- * Binary operations.
- *
- ******************************************************************************/
-
-inline color +(color a, color b)
+inline char sel(int[.] idx, string str)
 {
-    r1, g1, b1 = rgb(a);
-    r2, g2, b2 = rgb(b);
-    return newColor(_add_SxS_(r1, r2), _add_SxS_(g1, g2), _add_SxS_(b1, b2));
+    return strsel(str, Array::sel([0], idx));
 }
 
-inline color[d:shp] + (color[d:shp] a, color[d:shp] b)
+inline string modarray(string str, int[1] idx, char c)
 {
-    return { iv -> a[iv] + b[iv] | iv < shp };
+    return strmod(str, Array::sel([0], idx), c);
 }
 
-inline color -(color a, color b)
+inline string modarray(string s1, int[1] idx, string s2)
 {
-    r1, g1, b1 = rgb(a);
-    r2, g2, b2 = rgb(b);
-    return newColor(_sub_SxS_(r1, r2), _sub_SxS_(g1, g2), _sub_SxS_(b1, b2));
+    return strovwt(s1, Array::sel([0], idx), s2);
 }
 
-inline color[d:shp] -(color[d:shp] a, color[d:shp] b)
-{
-    return { iv -> a[iv] - b[iv] | iv < shp };
+#define COMPARE_STRINGS(cmp)                                                   \
+inline bool cmp(string A, string B)                                            \
+{                                                                              \
+    return strcmp(A, B) Array::cmp 0;                                          \
 }
 
-inline color *(color c, double x)
-{
-    r, g, b = rgb(c);
-    return newColor(
-        Array::toi(_mul_SxS_(Array::tod(r), x)),
-        Array::toi(_mul_SxS_(Array::tod(g), x)),
-        Array::toi(_mul_SxS_(Array::tod(b), x))
-    );
+COMPARE_STRINGS(==)
+COMPARE_STRINGS(!=)
+COMPARE_STRINGS(<)
+COMPARE_STRINGS(<=)
+COMPARE_STRINGS(>)
+COMPARE_STRINGS(>=)
+
+#define TEST_STRING(pred)                                                      \
+inline  bool pred(string str)                                                  \
+{                                                                              \
+    res = false;                                                               \
+    len = strlen(str);                                                         \
+    for (i = 0; _and_SxS_(i Array::< len, res); i = i Array::+ 1) {            \
+        c = str[[i]];                                                          \
+        res = Char::pred(c);                                                   \
+    }                                                                          \
+    return res;                                                                \
 }
 
-inline color[d:shp] *(color[d:shp] c, double x)
-{
-    return { iv -> c[iv] * x | iv < shp };
+TEST_STRING(isalpha)
+TEST_STRING(isupper)
+TEST_STRING(islower)
+TEST_STRING(isdigit)
+TEST_STRING(isxdigit)
+TEST_STRING(isspace)
+TEST_STRING(ispunct)
+TEST_STRING(isalnum)
+TEST_STRING(isprint)
+TEST_STRING(isgraph)
+TEST_STRING(iscntrl)
+
+#define CONVERT_STRING(pred, convert)                                          \
+inline string convert(string str)                                              \
+{                                                                              \
+    for (i = 0; i Array::< strlen(str); i = i Array::+ 1) {                    \
+        c = str[[i]];                                                          \
+        if (Char::pred(c))                                                     \
+        {                                                                      \
+            str = strmod(str, i, Char::convert(c));                            \
+        }                                                                      \
+    }                                                                          \
+    return str;                                                                \
 }
 
-/******************************************************************************
- *
- * Color constants.
- *
- ******************************************************************************/
+CONVERT_STRING(isupper, tolower)
+CONVERT_STRING(islower, toupper)
 
-inline color black()
-{
-    return (color)[0,0,0];
-}
-
-inline color white()
-{
-    return (color)[255,255,255];
-}
-
-inline color red()
-{
-    return (color)[255,0,0];
-}
-
-inline color green()
-{
-    return (color)[0,255,0];
-}
-
-inline color blue()
-{
-    return (color)[0,0,255];
-}
+#endif /* SAC_BACKEND_MUTC */
