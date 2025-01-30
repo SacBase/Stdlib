@@ -275,9 +275,8 @@ a[+] rotate (int dimension, int count, a[+] A)                                 \
                                                                                \
       result = with {                                                          \
                  (_mul_SxV_(0,shape(result)) <= iv <  slice_shp)               \
-                 : sel(_add_VxV_(_sub_VxV_(shape(A),                                                \
-                       slice_shp),                                 \
-                       + iv), A);                                   \
+                 : sel(_add_VxV_(_sub_VxV_(shape(A), slice_shp),                                 \
+                                 iv), A);                                   \
                } : modarray( result );                                         \
     }                                                                          \
   }                                                                            \
