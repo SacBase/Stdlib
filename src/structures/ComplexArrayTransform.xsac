@@ -13,12 +13,12 @@ export all;
  *
  ******************************************************************************/
 
-inline complex sum(complex[d:shp] arr)
-{
-    return with {
-        (_mul_SxV_(0, shp) <= iv < shp) : arr[iv];
-    } : fold(ComplexScalarArith::+, (complex)[0d, 0d]);
-}
+//inline complex sum(complex[d:shp] arr)
+//{
+//    return with {
+//        (_mul_SxV_(0, shp) <= iv < shp) : arr[iv];
+//    } : fold(ComplexScalarArith::+, (complex)[0d, 0d]);
+//}
 
 TAKE(complex)
 
