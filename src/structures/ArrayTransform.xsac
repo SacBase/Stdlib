@@ -258,11 +258,11 @@ typ[o,d:shp] ++(typ[n,d:shp] A, typ B)                                         \
 #define CAT_SxA(typ, postfix, zval, oval)                                      \
 inline                                                                         \
 typ[o,d:shp] ++(typ A, typ[m,d:shp] B)                                         \
-    | _eq_SxS_(o, _add_SxS_(1, m))                                             \
+    | _eq_SxS_(o, _add_SxS_(m, 1))                                             \
 {                                                                              \
-    o = _add_SxS_(1, m);                                                       \
-    return { [i] -> genarray(shp, A) | [i] < [1];                              \
-             [i] -> B[_sub_SxS_(i, 1)] | [1] <= [i] < [o] };                   \
+    o = _add_SxS_(m, 1);                                                       \
+    return { [i] -> B[_sub_SxS_(i, 1)] | [1] <= [i] < [o];                     \
+             [i] -> genarray(shp, A) | [i] < [o] };                            \
 }
 
 #define CAT_SxS(typ, postfix, zval, oval)                                      \
