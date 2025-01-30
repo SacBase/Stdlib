@@ -56,9 +56,7 @@ inline int[.] shape(complex[*] arr)
 inline complex[i:ishp] sel(int[o] idx, complex[o:oshp,i:ishp] arr)
     | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
 {
-    r = _sel_VxA_(_cat_VxV_(idx, [0]), (double[+])arr);
-    i = _sel_VxA_(_cat_VxV_(idx, [1]), (double[+])arr);
-    return (complex[*])[r, i];
+    return (complex[*])Array::sel(idx, (double[+])arr);
 }
 
 inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
