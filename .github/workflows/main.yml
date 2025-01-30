@@ -1,60 +1,49 @@
-# The following configuration is used to setup GitHub Actions
-# for building (and running unit tests) on pushes and PRs.
-# At the moment, we build on two runner types: Linux and MacOS,
-# specific version information can be found further below.
-name: Build On Changes
+name: Build
 
-# run action on all pushes and pull_request for all branches
 on: [pull_request]
 
-# high-level constants
 env:
   BASE_URL: https://gitlab.sac-home.org/sac-group/sac-packages/-/raw/master/latest/weekly
 
-# action listing, all jobs run in parallel
 jobs:
-  build_linux:
+  build_ubuntu:
     runs-on: ubuntu-22.04
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
         with:
-          # we need to get tag information
           fetch-depth: 0
-          # we need to get all submodules
           submodules: 'recursive'
       - name: Install sac2c-basic
         run: |
-          wget ${BASE_URL}/Ubl20/sac2c-basic.deb
+          wget ${BASE_URL}/Ubl22/sac2c-basic.deb
           sudo apt install ./sac2c-basic.deb
           sac2c -V
-      - name: Create build dir
+      - name: Create build directory
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
           mkdir $HOME/.sac2crc
-      - name: Configure build-system
+      - name: Configure build system
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake -DLINKSETSIZE=200 -DFULLTYPES=ON $GITHUB_WORKSPACE
+        run: cmake -DFULLTYPES=ON $GITHUB_WORKSPACE
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
-          cmake --build . -j 2 2>&1 | tee build.log
+          cmake --build . -j2 2>&1 | tee build.log
           if [ ${PIPESTATUS[0]} -ne 0 ]; then
             echo "!!! ERROR detected in build !!!";
             exit 1;
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-  build_mac:
+  build_macos:
     runs-on: macos-13
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
         with:
-          # we need to get tag information
           fetch-depth: 0
-          # we need to get all submodules
           submodules: 'recursive'
       - name: Install sac2c-basic
         run: |
@@ -66,19 +55,19 @@ jobs:
           sudo xcode-select -switch "/Applications/Xcode_14.1.0.app"
           # we need to rewrite sysroot path to use specific Xcode version
           sudo find /usr/local/share -type f -name 'sac2crc_*' -execdir sed -i.bak 's/Xcode\.app/Xcode_13\.4\.app/g' {} \;
-      - name: Create build dir
+      - name: Create build directory
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
           mkdir $HOME/.sac2crc
-      - name: Configure build-system
+      - name: Configure build system
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake -DLINKSETSIZE=200 -DFULLTYPES=ON ${GITHUB_WORKSPACE}
+        run: cmake -DFULLTYPES=ON ${GITHUB_WORKSPACE}
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
-          cmake --build . -j 2 2>&1 | tee build.log
+          cmake --build . -j2 2>&1 | tee build.log
           if [ ${PIPESTATUS[0]} -ne 0 ]; then
             echo "!!! ERROR detected in build !!!";
             exit 1;
