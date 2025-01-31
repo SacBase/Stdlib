@@ -1,5 +1,11 @@
 module ArrayTransform;
 
+ /******************************************************************************
+ *
+ * Depends on ScalarArith, ArrayBasics, and Constants.
+ *
+ ******************************************************************************/
+
 use ArrayBasics: { sel, genarray };
 use Constants: all;
 
@@ -241,38 +247,8 @@ typ[o,d:shp] ++(typ[n,d:shp] A, typ[m,d:shp] B)                                \
              [i] -> B[_sub_SxS_(i, n)] | [n] <= [i] < [o] };                   \
 }
 
-#define CAT_AxS(typ, postfix, zval, oval)                                      \
-inline                                                                         \
-typ[o,d:shp] ++(typ[n,d:shp] A, typ B)                                         \
-    | _eq_SxS_(o, _add_SxS_(n, 1))                                             \
-{                                                                              \
-    o = _add_SxS_(n, 1);                                                       \
-    return { [i] -> A[i] | [i] < [n];                                          \
-             [i] -> genarray(shp, B) | [n] <= [i] < [o] };                     \
-}
-
-#define CAT_SxA(typ, postfix, zval, oval)                                      \
-inline                                                                         \
-typ[o,d:shp] ++(typ A, typ[m,d:shp] B)                                         \
-    | _eq_SxS_(o, _add_SxS_(m, 1))                                             \
-{                                                                              \
-    o = _add_SxS_(m, 1);                                                       \
-    return { [i] -> B[_sub_SxS_(i, 1)] | [1] <= [i] < [o];                     \
-             [i] -> genarray(shp, A) | [i] < [o] };                            \
-}
-
-#define CAT_SxS(typ, postfix, zval, oval)                                      \
-inline                                                                         \
-typ[2] ++(typ A, typ B)                                                        \
-{                                                                              \
-    return [A, B];                                                             \
-}
-
 #define CAT(typ, postfix, zval, oval)                                          \
-CAT_AxA(typ, postfix, zval, oval)                                              \
-CAT_AxS(typ, postfix, zval, oval)                                              \
-CAT_SxA(typ, postfix, zval, oval)                                              \
-CAT_SxS(typ, postfix, zval, oval)
+CAT_AxA(typ, postfix, zval, oval)
 
 BUILT_IN(CAT)
 
@@ -293,34 +269,8 @@ typ[d:shp,o] ++^(typ[d:shp,n] A, typ[d:shp,m] B)                               \
     return { iv -> _cat_VxV_(A[iv], B[iv]) | iv < shp };                       \
 }
 
-#define CATENATE_AxS(typ, postfix, zval, oval)                                 \
-inline                                                                         \
-typ[d:shp,o] ++^(typ[d:shp,n] A, typ B)                                        \
-    | _eq_SxS_(o, _add_SxS_(n, 1))                                             \
-{                                                                              \
-    return { iv -> _cat_VxV_(A[iv], [B]) | iv < shp };                         \
-}
-
-#define CATENATE_SxA(typ, postfix, zval, oval)                                 \
-inline                                                                         \
-typ[d:shp,o] ++^(typ A, typ[d:shp,m] B)                                        \
-    | _eq_SxS_(o, _add_SxS_(1, m))                                             \
-{                                                                              \
-    return { iv -> _cat_VxV_([A], B[iv]) | iv < shp };                         \
-}
-
-#define CATENATE_SxS(typ, postfix, zval, oval)                                 \
-inline                                                                         \
-typ[2] ++^(typ A, typ B)                                                       \
-{                                                                              \
-    return [A, B];                                                             \
-}
-
 #define CATENATE(typ, postfix, zval, oval)                                     \
-CATENATE_AxA(typ, postfix, zval, oval)                                         \
-CATENATE_AxS(typ, postfix, zval, oval)                                         \
-CATENATE_SxA(typ, postfix, zval, oval)                                         \
-CATENATE_SxS(typ, postfix, zval, oval)
+CATENATE_AxA(typ, postfix, zval, oval)
 
 BUILT_IN(CATENATE)
 
