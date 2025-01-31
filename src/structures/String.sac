@@ -7,7 +7,11 @@ export all;
 
 #else
 
-use Array: { ++ };
+/******************************************************************************
+ *
+ * Depends on ArrayBasics and Char.
+ *
+ ******************************************************************************/
 
 export all except { indent };
 
@@ -285,7 +289,7 @@ external string tos(bool B);
 
 inline string indent(int indent, string str)
 {
-    while (indent Array::> 0){
+    while (_lt_SxS_(0, indent)){
         str = strcat("  ", str);
     }
     return str;
@@ -305,8 +309,9 @@ inline string tos(type in, int indent)                                         \
 inline string tos(type[n,d:shp] in, int indent)                                \
 {                                                                              \
     res = "[\n";                                                               \
-    for (i = 0; i Array::< n; i = i Array::+ 1) {                              \
-        res = strcat(res, tos(Array::sel([i], in), indent Array::+ 1));        \
+    for (i = 0; _lt_SxS_(i, n); i = _add_SxS_(i, 1)) {                         \
+        res = strcat(res, tos(ArrayBasics::sel([i], in),                       \
+                              _add_SxS_(indent, 1)));                          \
     }                                                                          \
     res = strcat(res, indent(indent, "]\n"));                                  \
     return res;                                                                \
@@ -319,7 +324,7 @@ TOS(bool)
 
 inline string to_string(char[len] arr)
 {
-    return to_string(arr ++ ['\0'], len);
+    return to_string(_cat_VxV_(arr, ['\0']), len);
 }
 
 inline char[.] tochar(string str)
@@ -329,38 +334,38 @@ inline char[.] tochar(string str)
 
 inline char sel(int[.] idx, string str)
 {
-    return strsel(str, Array::sel([0], idx));
+    return strsel(str, _sel_VxA_([0], idx));
 }
 
 inline string modarray(string str, int[1] idx, char c)
 {
-    return strmod(str, Array::sel([0], idx), c);
+    return strmod(str, _sel_VxA_([0], idx), c);
 }
 
 inline string modarray(string s1, int[1] idx, string s2)
 {
-    return strovwt(s1, Array::sel([0], idx), s2);
+    return strovwt(s1, _sel_VxA_([0], idx), s2);
 }
 
-#define COMPARE_STRINGS(cmp)                                                   \
+#define COMPARE_STRINGS(cmp, op)                                               \
 inline bool cmp(string A, string B)                                            \
 {                                                                              \
-    return strcmp(A, B) Array::cmp 0;                                          \
+    return op(strcmp(A, B), 0);                                                \
 }
 
-COMPARE_STRINGS(==)
-COMPARE_STRINGS(!=)
-COMPARE_STRINGS(<)
-COMPARE_STRINGS(<=)
-COMPARE_STRINGS(>)
-COMPARE_STRINGS(>=)
+COMPARE_STRINGS(==, _eq_SxS_)
+COMPARE_STRINGS(!=, _neq_SxS_)
+COMPARE_STRINGS(<,  _lt_SxS_)
+COMPARE_STRINGS(<=, _le_SxS_)
+COMPARE_STRINGS(>,  _gt_SxS_)
+COMPARE_STRINGS(>=, _ge_SxS_)
 
 #define TEST_STRING(pred)                                                      \
 inline  bool pred(string str)                                                  \
 {                                                                              \
     res = false;                                                               \
     len = strlen(str);                                                         \
-    for (i = 0; _and_SxS_(i Array::< len, res); i = i Array::+ 1) {            \
+    for (i = 0; _and_SxS_(_lt_SxS_(i, len), res); i = _add_SxS_(i, 1)) {       \
         c = str[[i]];                                                          \
         res = Char::pred(c);                                                   \
     }                                                                          \
@@ -382,7 +387,7 @@ TEST_STRING(iscntrl)
 #define CONVERT_STRING(pred, convert)                                          \
 inline string convert(string str)                                              \
 {                                                                              \
-    for (i = 0; i Array::< strlen(str); i = i Array::+ 1) {                    \
+    for (i = 0; _lt_SxS_(i, strlen(str)); i = _add_SxS_(i, 1)) {               \
         c = str[[i]];                                                          \
         if (Char::pred(c))                                                     \
         {                                                                      \
