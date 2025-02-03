@@ -43,7 +43,10 @@ inline int dim(complex[*] arr)
  ******************************************************************************/
 inline int[.] shape(complex[*] arr)
 {
-    return _drop_SxV_(_sub_SxS_(0, 1), _shape_A_((double[+])arr));
+
+    shp = _shape_A_((double[+])arr);
+    shp_len = _sel_VxA_([0], _shape_A_(shp));
+    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
 }
 
 /******************************************************************************
