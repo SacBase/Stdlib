@@ -1,5 +1,11 @@
 module Color8;
 
+/******************************************************************************
+ *
+ * Depends on Array and Numerical.
+ *
+ ******************************************************************************/
+
 use Numerical: { exp, log };
 
 export all except { Weights2Clut, genSteps };
@@ -24,7 +30,9 @@ inline int dim(color[*] arr)
 
 inline int[.] shape(color[*] arr)
 {
-    return _drop_SxV_(_sub_SxS_(0, 1), _shape_A_((int[*])arr));
+    shp = _shape_A_((int[+])arr);
+    shp_len = _sel_VxA_([0], _shape_A_(shp));
+    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
 }
 
 inline color[i:ishp] sel(int[o] idx, color[o:oshp,i:ishp] arr)
