@@ -610,44 +610,6 @@ typ[i:ishp] rsum(int o, typ[o:oshp,i:ishp] arr)                                \
 
 NUM(RSUM)
 
-/* The match verb */
-#define MATCH( typ, postfix, zval, oval)						                    \
-inline									                                                \
-bool match( typ arr_a, typ arr_b)						                            \
-{									                                                      \
- return( arr_a == arr_b);						                                    \
-}									                                                      \
-									                                                      \
-inline									                                                \
-bool match( typ[+] arr_a, typ arr_b)					                          \
-{									                                                      \
- return(false);								                                          \
-}									                                                      \
-									                                                      \
-inline									                                                \
-bool match( typ arr_a, typ[+] arr_b)					                          \
-{									                                                      \
- return( false);							                                          \
-}									                                                      \
-									                                                      \
-inline									                                                \
-bool match( typ[+] arr_a, typ[+] arr_b)					                        \
-{									                                                      \
- if ((_dim_A_( arr_a) == _dim_A_( arr_b)) && 				                    \
-	(all(_eq_VxV_(_shape_A_(arr_a), _shape_A_(arr_b))))){		              \
-         res = with {							                                      \
-          ( _mul_SxV_(0,_shape_A_( arr_a)) <= iv < _shape_A_( arr_a) )  \
-          : _eq_SxS_(_sel_VxA_(iv, arr_a), _sel_VxA_(iv, arr_b)) ;  	  \
-          } : foldfix( &, true, false );                               	\
- } else {								                                                \
-	res = false;							                                            \
-   }									                                                  \
- return( res);								                                          \
-}
-
-BUILT_IN( MATCH)
-
-
 /********************************************************************************
  *
  * mask() has the same semantics as where(), but it does not use WLs.
