@@ -25,12 +25,12 @@ RandLC create_randlc(double x,double a)
   t23 = 1d;
   t46 = 1d;
 
-  for (i=0; i<23; i++){
+  for (i = 0; i < 23; i = _add_SxS_(i, 1)) {
     r23 = 0.5d * r23;
     t23 = 2d * t23;
   }
 
-  for (i=0;i<46;i++){
+  for (i = 0; i < 46; i = _add_SxS_(i, 1)) {
     r46 = 0.5d * r46;
     t46 = 2d * t46;
   }

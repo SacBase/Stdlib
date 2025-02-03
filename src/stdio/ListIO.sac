@@ -162,7 +162,7 @@ void fprint( File &stream, list L, int ElemsPerLine)
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
       File::fprintf( stream, ": %d ", hd( L));
       L = tl( L);
-      cnt++;
+      cnt = _add_SxS_(cnt, 1);
     }
     while (! empty( L)) {
       File::fprintf( stream, "\n");
@@ -170,7 +170,7 @@ void fprint( File &stream, list L, int ElemsPerLine)
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
         File::fprintf( stream, ": %d ", hd( L));
         L = tl( L);
-        cnt++;
+        cnt = _add_SxS_(cnt, 1);
       }
     }
   }
@@ -191,7 +191,7 @@ void fprint( File &stream, list L, int ElemsPerLine, int ColWidth)
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
       File::fprintf( stream, ": %*d ", ColWidth, hd( L));
       L = tl( L);
-      cnt++;
+      cnt = _add_SxS_(cnt, 1);
     }
     while (! empty( L)) {
       File::fprintf( stream, "\n");
@@ -199,7 +199,7 @@ void fprint( File &stream, list L, int ElemsPerLine, int ColWidth)
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
         File::fprintf( stream, ": %*d ", ColWidth, hd( L));
         L = tl( L);
-        cnt++;
+        cnt = _add_SxS_(cnt, 1);
       }
     }
   }
@@ -239,7 +239,7 @@ void fprint( TermFile &stream, list L, int ElemsPerLine)
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
       TermFile::fprintf( stream, ": %d ", hd( L));
       L = tl( L);
-      cnt++;
+      cnt = _add_SxS_(cnt, 1);
     }
     while (! empty( L)) {
       TermFile::fprintf( stream, "\n");
@@ -247,7 +247,7 @@ void fprint( TermFile &stream, list L, int ElemsPerLine)
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
         TermFile::fprintf( stream, ": %d ", hd( L));
         L = tl( L);
-        cnt++;
+        cnt = _add_SxS_(cnt, 1);
       }
     }
   }
@@ -268,7 +268,7 @@ void fprint( TermFile &stream, list L, int ElemsPerLine, int ColWidth)
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
       TermFile::fprintf( stream, ": %*d ", ColWidth, hd( L));
       L = tl( L);
-      cnt++;
+      cnt = _add_SxS_(cnt, 1);
     }
     while (! empty( L)) {
       TermFile::fprintf( stream, "\n");
@@ -276,7 +276,7 @@ void fprint( TermFile &stream, list L, int ElemsPerLine, int ColWidth)
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
         TermFile::fprintf( stream, ": %*d ", ColWidth, hd( L));
         L = tl( L);
-        cnt++;
+        cnt = _add_SxS_(cnt, 1);
       }
     }
   }
@@ -316,7 +316,7 @@ void print( list L, int ElemsPerLine)
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
       TermFile::printf( ": %d ", hd( L));
       L = tl( L);
-      cnt++;
+      cnt = _add_SxS_(cnt, 1);
     }
     while (! empty( L)) {
       TermFile::printf( "\n");
@@ -324,7 +324,7 @@ void print( list L, int ElemsPerLine)
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
         TermFile::printf( ": %d ", hd( L));
         L = tl( L);
-        cnt++;
+        cnt = _add_SxS_(cnt, 1);
       }
     }
   }
@@ -345,7 +345,7 @@ void print( list L, int ElemsPerLine, int ColWidth)
     while ((! empty( L)) && (cnt < ElemsPerLine)) {
       TermFile::printf( ": %*d ", ColWidth, hd( L));
       L = tl( L);
-      cnt++;
+      cnt = _add_SxS_(cnt, 1);
     }
     while (! empty( L)) {
       TermFile::printf( "\n");
@@ -353,7 +353,7 @@ void print( list L, int ElemsPerLine, int ColWidth)
       while ((! empty( L)) && (cnt < ElemsPerLine)) {
         TermFile::printf( ": %*d ", ColWidth, hd( L));
         L = tl( L);
-        cnt++;
+        cnt = _add_SxS_(cnt, 1);
       }
     }
   }
