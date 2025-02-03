@@ -26,7 +26,7 @@ void indentedShow(a[d:shp] arr)                                                \
                         ' ');                                                  \
     carr = format(arr);                                                        \
     ext_carr = with {                                                          \
-        (. <= iv <= . ) : _cat_VxV_(spaces, carr[iv]);                         \
+        (. <= [i] <= . ) : _cat_VxV_(spaces, carr[[i]]);                       \
     } : genarray(drop([-1], shape(carr)),                                      \
                  _cat_VxV_(spaces,                                             \
                            genarray(take([-1], shape(carr)), ' ')));           \
