@@ -61,8 +61,8 @@ char[d:shp,m] format(bool[d:shp,n] arr)
     | m == max(2 * n - 1, 0)
 {
     res = { iv -> arr[iv] ? ['1', ' '] : ['0', ' '] };
-    res = reshape(shp ++ [2 * n], res);
-    lastcol = genarray([d], 0) ++ [-1];
+    res = reshape(_cat_VxV_(shp, [2 * n]), res);
+    lastcol = _cat_VxV_(genarray([d], 0), [-1]);
     res = drop(lastcol, res);
     return res;
 }
@@ -151,7 +151,7 @@ char[+] format(int[d:shp,n] arr)
         zcols = sum(widths + 1) - 1;
 
         res = { [i] -> formatrow(widths, m[i]) | [i] < [shpp] };
-        res = reshape(shp ++ [zcols], res);
+        res = reshape(_cat_VxV_(shp, [zcols]), res);
     }
 
     return res;
@@ -369,7 +369,7 @@ char[+] format(double[d:shp,n] arr, int precision)
 
         res = { [i] -> alignrow(fry, i, widths, lodp, lodpmax, zcols)
               | [i] < [shpp] };
-        res = reshape(shp ++ [zcols], res);
+        res = reshape(_cat_VxV_(shp, [zcols]), res);
     }
 
     return res;
@@ -412,7 +412,8 @@ char[+] format(double[d:shp] arr, int[2] w)
 {
     res = { iv -> format(arr[iv], w) | iv < shp };
     zshp = shape(res);
-    zshp = drop([-2], zshp) ++ [prod(take([-2], zshp))];
+    zshp = _cat_VxV_(drop([-2], zshp),
+                     [prod(take([-2], zshp))]);
     res = reshape(zshp, res);
     return res;
 }
@@ -438,12 +439,12 @@ char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 
     // Can't use WL because widths may differ
     sink = 0;
-    for (i = 0; i < vlen; i++) {
+    for (i = 0; i < vlen; i = _add_SxS_(i, 1)) {
         w = [wid[i], 1];
         curz = format(arr[i], w);
         lim  = shape(curz)[0];
 
-        for (src = 0; src < lim; src++) {
+        for (src = 0; src < lim; src = _add_SxS_(src, 1)) {
             res = modarray(res, src + sink, curz[src]);
         }
 
@@ -511,7 +512,7 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
     res = genarray([zcols], ' ');
 
     zci = 0;
-    for (ci = 0; ci < cols; ci++) {
+    for (ci = 0; ci < cols; ci = _add_SxS_(ci, 1)) {
         fi = ci + cols * i;           // Source item index
         sc = lodp[fi] - lodpmax[ci];  // Shift count to align decimal
         sefe = thCharsTo([' ', ' '], fry[fi]);
@@ -553,7 +554,7 @@ int thCharsTo(char[n] ch, char[lim] fry)
     | n > 1
 {
     res = lim;
-    for (i = 0; i < lim; i++) {
+    for (i = 0; i < lim; i = _add_SxS_(i, 1)) {
         if (fry[i] == ch[0] || fry[i] == ch[1]) {
             res = i;
             i = lim;
@@ -574,9 +575,9 @@ inline
 char[d], int thrnAppend(char[d] vec, int sink, char[n] arr)
 {
     res = vec;
-    for (src = 0; src < n; src++) {
+    for (src = 0; src < n; src = _add_SxS_(src, 1)) {
         res[sink] = arr[src];
-        sink++;
+        sink = _add_SxS_(sink, 1);
     }
 
     return (res, sink);
@@ -611,7 +612,7 @@ char[.] killPlusSign(char[n] arr)
 {
     res = arr;
     sink = 1;
-    for (src = 1; src < n; src++) {
+    for (src = 1; src < n; src = _add_SxS_(src, 1)) {
         res[sink] = arr[src];
         sink += toi(res[sink] != '+');
     }

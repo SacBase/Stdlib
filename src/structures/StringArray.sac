@@ -84,7 +84,7 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
         o, indices = getIndices(val_shp);
         for (i = 0; i < o; i += 1) {
             selection = Array::sel([i], indices);
-            modarrayidx = idx Array::++ selection;
+            modarrayidx = _cat_VxV_(idx, selection);
             modArrVal = _sel(Array::sel([i], indices), val);
             res = _modarray(res, modarrayidx, modArrVal);
         }
@@ -120,7 +120,8 @@ stringArray sel(int[n] idx, stringArray arr)
         for (i = 0; i < o; i += 1) {
             res = modarray(res,
                            Array::sel([i], indices),
-                           sel(idx Array::++ Array::sel([i], indices), arr));
+                           sel(_cat_VxV_(idx, Array::sel([i], indices)),
+                               arr));
         }
     }
     else {
@@ -150,7 +151,7 @@ stringArray to_stringArray(string s)
 
 stringArray genarray(int[.] shp, stringArray s)
 {
-    new_shp = shp Array::++ shape(s);
+    new_shp = _cat_VxV_(shp, shape(s));
     res = _to_stringArray(new_shp, "");
 
     o, indices = getIndices(shp);
@@ -214,7 +215,7 @@ stringArray ++(stringArray m1, stringArray m2)
 
     m1Len = Array::sel([0], shape(m1));
     m2Len = Array::sel([0], shape(m2));
-    resShape = [m1Len + m2Len] Array::++ m1InnerShape;
+    resShape = _cat_VxV_([m1Len + m2Len], m1InnerShape);
     res = genarray(resShape, to_stringArray(""));
 
     for (i = 0; i < m1Len; i += 1) {

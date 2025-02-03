@@ -26,9 +26,10 @@ void indentedShow(a[d:shp] arr)                                                \
                         ' ');                                                  \
     carr = format(arr);                                                        \
     ext_carr = with {                                                          \
-        (. <= iv <= . ) : spaces Array::++ carr[iv];                           \
+        (. <= iv <= . ) : _cat_VxV_(spaces, carr[iv]);                         \
     } : genarray(drop([-1], shape(carr)),                                      \
-                 (spaces Array::++ genarray(take([-1], shape(carr)), ' ')));   \
+                 _cat_VxV_(spaces,                                             \
+                           genarray(take([-1], shape(carr)), ' ')));           \
                                                                                \
     show(ext_carr);                                                            \
     incIndent(offset, strlen(cshape) + 16);                                    \
@@ -43,8 +44,8 @@ void indentedShow(a[n,m] arr)                                                  \
     spaces = genarray([getIndent() + getIndent(offset)], ' ');                 \
     carr = format(arr);                                                        \
     ext_carr = { [i] -> _eq_SxS_(i, 0)                                         \
-                            ? carr[[i]] Array::++ spaces                       \
-                            : spaces Array::++ carr[[i]] };                    \
+                            ? _cat_VxV_(carr[[i]], spaces)                     \
+                            : _cat_VxV_(spaces, carr[[i]]) };                  \
     show(ext_carr);                                                            \
 }                                                                              \
                                                                                \
