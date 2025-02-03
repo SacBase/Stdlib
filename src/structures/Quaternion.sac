@@ -1,5 +1,11 @@
 module Quaternion;
 
+/******************************************************************************
+ *
+ * Depends on ArrayBasics.
+ *
+ ******************************************************************************/
+
 export all;
 
 typedef double[4] quaternion;
@@ -17,18 +23,20 @@ typedef double[4] quaternion;
 
 inline int dim(quaternion[*] arr)
 {
-    return Array::dim((double[+])arr) Array::- 1;
+    return _sub_SxS_(_dim_A_((double[+])arr), 1);
 }
 
 inline int[.] shape(quaternion[*] arr)
 {
-    return Array::drop([Array::-1], Array::shape((double[+])arr));
+    shp = _shape_A_((double[+])arr);
+    shp_len = _sel_VxA_([0], _shape_A_(shp));
+    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
 }
 
 inline quaternion[i:ishp] sel(int[o] idx, quaternion[o:oshp,i:ishp] arr)
     | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
 {
-    return (quaternion[*])Array::sel(idx, (double[*])arr);
+    return (quaternion[*])ArrayBasics::sel(idx, (double[+])arr);
 }
 
 inline quaternion[d:shp] sel(int idx, quaternion[n,d:shp] arr)
@@ -50,7 +58,7 @@ inline quaternion[d:shp] toq(double[d:shp,4] arr)
 
 inline quaternion[d:shp] toq(int[d:shp,4] arr)
 {
-    return (quaternion[*])Array::tod(arr);
+    return (quaternion[*]){ iv -> _tod_S_(_sel_VxA_(iv, arr)) };
 }
 
 inline double[d:shp,4] tod(quaternion[d:shp] arr)
@@ -66,17 +74,18 @@ inline double[d:shp,4] tod(quaternion[d:shp] arr)
 
 inline quaternion[d:shp] +(double a, quaternion[d:shp] b)
 {
-    return (quaternion[*])(a Array::+ (double[+])b);
+    return (quaternion[*]){ iv -> _add_SxV_(a, (double[4])b[iv]) | iv < shp };
 }
 
 inline quaternion[d:shp] +(quaternion[d:shp] a, double b)
 {
-    return (quaternion[*])((double[+])a Array::+ b);
+    return (quaternion[*]){ iv -> _add_VxS_((double[4])a[iv], b) | iv < shp };
 }
 
 inline quaternion[d:shp] +(quaternion[d:shp] a, quaternion[d:shp] b)
 {
-    return (quaternion[*])((double[+])a Array::+ (double[+])b);
+    return (quaternion[*]){ iv -> _add_VxV_((double[4])a[iv], (double[4])b[iv])
+                          | iv < shp };
 }
 
 /******************************************************************************/
@@ -84,22 +93,34 @@ inline quaternion[d:shp] +(quaternion[d:shp] a, quaternion[d:shp] b)
 inline quaternion *(quaternion a, quaternion b)
 {
     ad = (double[4])a;
-    ad0 = Array::sel([0], ad);
-    ad1 = Array::sel([1], ad);
-    ad2 = Array::sel([2], ad);
-    ad3 = Array::sel([3], ad);
+    ad0 = _sel_VxA_([0], ad);
+    ad1 = _sel_VxA_([1], ad);
+    ad2 = _sel_VxA_([2], ad);
+    ad3 = _sel_VxA_([3], ad);
 
     bd = (double[4])b;
-    bd0 = Array::sel([0], bd);
-    bd1 = Array::sel([1], bd);
-    bd2 = Array::sel([2], bd);
-    bd3 = Array::sel([3], bd);
+    bd0 = _sel_VxA_([0], bd);
+    bd1 = _sel_VxA_([1], bd);
+    bd2 = _sel_VxA_([2], bd);
+    bd3 = _sel_VxA_([3], bd);
 
     return (quaternion)[
-        ad0 Array::* bd0 Array::- ad1 Array::* bd1 Array::- ad2 Array::* bd2 Array::- ad3 Array::* bd3,
-        ad0 Array::* bd1 Array::+ ad1 Array::* bd0 Array::+ ad2 Array::* bd3 Array::- ad3 Array::* bd2,
-        ad0 Array::* bd2 Array::- ad1 Array::* bd3 Array::+ ad2 Array::* bd0 Array::+ ad3 Array::* bd1,
-        ad0 Array::* bd3 Array::+ ad1 Array::* bd2 Array::- ad2 Array::* bd1 Array::+ ad3 Array::* bd0
+        _sub_SxS_(_mul_SxS_(ad0, bd0),
+                  _sub_SxS_(_mul_SxS_(ad1, bd1),
+                            _sub_SxS_(_mul_SxS_(ad2, bd2),
+                                      _mul_SxS_(ad3, bd3)))),
+        _add_SxS_(_mul_SxS_(ad0, bd1),
+                  _add_SxS_(_mul_SxS_(ad1, bd0),
+                            _sub_SxS_(_mul_SxS_(ad2, bd3),
+                                      _mul_SxS_(ad3, bd2)))),
+        _sub_SxS_(_mul_SxS_(ad0, bd2),
+                  _add_SxS_(_mul_SxS_(ad1, bd3),
+                            _add_SxS_(_mul_SxS_(ad2, bd0),
+                                      _mul_SxS_(ad3, bd1)))),
+        _add_SxS_(_mul_SxS_(ad0, bd3),
+                  _sub_SxS_(_mul_SxS_(ad1, bd2),
+                            _add_SxS_(_mul_SxS_(ad2, bd1),
+                                      _mul_SxS_(ad3, bd0))))
     ];
 }
 
