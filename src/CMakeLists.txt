@@ -101,6 +101,7 @@ CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" FLEX_SAC2C_CC_FLAGS) #needed on CentOS7
 CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" FLEX_SAC2C_CC_FLAGS) #needed on OSX 10.12
 
 SET (BISON_SAC2C_CC_FLAGS "")
+CHECK_SAC2C_CC_FLAG("-Wno-c2x-compat" BISON_SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" BISON_SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code-break" BISON_SAC2C_CC_FLAGS)
 
