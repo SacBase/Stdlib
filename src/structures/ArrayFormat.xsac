@@ -136,7 +136,7 @@ char[.] format(long arr)
 inline
 char[+] format(int[d:shp,n] arr)
 {
-    shpp = _size_A_(shp);
+    shpp = prod(shp);
 
     if (shpp == 0 || n == 0) {
         res = genarray(shp, ' ');
@@ -343,7 +343,7 @@ char[.] format(double arr, int precision)
 inline
 char[+] format(double[d:shp,n] arr, int precision)
 {
-    shpp = _size_A_(shp);
+    shpp = prod(shp);
 
     if (shpp == 0 || n == 0) {
         res = genarray(shp, ' ');

@@ -1,6 +1,6 @@
 module StringArray;
 
-use Array: { +, *, <, <=, !=, all, any, drop, iota, reshape, sum, transpose };
+use Array: { +, *, <, <=, !=, all, any, drop, iota, prod, reshape, sum, transpose };
 use String: { string };
 
 export all except { _to_stringArray, _sel, _modarray, getIndices };
@@ -261,7 +261,7 @@ int[n] indexOf(string needle, stringArray haystack)
 
 int, int[o,d] getIndices(int[d] shp)
 {
-    o = _size_A_(shp);
+    o = prod(shp);
     arr = reshape([o,d], iota(shp));
     return (o, arr);
 }
