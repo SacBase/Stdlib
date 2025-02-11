@@ -72,20 +72,17 @@ BUILT_IN(SEL)
 
 /******************************************************************************
  *
- * @fn <a>[d:shp] reshape(int[d] shp, <a>[*] arr)
+ * @fn <a>[d:shp] reshape(int[d] shp, <a>[a:ashp] arr)
  *
  * @brief Creates a new array with identical data vector but new shape, provided
  * the length of the data vector matches the product of the new shape vector.
- *
- * @todo Requires a type pattern constraint that checks whether prod(shp) ==
- * prod(shape(arr)). But prod is in ArrayTransform, which would introduce A
- * circular dependency. We need to find a nice solution.
  *
  ******************************************************************************/
 
 #define RESHAPE(typ, postfix, zval, oval)                                      \
 inline                                                                         \
-typ[d:shp] reshape(int[d] shp, typ[*] arr)                                     \
+typ[d:shp] reshape(int[d] shp, typ[a:ashp] arr)                                \
+    | _eq_SxS_(_size_A_(shp), _size_A_(ashp))                                  \
 {                                                                              \
     return _reshape_VxA_(shp, arr);                                            \
 }

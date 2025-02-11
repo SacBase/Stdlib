@@ -49,7 +49,7 @@ inline color[d:shp] sel(int idx, color[n,d:shp] arr)
 
 inline
 color[d:shp] reshape(int[d] shp, color[_:shp_a] arr)
-    | _eq_SxS_(Array::prod(shp), Array::prod(shp_a))
+    | _eq_SxS_(_size_A_(shp), _size_A_(shp_a))
 {
     return (color[*])_reshape_VxA_(_cat_VxV_(shp, [3]), (int[*])arr);
 }
