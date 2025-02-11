@@ -13,7 +13,6 @@ env:
 
 # action listing, all jobs run in parallel
 jobs:
-  # Ubuntu 22.04 (x86_64)
   build-ubuntu22:
     runs-on: ubuntu-22.04
     steps:
@@ -47,7 +46,6 @@ jobs:
             exit 1;
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-  # MacOS (x86_64)
   build-macos-x86:
     runs-on: macos-13
     steps:
@@ -85,7 +83,6 @@ jobs:
             exit 1;
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-  # MacOS (arm)
   build-macos-arm:
     runs-on: macos-15
     steps:
