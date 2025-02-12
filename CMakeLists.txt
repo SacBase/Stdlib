@@ -37,6 +37,7 @@ IF (BUILD_EXT)
 ENDIF ()
 
 # Check whether sac2c is operational
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-common")
 INCLUDE ("cmake-common/check-sac2c.cmake") # get SAC2C_VERSION
 INCLUDE ("cmake-common/misc-macros.cmake")
 INCLUDE ("cmake-common/check-sac2c-feature-support.cmake")
