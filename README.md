@@ -13,20 +13,20 @@ Build instructions
 To build the system one requires an operational [CMake](https://cmake.org/) >= 3.20,
 [Flex](http://flex.sourceforge.net/), and [Bison](https://www.gnu.org/software/bison/).
 
-An example on how to build the library:
-```sh
-cd Stdlib
-git submodule init
-git submodule update
-cmake -B build
-cmake --build build -- -j4  # you should have roughly 2GB per thread :-)
+The quick and dirty option is just
+
+```
+make
 ```
 
-If you like you can also install the stdlib into `/usr/local` with `make
-install`, but this is _unnecessary_ as `sac2c` will be able to find your stdlib
-build automatically. This is achieved through a file named `sac2crc.package.stdlib`
-which is being placed in `~/.sac2crc/` and which contains the path to the place 
-where you build your stdlib
+You can also use the `cmake` build system for more control
+
+```
+mkdir build
+cd build
+cmake <OPTIONS> ..
+make -j4
+```
 
 **NOTE:** *When pulling the latest commit, remember to run `git submodule
 update` or you will be missing changes to the `cmake-common` repository.*
@@ -49,7 +49,7 @@ When running CMake it is possible to pass the following variables:
   
     *Default value: 500.*
 * `-DFULLTYPES=ON|OFF` --- add support for further types to the stdlib, such as `long` and
-  `longlong` (Default is `OFF`).
+  `longlong` (Default is `ON`).
 * `-DBUILD_EXT=ON|OFF` --- build extended stdlib (see
   `cmake/source-core-ext.txt` for details) (Default is `ON`)
 
@@ -58,8 +58,6 @@ Continuous Integration
 
 We make use of Github Actions for our CI pipeline, building the standard library on different systems
 anytime there is a pull request. Build will fail if there are any compile-time warnings.
-
-Currently we build on the following systems: `ubuntu-18.04` and `macos-11`.
 
 Please look at `.github/workflows/` for more exact details on what we do.
 
