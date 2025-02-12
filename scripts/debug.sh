@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$#" -ne 1 ]; then
-    printf "Usage: debug.sh SAC2C_FILE\n" >&2
+    printf "Usage: %s SAC2C_FILE\n" "$0" >&2
     printf "\tSAC2C_FILE: .sac2c file created by sac2c option -dcccall\n\n" >&2
     printf "\tThis is for debugging parts of stdlib using gdb.\n" >&2
     printf "\tBuild stdlib with VERBOSE=1 in the environment, and copy\n" >&2
