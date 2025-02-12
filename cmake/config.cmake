@@ -2,6 +2,7 @@ INCLUDE (CheckFunctionExists)
 INCLUDE (CheckCSourceCompiles)
 INCLUDE (CheckLibraryExists)
 INCLUDE (CheckIncludeFiles)
+INCLUDE ("cmake/options.cmake")
 
 # Additional config checks regarding feature support
 INCLUDE ("cmake-common/check-sac2c-feature-support.cmake")
