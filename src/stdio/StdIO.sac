@@ -12,7 +12,6 @@ import ArrayIO: all;
 import FibreIO: all;
 import ListIO: all;
 import ComplexIO: all;
-import Color8IO: all;
 #endif /* EXT_STDLIB */
 #endif /* SAC_BACKEND_MUTC */
 
