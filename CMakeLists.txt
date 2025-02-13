@@ -12,9 +12,6 @@ SET (TARGETS            seq seq_checks mt_pth CACHE STRING "Build stdlib for the
 SET (SAC2C_EXEC                     CACHE STRING "A path to sac2c compiler")
 SET (LINKSETSIZE        "500"       CACHE STRING "Set a value for -linksetsize parameter of sac2c")
 SET (IS_RELEASE         FALSE       CACHE BOOL "Indicate if we are building with release version of SAC2C")
-OPTION (FULLTYPES "Include types such as long and longlong" OFF)
-OPTION (BUILD_EXT "Build complete Stdlib with extra modules" ON)
-OPTION (BUILDGENERIC "Do not use architecture specific optimisations (useful for package builds)" OFF)
 
 SET (SAC2C_EXTRA_INC
      -DHAVE_CONFIG_H
@@ -25,16 +22,6 @@ SET (SAC2C_CPP_INC
      -DHAVE_CONFIG_H
      -cppI${PROJECT_BINARY_DIR}/include
      -cppI${PROJECT_SOURCE_DIR}/include)
-
-IF (FULLTYPES)
-    LIST (APPEND SAC2C_EXTRA_INC -DFULLTYPES)
-    LIST (APPEND SAC2C_CPP_INC -DFULLTYPES)
-ENDIF ()
-
-IF (BUILD_EXT)
-    LIST (APPEND SAC2C_EXTRA_INC -DEXT_STDLIB)
-    LIST (APPEND SAC2C_CPP_INC -DEXT_STDLIB)
-ENDIF ()
 
 # Check whether sac2c is operational
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-common")
@@ -56,6 +43,16 @@ ENDIF ()
 
 # complete configuration now
 INCLUDE ("cmake/config.cmake")
+
+IF (FULLTYPES)
+    LIST (APPEND SAC2C_EXTRA_INC -DFULLTYPES)
+    LIST (APPEND SAC2C_CPP_INC -DFULLTYPES)
+ENDIF ()
+
+IF (BUILD_EXT)
+    LIST (APPEND SAC2C_EXTRA_INC -DEXT_STDLIB)
+    LIST (APPEND SAC2C_CPP_INC -DEXT_STDLIB)
+ENDIF ()
 
 # For every target run CMakeLists.txt in src
 SET (TARGET_COUNT 1)
