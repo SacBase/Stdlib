@@ -1,70 +1,10 @@
 module Quaternion;
 
-/******************************************************************************
- *
- * Depends on ArrayBasics.
- *
- ******************************************************************************/
-
 export all;
 
-typedef double[4] quaternion;
-
-/******************************************************************************
- *
- * Array properties.
- *
- * @note The definition of `dim` and `shape` for user-defined types may not use
- * type patterns, as type patterns rely on the existence of these functions
- * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
- * are not defined for user-defined types.
- *
- ******************************************************************************/
-
-inline int dim(quaternion[*] arr)
-{
-    return _sub_SxS_(_dim_A_((double[+])arr), 1);
-}
-
-inline int[.] shape(quaternion[*] arr)
-{
-    shp = _shape_A_((double[+])arr);
-    shp_len = _sel_VxA_([0], _shape_A_(shp));
-    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
-}
-
-inline quaternion[i:ishp] sel(int[o] idx, quaternion[o:oshp,i:ishp] arr)
-    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
-{
-    return (quaternion[*])ArrayBasics::sel(idx, (double[+])arr);
-}
-
-inline quaternion[d:shp] sel(int idx, quaternion[n,d:shp] arr)
-    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
-{
-    return arr[[idx]];
-}
-
-/******************************************************************************
- *
- * Type conversions.
- *
- ******************************************************************************/
-
-inline quaternion[d:shp] toq(double[d:shp,4] arr)
-{
-    return (quaternion[*])arr;
-}
-
-inline quaternion[d:shp] toq(int[d:shp,4] arr)
-{
-    return (quaternion[*]){ iv -> _tod_S_(_sel_VxA_(iv, arr)) };
-}
-
-inline double[d:shp,4] tod(quaternion[d:shp] arr)
-{
-    return (double[+])arr;
-}
+struct Quaternion {
+    double a, b, c, d;
+};
 
 /******************************************************************************
  *
@@ -72,69 +12,71 @@ inline double[d:shp,4] tod(quaternion[d:shp] arr)
  *
  ******************************************************************************/
 
-inline quaternion[d:shp] +(double a, quaternion[d:shp] b)
+inline struct Quaternion[d:shp] +(struct Quaternion q, double x)
 {
-    return (quaternion[*]){ iv -> _add_SxV_(a, (double[4])b[iv]) | iv < shp };
+    return Quaternion{ _add_SxS_(q.a, x),
+                       _add_SxS_(q.b, x),
+                       _add_SxS_(q.c, x),
+                       _add_SxS_(q.d, x) };
 }
 
-inline quaternion[d:shp] +(quaternion[d:shp] a, double b)
+inline struct Quaternion[d:shp] +(struct Quaternion[d:shp] q, double x)
 {
-    return (quaternion[*]){ iv -> _add_VxS_((double[4])a[iv], b) | iv < shp };
+    return { iv -> q[iv] + x | iv < shp };
 }
 
-inline quaternion[d:shp] +(quaternion[d:shp] a, quaternion[d:shp] b)
+inline struct Quaternion +(struct Quaternion a, struct Quaternion b)
 {
-    return (quaternion[*]){ iv -> _add_VxV_((double[4])a[iv], (double[4])b[iv])
-                          | iv < shp };
+    return Quaternion{ _add_SxS_(a.a, b.a),
+                       _add_SxS_(a.b, b.b),
+                       _add_SxS_(a.c, b.c),
+                       _add_SxS_(a.d, b.d) };
+}
+
+inline struct Quaternion[d:shp] +(struct Quaternion[d:shp] a,
+                                  struct Quaternion[d:shp] b)
+{
+    return { iv -> a[iv] + b[iv] | iv < shp };
 }
 
 /******************************************************************************/
 
-inline quaternion *(quaternion a, quaternion b)
+inline struct Quaternion *(struct Quaternion a, struct Quaternion b)
 {
-    ad = (double[4])a;
-    ad0 = _sel_VxA_([0], ad);
-    ad1 = _sel_VxA_([1], ad);
-    ad2 = _sel_VxA_([2], ad);
-    ad3 = _sel_VxA_([3], ad);
-
-    bd = (double[4])b;
-    bd0 = _sel_VxA_([0], bd);
-    bd1 = _sel_VxA_([1], bd);
-    bd2 = _sel_VxA_([2], bd);
-    bd3 = _sel_VxA_([3], bd);
-
-    return (quaternion)[
-        _sub_SxS_(_mul_SxS_(ad0, bd0),
-                  _sub_SxS_(_mul_SxS_(ad1, bd1),
-                            _sub_SxS_(_mul_SxS_(ad2, bd2),
-                                      _mul_SxS_(ad3, bd3)))),
-        _add_SxS_(_mul_SxS_(ad0, bd1),
-                  _add_SxS_(_mul_SxS_(ad1, bd0),
-                            _sub_SxS_(_mul_SxS_(ad2, bd3),
-                                      _mul_SxS_(ad3, bd2)))),
-        _sub_SxS_(_mul_SxS_(ad0, bd2),
-                  _add_SxS_(_mul_SxS_(ad1, bd3),
-                            _add_SxS_(_mul_SxS_(ad2, bd0),
-                                      _mul_SxS_(ad3, bd1)))),
-        _add_SxS_(_mul_SxS_(ad0, bd3),
-                  _sub_SxS_(_mul_SxS_(ad1, bd2),
-                            _add_SxS_(_mul_SxS_(ad2, bd1),
-                                      _mul_SxS_(ad3, bd0))))
-    ];
+    return Quaternion{
+        _sub_SxS_(_mul_SxS_(a.a, b.a),
+                  _sub_SxS_(_mul_SxS_(a.b, b.b),
+                            _sub_SxS_(_mul_SxS_(a.c, b.c),
+                                      _mul_SxS_(a.d, b.d)))),
+        _add_SxS_(_mul_SxS_(a.a, b.b),
+                  _add_SxS_(_mul_SxS_(a.b, b.a),
+                            _sub_SxS_(_mul_SxS_(a.c, b.d),
+                                      _mul_SxS_(a.d, b.c)))),
+        _sub_SxS_(_mul_SxS_(a.a, b.c),
+                  _add_SxS_(_mul_SxS_(a.b, b.d),
+                            _add_SxS_(_mul_SxS_(a.c, b.a),
+                                      _mul_SxS_(a.d, b.b)))),
+        _add_SxS_(_mul_SxS_(a.a, b.d),
+                  _sub_SxS_(_mul_SxS_(a.b, b.c),
+                            _add_SxS_(_mul_SxS_(a.c, b.b),
+                                      _mul_SxS_(a.d, b.a))))
+    };
 }
 
-inline quaternion[d:shp] *(quaternion a, quaternion[d:shp] b)
+inline struct Quaternion[d:shp] *(struct Quaternion a,
+                                  struct Quaternion[d:shp] b)
 {
     return { iv -> a * b[iv] | iv < shp };
 }
 
-inline quaternion[d:shp] *(quaternion[d:shp] a, quaternion b)
+inline struct Quaternion[d:shp] *(struct Quaternion[d:shp] a,
+                                  struct Quaternion b)
 {
     return { iv -> a[iv] * b | iv < shp };
 }
 
-inline quaternion[d:shp] *(quaternion[d:shp] a, quaternion[d:shp] b)
+inline struct Quaternion[d:shp] *(struct Quaternion[d:shp] a,
+                                  struct Quaternion[d:shp] b)
 {
     return { iv -> a[iv] * b[iv] | iv < shp };
 }
