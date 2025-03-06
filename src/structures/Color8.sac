@@ -128,9 +128,9 @@ inline double[256] genSteps(double from, double to)
 
 inline color[256] Weights2Clut(double[256] w, color c1, color c2)
 {
-    w1 = { iv ->             (_sel_VxA_(iv, w) Array::* tod(c1)) | iv < [256] };
-    w2 = { iv -> 1d Array::- (_sel_VxA_(iv, w) Array::* tod(c2)) | iv < [256] };
-    return (color[256])Array::toi(w1 Array::+ w2);
+    w1 = { iv ->              Array::*(_sel_VxA_(iv, w), tod(c1))  | iv < [256] };
+    w2 = { iv -> Array::-(1d, Array::*(_sel_VxA_(iv, w), tod(c2))) | iv < [256] };
+    return (color[256])Array::toi(Array::+(w1, w2));
 }
 
 inline color[256] genLinearClut(color c1, color c2)
