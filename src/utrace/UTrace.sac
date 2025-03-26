@@ -1,14 +1,18 @@
 module UTrace;
 
+ /******************************************************************************
+ *
+ * Depends on Array, ArrayFormat, ArrayIO, ScalarIO, String, TermFile, Indent.
+ *
+ ******************************************************************************/
+
 use Array: { sel };
-use String: { string, strlen, to_string };
 use ArrayFormat: { format };
-use StdIO: { printf, show };
+use String: { string, strlen, to_string };
+use TermFile: { printf };
 use Indent: all;
 
 export all except { offset, whitespace, printSeparator, printHeader };
-
-objdef Indent offset = newIndent(0);
 
 #define BUILT_IN(fun)                                                          \
 fun(int)                                                                       \
@@ -16,6 +20,8 @@ fun(float)                                                                     \
 fun(double)                                                                    \
 fun(bool)                                                                      \
 fun(char)
+
+objdef Indent offset = newIndent(0);
 
 char[n] whitespace(int n)
 {
@@ -40,9 +46,6 @@ void printHeader(string modName, int line)
 #define SHOW(a)                                                                \
 void indentedShow(a[d:shp] arr)                                                \
 {                                                                              \
-    char[.,.] carr;                                                            \
-    carr = format(arr);                                                        \
-                                                                               \
     cshape = to_string(format(shp));                                           \
     printf("reshape([ %s ] , [\n", cshape);                                    \
                                                                                \
@@ -50,13 +53,14 @@ void indentedShow(a[d:shp] arr)                                                \
                         _add_SxS_(getIndent(offset),                           \
                         _add_SxS_(strlen(cshape), 18))));                      \
                                                                                \
+    carr = format(arr);                                                        \
     ext_carr = with {                                                          \
         (. <= [i] <= . ) : _cat_VxV_(spaces, carr[[i]]);                       \
     } : genarray([_sel_VxA_([0], _shape_A_(carr))],                            \
                  _cat_VxV_(spaces,                                             \
                            whitespace(_sel_VxA_([1], _shape_A_(carr)))));      \
                                                                                \
-    show(ext_carr);                                                            \
+    ArrayIO::show(ext_carr);                                                   \
     incIndent(offset, _add_SxS_(strlen(cshape), 16));                          \
     doIndent("   ");                                                           \
     doIndent(offset, " ");                                                     \
@@ -64,28 +68,25 @@ void indentedShow(a[d:shp] arr)                                                \
     decIndent(offset, _add_SxS_(strlen(cshape), 16));                          \
 }                                                                              \
                                                                                \
-void indentedShow(a[n,m] arr)                                                  \
+void indentedShow(a[.,.] arr)                                                  \
 {                                                                              \
-    char[.,.] carr;                                                            \
+    spaces = whitespace(_add_SxS_(getIndent(), getIndent(offset)));            \
+                                                                               \
     carr = format(arr);                                                        \
-                                                                               \
-    spaces = whitespace(getIndent() + getIndent(offset));                      \
-                                                                               \
     ext_carr = { [i] -> _eq_SxS_(i, 0)                                         \
                             ? _cat_VxV_(carr[[i]], spaces)                     \
                             : _cat_VxV_(spaces, carr[[i]]) };                  \
-                                                                               \
-    show(ext_carr);                                                            \
+    ArrayIO::show(ext_carr);                                                   \
 }                                                                              \
                                                                                \
 void indentedShow(a[.] arr)                                                    \
 {                                                                              \
-    show(arr);                                                                 \
+    ArrayIO::show(arr);                                                        \
 }                                                                              \
                                                                                \
 void indentedShow(a arr)                                                       \
 {                                                                              \
-    show(arr);                                                                 \
+    ScalarIO::show(arr);                                                       \
 }
 
 BUILT_IN(SHOW)
