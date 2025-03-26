@@ -18,6 +18,24 @@ struct Color8 {
 
 /******************************************************************************
  *
+ * Array operations.
+ *
+ ******************************************************************************/
+
+inline struct Color8[i:ishp] sel(int[o] idx, struct Color8[o:oshp,i:ishp] arr)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
+{
+    return { iv -> _sel_VxA_(_cat_VxV_(idx, iv), arr) | iv < ishp };
+}
+
+inline struct Color8[d:shp] sel(int idx, struct Color8[n,d:shp] arr)
+    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
+{
+    return sel([idx], arr);
+}
+
+/******************************************************************************
+ *
  * Color operations.
  *
  ******************************************************************************/
@@ -152,7 +170,7 @@ inline struct Color8 +(struct Color8 a, struct Color8 b)
 
 inline struct Color8[d:shp] +(struct Color8[d:shp] a, struct Color8[d:shp] b)
 {
-    return { iv -> a[iv] + b[iv] | iv < shp };
+    return { iv -> _sel_VxA_(iv, a) + _sel_VxA_(iv, b) | iv < shp };
 }
 
 inline struct Color8 -(struct Color8 a, struct Color8 b)
@@ -164,7 +182,7 @@ inline struct Color8 -(struct Color8 a, struct Color8 b)
 
 inline struct Color8[d:shp] -(struct Color8[d:shp] a, struct Color8[d:shp] b)
 {
-    return { iv -> a[iv] - b[iv] | iv < shp };
+    return { iv -> _sel_VxA_(iv, a) - _sel_VxA_(iv, b) | iv < shp };
 }
 
 inline struct Color8 *(struct Color8 c, double x)
@@ -176,7 +194,7 @@ inline struct Color8 *(struct Color8 c, double x)
 
 inline struct Color8[d:shp] *(struct Color8[d:shp] c, double x)
 {
-    return { iv -> c[iv] * x | iv < shp };
+    return { iv -> _sel_VxA_(iv, c) * x | iv < shp };
 }
 
 /******************************************************************************
