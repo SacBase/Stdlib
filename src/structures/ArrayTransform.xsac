@@ -561,10 +561,12 @@ typ mask(bool p, typ A, typ B)                                                 \
 MASK_VxVxV(typ, postfix, zval, oval)                                           \
 MASK_VxVxS(typ, postfix, zval, oval)                                           \
 MASK_VxSxV(typ, postfix, zval, oval)                                           \
-MASK_VxSxS(typ, postfix, zval, oval)                                           \
 MASK_SxVxV(typ, postfix, zval, oval)                                           \
 MASK_SxVxS(typ, postfix, zval, oval)                                           \
 MASK_SxSxV(typ, postfix, zval, oval)                                           \
 MASK_SxSxS(typ, postfix, zval, oval)
+
+// FIXME: Fix _mask_VxSxS_ in ct_prf.c
+// MASK_VxSxS(typ, postfix, zval, oval)
 
 BUILT_IN(MASK)
