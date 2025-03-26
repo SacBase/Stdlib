@@ -8,6 +8,25 @@ struct Quaternion {
 
 /******************************************************************************
  *
+ * Array operations.
+ *
+ ******************************************************************************/
+
+inline struct Quaternion[i:ishp] sel(int[o] idx,
+                                     struct Quaternion[o:oshp,i:ishp] arr)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
+{
+    return { iv -> _sel_VxA_(_cat_VxV_(idx, iv), arr) | iv < ishp };
+}
+
+inline struct Quaternion[d:shp] sel(int idx, struct Quaternion[n,d:shp] arr)
+    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
+{
+    return sel([idx], arr);
+}
+
+/******************************************************************************
+ *
  * Binary operations on quaternions.
  *
  ******************************************************************************/
