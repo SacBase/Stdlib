@@ -175,7 +175,7 @@ BUILT_IN(DROP_APL)
 
 /******************************************************************************
  *
- * @fn <a>[d:shp] tile(int[d] shp, int[d] idx, <a>[d:shp_a] A)
+ * @fn <a>[d:shp] tile(int[d] shp, int[d] idx, <a>[d:oshp,i:ishp] A)
  *
  * @brief Takes a tile from the array, of shape shp, starting at index idx.
  *
@@ -186,19 +186,19 @@ BUILT_IN(DROP_APL)
 
 #define TILE(typ, postfix, zval, oval)                                         \
 inline                                                                         \
-typ[d:shp] tile(int[d] shp, int[d] idx, typ[d:shp_a] A)                        \
+typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
     | _all_V_(_ge_VxS_(shp, 0))                                                \
     , _all_V_(_ge_VxS_(idx, 0))                                                \
-    , _all_V_(_le_VxV_(_add_VxV_(shp, idx), shp_a))                            \
+    , _all_V_(_le_VxV_(_add_VxV_(shp, idx), oshp))                             \
 {                                                                              \
-    return { iv -> _sel_VxA_(_add_VxV_(idx, iv), A) | iv < shp };              \
+    return { iv -> A[_add_VxV_(idx, iv)] | iv < shp };                         \
 }
 
 BUILT_IN(TILE)
 
 /******************************************************************************
  *
- * @fn <a>[d:shp] tile_apl(int[d] shp, int[d] idx, <a>[d:shp_a] A)
+ * @fn <a>[d:shp] tile_apl(int[d] shp, int[d] idx, <a>[d:oshp] A)
  *
  * @brief Takes a tile from the array, of shape shp, starting at index idx.
  *
@@ -210,7 +210,7 @@ BUILT_IN(TILE)
 
 #define TILE_APL(typ, postfix, zval, oval)                                     \
 inline                                                                         \
-typ[d:shp] tile_apl(int[d] shp, int[d] idx, typ[d:shp_a] A)                    \
+typ[d:shp,i:ishp] tile_apl(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)       \
     | _all_V_(_ge_VxS_(shp, 0))                                                \
 {                                                                              \
     /* Start shows how many elements we prepend before the array. */           \
@@ -219,12 +219,12 @@ typ[d:shp] tile_apl(int[d] shp, int[d] idx, typ[d:shp_a] A)                    \
      * Stop shows where our selection of the given array ends, or, in case     \
      * the selection goes beyond the array, where the array ends.              \
      */                                                                        \
-    stop = _min_VxV_(shp, _sub_VxV_(shp_a, idx));                              \
+    stop = _min_VxV_(shp, _sub_VxV_(oshp, idx));                               \
     /* The result is calculated in 2 steps: */                                 \
     return { /* 1: select the required elements of the array */                \
-             iv -> _sel_VxA_(_add_VxV_(idx, iv), A) | start <= iv < stop;      \
+             iv -> A[_add_VxV_(idx, iv)] | start <= iv < stop;                 \
              /* 2: add zeros around (if needed) */                             \
-             iv -> zval | iv < shp};                                           \
+             iv -> genarray(ishp, zval) | iv < shp};                           \
 }
 
 BUILT_IN(TILE_APL)
