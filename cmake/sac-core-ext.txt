@@ -56,7 +56,6 @@ stdio/ListIO.sac                           Ext
 stdio/IOresources.sac                      Core
 stdio/FibreIO.sac                          Ext
 stdio/ComplexIO.sac                        Ext
-stdio/Color8IO.sac                         Ext
 stdio/BinFile.sac                          Core
 stdio/StdIO.sac                            Core
 stdio/File.sac                             Core
