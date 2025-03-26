@@ -1,11 +1,12 @@
 module UTrace;
 
-export all except { PrintSeparator, PrintHeader, Indent };
-
-use StdIO: all;
-use Structures: all;
-use ArrayFormat: all;
+use Array: { +, -, genarray, take, drop, sel };
+use String: { string, strlen, to_string };
+use ArrayFormat: { format };
+use StdIO: { printf, show };
 use Indent: all;
+
+export all except { offset, PrintSeparator, PrintHeader };
 
 objdef Indent offset = newIndent(0);
 
@@ -26,10 +27,10 @@ void indentedShow(a[d:shp] arr)                                                \
                         ' ');                                                  \
     carr = format(arr);                                                        \
     ext_carr = with {                                                          \
-        (. <= [i] <= . ) : Array::++(spaces, carr[[i]]);                       \
-    } : genarray(drop([-1], shape(carr)),                                      \
-                 Array::++(spaces,                                             \
-                           genarray(take([-1], shape(carr)), ' ')));           \
+        (. <= [i] <= . ) : _cat_VxV_(spaces, carr[[i]]);                       \
+    } : genarray(drop([-1], _shape_A_(carr)),                                  \
+                 _cat_VxV_(spaces,                                             \
+                           genarray(take([-1], _shape_A_(carr)), ' ')));       \
                                                                                \
     show(ext_carr);                                                            \
     incIndent(offset, strlen(cshape) + 16);                                    \
@@ -44,8 +45,8 @@ void indentedShow(a[n,m] arr)                                                  \
     spaces = genarray([getIndent() + getIndent(offset)], ' ');                 \
     carr = format(arr);                                                        \
     ext_carr = { [i] -> _eq_SxS_(i, 0)                                         \
-                            ? Array::++(carr[[i]], spaces)                     \
-                            : Array::++(spaces, carr[[i]]) };                  \
+                            ? _cat_VxV_(carr[[i]], spaces)                     \
+                            : _cat_VxV_(spaces, carr[[i]]) };                  \
     show(ext_carr);                                                            \
 }                                                                              \
                                                                                \
