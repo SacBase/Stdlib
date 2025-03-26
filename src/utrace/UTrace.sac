@@ -1,13 +1,18 @@
 module UTrace;
 
-export all except { PrintSeparator, PrintHeader, Indent };
+ /******************************************************************************
+ *
+ * Depends on Array, ArrayFormat, ArrayIO, ScalarIO, String, TermFile, Indent.
+ *
+ ******************************************************************************/
 
-use StdIO: all;
-use Structures: all;
-use ArrayFormat: all;
+use Array: { sel };
+use ArrayFormat: { format };
+use String: { string, strlen, to_string };
+use TermFile: { printf };
 use Indent: all;
 
-objdef Indent offset = newIndent(0);
+export all except { offset, whitespace, printSeparator, printHeader };
 
 #define BUILT_IN(fun)                                                          \
 fun(int)                                                                       \
@@ -16,80 +21,92 @@ fun(double)                                                                    \
 fun(bool)                                                                      \
 fun(char)
 
-#define SHOW(a) \
+objdef Indent offset = newIndent(0);
+
+char[n] whitespace(int n)
+{
+    return { [i] -> ' ' | [i] < [n] };
+}
+
+void printSeparator(string pattern)
+{
+    doIndent(pattern);
+    printf("----------------------------------------------\n");
+}
+
+void printHeader(string modName, int line)
+{
+    doIndent("   ");
+    printf("%-15s: line %3d: ", modName, line);
+    setIndent(offset, 27);
+}
+
+/******************************************************************************/
+
+#define SHOW(a)                                                                \
 void indentedShow(a[d:shp] arr)                                                \
 {                                                                              \
     cshape = to_string(format(shp));                                           \
     printf("reshape([ %s ] , [\n", cshape);                                    \
                                                                                \
-    spaces = genarray([getIndent() + getIndent(offset) + strlen(cshape) + 18], \
-                        ' ');                                                  \
+    spaces = whitespace(_add_SxS_(getIndent(),                                 \
+                        _add_SxS_(getIndent(offset),                           \
+                        _add_SxS_(strlen(cshape), 18))));                      \
+                                                                               \
     carr = format(arr);                                                        \
     ext_carr = with {                                                          \
-        (. <= [i] <= . ) : Array::++(spaces, carr[[i]]);                       \
-    } : genarray(drop([-1], shape(carr)),                                      \
-                 Array::++(spaces,                                             \
-                           genarray(take([-1], shape(carr)), ' ')));           \
+        (. <= [i] <= . ) : _cat_VxV_(spaces, carr[[i]]);                       \
+    } : genarray([_sel_VxA_([0], _shape_A_(carr))],                            \
+                 _cat_VxV_(spaces,                                             \
+                           whitespace(_sel_VxA_([1], _shape_A_(carr)))));      \
                                                                                \
-    show(ext_carr);                                                            \
-    incIndent(offset, strlen(cshape) + 16);                                    \
+    ArrayIO::show(ext_carr);                                                   \
+    incIndent(offset, _add_SxS_(strlen(cshape), 16));                          \
     doIndent("   ");                                                           \
     doIndent(offset, " ");                                                     \
     printf("])\n");                                                            \
-    decIndent(offset, strlen(cshape) + 16);                                    \
+    decIndent(offset, _add_SxS_(strlen(cshape), 16));                          \
 }                                                                              \
                                                                                \
-void indentedShow(a[n,m] arr)                                                  \
+void indentedShow(a[.,.] arr)                                                  \
 {                                                                              \
-    spaces = genarray([getIndent() + getIndent(offset)], ' ');                 \
+    spaces = whitespace(_add_SxS_(getIndent(), getIndent(offset)));            \
+                                                                               \
     carr = format(arr);                                                        \
     ext_carr = { [i] -> _eq_SxS_(i, 0)                                         \
-                            ? Array::++(carr[[i]], spaces)                     \
-                            : Array::++(spaces, carr[[i]]) };                  \
-    show(ext_carr);                                                            \
+                            ? _cat_VxV_(carr[[i]], spaces)                     \
+                            : _cat_VxV_(spaces, carr[[i]]) };                  \
+    ArrayIO::show(ext_carr);                                                   \
 }                                                                              \
                                                                                \
 void indentedShow(a[.] arr)                                                    \
 {                                                                              \
-    show(arr);                                                                 \
+    ArrayIO::show(arr);                                                        \
 }                                                                              \
                                                                                \
 void indentedShow(a arr)                                                       \
 {                                                                              \
-    show(arr);                                                                 \
+    ScalarIO::show(arr);                                                       \
 }
 
 BUILT_IN(SHOW)
 
 /******************************************************************************/
 
-void PrintSeparator(string pattern)
-{
-    doIndent(pattern);
-    printf("----------------------------------------------\n");
-}
-
-void PrintHeader(string modName, int line)
-{
-    doIndent("   ");
-    printf("%-15s: line %3d: ", modName, line);
-    setIndent(offset, 15+2+5+3+2);
-}
-
 void PrintFunEnter(string modName, int line, string funName)
 {
     incIndent();
-    PrintSeparator(">  ");
-    PrintHeader(modName, line);
+    printSeparator(">  ");
+    printHeader(modName, line);
     printf("%s (\n",  funName);
-    incIndent(offset, strlen(funName) + 3);
+    incIndent(offset, _add_SxS_(strlen(funName), 3));
 }
 
 void PrintFunLeave(string modName, int line, string funName)
 {
-    PrintSeparator("<  ");
+    printSeparator("<  ");
     decIndent();
-    decIndent(offset, strlen(funName) + 2);
+    decIndent(offset, _add_SxS_(strlen(funName), 2));
 }
 
 void PrintArgsDone(string modName, int line, string funName)
@@ -105,9 +122,9 @@ void PrintArg(string modName, int line, string var, a[*] arr)                  \
     doIndent("   ");                                                           \
     doIndent(offset, " ");                                                     \
     printf(" %s = ", var);                                                     \
-    incIndent(offset, strlen(var) + 4);                                        \
+    incIndent(offset, _add_SxS_(strlen(var), 4));                              \
     indentedShow(arr);                                                         \
-    decIndent(offset, strlen(var) + 4);                                        \
+    decIndent(offset, _add_SxS_(strlen(var), 4));                              \
 }
 
 BUILT_IN(PRINT_ARG)
@@ -115,11 +132,11 @@ BUILT_IN(PRINT_ARG)
 #define PRINT_ASSIGN(a)                                                        \
 void PrintAssign(string modName, int line, string var, a[*] arr)               \
 {                                                                              \
-    PrintHeader(modName, line);                                                \
+    printHeader(modName, line);                                                \
     printf("%s = ", var);                                                      \
-    incIndent(offset, strlen(var) +3);                                         \
+    incIndent(offset, _add_SxS_(strlen(var), 3));                              \
     indentedShow(arr);                                                         \
-    decIndent(offset, strlen(var) +3);                                         \
+    decIndent(offset, _add_SxS_(strlen(var), 3));                              \
 }
 
 BUILT_IN(PRINT_ASSIGN)
@@ -127,7 +144,7 @@ BUILT_IN(PRINT_ASSIGN)
 #define PRINT_RETURN(a)                                                        \
 void PrintReturn(string modName, int line, a[*] arr)                           \
 {                                                                              \
-    PrintHeader(modName, line);                                                \
+    printHeader(modName, line);                                                \
     printf("returning ");                                                      \
     incIndent(offset, 10);                                                     \
     indentedShow(arr);                                                         \
