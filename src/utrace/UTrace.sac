@@ -14,7 +14,12 @@ use Indent: all;
 
 export all except { offset, whitespace, printSeparator, printHeader };
 
-#include "builtin.mac"
+#define BUILT_IN(fun)                                                          \
+fun(int)                                                                       \
+fun(float)                                                                     \
+fun(double)                                                                    \
+fun(bool)                                                                      \
+fun(char)
 
 objdef Indent offset = newIndent(0);
 
