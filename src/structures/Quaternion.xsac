@@ -15,7 +15,10 @@ struct Quaternion {
  ******************************************************************************/
 
 #define QUATERNION(fun)                                                        \
-fun(struct Quaternion, /* no postfix */, zero(), one())
+fun(struct Quaternion,                                                         \
+    /* no postfix */,                                                          \
+    (Quaternion{ 0.0, 0.0, 0.0, 0.0 }),                                        \
+    (Quaternion{ 1.0, 1.0, 1.0, 1.0 }))
 
 QUATERNION(DIM)
 QUATERNION(SHAPE)
@@ -94,20 +97,4 @@ inline struct Quaternion[d:shp] *(struct Quaternion[d:shp] a,
                                   struct Quaternion[d:shp] b)
 {
     return { iv -> a[iv] * b[iv] | iv < shp };
-}
-
-/******************************************************************************
- *
- * Constants.
- *
- ******************************************************************************/
-
-inline struct Quaternion zero()
-{
-    return Quaternion{ 0.0, 0.0, 0.0, 0.0 };
-}
-
-inline struct Quaternion one()
-{
-    return Quaternion{ 1.0, 1.0, 1.0, 1.0 };
 }
