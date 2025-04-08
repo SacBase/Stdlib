@@ -10,6 +10,8 @@ use Numerical: { exp, log };
 
 export all except { genSteps, weights2Clut };
 
+#include "arraybasics.mac"
+
 struct Color8 {
     int r;
     int g;
@@ -22,17 +24,12 @@ struct Color8 {
  *
  ******************************************************************************/
 
-inline struct Color8[i:ishp] sel(int[o] idx, struct Color8[o:oshp,i:ishp] arr)
-    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
-{
-    return { iv -> _sel_VxA_(_cat_VxV_(idx, iv), arr) | iv < ishp };
-}
+#define COLOR8(fun)                                                            \
+fun(struct Color8, /* no postfix */, Color8{0,0,0}, Color8{255,255,255})
 
-inline struct Color8[d:shp] sel(int idx, struct Color8[n,d:shp] arr)
-    | _le_SxS_(0, idx), _lt_SxS_(idx, n)
-{
-    return sel([idx], arr);
-}
+COLOR8(DIM)
+COLOR8(SHAPE)
+COLOR8(SEL)
 
 /******************************************************************************
  *
