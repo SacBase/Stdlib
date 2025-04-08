@@ -5,8 +5,6 @@ use String: { tochar, sprintf };
 
 export { format };
 
-#include "Templates.mac"
-
 /******************************************************************************
  *
  * APL Array formatting functions.
