@@ -4,6 +4,7 @@ import ScalarArith: all;
 
 export all;
 
+#include "builtin.mac"
 #include "Templates.mac"
 
 /******************************************************************************
