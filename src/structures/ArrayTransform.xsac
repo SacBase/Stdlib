@@ -12,7 +12,6 @@ use Constants: all;
 export all;
 
 #include "builtin.mac"
-#include "Templates.mac"
 
  /******************************************************************************
  *
