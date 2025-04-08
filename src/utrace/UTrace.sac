@@ -43,7 +43,7 @@ void printHeader(string modName, int line)
 
 /******************************************************************************/
 
-#define SHOW(typ, postfix, zero, one)                                          \
+#define SHOW(typ)                                                              \
 void indentedShow(typ[d:shp] arr)                                              \
 {                                                                              \
     cshape = to_string(format(shp));                                           \
@@ -116,7 +116,7 @@ void PrintArgsDone(string modName, int line, string funName)
     printf(");\n");
 }
 
-#define PRINT_ARG(typ, postfix, zero, one)                                     \
+#define PRINT_ARG(typ)                                                         \
 void PrintArg(string modName, int line, string var, typ[*] arr)                \
 {                                                                              \
     doIndent("   ");                                                           \
@@ -129,7 +129,7 @@ void PrintArg(string modName, int line, string var, typ[*] arr)                \
 
 BUILT_IN(PRINT_ARG)
 
-#define PRINT_ASSIGN(typ, postfix, zero, one)                                  \
+#define PRINT_ASSIGN(typ)                                                      \
 void PrintAssign(string modName, int line, string var, typ[*] arr)             \
 {                                                                              \
     printHeader(modName, line);                                                \
@@ -141,7 +141,7 @@ void PrintAssign(string modName, int line, string var, typ[*] arr)             \
 
 BUILT_IN(PRINT_ASSIGN)
 
-#define PRINT_RETURN(typ, postfix, zero, one)                                  \
+#define PRINT_RETURN(typ)                                                      \
 void PrintReturn(string modName, int line, typ[*] arr)                         \
 {                                                                              \
     printHeader(modName, line);                                                \
