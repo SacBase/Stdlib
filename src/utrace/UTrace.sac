@@ -43,8 +43,8 @@ void printHeader(string modName, int line)
 
 /******************************************************************************/
 
-#define SHOW(a)                                                                \
-void indentedShow(a[d:shp] arr)                                                \
+#define SHOW(typ)                                                              \
+void indentedShow(typ[d:shp] arr)                                              \
 {                                                                              \
     cshape = to_string(format(shp));                                           \
     printf("reshape([ %s ] , [\n", cshape);                                    \
@@ -68,7 +68,7 @@ void indentedShow(a[d:shp] arr)                                                \
     decIndent(offset, _add_SxS_(strlen(cshape), 16));                          \
 }                                                                              \
                                                                                \
-void indentedShow(a[.,.] arr)                                                  \
+void indentedShow(typ[.,.] arr)                                                \
 {                                                                              \
     spaces = whitespace(_add_SxS_(getIndent(), getIndent(offset)));            \
                                                                                \
@@ -79,12 +79,12 @@ void indentedShow(a[.,.] arr)                                                  \
     ArrayIO::show(ext_carr);                                                   \
 }                                                                              \
                                                                                \
-void indentedShow(a[.] arr)                                                    \
+void indentedShow(typ[.] arr)                                                  \
 {                                                                              \
     ArrayIO::show(arr);                                                        \
 }                                                                              \
                                                                                \
-void indentedShow(a arr)                                                       \
+void indentedShow(typ arr)                                                     \
 {                                                                              \
     ScalarIO::show(arr);                                                       \
 }
@@ -116,8 +116,8 @@ void PrintArgsDone(string modName, int line, string funName)
     printf(");\n");
 }
 
-#define PRINT_ARG(a)                                                           \
-void PrintArg(string modName, int line, string var, a[*] arr)                  \
+#define PRINT_ARG(typ)                                                         \
+void PrintArg(string modName, int line, string var, typ[*] arr)                \
 {                                                                              \
     doIndent("   ");                                                           \
     doIndent(offset, " ");                                                     \
@@ -129,8 +129,8 @@ void PrintArg(string modName, int line, string var, a[*] arr)                  \
 
 BUILT_IN(PRINT_ARG)
 
-#define PRINT_ASSIGN(a)                                                        \
-void PrintAssign(string modName, int line, string var, a[*] arr)               \
+#define PRINT_ASSIGN(typ)                                                      \
+void PrintAssign(string modName, int line, string var, typ[*] arr)             \
 {                                                                              \
     printHeader(modName, line);                                                \
     printf("%s = ", var);                                                      \
@@ -141,8 +141,8 @@ void PrintAssign(string modName, int line, string var, a[*] arr)               \
 
 BUILT_IN(PRINT_ASSIGN)
 
-#define PRINT_RETURN(a)                                                        \
-void PrintReturn(string modName, int line, a[*] arr)                           \
+#define PRINT_RETURN(typ)                                                      \
+void PrintReturn(string modName, int line, typ[*] arr)                         \
 {                                                                              \
     printHeader(modName, line);                                                \
     printf("returning ");                                                      \
