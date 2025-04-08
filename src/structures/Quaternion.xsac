@@ -104,10 +104,10 @@ inline struct Quaternion[d:shp] *(struct Quaternion[d:shp] a,
 
 inline struct Quaternion zero()
 {
-    return Quaternion{ 0, 0, 0, 0 };
+    return Quaternion{ 0.0, 0.0, 0.0, 0.0 };
 }
 
 inline struct Quaternion one()
 {
-    return Quaternion{ 1, 1, 1, 1 };
+    return Quaternion{ 1.0, 1.0, 1.0, 1.0 };
 }
