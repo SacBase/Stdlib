@@ -90,7 +90,7 @@ inline typ[d:shp] reshape(int[d] shp, typ[*] arr)                              \
 
 #define GENARRAY(typ, postfix, zval, oval)                                     \
 inline typ[o:oshp,i:ishp] genarray(int[o] oshp, typ[i:ishp] val)               \
-    | _all_V_(_le_SxV_(0, shp))                                                \
+    | _all_V_(_le_SxV_(0, oshp))                                               \
 {                                                                              \
     return { iv -> val | iv < oshp };                                          \
 }
