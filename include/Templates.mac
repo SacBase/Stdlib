@@ -118,12 +118,12 @@ MAP_UNA_##ext(--, _sub_SxS_, a, a)
 
 #define MAP_INT_OPS(ext, a)                                                    \
 MAP_BIN_##ext(mod, _aplmod_SxS_, a, a)                                         \
-MAP_BIN_##ext(%, _mod_SxS_, a, a)
-MAP_BIN_##ext(^, _bitxor_SxS_, a, a)
-MAP_BIN_##ext(|, _bitor_SxS_, a, a)
-MAP_BIN_##ext(&, _bitand_SxS_, a, a)
-MAP_BIN_##ext(<<, _bitshl_SxS_, a, a)
-MAP_BIN_##ext(>> _bitshr_SxS_, a, a)
+MAP_BIN_##ext(%, _mod_SxS_, a, a)                                              \
+MAP_BIN_##ext(^, _bitxor_SxS_, a, a)                                           \
+MAP_BIN_##ext(|, _bitor_SxS_, a, a)                                            \
+MAP_BIN_##ext(&, _bitand_SxS_, a, a)                                           \
+MAP_BIN_##ext(<<, _shl_SxS_, a, a)                                             \
+MAP_BIN_##ext(>>, _shr_SxS_, a, a)
 
 /******************************************************************************
  *
