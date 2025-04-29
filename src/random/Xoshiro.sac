@@ -104,30 +104,30 @@ struct State128 {
 inline
 ulong rotl(ulong x, ulong k)
 {
-	return (x << k) | (x >> (64ul - k));
+  return (x << k) | (x >> (64ul - k));
 }
 
 inline
 uint rotl(uint x, uint k)
 {
-	return (x << k) | (x >> (32u - k));
+  return (x << k) | (x >> (32u - k));
 }
 
 inline
 ulong, struct State256 xoshiro256p(struct State256 state)
 {
-	result = state.s0l + state.s3l;
+  result = state.s0l + state.s3l;
 
-	t = state.s1l << 17ul;
+  t = state.s1l << 17ul;
 
-	state.s2l = state.s2l ^ state.s0l;
-	state.s3l = state.s3l ^ state.s1l;
-	state.s1l = state.s1l ^ state.s2l;
-	state.s0l = state.s0l ^ state.s3l;
+  state.s2l = state.s2l ^ state.s0l;
+  state.s3l = state.s3l ^ state.s1l;
+  state.s1l = state.s1l ^ state.s2l;
+  state.s0l = state.s0l ^ state.s3l;
 
-	state.s2l = state.s2l ^ t;
+  state.s2l = state.s2l ^ t;
 
-	state.s3l = rotl(state.s3l, 45ul);
+  state.s3l = rotl(state.s3l, 45ul);
 
   return (result, state);
 }
@@ -135,30 +135,30 @@ ulong, struct State256 xoshiro256p(struct State256 state)
 inline
 uint, struct State128 xoshiro128p(struct State128 state)
 {
-	result = state.s0 + state.s3;
+  result = state.s0 + state.s3;
 
-	t = state.s1 << 9u;
+  t = state.s1 << 9u;
 
-	state.s2 = state.s2 ^ state.s0;
-	state.s3 = state.s3 ^ state.s1;
-	state.s1 = state.s1 ^ state.s2;
-	state.s0 = state.s0 ^ state.s3;
+  state.s2 = state.s2 ^ state.s0;
+  state.s3 = state.s3 ^ state.s1;
+  state.s1 = state.s1 ^ state.s2;
+  state.s0 = state.s0 ^ state.s3;
 
-	state.s2 = state.s2 ^ t;
+  state.s2 = state.s2 ^ t;
 
-	state.s3 = rotl(state.s3, 11u);
+  state.s3 = rotl(state.s3, 11u);
 
   return (result, state);
 }
 
 #define LOOP_BODY_ULONG(i)                                                     \
-	for (b = 0; b < 64; b = b + 1) {                                             \
-		if ((JUMP##i & 1ul) << _toul_S_(b) != 0ul) {                               \
+  for (b = 0; b < 64; b = b + 1) {                                             \
+    if ((JUMP##i & 1ul) << _toul_S_(b) != 0ul) {                               \
       s0 = s0 ^ state.s0l;                                                      \
       s1 = s1 ^ state.s1l;                                                      \
       s2 = s2 ^ state.s2l;                                                      \
       s3 = s3 ^ state.s3l;                                                      \
-		}                                                                          \
+    }                                                                          \
     unused, state = xoshiro256p(state);                                        \
   }
 
@@ -166,32 +166,32 @@ inline
 struct State256 jumpl(struct State256 state)
 {
   /* Array would be cleaner, but see issue #2470 */
-	JUMP0 = 8566230491382795199ul;
+  JUMP0 = 8566230491382795199ul;
   JUMP1 = 14195432079911694259ul;
   JUMP2 = 8606660816089834049ul;
   JUMP3 = 4111957640723818037ul;
 
-	s0 = 0ul;
-	s1 = 0ul;
-	s2 = 0ul;
-	s3 = 0ul;
+  s0 = 0ul;
+  s1 = 0ul;
+  s2 = 0ul;
+  s3 = 0ul;
 
   LOOP_BODY_ULONG(0)
   LOOP_BODY_ULONG(1)
   LOOP_BODY_ULONG(2)
   LOOP_BODY_ULONG(3)
-		
+    
   return State256 {.s0l = s0, .s1l = s1, .s2l = s2, .s3l = s3};
 }
 
 #define LOOP_BODY_UINT(i)                                                      \
-	for (b = 0; b < 64; b = b + 1) {                                             \
-		if ((JUMP##i & 1u) << _toui_S_(b) != 0u) {                                 \
+  for (b = 0; b < 64; b = b + 1) {                                             \
+    if ((JUMP##i & 1u) << _toui_S_(b) != 0u) {                                 \
       s0 = s0 ^ state.s0;                                                      \
       s1 = s1 ^ state.s1;                                                      \
       s2 = s2 ^ state.s2;                                                      \
       s3 = s3 ^ state.s3;                                                      \
-		}                                                                          \
+    }                                                                          \
     unused, state = xoshiro128p(state);                                        \
   }
 
@@ -199,21 +199,21 @@ inline
 struct State128 jump(struct State128 state)
 {
   /* Array would be cleaner, but see issue #2470 */
-	JUMP0 = 3039008046u;
+  JUMP0 = 3039008046u;
   JUMP1 = 191826335u;
   JUMP2 = 3438649583u;
   JUMP3 = 475530850u;
 
-	s0 = 0u;
-	s1 = 0u;
-	s2 = 0u;
-	s3 = 0u;
+  s0 = 0u;
+  s1 = 0u;
+  s2 = 0u;
+  s3 = 0u;
 
   LOOP_BODY_UINT(0)
   LOOP_BODY_UINT(1)
   LOOP_BODY_UINT(2)
   LOOP_BODY_UINT(3)
-		
+    
   return State128 {.s0 = s0, .s1 = s1, .s2 = s2, .s3 = s3};
 }
 
