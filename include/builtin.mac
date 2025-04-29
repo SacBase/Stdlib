@@ -26,7 +26,9 @@ fun(ulonglong, ull, 0ull, 1ull)
 fun(int, i, 0i, 1i)                                                            \
 fun(long, l, 0l, 1l)
 
-#define UNSIGNED_INT_NUM(fun)
+#define UNSIGNED_INT_NUM(fun)                                                  \
+fun(uint, ui, 0ui, 1ui)                                                        \
+fun(ulong, ul, 0ul, 1ul)
 
 #endif /* FULLTYPES */
 
