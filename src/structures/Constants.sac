@@ -4,112 +4,112 @@ export all;
 
 #ifdef FULLTYPES
 
-external byte     minbyte();
+external byte minbyte();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external byte     maxbyte();
+external byte maxbyte();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external short     minshort();
+external short minshort();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external short     maxshort();
+external short maxshort();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external longlong     minlonglong();
+external longlong minlonglong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external longlong     maxlonglong();
+external longlong maxlonglong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external ubyte     minubyte();
+external ubyte minubyte();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external ubyte     maxubyte();
+external ubyte maxubyte();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external ushort     minushort();
+external ushort minushort();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external ushort     maxushort();
+external ushort maxushort();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external uint     minuint();
+external ulonglong minulonglong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external uint     maxuint();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minmax.o"
-
-external ulong     minulong();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minmax.o"
-
-external ulong     maxulong();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minmax.o"
-
-external ulonglong     minulonglong();
-    #pragma linksign[0]
-    #pragma linkobj "src/Constants/minmax.o"
-
-external ulonglong     maxulonglong();
+external ulonglong maxulonglong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
 #endif /* FULLTYPES */
 
-external int     minint();
+external int minint();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minint.o"
 
-external int     maxint();
+external int maxint();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/maxint.o"
 
-external long     minlong();
+external long minlong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external long     maxlong();
+external long maxlong();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minmax.o"
 
-external float   minfloat();
+external uint minuint();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external uint maxuint();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ulong minulong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external ulong maxulong();
+    #pragma linksign[0]
+    #pragma linkobj "src/Constants/minmax.o"
+
+external float minfloat();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/minfloat.o"
 
-external float   maxfloat();
+external float maxfloat();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/maxfloat.o"
 
-external double  mindouble();
+external double mindouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/mindouble.o"
 
-external double  tinydouble();
+external double tinydouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/tinydouble.o"
 
-external double  maxdouble();
+external double maxdouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/maxdouble.o"
 
-external double  epidouble();
+external double epidouble();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/epidouble.o"
 
-external int     randmax();
+external int randmax();
     #pragma linksign[0]
     #pragma linkobj "src/Constants/randmax.o"
