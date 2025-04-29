@@ -1,7 +1,6 @@
 module Structures;
 
 import Array: all;
-import Bits: all;
 import Char: all;
 import String: all;
 #ifdef EXT_STDLIB

@@ -259,15 +259,6 @@ SET (C_DEPS_SRC
     structures/src/Constants/randmax.c
     structures/src/Char/ctype.c
     structures/src/Char/Char.c
-    structures/src/Bits/BitXOR.c
-    structures/src/Bits/BitTwosComplement.c
-    structures/src/Bits/BitShiftRight.c
-    structures/src/Bits/BitShiftLeft.c
-    structures/src/Bits/BitRotateRight.c
-    structures/src/Bits/BitRotateLeft.c
-    structures/src/Bits/BitOnesComplement.c
-    structures/src/Bits/BitOR.c
-    structures/src/Bits/BitAND.c
     stdio/src/TermFile/stdstreams.c
     stdio/src/TermFile/printf.c
     stdio/src/TermFile/fputc.c
@@ -323,6 +314,7 @@ SET (C_DEPS_SRC
     numerical/src/Math/isnan.c
     numerical/src/Math/isinf.c
     numerical/src/Math/isfinite.c
+    random/src/Xoshiro.c
     auxiliary/src/C99Benchmarking/bench.c
 )
 
