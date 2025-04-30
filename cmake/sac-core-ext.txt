@@ -12,6 +12,7 @@ stdio/ArrayIO.xsac                         Core
 structures/ScalarArith.xsac                Core
 structures/ArrayBasics.xsac                Core
 structures/ArrayArith.xsac                 Core
+structures/ArrayReduce.xsac                Core
 structures/ArrayTransform.xsac             Core
 structures/ArrayTransformApl.xsac          Ext
 structures/ArrayFormat.xsac                Core

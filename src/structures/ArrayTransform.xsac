@@ -336,37 +336,6 @@ BUILT_IN(WHERE)
 
 /******************************************************************************
  *
- * @fn <a> reduce(<a>[d:shp] A)
- *
- * @brief Reduces the given array to a single element.
- *
- ******************************************************************************/
-
-#define REDUCE(name, typ, fun, neutral)                                        \
-inline                                                                         \
-typ name(typ[d:shp] A)                                                         \
-{                                                                              \
-    return with {                                                              \
-        (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, A);                    \
-    } : fold(fun, neutral);                                                    \
-}
-
-#define NUM_REDUCE(typ, postfix, zval, oval)                                   \
-REDUCE(sum, typ, ScalarArith::+, zval)                                         \
-REDUCE(prod, typ, ScalarArith::*, oval)                                        \
-REDUCE(maxval, typ, ScalarArith::max, min##typ())                              \
-REDUCE(minval, typ, ScalarArith::min, max##typ())
-
-NUM(NUM_REDUCE)
-
-#define BOOL_REDUCE                                                            \
-REDUCE(all, bool, ScalarArith::&, true)                                        \
-REDUCE(any, bool, ScalarArith::|, false)
-
-BOOL_REDUCE
-
-/******************************************************************************
- *
  * @fn <a>[n] mask(bool[n] p, <a>[n] A, <a>[n] B)
  *
  * @brief mask has the same semantics as where, but it does not use WLs.
