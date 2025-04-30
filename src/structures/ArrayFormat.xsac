@@ -362,7 +362,8 @@ char[+] format(double[d:shp,n] arr, int precision)
         // Format each array element
         // See scalarFormatter for why we do 'precision + 7'
         fry = { [i] -> padWithBlanks(precision + 7,
-                                     scalarFormatter(ravel[i], precision)) };
+                                     scalarFormatter(_sel_VxA_([i], ravel),
+                                                     precision)) };
 
         // Determine width of each result column
         // First, chars left of decimal point
@@ -372,9 +373,9 @@ char[+] format(double[d:shp,n] arr, int precision)
 
         lodpmax = maxsl1(_reshape_VxA_([shpp, n], lodp));
         rodpmax = maxsl1(_reshape_VxA_([shpp, n], rodp));
-        widths = lodpmax + rodpmax;
+        widths = _add_VxV_(lodpmax, rodpmax);
         // Room for decimal point and blank
-        zcols = _sub_SxS_(sum(widths + 2), 1);
+        zcols = _sub_SxS_(sum(_add_VxS_(widths, 2)), 1);
 
         res = { [i] -> alignrow(fry, i, widths, lodp, lodpmax, zcols)
               | [i] < [shpp] };
@@ -400,8 +401,10 @@ char[+] format(double[d:shp,n] arr, int precision)
 inline
 char[.] format(double arr, int[2] w)
 {
-    res = tochar(sprintf("%*.*g", w[0], w[1], arr));
-    res = overflowCheck(res, w[0]);
+    w0 = _sel_VxA_([0], w);
+    w1 = _sel_VxA_([1], w);
+    res = tochar(sprintf("%*.*g", w0, w1, arr));
+    res = overflowCheck(res, w0);
     return res;
 }
 
