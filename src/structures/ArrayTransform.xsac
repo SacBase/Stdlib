@@ -11,7 +11,7 @@ use Constants: all;
 
 export all;
 
-#include "Templates.mac"
+#include "builtin.mac"
 
  /******************************************************************************
  *
@@ -51,71 +51,18 @@ BUILT_IN(TAKE)
 
 /******************************************************************************
  *
- * @fn <a>[o:sv,i:ishp] take_apl(int[o] sv, <a>[o:oshp,i:ishp] A)
- *
- * @brief Takes a number of elements from the array in APL style,
- *        given a shape vector.
- *
- * @remark take_apl supports overtake
- *         E.g., take([5], [2, 3]) =
- *           [2, 3, 0, 0, 0]
- *
- * @remark take_apl supports negative sv, taking the last elements
- *         E.g., take([-1], [2, 3]) =
- *           [3]
- *         E.g., take([-5], [2, 3]) =
- *           [0, 0, 0, 2, 3]
- *
- * @remark take_apl supports lower-dimensional sv, padding the missing elements
- *         with corresponding elements from shp.
- *         E.g., take([3], genarray([2,2], 42)) =
- *           [[42, 42]
- *            [42, 42]
- *            [0,  0]]
- *
- ******************************************************************************/
-
-#define TAKE_APL(typ, postfix, zval, oval)                                     \
-inline                                                                         \
-typ[o:sv,i:ishp] take_apl(int[o] sv, typ[o:oshp,i:ishp] A)                     \
-{                                                                              \
-    /* Offset shows the index of the first element to be selected. */          \
-    offset = where(_lt_VxS_(sv, 0),                                            \
-                   _add_VxV_(oshp, sv),                                        \
-                   0);                                                         \
-    /* Stop signals the location of the last index element of array.           \
-     * This can be longer than the size of the array, in case offset           \
-     * is less than (-oshp). */                                                \
-    stop = where(_lt_VxS_(sv, 0),                                              \
-                 _abs_V_(sv),                                                  \
-                 _min_VxV_(_abs_V_(sv), oshp));                                \
-    /* Start shows where the selection of array elements starts.               \
-     * This can only be different from offset if offset < (-oshp). */          \
-    start = _max_VxS_(_neg_V_(offset), 0);                                     \
-    /* The result is calculated in 2 steps: */                                 \
-    return { /* 1: select the required elements of the array */                \
-             iv -> A[_add_VxV_(offset, iv)] | start <= iv < stop;              \
-             /* 2: add zeros around (if needed) */                             \
-             iv -> genarray(ishp, zval) | iv < _abs_V_(sv) };                  \
-}
-
-BUILT_IN(TAKE_APL)
-
-/******************************************************************************
- *
  * @fn <a>[o:shp_res,i:ishp] drop(int[o] sv, <a>[o:oshp,i:ishp] A)
  *
- * @brief Drops a number of elements from the array in APL style,
- *        given a shape vector.
+ * @brief Drops a number of elements from the array, given a shape vector.
  *
  * @remark drop does NOT support overdrop
  *         E.g., drop([5], [2, 3]) throws an error.
  *
- * @remark drop_apl supports negative sv, dropping the last elements
+ * @remark drop supports negative sv, dropping the last elements
  *         E.g., drop([-1], [2, 3]) =
  *           [2]
  *
- * @remark drop_apl supports lower-dimensional sv, padding the missing elements
+ * @remark drop supports lower-dimensional sv, padding the missing elements
  *         with corresponding elements from shp.
  *         E.g., drop([1], genarray([2,2], 42)) =
  *           [[42, 42]]
@@ -138,48 +85,11 @@ BUILT_IN(DROP)
 
 /******************************************************************************
  *
- * @fn <a>[o:shp_res,i:ishp] drop_apl(int[o] sv, <a>[o:oshp,i:ishp] A)
- *
- * @brief Drops a number of elements from the array in APL style,
- *        given a shape vector.
- *
- * @remark drop_apl supports overdrop
- *         E.g., drop([5], [2, 3]) =
- *           []
- *
- * @remark drop_apl supports negative sv, dropping the last elements
- *         E.g., drop([-1], [2, 3]) =
- *           [2]
- *
- * @remark drop_apl supports lower-dimensional sv, padding the missing elements
- *         with corresponding elements from shp.
- *         E.g., drop([1], genarray([2,2], 42)) =
- *           [[42, 42]]
- *
- ******************************************************************************/
-
-#define DROP_APL(typ, postfix, zval, oval)                                     \
-inline                                                                         \
-typ[o:shp_res,i:ishp] drop_apl(int[o] sv, typ[o:oshp,i:ishp] A)                \
-{                                                                              \
-    /* Calculate shape of result array. */                                     \
-    shp_res = _sub_VxV_(oshp, _abs_V_(sv));                                    \
-    shp_res = _max_VxS_(shp_res, 0);                                           \
-    /* Start shows the index of the first element to be selected. */           \
-    start = _max_VxS_(sv, 0);                                                  \
-    /* Select the requested elements of array A. */                            \
-    return { iv -> A[_add_VxV_(start, iv)] | iv < shp_res };                   \
-}
-
-BUILT_IN(DROP_APL)
-
-/******************************************************************************
- *
  * @fn <a>[d:shp] tile(int[d] shp, int[d] idx, <a>[d:oshp,i:ishp] A)
  *
  * @brief Takes a tile from the array, of shape shp, starting at index idx.
  *
- * @remark tile_apl does NOT support overtile
+ * @remark tile does NOT support overtile
  *         E.g., tile([5], [1], [2, 3, 4]) throws an error.
  *
  ******************************************************************************/
@@ -195,39 +105,6 @@ typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
 }
 
 BUILT_IN(TILE)
-
-/******************************************************************************
- *
- * @fn <a>[d:shp] tile_apl(int[d] shp, int[d] idx, <a>[d:oshp] A)
- *
- * @brief Takes a tile from the array, of shape shp, starting at index idx.
- *
- * @remark tile_apl supports overtile
- *         E.g., tile([5], [1], [2, 3, 4]) =
- *           [3, 4, 0, 0, 0]
- *
- ******************************************************************************/
-
-#define TILE_APL(typ, postfix, zval, oval)                                     \
-inline                                                                         \
-typ[d:shp,i:ishp] tile_apl(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)       \
-    | _all_V_(_ge_VxS_(shp, 0))                                                \
-{                                                                              \
-    /* Start shows how many elements we prepend before the array. */           \
-    start = _max_VxS_(_neg_V_(idx), 0);                                        \
-    /*                                                                         \
-     * Stop shows where our selection of the given array ends, or, in case     \
-     * the selection goes beyond the array, where the array ends.              \
-     */                                                                        \
-    stop = _min_VxV_(shp, _sub_VxV_(oshp, idx));                               \
-    /* The result is calculated in 2 steps: */                                 \
-    return { /* 1: select the required elements of the array */                \
-             iv -> A[_add_VxV_(idx, iv)] | start <= iv < stop;                 \
-             /* 2: add zeros around (if needed) */                             \
-             iv -> genarray(ishp, zval) | iv < shp};                           \
-}
-
-BUILT_IN(TILE_APL)
 
 /******************************************************************************
  *
@@ -357,7 +234,7 @@ typ[o:oshp,i:ishp] shift(int[o] counts, typ boundary, typ[o:oshp,i:ishp] A)    \
     counts_ext = _cat_VxV_(counts, _mul_SxV_(0, ishp));                        \
     shp = _cat_VxV_(oshp, ishp);                                               \
     idx = _neg_V_(counts_ext);                                                 \
-    return tile_apl(shp, idx, A);                                              \
+    return tile(shp, idx, A);                                                  \
 }
 
 #define SHIFT_VZ(typ, postfix, zval, oval)                                     \

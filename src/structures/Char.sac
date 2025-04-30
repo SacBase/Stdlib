@@ -2,7 +2,7 @@ module Char;
 
 export all;
 
-#include "Templates.mac"
+#include "builtin.mac"
 
 /******************************************************************************
  *

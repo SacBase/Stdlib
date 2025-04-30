@@ -8,15 +8,17 @@
 # The filename is specified relatively to src directory.
 
 # The xsac files:
+stdio/ArrayIO.xsac                         Core
 structures/ScalarArith.xsac                Core
-structures/ComplexArrayTransform.xsac      Ext
-structures/ComplexArrayBasics.xsac         Ext
-structures/ComplexArrayArith.xsac          Ext
-structures/ArrayTransform.xsac             Core
-structures/ArrayFormat.xsac                Core
 structures/ArrayBasics.xsac                Core
 structures/ArrayArith.xsac                 Core
-stdio/ArrayIO.xsac                         Core
+structures/ArrayTransform.xsac             Core
+structures/ArrayTransformApl.xsac          Ext
+structures/ArrayFormat.xsac                Core
+structures/ComplexArrayBasics.xsac         Ext
+structures/ComplexArrayArith.xsac          Ext
+structures/ComplexArrayTransform.xsac      Ext
+structures/Quaternion.xsac                 Ext
 
 # The sac files:
 utrace/UTrace.sac                          Core
@@ -40,13 +42,12 @@ system/Dir.sac                             Core
 structures/Array.sac                       Core
 structures/Structures.sac                  Core
 structures/StringArray.sac                 Ext
-structures/Color8.sac                      Ext
 structures/List.sac                        Ext
+structures/Color8.sac                      Ext
 structures/Constants.sac                   Core
 structures/ComplexScalarArith.sac          Ext
 structures/ComplexBasics.sac               Ext
 structures/Complex.sac                     Ext
-structures/Quaternion.sac                  Ext
 structures/Char.sac                        Core
 structures/String.sac                      Core
 stdio/TermFile.sac                         Core

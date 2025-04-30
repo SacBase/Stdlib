@@ -2,7 +2,7 @@ module Color8;
 
 /******************************************************************************
  *
- * Depends on Numerical.
+ * Depends on Array and Numerical.
  *
  ******************************************************************************/
 
@@ -10,28 +10,106 @@ use Numerical: { exp, log };
 
 export all except { genSteps, weights2Clut };
 
-struct Color8 {
-    int r;
-    int g;
-    int b;
-};
+typedef int[3] Color8;
 
 /******************************************************************************
  *
- * Array operations.
+ * Array properties.
+ *
+ * @note The definition of `dim` and `shape` for user-defined types may not use
+ * type patterns, as type patterns rely on the existence of these functions
+ * for user-defined types since the primitives `_dim_A_` and `_shape_A_`
+ * are not defined for user-defined types.
  *
  ******************************************************************************/
 
-inline struct Color8[i:ishp] sel(int[o] idx, struct Color8[o:oshp,i:ishp] arr)
-    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
+inline int dim(Color8[*] arr)
 {
-    return { iv -> _sel_VxA_(_cat_VxV_(idx, iv), arr) | iv < ishp };
+    return _sub_SxS_(_dim_A_((int[*])arr), 1);
 }
 
-inline struct Color8[d:shp] sel(int idx, struct Color8[n,d:shp] arr)
+inline int[.] shape(Color8[*] arr)
+{
+    shp = _shape_A_((int[+])arr);
+    shp_len = _sel_VxA_([0], _shape_A_(shp));
+    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
+}
+
+inline Color8[i:ishp] sel(int[o] idx, Color8[o:oshp,i:ishp] arr)
+    | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, oshp))
+{
+    return (Color8[*])Array::sel(idx, (int[*])arr);
+}
+
+inline Color8[d:shp] sel(int idx, Color8[n,d:shp] arr)
     | _le_SxS_(0, idx), _lt_SxS_(idx, n)
 {
-    return sel([idx], arr);
+    return arr[[idx]];
+}
+
+inline
+Color8[d:shp] reshape(int[d] shp, Color8[_:shp_a] arr)
+{
+    return (Color8[*])_reshape_VxA_(_cat_VxV_(shp, [3]), (int[*])arr);
+}
+
+/******************************************************************************
+ *
+ * Type conversions.
+ *
+ ******************************************************************************/
+
+inline Color8 newColor(int[3] c)
+{
+    min_col = [0, 0, 0];
+    max_col = [255, 255, 255];
+    c = _max_VxV_(_min_VxV_(c, max_col), min_col);
+    return (Color8)c;
+}
+
+inline Color8 newColor(int r, int g, int b)
+{
+    return newColor([r,g,b]);
+}
+
+inline int[3] toi(Color8 c)
+{
+    return (int[3])c;
+}
+
+inline int[d:shp,3] toi(Color8[d:shp] c)
+{
+    return (int[*])c;
+}
+
+inline double[3] tod(Color8 c)
+{
+    return Array::tod((int[3])c);
+}
+
+inline double[d:shp,3] tod(Color8[d:shp] c)
+{
+    return Array::tod((int[+])c);
+}
+
+inline int red(Color8 c)
+{
+    return _sel_VxA_([0], (int[3])c);
+}
+
+inline int green(Color8 c)
+{
+    return _sel_VxA_([1], (int[3])c);
+}
+
+inline int blue(Color8 c)
+{
+    return _sel_VxA_([2], (int[3])c);
+}
+
+inline int, int, int rgb(Color8 c)
+{
+    return (red(c), green(c), blue(c));
 }
 
 /******************************************************************************
@@ -48,29 +126,31 @@ inline double[256] genSteps(double from, double to)
            | [i] < [256] };
 }
 
-inline struct Color8 weights2Clut(double w, struct Color8 c1, struct Color8 c2)
+inline Color8 weights2Clut(double w, Color8 c1, Color8 c2)
 {
-    r = _toi_S_(_add_SxS_(_mul_SxS_(w, _tod_S_(c1.r)),
-                          _sub_SxS_(1d, _mul_SxS_(w, _tod_S_(c2.r)))));
-    g = _toi_S_(_add_SxS_(_mul_SxS_(w, _tod_S_(c1.g)),
-                          _sub_SxS_(1d, _mul_SxS_(w, _tod_S_(c2.g)))));
-    b = _toi_S_(_add_SxS_(_mul_SxS_(w, _tod_S_(c1.b)),
-                          _sub_SxS_(1d, _mul_SxS_(w, _tod_S_(c2.b)))));
-    return Color8{ r, g, b };
+    r1, g1, b1 = rgb(c1);
+    r2, g2, b2 = rgb(c2);
+    r = _toi_S_(_add_SxS_(_mul_SxS_(w, _tod_S_(r1)),
+                          _sub_SxS_(1d, _mul_SxS_(w, _tod_S_(r2)))));
+    g = _toi_S_(_add_SxS_(_mul_SxS_(w, _tod_S_(g1)),
+                          _sub_SxS_(1d, _mul_SxS_(w, _tod_S_(g2)))));
+    b = _toi_S_(_add_SxS_(_mul_SxS_(w, _tod_S_(b1)),
+                          _sub_SxS_(1d, _mul_SxS_(w, _tod_S_(b2)))));
+    return (Color8)[r,g,b];
 }
 
-inline struct Color8[256] weights2Clut(double[256] w, struct Color8 c1, struct Color8 c2)
+inline Color8[256] weights2Clut(double[256] w, Color8 c1, Color8 c2)
 {
     return { iv -> weights2Clut(_sel_VxA_(iv, w), c1, c2) | iv < [256] };
 }
 
-inline struct Color8[256] genLinearClut(struct Color8 c1, struct Color8 c2)
+inline Color8[256] genLinearClut(Color8 c1, Color8 c2)
 {
     weights = genSteps(0d, 1d);
     return weights2Clut(weights, c1, c2);
 }
 
-inline struct Color8[256] genLogarithmicClut(double from, double to, struct Color8 c1, struct Color8 c2)
+inline Color8[256] genLogarithmicClut(double from, double to, Color8 c1, Color8 c2)
 {
     steps = genSteps(from, to);
     weights = _div_VxS_(_sub_VxS_(log(steps), log(from)),
@@ -78,7 +158,7 @@ inline struct Color8[256] genLogarithmicClut(double from, double to, struct Colo
     return weights2Clut(weights, c1, c2);
 }
 
-inline struct Color8[256] genExponentialClut(double from, double to, struct Color8 c1, struct Color8 c2)
+inline Color8[256] genExponentialClut(double from, double to, Color8 c1, Color8 c2)
 {
     steps = genSteps(from, to);
     weights = _div_VxS_(_sub_VxS_(exp(steps), exp(from)),
@@ -86,7 +166,7 @@ inline struct Color8[256] genExponentialClut(double from, double to, struct Colo
     return weights2Clut(weights, c1, c2);
 }
 
-inline struct Color8[256] genAlternatingClut(struct Color8 c1, struct Color8 c2)
+inline Color8[256] genAlternatingClut(Color8 c1, Color8 c2)
 {
     return with {
         ( . <= [i] <= . step [2]) : c1;
@@ -98,7 +178,7 @@ inline struct Color8[256] genAlternatingClut(struct Color8 c1, struct Color8 c2)
  * s_in is the saturation in % [0:100]
  * b_in is the brightness in % [0:100]
  */
-inline struct Color8 Hsb2Rgb(int h_in, int s_in, int b_in)
+inline Color8 Hsb2Rgb(int h_in, int s_in, int b_in)
 {
     c = black();
 
@@ -107,7 +187,7 @@ inline struct Color8 Hsb2Rgb(int h_in, int s_in, int b_in)
     } else if (_eq_SxS_(b_in, 100) && _eq_SxS_(s_in, 0)) {
         c = white();
     } else if (_eq_SxS_(s_in, 0)) {
-        c = Color8{ b_in, b_in, b_in };
+        c = newColor(b_in, b_in, b_in);
     } else {
         h = _div_SxS_(_tod_S_(h_in), 60d);
         s = _div_SxS_(_tod_S_(s_in), 100d);
@@ -128,31 +208,34 @@ inline struct Color8 Hsb2Rgb(int h_in, int s_in, int b_in)
         n = _toi_S_(_mul_SxS_(n, 255d));
 
         if (_eq_SxS_(0, i)) {
-            c = Color8{ b, n, m };
+            c = newColor(b, n, m);
         } else if (_eq_SxS_(1, i)) {
-            c = Color8{ n, b, m };
+            c = newColor(n, b, m);
         } else if (_eq_SxS_(2, i)) {
-            c = Color8{ m, b, n };
+            c = newColor(m, b, n);
         } else if (_eq_SxS_(3, i)) {
-            c = Color8{ m, n, b };
+            c = newColor(m, n, b);
         } else if (_eq_SxS_(4, i)) {
-            c = Color8{ n, m, b };
+            c = newColor(n, m, b);
         } else if (_eq_SxS_(5, i)) {
-            c = Color8{ b, m, n };
+            c = newColor(b, m, n);
         }
     }
 
     return c;
 }
 
-inline struct Color8[d:shp] Hsb2Rgb(int[d:shp] h, int s, int b)
+inline Color8[d:shp] Hsb2Rgb(int[d:shp] h, int s, int b)
 {
-    return { iv -> Hsb2Rgb(_sel_VxA_(iv, h), s, b) };
+    return { iv -> Hsb2Rgb(_sel_VxA_(iv, h), s, b) | iv < shp };
 }
 
-inline struct Color8[d:shp] Hsb2Rgb(int[d:shp] h, int[d:shp] s, int[d:shp] b)
+inline Color8[d:shp] Hsb2Rgb(int[d:shp] h, int[d:shp] s, int[d:shp] b)
 {
-    return { iv -> Hsb2Rgb(_sel_VxA_(iv, h), _sel_VxA_(iv, s), _sel_VxA_(iv, b)) };
+    return { iv -> Hsb2Rgb(_sel_VxA_(iv, h),
+                           _sel_VxA_(iv, s),
+                           _sel_VxA_(iv, b))
+           | iv < shp };
 }
 
 /******************************************************************************
@@ -161,40 +244,43 @@ inline struct Color8[d:shp] Hsb2Rgb(int[d:shp] h, int[d:shp] s, int[d:shp] b)
  *
  ******************************************************************************/
 
-inline struct Color8 +(struct Color8 a, struct Color8 b)
+inline Color8 +(Color8 a, Color8 b)
 {
-    return Color8{ _add_SxS_(a.r, b.r),
-                   _add_SxS_(a.g, b.g),
-                   _add_SxS_(a.b, b.b) };
+    r1, g1, b1 = rgb(a);
+    r2, g2, b2 = rgb(b);
+    return newColor(_add_SxS_(r1, r2), _add_SxS_(g1, g2), _add_SxS_(b1, b2));
 }
 
-inline struct Color8[d:shp] +(struct Color8[d:shp] a, struct Color8[d:shp] b)
+inline Color8[d:shp] +(Color8[d:shp] a, Color8[d:shp] b)
 {
-    return { iv -> _sel_VxA_(iv, a) + _sel_VxA_(iv, b) | iv < shp };
+    return { iv -> a[iv] + b[iv] | iv < shp };
 }
 
-inline struct Color8 -(struct Color8 a, struct Color8 b)
+inline Color8 -(Color8 a, Color8 b)
 {
-    return Color8{ _sub_SxS_(a.r, b.r),
-                   _sub_SxS_(a.g, b.g),
-                   _sub_SxS_(a.b, b.b) };
+    r1, g1, b1 = rgb(a);
+    r2, g2, b2 = rgb(b);
+    return newColor(_sub_SxS_(r1, r2), _sub_SxS_(g1, g2), _sub_SxS_(b1, b2));
 }
 
-inline struct Color8[d:shp] -(struct Color8[d:shp] a, struct Color8[d:shp] b)
+inline Color8[d:shp] -(Color8[d:shp] a, Color8[d:shp] b)
 {
-    return { iv -> _sel_VxA_(iv, a) - _sel_VxA_(iv, b) | iv < shp };
+    return { iv -> a[iv] - b[iv] | iv < shp };
 }
 
-inline struct Color8 *(struct Color8 c, double x)
+inline Color8 *(Color8 c, double x)
 {
-    return Color8{ _toi_S_(_mul_SxS_(_tod_S_(c.r), x)),
-                   _toi_S_(_mul_SxS_(_tod_S_(c.g), x)),
-                   _toi_S_(_mul_SxS_(_tod_S_(c.b), x)) };
+    r, g, b = rgb(c);
+    return newColor(
+        _toi_S_(_mul_SxS_(_tod_S_(r), x)),
+        _toi_S_(_mul_SxS_(_tod_S_(g), x)),
+        _toi_S_(_mul_SxS_(_tod_S_(b), x))
+    );
 }
 
-inline struct Color8[d:shp] *(struct Color8[d:shp] c, double x)
+inline Color8[d:shp] *(Color8[d:shp] c, double x)
 {
-    return { iv -> _sel_VxA_(iv, c) * x | iv < shp };
+    return { iv -> c[iv] * x | iv < shp };
 }
 
 /******************************************************************************
@@ -203,27 +289,27 @@ inline struct Color8[d:shp] *(struct Color8[d:shp] c, double x)
  *
  ******************************************************************************/
 
-inline struct Color8 black()
+inline Color8 black()
 {
-    return Color8{ 0, 0, 0 };
+    return (Color8)[0,0,0];
 }
 
-inline struct Color8 white()
+inline Color8 white()
 {
-    return Color8{ 255, 255, 255 };
+    return (Color8)[255,255,255];
 }
 
-inline struct Color8 red()
+inline Color8 red()
 {
-    return Color8{ 255, 0, 0 };
+    return (Color8)[255,0,0];
 }
 
-inline struct Color8 green()
+inline Color8 green()
 {
-    return Color8{ 0, 255, 0 };
+    return (Color8)[0,255,0];
 }
 
-inline struct Color8 blue()
+inline Color8 blue()
 {
-    return Color8{ 0, 0, 255 };
+    return (Color8)[0,0,255];
 }

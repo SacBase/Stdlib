@@ -3,6 +3,9 @@ module Array;
 import ArrayArith: all;
 import ArrayBasics: all;
 import ArrayTransform: all;
+#ifdef EXT_STDLIB
+import ArrayTransformApl: all;
+#endif /* EXT_STDLIB */
 import ScalarArith: all;
 
 export all;
