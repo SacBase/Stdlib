@@ -14,7 +14,7 @@ export all;
 
 /******************************************************************************
  *
- * @fn <a> reduce(<a>[d>0:shp] arr)
+ * @fn <a> reduce(<a>[d:shp] arr)
  *
  * @brief Reduces the given array to a single element.
  *

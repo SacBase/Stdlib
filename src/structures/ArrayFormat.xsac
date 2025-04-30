@@ -77,37 +77,6 @@ char[d:shp,m] format(bool[d:shp,n] arr)
 
 /******************************************************************************
  *
- * @fn char[.] format(bool arr, int[2] w)
- *
- * @brief Defined-width and precision format on boolean scalar.
- *
- * @param w[0] The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param w[1] The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[.] format(bool arr, int[2] w)
-{
-    return format(_tod_S_(arr), w);
-}
-
-/******************************************************************************
- *
- * @fn char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
- *
- * @brief Defined-width format on boolean non-scalar.
- *
- ******************************************************************************/
-inline
-char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
-    | _eq_SxS_(m, max(2 * n - 1, 0))
-{
-    return format(tod(arr), w);
-}
-
-/******************************************************************************
- *
  * @fn char[.] format(int arr)
  *
  * @brief Default format on integer scalar.
@@ -193,25 +162,6 @@ char[+] format(int[+] arr, int precision)
 
 /******************************************************************************
  *
- * @fn char[.] format(int arr, int[2] w)
- *
- * @brief Defined-width and precision format on integer scalar.
- *
- * @param w[0] The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param w[1] The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[.] format(int arr, int[2] w)
-{
-    res = tochar(sprintf("%*.*d", w[0], w[1], arr));
-    res = overflowCheck(res, w[0]);
-    return res;
-}
-
-/******************************************************************************
- *
  * @fn char[.] format(float arr)
  *
  * @brief Default format on float scalar.
@@ -260,40 +210,6 @@ inline
 char[+] format(float[+] arr, int precision)
 {
     return format(tod(arr), precision);
-}
-
-/******************************************************************************
- *
- * @fn char[.] format(float arr, int[2] w)
- *
- * @brief Defined-width and precision format on floating scalar.
- *
- * @param w[0] The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param w[1] The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[.] format(float arr, int[2] w)
-{
-    return format(_tod_S_(arr), w);
-}
-
-/******************************************************************************
- *
- * @fn char[+] format(float[+] arr, int[2] w)
- *
- * @brief Defined-width format on float non-scalar.
- *
- * @param w[0] The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param w[1] The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[+] format(float[+] arr, int[2] w)
-{
-    return format(tod(arr), w);
 }
 
 /******************************************************************************
@@ -386,51 +302,6 @@ char[+] format(double[d:shp,n] arr, int precision)
 
 /******************************************************************************
  *
- * @fn char[.] format(double arr, int[2] w)
- *
- * @brief Formatting for a double scalar.
- *
- * @note This is temporary, pending use of the Burger/Dybvig algorithm.
- *
- * @param w[0] The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param w[1] The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[.] format(double arr, int[2] w)
-{
-    w0 = _sel_VxA_([0], w);
-    w1 = _sel_VxA_([1], w);
-    res = tochar(sprintf("%*.*g", w0, w1, arr));
-    res = overflowCheck(res, w0);
-    return res;
-}
-
-/******************************************************************************
- *
- * @fn char[+] format(double[d>0:shp] arr, int[2] w)
- *
- * @brief Defined-width format on double non-scalar.
- *
- * @param w[0] The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param w[1] The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[+] format(double[d>0:shp] arr, int[2] w)
-{
-    res = { iv -> format(_sel_VxA_(iv, arr), w) | iv < shp };
-    zshp = _shape_A_(res);
-    zshp = _cat_VxV_(drop([-2], zshp),
-                     [prod(take([-2], zshp))]);
-    res = _reshape_VxA_(zshp, res);
-    return res;
-}
-
-/******************************************************************************
- *
  * Private helper functions for formatting.
  *
  ******************************************************************************/
@@ -451,8 +322,7 @@ char[olen] formatrow(int[vlen] wid, int[vlen] arr)
     // Can't use WL because widths may differ
     sink = 0;
     for (i = 0; _lt_SxS_(i, vlen); i = _add_SxS_(i, 1)) {
-        w = [_sel_VxA_([i], wid), 1];
-        curz = format(_sel_VxA_([i], arr), w);
+        curz = formatOverflow(_sel_VxA_([i], arr), _sel_VxA_([i], wid), 1);
         lim  = _sel_VxA_([0], _shape_A_(curz));
 
         for (src = 0; _lt_SxS_(src, lim); src = _add_SxS_(src, 1)) {
@@ -643,6 +513,25 @@ char[.] killPlusSign(char[n] arr)
 
 /******************************************************************************
  *
+ * @fn char[.] formatOverflow(int arr, int width, int precision)
+ *
+ * @brief Defined-width and precision format on integer scalar.
+ *
+ * @param width The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param precision The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] formatOverflow(int arr, int wid, int precision)
+{
+    res = tochar(sprintf("%*.*d", wid, precision, arr));
+    res = overflowCheck(res, wid);
+    return res;
+}
+
+/******************************************************************************
+ *
  * @fn char[.] overflowCheck(char[n] arr, int wid)
  *
  * @brief Check for txt overflowing wid.
@@ -651,5 +540,5 @@ char[.] killPlusSign(char[n] arr)
 inline
 char[.] overflowCheck(char[n] arr, int wid)
 {
-    return _lt_SxS_(wid, n) ? genarray([wid], '*') : arr;
+    return _gt_SxS_(n, wid) ? genarray([wid], '*') : arr;
 }
