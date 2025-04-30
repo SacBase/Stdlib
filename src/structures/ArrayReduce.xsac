@@ -21,7 +21,7 @@ export all;
  ******************************************************************************/
 
 #define REDUCE(name, typ, fun, neutral)                                        \
-inline typ name(typ[d>0:shp] arr)                                              \
+inline typ name(typ[d:shp] arr)                                                \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, arr);                  \
