@@ -1,6 +1,9 @@
 module ArrayFormat;
 
-use Array: all;
+use ArrayArith: { +, -, <, <=, >=, abs, max, tod, toi };
+use ArrayBasics: { sel, genarray };
+use ArrayTransform: { take, drop, rotate };
+use ArrayReduce: { sum, prod };
 use String: { tochar, sprintf };
 
 export { format };
@@ -58,8 +61,8 @@ inline
 char[d:shp,m] format(bool[d:shp,n] arr)
     | _eq_SxS_(m, max(2 * n - 1, 0))
 {
-    res = { iv -> arr[iv] ? ['1', ' '] : ['0', ' '] };
-    res = reshape(_cat_VxV_(shp, [2 * n]), res);
+    res = { iv -> _sel_VxA_(iv, arr) ? ['1', ' '] : ['0', ' '] };
+    res = _reshape_VxA_(_cat_VxV_(shp, [_mul_SxS_(2, n)]), res);
     lastcol = _cat_VxV_(genarray([d], 0), [-1]);
     res = drop(lastcol, res);
     return res;
@@ -79,7 +82,7 @@ char[d:shp,m] format(bool[d:shp,n] arr)
 inline
 char[.] format(bool arr, int[2] w)
 {
-    return format(tod(arr), w);
+    return format(_tod_S_(arr), w);
 }
 
 /******************************************************************************
@@ -139,17 +142,18 @@ char[+] format(int[d:shp,n] arr)
     if (_or_SxS_(_eq_SxS_(shpp, 0), _eq_SxS_(n, 0))) {
         res = genarray(shp, ' ');
     } else {
-        m = reshape([shpp, n], arr);
+        m = _reshape_VxA_([shpp, n], arr);
 
         // Large negative number may need extra column for minus sign
         minm = minsl1(m);
-        maxneg = log10(abs(minm));
+        maxneg = log10(_abs_V_(minm));
         widths = log10(maxsl1(abs(m)));
-        widths += toi(minm < 0) * toi(maxneg >= widths);
-        zcols = sum(widths + 1) - 1;
+        widths += _mul_VxV_(toi(minm < 0),
+                            toi(maxneg >= widths));
+        zcols = _sub_SxS_(sum(_add_VxS_(widths, 1)), 1);
 
         res = { [i] -> formatrow(widths, m[i]) | [i] < [shpp] };
-        res = reshape(_cat_VxV_(shp, [zcols]), res);
+        res = _reshape_VxA_(_cat_VxV_(shp, [zcols]), res);
     }
 
     return res;
@@ -165,7 +169,7 @@ char[+] format(int[d:shp,n] arr)
 inline
 char[.] format(int arr, int precision)
 {
-    return format(tod(arr), precision);
+    return format(_tod_S_(arr), precision);
 }
 
 /******************************************************************************
@@ -210,7 +214,7 @@ char[.] format(int arr, int[2] w)
 inline
 char[.] format(float arr)
 {
-    return format(tod(arr), 15);
+    return format(_tod_S_(arr), 15);
 }
 
 /******************************************************************************
@@ -236,7 +240,7 @@ char[+] format(float[+] arr)
 inline
 char[.] format(float arr, int precision)
 {
-    return format(tod(arr), precision);
+    return format(_tod_S_(arr), precision);
 }
 
 /******************************************************************************
@@ -266,7 +270,7 @@ char[+] format(float[+] arr, int precision)
 inline
 char[.] format(float arr, int[2] w)
 {
-    return format(tod(arr), w);
+    return format(_tod_S_(arr), w);
 }
 
 /******************************************************************************
@@ -346,7 +350,7 @@ char[+] format(double[d:shp,n] arr, int precision)
     if (_or_SxS_(_eq_SxS_(shpp, 0), _eq_SxS_(n, 0))) {
         res = genarray(shp, ' ');
     } else {
-        ravel = reshape([shpp * n], arr);
+        ravel = _reshape_VxA_([_mul_SxS_(shpp, n)], arr);
 
         // Format each array element
         // See scalarFormatter for why we do 'precision + 7'
@@ -359,15 +363,15 @@ char[+] format(double[d:shp,n] arr, int precision)
         // Decimal point and # non-blankchars to right of decimal point
         rodp = { [i] -> thCharsTo(' ', ' ', drop([lodp[i]], fry[i])) };
 
-        lodpmax = maxsl1(reshape([shpp, n], lodp));
-        rodpmax = maxsl1(reshape([shpp, n], rodp));
+        lodpmax = maxsl1(_reshape_VxA_([shpp, n], lodp));
+        rodpmax = maxsl1(_reshape_VxA_([shpp, n], rodp));
         widths = lodpmax + rodpmax;
         // Room for decimal point and blank
         zcols = sum(widths + 2) - 1;
 
         res = { [i] -> alignrow(fry, i, widths, lodp, lodpmax, zcols)
               | [i] < [shpp] };
-        res = reshape(_cat_VxV_(shp, [zcols]), res);
+        res = _reshape_VxA_(_cat_VxV_(shp, [zcols]), res);
     }
 
     return res;
@@ -408,11 +412,11 @@ char[.] format(double arr, int[2] w)
 inline
 char[+] format(double[d:shp] arr, int[2] w)
 {
-    res = { iv -> format(arr[iv], w) | iv < shp };
-    zshp = shape(res);
+    res = { iv -> format(_sel_VxA_(iv, arr), w) | iv < shp };
+    zshp = _shape_A_(res);
     zshp = _cat_VxV_(drop([-2], zshp),
                      [prod(take([-2], zshp))]);
-    res = reshape(zshp, res);
+    res = _reshape_VxA_(zshp, res);
     return res;
 }
 
@@ -516,11 +520,16 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
     res = genarray([zcols], ' ');
 
     zci = 0;
-    for (ci = 0; ci < cols; ci = _add_SxS_(ci, 1)) {
-        fi = ci + cols * i;           // Source item index
-        sc = lodp[fi] - lodpmax[ci];  // Shift count to align decimal
+    for (ci = 0; _lt_SxS_(ci, cols); ci = _add_SxS_(ci, 1)) {
+        // Source item index
+        fi = _add_SxS_(ci, _mul_SxS_(cols, i));
+
+        // Shift count to align decimal
+        sc = _sub_SxS_(_sel_VxA_([fi], lodp),
+                       _sel_VxA_([ci], lodpmax));
+
         sefe = thCharsTo(' ', ' ', fry[fi]);
-        sz = sefe + abs(sc);
+        sz = _add_SxS_(sefe, _abs_S_(sc));
         zit = padWithBlanks(sz, rotate([-sc], fry[fi]));
         res, junk = thrnAppend(res, zci, zit);
         zci += widths[ci] + 1;
@@ -539,9 +548,8 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
 inline
 char[wid] padWithBlanks(int wid, char[n] arr)
 {
-    maxidx = max(wid, n);
     return with {
-        ([0] <= iv < [maxidx]) : arr[iv];
+        ([0] <= iv < [_max_SxS_(wid, n)]) : _sel_VxA_(iv, arr);
     } : genarray([wid], ' ');
 }
 
@@ -578,8 +586,8 @@ inline
 char[d], int thrnAppend(char[d] vec, int sink, char[n] arr)
 {
     res = vec;
-    for (src = 0; src < n; src = _add_SxS_(src, 1)) {
-        res[sink] = arr[src];
+    for (src = 0; _lt_SxS_(src, n); src = _add_SxS_(src, 1)) {
+        res = _modarray_AxVxS_(res, [sink], _sel_VxA_([src], arr));
         sink = _add_SxS_(sink, 1);
     }
 
@@ -615,12 +623,14 @@ char[.] killPlusSign(char[n] arr)
 {
     res = arr;
     sink = 1;
-    for (src = 1; src < n; src = _add_SxS_(src, 1)) {
-        res[sink] = arr[src];
-        sink += toi(res[sink] != '+');
+    for (src = 1; _lt_SxS_(src, n); src = _add_SxS_(src, 1)) {
+        res = _modarray_AxVxS_(res, [sink], _sel_VxA_([src], arr));
+        sink = _add_SxS_(sink,
+                         _toi_S_(_neq_SxS_(_sel_VxA_([sink], res),
+                                           '+')));
     }
 
-    res = take([sink], res);
+    res = _take_SxV_(sink, res);
     return res;
 }
 
@@ -634,5 +644,5 @@ char[.] killPlusSign(char[n] arr)
 inline
 char[.] overflowCheck(char[n] arr, int wid)
 {
-    return wid < n ? genarray([wid], '*') : arr;
+    return _lt_SxS_(wid, n) ? genarray([wid], '*') : arr;
 }
