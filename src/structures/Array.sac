@@ -3,6 +3,7 @@ module Array;
 import ArrayArith: all;
 import ArrayBasics: all;
 import ArrayTransform: all;
+import ArrayTransformApl: all;
 import ScalarArith: all;
 
 export all;
