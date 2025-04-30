@@ -14,18 +14,17 @@ export all;
 
 /******************************************************************************
  *
- * @fn <a> reduce(<a>[d:shp] A)
+ * @fn <a> reduce(<a>[d>0:shp] arr)
  *
  * @brief Reduces the given array to a single element.
  *
  ******************************************************************************/
 
 #define REDUCE(name, typ, fun, neutral)                                        \
-inline                                                                         \
-typ name(typ[d>0:shp] A)                                                       \
+inline typ name(typ[d:shp] arr)                                                \
 {                                                                              \
     return with {                                                              \
-        (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, A);                    \
+        (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, arr);                  \
     } : fold(fun, neutral);                                                    \
 }
 
@@ -41,4 +40,4 @@ NUM(NUM_REDUCE)
 REDUCE(any, typ, ScalarArith::|, zval)                                         \
 REDUCE(all, typ, ScalarArith::&, oval)
 
-BOOL_REDUCE
+BOOL(BOOL_REDUCE)
