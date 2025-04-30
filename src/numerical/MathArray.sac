@@ -13,13 +13,13 @@ export all;
  ******************************************************************************/
 
 #define MAP_A(op, typ)                                                         \
-inline typ[d>0:shp] op(typ[d>0:shp] arr)                                       \
+inline typ[d:shp] op(typ[d:shp] arr)                                           \
 {                                                                              \
     return { iv -> Math::op(_sel_VxA_(iv, arr)) | iv < shp };                  \
 }
 
 #define MAP_AxS(op, typ)                                                       \
-inline typ[d>0:shp] op(typ[d>0:shp] arr, typ x)                                \
+inline typ[d:shp] op(typ[d:shp] arr, typ x)                                    \
 {                                                                              \
     return { iv -> Math::op(_sel_VxA_(iv, arr), x) | iv < shp };               \
 }
