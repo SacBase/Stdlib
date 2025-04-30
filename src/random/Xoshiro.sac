@@ -1,0 +1,320 @@
+/**
+ * # Introduction
+ *
+ * This module implements pseudo-random number generators (PRNGs) for 
+ * Monte-Carlo simulations and related algorithms. As of April 2025, 
+ * the Xoshiro family is state of the art. We currently do not offer 
+ * cryptographically-secure PRNGS.
+ * 
+ * A PRNG is a function [state space] -> [unsigned int type] x [state space]
+ * The unsigned integer can be converted to a real (float or double) of 
+ * various distributions. 
+ *
+ * # API
+ *
+ * The 64-bit version has an l-suffix to avoid name conflicts.
+ * 
+ * ## Basic
+ *
+ * For generating double
+ *    ulong, struct State256 xoshiro256p(struct State256 state)
+ * 
+ * For generating float
+ *    uint, struct State128 xoshiro128p(struct State128 state)
+ *
+ * An initial state can be generated from the system time with
+ *    struct State256 srand256(void);
+ *    struct State128 srand128(void);
+ *
+ * For reproducible results you can also set the seed manually.
+ *
+ * ## Conversions
+ *
+ * To U(a, b)
+ *    double to_uniform(ulong x, double a, double b)
+ *    float  to_uniform(uint  x, float  a, float  b)
+ *
+ * To N(mean, stddev). Works in pairs to map efficiently to Box-Muller.
+ *    double, double to_normal(ulong u1, ulong u2, double mean, double stddev)
+ *    float , float  to_normal(uint  u1, uint  u2, float  mean, float  stddev)
+ *
+ * ## Multithreading
+ * 
+ * For parallel exeuction, we can generate an array of
+ * states that are 2^192, 2^96 apart
+ * This can be created with
+ *
+ *    struct State256[p] seed_arrl(struct State256 state, int p)
+ *    struct State128[p] seed_arr (struct State128 state, int p)
+ *
+ * You can then use reshape-ing techniques. For example if we have p threads
+ * and we want to add normally distributed numbers to an array:
+ *
+ * inline
+ * double[n], struct State256 add_normal(double[n] x, struct State256 state)
+ * {
+ *    for (i = 0; i + 1 < n; i += 2) {
+ *      u1, state = xoshiro256p(state);
+ *      u2, state = xoshiro256p(state);
+ *      N1, N2 = to_normal(u1, u2, 0d, 1d);
+ *      x[i]     = N1;
+ *      x[i + 1] = N2;
+ *    }
+ *    if (n % 2 != 0) {
+ *      u1, state = xoshiro256p(state);
+ *      u2, state = xoshiro256p(state);
+ *      N1, N2 = to_normal(u1, u2, 0d, 1d);
+ *      x[n - 1] = N1;
+ *    }
+ *    return (x, state);
+ * }
+ *
+ * states       = seed_arrl(state, p);
+ * x_2d         = reshape([p, n / p], x);
+ * x_2d, states = {[i] -> add_normal(x[i], states[i]) | [i] < [p]};
+ * x            = reshape([n], x_2d);
+ * state        = states[0];
+ *
+ * TODO: In principle we just create a struct State256[L] for L the number
+ *       of SIMD-lanes, but struct is not yet mature enough to compile this
+ *       efficiently.
+ * TODO: The parallel method allocates and copies the rows.
+ **/
+
+module Xoshiro;
+
+use Array: all;
+use Math: all;
+export all except {rotl, splitmix64, srand_time};
+
+struct State256 {
+  ulong s0l;
+  ulong s1l;
+  ulong s2l;
+  ulong s3l;
+};
+
+struct State128 {
+  uint s0;
+  uint s1;
+  uint s2;
+  uint s3;
+};
+
+inline
+ulong rotl(ulong x, ulong k)
+{
+  return (x << k) | (x >> (64ul - k));
+}
+
+inline
+uint rotl(uint x, uint k)
+{
+  return (x << k) | (x >> (32u - k));
+}
+
+inline
+ulong, struct State256 xoshiro256p(struct State256 state)
+{
+  result = state.s0l + state.s3l;
+
+  t = state.s1l << 17ul;
+
+  state.s2l = state.s2l ^ state.s0l;
+  state.s3l = state.s3l ^ state.s1l;
+  state.s1l = state.s1l ^ state.s2l;
+  state.s0l = state.s0l ^ state.s3l;
+
+  state.s2l = state.s2l ^ t;
+
+  state.s3l = rotl(state.s3l, 45ul);
+
+  return (result, state);
+}
+
+inline
+uint, struct State128 xoshiro128p(struct State128 state)
+{
+  result = state.s0 + state.s3;
+
+  t = state.s1 << 9u;
+
+  state.s2 = state.s2 ^ state.s0;
+  state.s3 = state.s3 ^ state.s1;
+  state.s1 = state.s1 ^ state.s2;
+  state.s0 = state.s0 ^ state.s3;
+
+  state.s2 = state.s2 ^ t;
+
+  state.s3 = rotl(state.s3, 11u);
+
+  return (result, state);
+}
+
+#define LOOP_BODY_ULONG(i)                                                     \
+  for (b = 0; b < 64; b = b + 1) {                                             \
+    if ((JUMP##i & 1ul) << _toul_S_(b) != 0ul) {                               \
+      s0 = s0 ^ state.s0l;                                                      \
+      s1 = s1 ^ state.s1l;                                                      \
+      s2 = s2 ^ state.s2l;                                                      \
+      s3 = s3 ^ state.s3l;                                                      \
+    }                                                                          \
+    unused, state = xoshiro256p(state);                                        \
+  }
+
+inline
+struct State256 jumpl(struct State256 state)
+{
+  /* Array would be cleaner, but see issue #2470 */
+  JUMP0 = 8566230491382795199ul;
+  JUMP1 = 14195432079911694259ul;
+  JUMP2 = 8606660816089834049ul;
+  JUMP3 = 4111957640723818037ul;
+
+  s0 = 0ul;
+  s1 = 0ul;
+  s2 = 0ul;
+  s3 = 0ul;
+
+  LOOP_BODY_ULONG(0)
+  LOOP_BODY_ULONG(1)
+  LOOP_BODY_ULONG(2)
+  LOOP_BODY_ULONG(3)
+    
+  return State256 {.s0l = s0, .s1l = s1, .s2l = s2, .s3l = s3};
+}
+
+#define LOOP_BODY_UINT(i)                                                      \
+  for (b = 0; b < 64; b = b + 1) {                                             \
+    if ((JUMP##i & 1u) << _toui_S_(b) != 0u) {                                 \
+      s0 = s0 ^ state.s0;                                                      \
+      s1 = s1 ^ state.s1;                                                      \
+      s2 = s2 ^ state.s2;                                                      \
+      s3 = s3 ^ state.s3;                                                      \
+    }                                                                          \
+    unused, state = xoshiro128p(state);                                        \
+  }
+
+inline
+struct State128 jump(struct State128 state)
+{
+  /* Array would be cleaner, but see issue #2470 */
+  JUMP0 = 3039008046u;
+  JUMP1 = 191826335u;
+  JUMP2 = 3438649583u;
+  JUMP3 = 475530850u;
+
+  s0 = 0u;
+  s1 = 0u;
+  s2 = 0u;
+  s3 = 0u;
+
+  LOOP_BODY_UINT(0)
+  LOOP_BODY_UINT(1)
+  LOOP_BODY_UINT(2)
+  LOOP_BODY_UINT(3)
+    
+  return State128 {.s0 = s0, .s1 = s1, .s2 = s2, .s3 = s3};
+}
+
+struct State256[p]
+seed_arrl(int p, struct State256 state)
+{
+  states = {iv -> state | iv < [p]};
+
+  for (i = 1; i < p; i++) {
+    unused, new_state = xoshiro256p(_sel_VxA_([i - 1], states));
+    states = with {
+              ([i] <= iv <= [i]): new_state;
+             }: modarray(states);
+  }
+
+  return states;
+}
+
+struct State128[p]
+seed_arr(int p, struct State128 state)
+{
+  states = {iv -> state | iv < [p]};
+
+  for (i = 1; i < p; i++) {
+    unused, new_state = xoshiro128p(_sel_VxA_([i - 1], states));
+    states = with {
+              ([i] <= iv <= [i]): new_state;
+             }: modarray(states);
+  }
+
+  return states;
+}
+
+inline
+double to_uniform(ulong x, double a, double b)
+{
+    return a + (b - a) * (tod(x >> 11ul) * 0x1p-53);
+}
+
+inline
+float to_uniform(uint x, float a, float b)
+{
+    return a + (b - a) * (tof(x >> 8u) * tof(0x1p-24));
+}
+
+/**
+ * Box-Muller transform
+ **/
+inline
+double, double to_normal(ulong u1, ulong u2, double mean, double stddev)
+{
+  U1 = to_uniform(u1, 0d, 1d);
+  U2 = to_uniform(u2, 0d, 1d);
+  
+  Z1 = sqrt(-2d * log(U1)) * cos(2d * pi() * U2);
+  Z2 = sqrt(-2d * log(U1)) * sin(2d * pi() * U2);
+
+  return (mean + stddev * Z1, mean + stddev * Z2);
+}
+
+inline
+float, float to_normal(uint u1, uint u2, float mean, float stddev)
+{
+  U1 = to_uniform(u1, 0f, 1f);
+  U2 = to_uniform(u2, 0f, 1f);
+  
+  Z1 = sqrt(-2f * log(U1)) * cos(2f * tof(pi()) * U2);
+  Z2 = sqrt(-2f * log(U1)) * sin(2f * tof(pi()) * U2);
+
+  return (mean + stddev * Z1, mean + stddev * Z2);
+}
+
+ulong splitmix64(ulong x)
+{
+  x = x + 11400714819323198485ul;
+  z = (x ^ (x >> 30ul)) * 13787848793156543929ul;
+  z = (z ^ (z >> 27ul)) * 10723151780598845931ul;
+  return z ^ (z >> 31ul);
+}
+
+external ulong srand_time();
+  #pragma linkname "SAC_srand_time"
+  #pragma linkobj "src/Xoshiro.o"
+
+struct State256 srand256()
+{
+  s0 = srand_time(); 
+  s1 = splitmix64(s0);
+  s2 = splitmix64(s1);
+  s3 = splitmix64(s2);
+
+  return State256 {.s0l = s0, .s1l = s1, .s2l = s2, .s3l = s3};
+}
+
+struct State128 srand128()
+{
+  s0 = srand_time(); 
+  s1 = splitmix64(s0);
+  s2 = splitmix64(s1);
+  s3 = splitmix64(s2);
+
+  return State128 {.s0 = _toui_S_(s0), .s1 = _toui_S_(s1), 
+                   .s2 = _toui_S_(s2), .s3 = _toui_S_(s3)};
+}

@@ -49,7 +49,6 @@ structures/ComplexScalarArith.sac          Ext
 structures/ComplexBasics.sac               Ext
 structures/Complex.sac                     Ext
 structures/Char.sac                        Core
-structures/Bits.sac                        Core
 structures/String.sac                      Core
 stdio/TermFile.sac                         Core
 stdio/ScalarIO.sac                         Core
@@ -64,10 +63,7 @@ numerical/ComplexMath.sac                  Ext
 numerical/Numerical.sac                    Core
 numerical/MathArray.sac                    Core
 numerical/Math.sac                         Core
-random/Random.sac                          Core
-random/RandLC.sac                          Core
-random/Rand48.sac                          Core
-random/Rand.sac                            Core
+random/Xoshiro.sac                         Core
 auxiliary/Interval.sac                     Ext
 auxiliary/Hiding.sac                       Ext
 auxiliary/Benchmarking.sac                 Ext
