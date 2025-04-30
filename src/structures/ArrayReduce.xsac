@@ -30,10 +30,10 @@ typ name(typ[d>0:shp] A)                                                       \
 }
 
 #define NUM_REDUCE(typ, postfix, zval, oval)                                   \
-REDUCE(sum,  typ, ScalarArith::+,   zval)                                      \
-REDUCE(prod, typ, ScalarArith::*,   oval)                                      \
-REDUCE(min,  typ, ScalarArith::min, max##typ())                                \
-REDUCE(max,  typ, ScalarArith::max, min##typ())
+REDUCE(sum,    typ, ScalarArith::+,   zval)                                    \
+REDUCE(prod,   typ, ScalarArith::*,   oval)                                    \
+REDUCE(minval, typ, ScalarArith::min, max##typ())                              \
+REDUCE(maxval, typ, ScalarArith::max, min##typ())
 
 NUM(NUM_REDUCE)
 
