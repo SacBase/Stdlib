@@ -432,22 +432,26 @@ char[+] format(double[d:shp] arr, int[2] w)
 inline
 char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 {
-    olen = sum(wid + 1) - 1;
-    res = genarray([olen], ' ');
+    char[.] curz;
+
+    olen = _sub_SxS_(sum(_add_VxS_(wid, 1)), 1);
+    res = { [i] -> ' ' | [i] < [olen] };
 
     // Can't use WL because widths may differ
     sink = 0;
-    for (i = 0; i < vlen; i = _add_SxS_(i, 1)) {
-        w = [wid[i], 1];
-        curz = format(arr[i], w);
-        lim  = shape(curz)[0];
+    for (i = 0; _lt_SxS_(i, vlen); i = _add_SxS_(i, 1)) {
+        w = [_sel_VxA_([i], wid), 1];
+        curz = format(_sel_VxA_([i], arr), w);
+        lim  = _sel_VxA_([0], _shape_A_(curz));
 
-        for (src = 0; src < lim; src = _add_SxS_(src, 1)) {
-            res = modarray(res, src + sink, curz[src]);
+        for (src = 0; _lt_SxS_(src, lim); src = _add_SxS_(src, 1)) {
+            res = _modarray_AxVxS_(res,
+                                   [_add_SxS_(src, sink)],
+                                   _sel_VxA_([src], curz));
         }
 
         // Inter-element blank
-        sink += wid[i] + 1;
+        sink = _add_SxS_(sink, _add_SxS_(_sel_VxA_([i], wid), 1));
     }
 
     return res;
