@@ -13,7 +13,7 @@ structures/ScalarArith.xsac                Core
 structures/ArrayBasics.xsac                Core
 structures/ArrayArith.xsac                 Core
 structures/ArrayTransform.xsac             Core
-structures/ArrayTransformApl.xsac          Core
+structures/ArrayTransformApl.xsac          Ext
 structures/ArrayFormat.xsac                Core
 structures/ComplexArrayBasics.xsac         Ext
 structures/ComplexArrayArith.xsac          Ext
