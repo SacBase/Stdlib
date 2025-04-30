@@ -443,10 +443,8 @@ char[+] format(double[d:shp] arr, int[2] w)
 inline
 char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 {
-    char[.] curz;
-
-    olen = _sub_SxS_(sum(_add_VxS_(wid, 1)), 1);
-    res = { [i] -> ' ' | [i] < [olen] };
+    olen = _sub_SxS_(_add_SxS_(sum(wid), vlen), 1);
+    res = genarray([olen], ' ');
 
     // Can't use WL because widths may differ
     sink = 0;
