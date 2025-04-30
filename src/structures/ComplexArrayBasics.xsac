@@ -2,7 +2,7 @@ module ComplexArrayBasics;
 
 /******************************************************************************
  *
- * Depends on ComplexBasics, ArrayBasics, and ArrayTransform.
+ * Depends on ComplexBasics and ArrayBasics.
  *
  ******************************************************************************/
 
@@ -75,7 +75,6 @@ inline complex[d:shp] sel(int idx, complex[n,d:shp] arr)
  ******************************************************************************/
 inline complex[d:shp] reshape(int[d] shp, complex[o:oshp] arr)
     | _all_V_(_le_SxV_(0, shp))
-    , _eq_SxS_(ArrayTransform::prod(shp), ArrayTransform::prod(oshp))
 {
     return (complex[*])_reshape_VxA_(_cat_VxV_(shp, [2]), (double[*])arr);
 }

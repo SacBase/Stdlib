@@ -1,0 +1,44 @@
+module ArrayReduce;
+
+ /******************************************************************************
+ *
+ * Depends on ScalarArith and Constants.
+ *
+ ******************************************************************************/
+
+use Constants: all;
+
+export all;
+
+#include "builtin.mac"
+
+/******************************************************************************
+ *
+ * @fn <a> reduce(<a>[d:shp] A)
+ *
+ * @brief Reduces the given array to a single element.
+ *
+ ******************************************************************************/
+
+#define REDUCE(name, typ, fun, neutral)                                        \
+inline                                                                         \
+typ name(typ[d>0:shp] A)                                                       \
+{                                                                              \
+    return with {                                                              \
+        (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, A);                    \
+    } : fold(fun, neutral);                                                    \
+}
+
+#define NUM_REDUCE(typ, postfix, zval, oval)                                   \
+REDUCE(sum,  typ, ScalarArith::+,   zval)                                      \
+REDUCE(prod, typ, ScalarArith::*,   oval)                                      \
+REDUCE(min,  typ, ScalarArith::min, max##typ())                                \
+REDUCE(max,  typ, ScalarArith::max, min##typ())
+
+NUM(NUM_REDUCE)
+
+#define BOOL_REDUCE                                                            \
+REDUCE(all, bool, ScalarArith::&, true)                                        \
+REDUCE(any, bool, ScalarArith::|, false)
+
+BOOL_REDUCE
