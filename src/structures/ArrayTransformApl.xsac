@@ -38,7 +38,7 @@ export all;
  *
  ******************************************************************************/
 
-#define TAKE_APL(typ, zero)                                                    \
+#define TAKE_APL(typ, postfix, zval, oval)                                     \
 inline typ[o:sv,i:ishp] take_apl(int[o] sv, typ[o:oshp,i:ishp] A)              \
 {                                                                              \
     /* Offset shows the index of the first element to be selected. */          \
@@ -58,8 +58,8 @@ inline typ[o:sv,i:ishp] take_apl(int[o] sv, typ[o:oshp,i:ishp] A)              \
     /* The result is calculated in 2 steps: */                                 \
     return { /* 1: select the required elements of the array */                \
              iv -> A[_add_VxV_(offset, iv)] | start <= iv < stop;              \
-             /* 2: add zeros around (if needed) */                             \
-             iv -> { iv -> zero | iv < ishp } | iv < _abs_V_(sv) };            \
+             /* 2: add zvals around (if needed) */                             \
+             iv -> { iv -> zval | iv < ishp } | iv < _abs_V_(sv) };            \
 }
 
 BUILT_IN(TAKE_APL)
@@ -86,7 +86,7 @@ BUILT_IN(TAKE_APL)
  *
  ******************************************************************************/
 
-#define DROP_APL(typ, zero)                                                    \
+#define DROP_APL(typ, postfix, zval, oval)                                     \
 inline typ[o:shp_res,i:ishp] drop_apl(int[o] sv, typ[o:oshp,i:ishp] A)         \
 {                                                                              \
     /* Calculate shape of result array. */                                     \
@@ -112,7 +112,7 @@ BUILT_IN(DROP_APL)
  *
  ******************************************************************************/
 
-#define TILE_APL(typ, zero)                                                    \
+#define TILE_APL(typ, postfix, zval, oval)                                     \
 inline typ[d:shp,i:ishp] tile_apl(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)\
     | _all_V_(_ge_VxS_(shp, 0))                                                \
 {                                                                              \
@@ -124,8 +124,8 @@ inline typ[d:shp,i:ishp] tile_apl(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)\
     /* The result is calculated in 2 steps: */                                 \
     return { /* 1: select the required elements of the array */                \
              iv -> A[_add_VxV_(idx, iv)] | start <= iv < stop;                 \
-             /* 2: add zeros around (if needed) */                             \
-             iv -> { iv -> zero | iv < ishp } | iv < shp};                     \
+             /* 2: add zvals around (if needed) */                             \
+             iv -> { iv -> zval | iv < ishp } | iv < shp};                     \
 }
 
 BUILT_IN(TILE_APL)
