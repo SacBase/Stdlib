@@ -547,7 +547,7 @@ char[wid] padWithBlanks(int wid, char[n] arr)
 
 /******************************************************************************
  *
- * @fn int thCharsTo(char[n] ch, char[lim] fry)
+ * @fn int thCharsTo(char ch0, char ch1, char[n] fry)
  *
  * @brief Find chars left of decimal point (or end).
  *        I.e., (fry member ch) iota 1.
@@ -560,7 +560,7 @@ int thCharsTo(char ch0, char ch1, char[lim] fry)
     for (i = 0; i < lim; i = _add_SxS_(i, 1)) {
         if (fry[i] == ch0 || fry[i] == ch1) {
             res = i;
-            i = lim;
+            i = n;
         }
     }
 
