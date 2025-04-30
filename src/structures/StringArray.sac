@@ -1,6 +1,6 @@
 module StringArray;
 
-use Array: { +, *, <, <=, !=, all, any, drop, iota, prod, reshape, sum, transpose };
+use Array: { all, any, drop, iota, prod, sum, transpose };
 use String: { string };
 
 export all except { _to_stringArray, _sel, _modarray, getIndices };
@@ -57,13 +57,13 @@ external stringArray _modarray(stringArray labs, int[.] idx, string str);
 
 stringArray modarray(stringArray arr, int[n] idx, stringArray val)
 {
-    if (any(idx < 0) || any(shape(arr) <= idx)) {
+    if (any(_lt_VxS_(idx, 0)) || any(_le_VxV_(shape(arr), idx))) {
         RuntimeError::error(1,
             "Index out of bounds in call to StringArray::modarray");
     }
 
-    if (n Array::== dim(arr)) {
-        if (dim(val) != 0) {
+    if (_eq_SxS_(n, dim(arr))) {
+        if (_neq_SxS_(dim(val), 0)) {
             RuntimeError::error(1,
                 "Attempt to use StringArray::modarray to replace scalar "
                 "subarray with non-scalar");
@@ -71,8 +71,8 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
 
         res = _modarray(arr, idx, _sel([], val));
     }
-    else if (n < dim(arr)) {
-        if (any(shape(val) != drop([n], shape(arr)))) {
+    else if (_lt_SxS_(n, dim(arr))) {
+        if (any(_neq_VxV_(shape(val), drop([n], shape(arr))))) {
             RuntimeError::error(1,
                 "Attempt to use StringArray::modarray to replace subarray "
                 "with an arr of a different shape");
@@ -82,7 +82,7 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
 
         val_shp = drop([n], shape(arr));
         o, indices = getIndices(val_shp);
-        for (i = 0; i < o; i += 1) {
+        for (i = 0; _lt_SxS_(i, o); i = _add_SxS_(i, 1)) {
             selection = Array::sel([i], indices);
             modarrayidx = _cat_VxV_(idx, selection);
             modArrVal = _sel(Array::sel([i], indices), val);
@@ -100,15 +100,15 @@ stringArray modarray(stringArray arr, int[n] idx, stringArray val)
 
 stringArray sel(int[n] idx, stringArray arr)
 {
-    if (any(idx < 0) || any(shape(arr) <= idx)) {
+    if (any(_lt_VxS_(idx, 0)) || any(_le_VxV_(shape(arr), idx))) {
         RuntimeError::error(1,
             "Index out of bounds in call to StringArray::sel");
     }
 
-    if (n Array::== dim(arr)) {
+    if (_eq_SxS_(n, dim(arr))) {
         res = to_stringArray(_sel(idx, arr));
     }
-    else if (n < dim(arr)) {
+    else if (_lt_SxS_(n, dim(arr))) {
         res_shp = drop([n], shape(arr));
         if (Array::sel([0], res_shp) Array::== 0) {
             RuntimeError::error(1, "res_shape is [0]");
@@ -117,7 +117,7 @@ stringArray sel(int[n] idx, stringArray arr)
         res = genarray(res_shp, to_stringArray(""));
 
         o, indices = getIndices(shape(res));
-        for (i = 0; i < o; i += 1) {
+        for (i = 0; _lt_SxS_(i, o); i = _add_SxS_(i, 1)) {
             res = modarray(res,
                            Array::sel([i], indices),
                            sel(_cat_VxV_(idx, Array::sel([i], indices)),
@@ -136,7 +136,7 @@ stringArray sel(int[n] idx, stringArray arr)
 
 string to_string(stringArray a)
 {
-    if (dim(a) != 0) {
+    if (_neq_SxS_(dim(a), 0)) {
         RuntimeError::error(1,
             "StringArray::to_string passed non-scalar stringArray");
     }
@@ -155,7 +155,7 @@ stringArray genarray(int[.] shp, stringArray s)
     res = _to_stringArray(new_shp, "");
 
     o, indices = getIndices(shp);
-    for (i = 0; i < o; i += 1) {
+    for (i = 0; _lt_SxS_(i, o); i = _add_SxS_(i, 1)) {
         res = modarray(res, Array::sel([i], indices), s);
     }
 
@@ -165,15 +165,15 @@ stringArray genarray(int[.] shp, stringArray s)
 inline
 bool[*] ==(stringArray a, stringArray b)
 {
-    if (dim(a) Array::== 0) {
-        if (dim(b) Array::== 0) {
+    if (_eq_SxS_(dim(a), 0)) {
+        if (_eq_SxS_(dim(b), 0)) {
             res = to_string(a) String::== to_string(b);
         } else {
             res = { iv -> to_string(a) String::== _sel(iv, b)
                   | iv < shape(b) };
         }
     } else {
-        if (dim(b) Array::== 0) {
+        if (_eq_SxS_(dim(b), 0)) {
             res = { iv -> _sel(iv, a) String::== to_string(b)
                   | iv < shape(a) };
         } else if (all(shape(a) Array::== shape(b))) {
@@ -191,15 +191,15 @@ bool[*] ==(stringArray a, stringArray b)
 
 stringArray ++(stringArray m1, stringArray m2)
 {
-    if (dim(m1) Array::== 0) {
+    if (_eq_SxS_(dim(m1), 0)) {
         RuntimeError::error(1,
             "Cannot concat stringArrays since argument 1 is a scalar");
     }
-    if (dim(m2) Array::== 0) {
+    if (_eq_SxS_(dim(m2), 0)) {
         RuntimeError::error(1,
             "Cannot concat stringArrays since argument 2 is a scalar");
     }
-    if (dim(m1) != dim(m2)) {
+    if (_neq_SxS_(dim(m1), dim(m2))) {
         RuntimeError::error(1,
             "Cannot concat stringArrays with differing dimensions");
     }
@@ -207,7 +207,7 @@ stringArray ++(stringArray m1, stringArray m2)
     m1InnerShape = drop([1], shape(m1));
     m2InnerShape = drop([1], shape(m2));
 
-    if (any(m1InnerShape != m2InnerShape)) {
+    if (any(_neq_VxV_(m1InnerShape, m2InnerShape))) {
         RuntimeError::error(1,
             "Attempt to concat non-matching shapes when trying to "
             "concat two stringArrays");
@@ -215,14 +215,14 @@ stringArray ++(stringArray m1, stringArray m2)
 
     m1Len = Array::sel([0], shape(m1));
     m2Len = Array::sel([0], shape(m2));
-    resShape = _cat_VxV_([m1Len + m2Len], m1InnerShape);
+    resShape = _cat_VxV_([_add_SxS_(m1Len, m2Len)], m1InnerShape);
     res = genarray(resShape, to_stringArray(""));
 
-    for (i = 0; i < m1Len; i += 1) {
+    for (i = 0; _lt_SxS_(i, m1Len); i = _add_SxS_(i, 1)) {
         res = modarray(res, [i], m1[i]);
     }
-    for (j = 0; j < m2Len; j += 1) {
-        res = modarray(res, [i + j], m2[i]);
+    for (j = 0; _lt_SxS_(j, m2Len); j = _add_SxS_(j, 1)) {
+        res = modarray(res, [_add_SxS_(i, j)], m2[i]);
     }
 
     return res;
@@ -248,7 +248,7 @@ int[n] indexOf(string needle, stringArray haystack)
 
     res = { [i] -> to_string(haystack[Array::sel([i], indices)]) String::== needle
                     ? Array::sel([i], indices)
-                    : 0 * Array::sel([i], indices)
+                    : _mul_SxV_(0, Array::sel([i], indices))
           | [i] < [o] };
 
     res = transpose(res);
@@ -262,6 +262,6 @@ int[n] indexOf(string needle, stringArray haystack)
 int, int[o,d] getIndices(int[d] shp)
 {
     o = prod(shp);
-    arr = reshape([o,d], iota(shp));
+    arr = _reshape_VxA_([o,d], iota(shp));
     return (o, arr);
 }
