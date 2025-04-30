@@ -33,13 +33,13 @@ export { format };
 
 /******************************************************************************
  *
- * @fn char[d:shp] format(char[d:shp] arr)
+ * @fn char[d>0:shp] format(char[d>0:shp] arr)
  *
  * @brief Default format for any character array.
  *
  ******************************************************************************/
 inline
-char[d:shp] format(char[d:shp] arr)
+char[d>0:shp] format(char[d>0:shp] arr)
 {
     return arr;
 }
@@ -341,7 +341,7 @@ char[.] format(double arr, int precision)
 
 /******************************************************************************
  *
- * @fn char[+] format(double[d:shp] arr, int precision)
+ * @fn char[+] format(double[d>0:shp] arr, int precision)
  *
  * @brief Precision-significant digit format on double non-scalar.
  *
@@ -351,7 +351,6 @@ char[.] format(double arr, int precision)
 inline
 char[+] format(double[d:shp,n] arr, int precision)
 {
-
     if (_eq_SxS_(_size_A_(arr), 0)) {
         res = genarray(shp, ' ');
     } else {
@@ -410,7 +409,7 @@ char[.] format(double arr, int[2] w)
 
 /******************************************************************************
  *
- * @fn char[+] format(double[d:shp] arr, int[2] w)
+ * @fn char[+] format(double[d>0:shp] arr, int[2] w)
  *
  * @brief Defined-width format on double non-scalar.
  *
@@ -420,7 +419,7 @@ char[.] format(double arr, int[2] w)
  *
  ******************************************************************************/
 inline
-char[+] format(double[d:shp] arr, int[2] w)
+char[+] format(double[d>0:shp] arr, int[2] w)
 {
     res = { iv -> format(_sel_VxA_(iv, arr), w) | iv < shp };
     zshp = _shape_A_(res);
@@ -471,12 +470,12 @@ char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 
 /******************************************************************************
  *
- * @fn int[d:shp] log10(int[d:shp] arr)
+ * @fn int[d>0:shp] log10(int[d>0:shp] arr)
  *
  * @brief Poor man's 10-logarithm, used to compute column widths.
  *
  ******************************************************************************/
-int[d:shp] log10(int[d:shp] arr)
+int[d>0:shp] log10(int[d>0:shp] arr)
 {
     // Avoid 10 log 0!
     return toi(MathArray::log10(tod(max(arr, 2)))) + 1;

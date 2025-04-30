@@ -44,7 +44,7 @@ void printHeader(string modName, int line)
 /******************************************************************************/
 
 #define SHOW(typ)                                                              \
-void indentedShow(typ[d:shp] arr)                                              \
+void indentedShow(typ[d>1:shp] arr)                                            \
 {                                                                              \
     cshape = to_string(format(shp));                                           \
     printf("reshape([ %s ] , [\n", cshape);                                    \
