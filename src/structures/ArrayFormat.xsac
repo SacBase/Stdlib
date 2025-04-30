@@ -1,7 +1,14 @@
 module ArrayFormat;
 
-use ArrayArith: { +, -, <, <=, >=, abs, max, tod, toi };
+/******************************************************************************
+ *
+ * Depends on ArrayBasics, ArrayArith, ArrayTransform, ArrayReduce,
+ * Constants, MathArray, and String.
+ *
+ ******************************************************************************/
+
 use ArrayBasics: { sel, genarray };
+use ArrayArith: { +, -, <, <=, >=, abs, max, tod, toi };
 use ArrayTransform: { take, drop, rotate };
 use ArrayReduce: { sum, prod };
 use String: { tochar, sprintf };
