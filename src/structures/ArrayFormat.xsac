@@ -144,20 +144,19 @@ char[.] format(long arr)
 inline
 char[+] format(int[d:shp,n] arr)
 {
-    shpp = prod(shp);
-
-    if (_or_SxS_(_eq_SxS_(shpp, 0), _eq_SxS_(n, 0))) {
+    if (_eq_SxS_(_size_A_(arr), 0)) {
         res = genarray(shp, ' ');
     } else {
+        shpp = prod(shp);
         m = _reshape_VxA_([shpp, n], arr);
 
         // Large negative number may need extra column for minus sign
         minm = minsl1(m);
         maxneg = log10(_abs_V_(minm));
         widths = log10(maxsl1(abs(m)));
-        widths += _mul_VxV_(toi(minm < 0),
-                            toi(maxneg >= widths));
-        zcols = _sub_SxS_(sum(_add_VxS_(widths, 1)), 1);
+        widths += _mul_VxV_(toi(_lt_VxS_(minm, 0)),
+                            toi(_ge_VxV_(maxneg, widths)));
+        zcols = _sub_SxS_(_add_SxS_(sum(widths), shpp), 1);
 
         res = { [i] -> formatrow(widths, m[i]) | [i] < [shpp] };
         res = _reshape_VxA_(_cat_VxV_(shp, [zcols]), res);
@@ -352,11 +351,12 @@ char[.] format(double arr, int precision)
 inline
 char[+] format(double[d:shp,n] arr, int precision)
 {
-    shpp = prod(shp);
 
-    if (_or_SxS_(_eq_SxS_(shpp, 0), _eq_SxS_(n, 0))) {
+    if (_eq_SxS_(_size_A_(arr), 0)) {
         res = genarray(shp, ' ');
     } else {
+        shpp = prod(shp);
+
         ravel = _reshape_VxA_([_mul_SxS_(shpp, n)], arr);
 
         // Format each array element
@@ -374,7 +374,7 @@ char[+] format(double[d:shp,n] arr, int precision)
         rodpmax = maxsl1(_reshape_VxA_([shpp, n], rodp));
         widths = lodpmax + rodpmax;
         // Room for decimal point and blank
-        zcols = sum(widths + 2) - 1;
+        zcols = _sub_SxS_(sum(widths + 2), 1);
 
         res = { [i] -> alignrow(fry, i, widths, lodp, lodpmax, zcols)
               | [i] < [shpp] };
