@@ -105,20 +105,17 @@ external char toupper(char c);
  *
  ******************************************************************************/
 
-#define TOCHAR_S(typ)                                                          \
+#define TOCHAR_S(typ, _postfix, _fmt, _zval, _oval)                            \
 inline char tochar(typ a)                                                      \
 {                                                                              \
     return _toc_S_(a);                                                         \
 }
 
-#define TOCHAR_A(typ)                                                          \
+#define TOCHAR_A(typ, _postfix, _fmt, _zval, _oval)                            \
 inline char[d:shp] tochar(typ[d:shp] a)                                        \
 {                                                                              \
     return { iv -> _toc_S_(_sel_VxA_(iv, a)) | iv < shp };                     \
 }
 
-#define TOCHAR(typ, postfix, zval, oval)                                       \
-TOCHAR_S(typ)                                                                  \
-TOCHAR_A(typ)
-
-BUILT_IN(TOCHAR)
+BUILT_IN(TOCHAR_S)
+BUILT_IN(TOCHAR_A)

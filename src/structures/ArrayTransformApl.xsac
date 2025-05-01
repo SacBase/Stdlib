@@ -38,7 +38,7 @@ export all;
  *
  ******************************************************************************/
 
-#define TAKE_APL(typ, postfix, zval, oval)                                     \
+#define TAKE_APL(typ, _postfix, _fmt, zval, _oval)                             \
 inline typ[o:sv,i:ishp] take_apl(int[o] sv, typ[o:oshp,i:ishp] A)              \
 {                                                                              \
     /* Offset shows the index of the first element to be selected. */          \
@@ -86,7 +86,7 @@ BUILT_IN(TAKE_APL)
  *
  ******************************************************************************/
 
-#define DROP_APL(typ, postfix, zval, oval)                                     \
+#define DROP_APL(typ, _postfix, _fmt, _zval, _oval)                            \
 inline typ[o:shp_res,i:ishp] drop_apl(int[o] sv, typ[o:oshp,i:ishp] A)         \
 {                                                                              \
     /* Calculate shape of result array. */                                     \
@@ -112,7 +112,7 @@ BUILT_IN(DROP_APL)
  *
  ******************************************************************************/
 
-#define TILE_APL(typ, postfix, zval, oval)                                     \
+#define TILE_APL(typ, _postfix, _fmt, zval, _oval)                             \
 inline typ[d:shp,i:ishp] tile_apl(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)\
     | _all_V_(_ge_VxS_(shp, 0))                                                \
 {                                                                              \

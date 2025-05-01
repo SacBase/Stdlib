@@ -7,28 +7,28 @@
 #ifdef FULLTYPES
 
 #define SIGNED_INT_NUM(fun)                                                    \
-fun(byte, b, 0b, 1b)                                                           \
-fun(short, s, 0s, 1s)                                                          \
-fun(int, i, 0i, 1i)                                                            \
-fun(long, l, 0l, 1l)                                                           \
-fun(longlong, ll, 0ll, 1ll)
+fun(byte,     b,  x,   0b,  1b)                                                \
+fun(short,    s,  hd,  0s,  1s)                                                \
+fun(int,      i,  d,   0i,  1i)                                                \
+fun(long,     l,  ld,  0l,  1l)                                                \
+fun(longlong, ll, lld, 0ll, 1ll)
 
 #define UNSIGNED_INT_NUM(fun)                                                  \
-fun(ubyte, ub, 0ub, 1ub)                                                       \
-fun(ushort, us, 0us, 1us)                                                      \
-fun(uint, ui, 0ui, 1ui)                                                        \
-fun(ulong, ul, 0ul, 1ul)                                                       \
-fun(ulonglong, ull, 0ull, 1ull)
+fun(ubyte,     ub,  X,   0ub,  1ub)                                            \
+fun(ushort,    us,  hu,  0us,  1us)                                            \
+fun(uint,      ui,  u,   0ui,  1ui)                                            \
+fun(ulong,     ul,  lum  0ul,  1ul)                                            \
+fun(ulonglong, ull, llu, 0ull, 1ull)
 
 #else /* FULLTYPES */
 
 #define SIGNED_INT_NUM(fun)                                                    \
-fun(int, i, 0i, 1i)                                                            \
-fun(long, l, 0l, 1l)
+fun(int,  i, d,  0i, 1i)                                                       \
+fun(long, l, ld, 0l, 1l)
 
 #define UNSIGNED_INT_NUM(fun)                                                  \
-fun(uint, ui, 0ui, 1ui)                                                        \
-fun(ulong, ul, 0ul, 1ul)
+fun(uint,  ui, u,  0ui, 1ui)                                                   \
+fun(ulong, ul, lu, 0ul, 1ul)
 
 #endif /* FULLTYPES */
 
@@ -37,14 +37,8 @@ SIGNED_INT_NUM(fun)                                                            \
 UNSIGNED_INT_NUM(fun)
 
 #define REAL_NUM(fun)                                                          \
-fun(float, f, 0f, 1f)                                                          \
-fun(double, d, 0d, 1d)
-
-#define CHAR(fun)	                                                           \
-fun(char, /* no postfix */, ' ', ' ')
-
-#define BOOL(fun)                                                              \
-fun(bool, /* no postfix */, false, true)
+fun(float,  f, f, 0f, 1f)                                                      \
+fun(double, d, g, 0d, 1d)
 
 #define SIGNED_NUM(fun)                                                        \
 SIGNED_INT_NUM(fun)                                                            \
@@ -54,6 +48,12 @@ REAL_NUM(fun)
 INT_NUM(fun)                                                                   \
 REAL_NUM(fun)
 
+#define CHAR(fun)	                                                           \
+fun(char, /* no postfix */, c, ' ', ' ')
+
+#define BOOL(fun)                                                              \
+fun(bool, /* no postfix */, d, false, true)
+
 /******************************************************************************
  *
  * Macro for generating a function for built-in types.
@@ -61,11 +61,13 @@ REAL_NUM(fun)
  * It is of the following format:
  *
  * #define BUILT_IN(fun)
- *   fun(type, postfix, zero/false, one/true)
+ *   fun(type, postfix, format, zero/false, one/true)
  *
  * @param type: The name of the type.
  * @param postfix: The postfix specifier for scalar values.
  *        E.g. 1i is an integer of value 1, whereas 1f is a float value.
+ * @param format: String format specifier for scalar values.
+ *        E.g. 'd' for integers, 'ld' for longs, or 'x' for bytes.
  * @param zero/false: The default zero/false value.
  *        E.g. 0i for integers or false for booleans.
  * @param one/true: The default zero/false value.

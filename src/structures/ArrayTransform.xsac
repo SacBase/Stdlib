@@ -33,7 +33,7 @@ export all;
  *
  ******************************************************************************/
 
-#define TAKE(typ, postfix, zval, oval)                                         \
+#define TAKE(typ, _postfix, _fmt, _zval, _oval)                                \
 inline                                                                         \
 typ[o:sv,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                         \
     | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
@@ -69,7 +69,7 @@ BUILT_IN(TAKE)
  *
  ******************************************************************************/
 
-#define DROP(typ, postfix, zval, oval)                                         \
+#define DROP(typ, _postfix, _fmt, _zval, _oval)                                \
 inline                                                                         \
 typ[o:shp_res,i:ishp] drop(int[o] sv, typ[o:oshp,i:ishp] A)                    \
     | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
@@ -94,7 +94,7 @@ BUILT_IN(DROP)
  *
  ******************************************************************************/
 
-#define TILE(typ, postfix, zval, oval)                                         \
+#define TILE(typ, _postfix, _fmt, _zval, _oval)                                \
 inline                                                                         \
 typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
     | _all_V_(_ge_VxS_(shp, 0))                                                \
@@ -114,7 +114,7 @@ BUILT_IN(TILE)
  *
  ******************************************************************************/
 
-#define CAT_AxA(typ, postfix, zval, oval)                                      \
+#define CAT(typ, _postfix, _fmt, _zval, _oval)                                 \
 inline                                                                         \
 typ[o,d:shp] ++(typ[n,d:shp] A, typ[m,d:shp] B)                                \
     | _eq_SxS_(o, _add_SxS_(n, m))                                             \
@@ -123,9 +123,6 @@ typ[o,d:shp] ++(typ[n,d:shp] A, typ[m,d:shp] B)                                \
     return { [i] -> A[i] | [i] < [n];                                          \
              [i] -> B[_sub_SxS_(i, n)] | [n] <= [i] < [o] };                   \
 }
-
-#define CAT(typ, postfix, zval, oval)                                          \
-CAT_AxA(typ, postfix, zval, oval)
 
 BUILT_IN(CAT)
 
@@ -138,16 +135,13 @@ BUILT_IN(CAT)
  *
  ******************************************************************************/
 
-#define CATENATE_AxA(typ, postfix, zval, oval)                                 \
+#define CATENATE(typ, _postfix, _fmt, _zval, _oval)                            \
 inline                                                                         \
 typ[d:shp,o] ++^(typ[d:shp,n] A, typ[d:shp,m] B)                               \
     | _eq_SxS_(o, _add_SxS_(n, m))                                             \
 {                                                                              \
     return { iv -> _cat_VxV_(A[iv], B[iv]) | iv < shp };                       \
 }
-
-#define CATENATE(typ, postfix, zval, oval)                                     \
-CATENATE_AxA(typ, postfix, zval, oval)
 
 BUILT_IN(CATENATE)
 
@@ -159,7 +153,7 @@ BUILT_IN(CATENATE)
  *
  ******************************************************************************/
 
-#define REVERSE(typ, postfix, zval, oval)                                      \
+#define REVERSE(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
 typ[n,d:shp] reverse(typ[n,d:shp] A)                                           \
 {                                                                              \
@@ -176,7 +170,7 @@ BUILT_IN(REVERSE)
  *
  ******************************************************************************/
 
-#define REVERSEAXIS(typ, postfix, zval, oval)                                  \
+#define REVERSEAXIS(typ, _postfix, _fmt, _zval, _oval)                         \
 inline                                                                         \
 typ[axis:oshp,n,i:ishp] reverse(int axis, typ[axis:oshp,n,i:ishp] A)           \
 {                                                                              \
@@ -193,7 +187,7 @@ BUILT_IN(REVERSEAXIS)
  *
  ******************************************************************************/
 
-#define TRANSPOSE(typ, postfix, zval, oval)                                    \
+#define TRANSPOSE(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp_t] transpose(typ[d:shp] A)                                           \
     | _all_V_(_eq_VxV_(reverse(shp), shp_t))                                   \
@@ -213,7 +207,7 @@ BUILT_IN(TRANSPOSE)
  *
  ******************************************************************************/
 
-#define SHIFT_S(typ, postfix, zval, oval)                                      \
+#define SHIFT_S(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
 typ[o:oshp,n,i:ishp] shift(int o, int count, typ boundary,                     \
                            typ[o:oshp,n,i:ishp] A)                             \
@@ -227,7 +221,7 @@ typ[o:oshp,n,i:ishp] shift(int o, int count, typ boundary,                     \
            | iv < oshp };                                                      \
 }
 
-#define SHIFT_V(typ, postfix, zval, oval)                                      \
+#define SHIFT_V(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
 typ[o:oshp,i:ishp] shift(int[o] counts, typ boundary, typ[o:oshp,i:ishp] A)    \
 {                                                                              \
@@ -237,17 +231,17 @@ typ[o:oshp,i:ishp] shift(int[o] counts, typ boundary, typ[o:oshp,i:ishp] A)    \
     return tile(shp, idx, A);                                                  \
 }
 
-#define SHIFT_VZ(typ, postfix, zval, oval)                                     \
+#define SHIFT_VZ(typ, _postfix, _fmt, zval, _oval)                             \
 inline                                                                         \
 typ[o:oshp,i:ishp] shift(int[o] counts, typ[o:oshp,i:ishp] A)                  \
 {                                                                              \
     return shift(counts, zval, A);                                             \
 }
 
-#define SHIFT(typ, postfix, zval, oval)                                        \
-SHIFT_S(typ, postfix, zval, oval)                                              \
-SHIFT_V(typ, postfix, zval, oval)                                              \
-SHIFT_VZ(typ, postfix, zval, oval)
+#define SHIFT(typ, postfix, fmt, zval, oval)                                   \
+SHIFT_S(typ, postfix, fmt, zval, oval)                                         \
+SHIFT_V(typ, postfix, fmt, zval, oval)                                         \
+SHIFT_VZ(typ, postfix, fmt, zval, oval)
 
 BUILT_IN(SHIFT)
 
@@ -262,7 +256,7 @@ BUILT_IN(SHIFT)
  *
  ******************************************************************************/
 
-#define ROTATE_S(typ, postfix, zval, oval)                                     \
+#define ROTATE_S(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
 typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
 {                                                                              \
@@ -273,7 +267,7 @@ typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
            | iv < oshp };                                                      \
 }
 
-#define ROTATE_V(typ, postfix, zval, oval)                                     \
+#define ROTATE_V(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
 typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
 {                                                                              \
@@ -283,9 +277,9 @@ typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
     | iv < oshp };                                                             \
 }
 
-#define ROTATE(typ, postfix, zval, oval)                                       \
-ROTATE_S(typ, postfix, zval, oval)                                             \
-ROTATE_V(typ, postfix, zval, oval)
+#define ROTATE(typ, postfix, fmt, zval, oval)                                  \
+ROTATE_S(typ, postfix, fmt, zval, oval)                                        \
+ROTATE_V(typ, postfix, fmt, zval, oval)
 
 BUILT_IN(ROTATE)
 
@@ -298,39 +292,39 @@ BUILT_IN(ROTATE)
  *
  ******************************************************************************/
 
-#define WHERE_AxA(typ, postfix, zval, oval)                                    \
+#define WHERE_AxA(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ[d:shp] B)                    \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : _sel_VxA_(iv, B) };   \
 }
 
-#define WHERE_AxS(typ, postfix, zval, oval)                                    \
+#define WHERE_AxS(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ B)                           \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : B };                  \
 }
 
-#define WHERE_SxA(typ, postfix, zval, oval)                                    \
+#define WHERE_SxA(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ A, typ[d:shp] B)                           \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? A : _sel_VxA_(iv, B) };                  \
 }
 
-#define WHERE_SxS(typ, postfix, zval, oval)                                    \
+#define WHERE_SxS(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[b:shp] where(bool[b:shp] p, typ A, typ B)                                  \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? A : B };                                 \
 }
 
-#define WHERE(typ, postfix, zval, oval)                                        \
-WHERE_AxA(typ, postfix, zval, oval)                                            \
-WHERE_AxS(typ, postfix, zval, oval)                                            \
-WHERE_SxA(typ, postfix, zval, oval)                                            \
-WHERE_SxS(typ, postfix, zval, oval)
+#define WHERE(typ, postfix, fmt, zval, oval)                                   \
+WHERE_AxA(typ, postfix, fmt, zval, oval)                                       \
+WHERE_AxS(typ, postfix, fmt, zval, oval)                                       \
+WHERE_SxA(typ, postfix, fmt, zval, oval)                                       \
+WHERE_SxS(typ, postfix, fmt, zval, oval)
 
 BUILT_IN(WHERE)
 
@@ -347,72 +341,72 @@ BUILT_IN(WHERE)
  *
  ******************************************************************************/
 
-#define MASK_VxVxV(typ, postfix, zval, oval)                                   \
+#define MASK_VxVxV(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool[n] p, typ[n] A, typ[n] B)                                     \
 {                                                                              \
     return _mask_VxVxV_(p, A, B);                                              \
 }
 
-#define MASK_VxVxS(typ, postfix, zval, oval)                                   \
+#define MASK_VxVxS(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool[n] p, typ[n] A, typ B)                                        \
 {                                                                              \
     return _mask_VxVxS_(p, A, B);                                              \
 }
 
-#define MASK_VxSxV(typ, postfix, zval, oval)                                   \
+#define MASK_VxSxV(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool[n] p, typ A, typ[n] B)                                        \
 {                                                                              \
     return _mask_VxSxV_(p, A, B);                                              \
 }
 
-#define MASK_VxSxS(typ, postfix, zval, oval)                                   \
+#define MASK_VxSxS(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool[n] p, typ A, typ B)                                           \
 {                                                                              \
     return _mask_VxSxS_(p, A, B);                                              \
 }
 
-#define MASK_SxVxV(typ, postfix, zval, oval)                                   \
+#define MASK_SxVxV(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool p, typ[n] A, typ[n] B)                                        \
 {                                                                              \
     return _mask_SxVxV_(p, A, B);                                              \
 }
 
-#define MASK_SxVxS(typ, postfix, zval, oval)                                   \
+#define MASK_SxVxS(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool p, typ[n] A, typ B)                                           \
 {                                                                              \
     return _mask_SxVxS_(p, A, B);                                              \
 }
 
-#define MASK_SxSxV(typ, postfix, zval, oval)                                   \
+#define MASK_SxSxV(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ[n] mask(bool p, typ A, typ[n] B)                                           \
 {                                                                              \
     return _mask_SxSxV_(p, A, B);                                              \
 }
 
-#define MASK_SxSxS(typ, postfix, zval, oval)                                   \
+#define MASK_SxSxS(typ, _postfix, _fmt, _zval, _oval)                          \
 inline                                                                         \
 typ mask(bool p, typ A, typ B)                                                 \
 {                                                                              \
     return _mask_SxSxS_(p, A, B);                                              \
 }
 
-#define MASK(typ, postfix, zval, oval)                                         \
-MASK_VxVxV(typ, postfix, zval, oval)                                           \
-MASK_VxVxS(typ, postfix, zval, oval)                                           \
-MASK_VxSxV(typ, postfix, zval, oval)                                           \
-MASK_SxVxV(typ, postfix, zval, oval)                                           \
-MASK_SxVxS(typ, postfix, zval, oval)                                           \
-MASK_SxSxV(typ, postfix, zval, oval)                                           \
-MASK_SxSxS(typ, postfix, zval, oval)
+#define MASK(typ, postfix, fmt, zval, oval)                                    \
+MASK_VxVxV(typ, postfix, fmt, zval, oval)                                      \
+MASK_VxVxS(typ, postfix, fmt, zval, oval)                                      \
+MASK_VxSxV(typ, postfix, fmt, zval, oval)                                      \
+MASK_SxVxV(typ, postfix, fmt, zval, oval)                                      \
+MASK_SxVxS(typ, postfix, fmt, zval, oval)                                      \
+MASK_SxSxV(typ, postfix, fmt, zval, oval)                                      \
+MASK_SxSxS(typ, postfix, fmt, zval, oval)
 
 // FIXME: Fix _mask_VxSxS_ in ct_prf.c
-// MASK_VxSxS(typ, postfix, zval, oval)
+// MASK_VxSxS(typ, postfix, fmt, zval, oval)
 
 BUILT_IN(MASK)
