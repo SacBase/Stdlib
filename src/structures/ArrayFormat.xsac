@@ -56,7 +56,7 @@ char[1] format(bool arr)
  ******************************************************************************/
 inline
 char[d:shp,m] format(bool[d:shp,n] arr)
-    | m == max(2 * n - 1, 0)
+    | _eq_SxS_(m, max(2 * n - 1, 0))
 {
     res = { iv -> arr[iv] ? ['1', ' '] : ['0', ' '] };
     res = reshape(_cat_VxV_(shp, [2 * n]), res);
@@ -91,7 +91,7 @@ char[.] format(bool arr, int[2] w)
  ******************************************************************************/
 inline
 char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
-    | m == max(2 * n - 1, 0)
+    | _eq_SxS_(m, max(2 * n - 1, 0))
 {
     return format(tod(arr), w);
 }
@@ -355,9 +355,9 @@ char[+] format(double[d:shp,n] arr, int precision)
 
         // Determine width of each result column
         // First, chars left of decimal point
-        lodp = { [i] -> thCharsTo([' ', '.'], fry[i]) };
+        lodp = { [i] -> thCharsTo(' ', '.', fry[i]) };
         // Decimal point and # non-blankchars to right of decimal point
-        rodp = { [i] -> thCharsTo([' ', ' '], drop([lodp[i]], fry[i])) };
+        rodp = { [i] -> thCharsTo(' ', ' ', drop([lodp[i]], fry[i])) };
 
         lodpmax = maxsl1(reshape([shpp, n], lodp));
         rodpmax = maxsl1(reshape([shpp, n], rodp));
@@ -478,7 +478,7 @@ int[n] maxsl1(int[n,m] arr)
 {
     return with {
         ([0] <= iv < [n]) : arr[iv];
-    } : fold(max, Constants::minint());
+    } : fold(ArrayArith::max, genarray([m], Constants::minint()));
 }
 
 /******************************************************************************
@@ -493,13 +493,13 @@ int[n] minsl1(int[n,m] arr)
 {
     return with {
         ([0] <= iv < [n]) : arr[iv];
-    } : fold(min, Constants::maxint());
+    } : fold(ArrayArith::min, genarray([m], Constants::maxint()));
 }
 
 /******************************************************************************
  *
  * @fn char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
- *                           int[.] lodp, int[.] lodpmax, int zcols)
+ *                          int[.] lodp, int[.] lodpmax, int zcols)
  *
  * @brief Align one row of a floating-point matrix.
  *
@@ -513,7 +513,7 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
     for (ci = 0; ci < cols; ci = _add_SxS_(ci, 1)) {
         fi = ci + cols * i;           // Source item index
         sc = lodp[fi] - lodpmax[ci];  // Shift count to align decimal
-        sefe = thCharsTo([' ', ' '], fry[fi]);
+        sefe = thCharsTo(' ', ' ', fry[fi]);
         sz = sefe + abs(sc);
         zit = padWithBlanks(sz, rotate([-sc], fry[fi]));
         res, junk = thrnAppend(res, zci, zit);
@@ -548,12 +548,11 @@ char[wid] padWithBlanks(int wid, char[n] arr)
  *
  ******************************************************************************/
 inline
-int thCharsTo(char[n] ch, char[lim] fry)
-    | n > 1
+int thCharsTo(char ch0, char ch1, char[lim] fry)
 {
     res = lim;
     for (i = 0; i < lim; i = _add_SxS_(i, 1)) {
-        if (fry[i] == ch[0] || fry[i] == ch[1]) {
+        if (fry[i] == ch0 || fry[i] == ch1) {
             res = i;
             i = lim;
         }
