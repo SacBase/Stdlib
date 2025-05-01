@@ -7,18 +7,18 @@
 #ifdef FULLTYPES
 
 #define SIGNED_INT_NUM(fun)                                                    \
-fun(byte,     b,  x,   0b,  1b)                                                \
-fun(short,    s,  hd,  0s,  1s)                                                \
-fun(int,      i,  d,   0i,  1i)                                                \
-fun(long,     l,  ld,  0l,  1l)                                                \
-fun(longlong, ll, lld, 0ll, 1ll)
+fun(byte,     b,  x,  0b,  1b)                                                 \
+fun(short,    s,  hd, 0s,  1s)                                                 \
+fun(int,      i,  d,  0i,  1i)                                                 \
+fun(long,     l,  ld, 0l,  1l)                                                 \
+fun(longlong, ll, Ld, 0ll, 1ll)
 
 #define UNSIGNED_INT_NUM(fun)                                                  \
-fun(ubyte,     ub,  X,   0ub,  1ub)                                            \
-fun(ushort,    us,  hu,  0us,  1us)                                            \
-fun(uint,      ui,  u,   0ui,  1ui)                                            \
-fun(ulong,     ul,  lum  0ul,  1ul)                                            \
-fun(ulonglong, ull, llu, 0ull, 1ull)
+fun(ubyte,     ub,  X,  0ub,  1ub)                                             \
+fun(ushort,    us,  hu, 0us,  1us)                                             \
+fun(uint,      ui,  u,  0ui,  1ui)                                             \
+fun(ulong,     ul,  lu, 0ul,  1ul)                                             \
+fun(ulonglong, ull, Lu, 0ull, 1ull)
 
 #else /* FULLTYPES */
 
