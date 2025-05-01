@@ -17,6 +17,7 @@ struct Quaternion {
 #define QUATERNION(fun)                                                        \
 fun(struct Quaternion,                                                         \
     /* no postfix */,                                                          \
+    /* no format */,                                                           \
     (Quaternion{ 0.0, 0.0, 0.0, 0.0 }),                                        \
     (Quaternion{ 1.0, 1.0, 1.0, 1.0 }))
 
