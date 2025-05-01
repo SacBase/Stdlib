@@ -52,7 +52,7 @@ structures/Complex.sac                     Ext
 structures/Char.sac                        Core
 structures/String.sac                      Core
 stdio/TermFile.sac                         Core
-stdio/ScalarIO.sac                         Core
+stdio/ScalarIO.xsac                        Core
 stdio/ListIO.sac                           Ext
 stdio/IOresources.sac                      Core
 stdio/FibreIO.sac                          Ext

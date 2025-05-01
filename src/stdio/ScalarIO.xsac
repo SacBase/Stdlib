@@ -1,0 +1,318 @@
+module ScalarIO;
+
+use IOresources: all;
+use String: { string, to_string, strlen };
+use ScalarArith: all;
+use ArrayFormat: all;
+use TermFile: { TermFile };
+
+export all except { bool2str };
+
+#include "builtin.mac"
+
+#define QUOTE(s) #s
+
+inline string bool2str(bool val, int mode)
+{
+    if (mode == 2)
+    {
+        res = val ? "true" : "false";
+    }
+    else if (mode == 1)
+    {
+        res = val ? "t" : "f";
+    }
+    else
+    {
+        res = val ? "1" : "0";
+    }
+
+    return res;
+}
+
+/******************************************************************************
+ *
+ * void fprint(File &stream, <a> val)
+ *
+ * We need to handle float, double, and bool manually.
+ *
+ ******************************************************************************/
+
+#define FPRINT_FILE_S(typ, _postfix, fmt, _zval, _oval)                        \
+inline void fprint(File &stream, typ val)                                      \
+{                                                                              \
+    File::fprintf(stream, QUOTE(%fmt), val);                                   \
+}
+
+INT_NUM(FPRINT_FILE_S)
+CHAR(FPRINT_FILE_S)
+
+inline void fprint(File &stream, float val)
+{
+    File::fprintf(stream, "%g", tod(val));
+}
+
+inline void fprint(File &stream, float val, int prec)
+{
+    File::fprintf(stream, "%.*g", prec, tod(val));
+}
+
+inline void fprint(File &stream, double val)
+{
+    File::fprintf(stream, "%g", val);
+}
+
+inline void fprint(File &stream, double val, int prec)
+{
+    File::fprintf(stream, "%.*g", prec, val);
+}
+
+inline void fprint(File &stream, bool val)
+{
+    File::fprintf(stream, bool2str(val, 0));
+}
+
+inline void fprint(File &stream, bool val, int mode)
+{
+    File::fprintf(stream, bool2str(val, mode));
+}
+
+/******************************************************************************
+ *
+ * void fprint(TermFile &stream, <a> val)
+ *
+ * We need to handle float, double, and bool manually.
+ *
+ ******************************************************************************/
+
+#define FPRINT_TERMFILE_S(typ, _postfix, fmt, _zval, _oval)                    \
+inline void fprint(TermFile &stream, typ val)                                  \
+{                                                                              \
+    TermFile::fprintf(stream, QUOTE(%fmt), val);                               \
+}
+
+INT_NUM(FPRINT_TERMFILE_S)
+CHAR(FPRINT_TERMFILE_S)
+
+inline void fprint(TermFile &stream, float val)
+{
+    TermFile::fprintf(stream, "%g", tod(val));
+}
+
+inline void fprint(TermFile &stream, float val, int prec)
+{
+    TermFile::fprintf(stream, "%.*g", prec, tod(val));
+}
+
+inline void fprint(TermFile &stream, double val)
+{
+    TermFile::fprintf(stream, "%g", val);
+}
+
+inline void fprint(TermFile &stream, double val, int prec)
+{
+    TermFile::fprintf(stream, "%.*g", prec, val);
+}
+
+inline void fprint(TermFile &stream, bool val)
+{
+    TermFile::fprintf(stream, bool2str(val, 0));
+}
+
+inline void fprint(TermFile &stream, bool val, int mode)
+{
+	TermFile::fprintf(stream, bool2str(val, mode));
+}
+
+/******************************************************************************
+ *
+ * void show(<a> val)
+ *
+ * These are for ISO APL Standard N8485
+ * We need to handle float and double manually.
+ *
+ ******************************************************************************/
+
+#define SHOW_TERMFILE_S(typ, _postfix, fmt, _zval, _oval)                      \
+inline void show(typ val)                                                      \
+{                                                                              \
+    TermFile::printf(QUOTE(%fmt\n), val);                                      \
+}
+
+INT_NUM(SHOW_TERMFILE_S)
+CHAR(SHOW_TERMFILE_S)
+BOOL(SHOW_TERMFILE_S)
+
+inline void show(float val)
+{
+    TermFile::printf("%g\n", tod(val));
+}
+
+inline void show(double val)
+{
+    TermFile::printf("%g\n", val);
+}
+
+/******************************************************************************
+ *
+ * void print(<a> val)
+ *
+ * We need to handle float, double, bool, and char manually.
+ *
+ ******************************************************************************/
+
+#define PRINT_TERMFILE_S(typ, _postfix, fmt, _zval, _oval)                     \
+inline void print(typ val)                                                     \
+{                                                                              \
+    TermFile::printf("Dimension:  0\nShape    : < >\n");                       \
+    TermFile::printf(" " QUOTE(%fmt\n), val);                                  \
+}
+
+INT_NUM(PRINT_TERMFILE_S)
+
+inline void print(float val)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" %g\n", tod(val));
+}
+
+inline void print(float val, int prec)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" %.*g\n", prec, tod(val));
+}
+
+inline void print(double val)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" %g\n", val);
+}
+
+inline void print(double val, int prec)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" %.*g\n", prec, val);
+}
+
+inline void print(bool val)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" %s\n", bool2str(val, 2));
+}
+
+inline void print(bool val, int mode)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" %s\n", bool2str(val, mode));
+}
+
+void print(char val)
+{
+    TermFile::printf("Dimension:  0\nShape    : < >\n");
+    TermFile::printf(" '%c'\n", val);
+}
+
+/******************************************************************************
+ *
+ * bool, <a> fscan<a>(File &stream)
+ *
+ * We need to handle bool manually.
+ * Additionally we provide an overload for string.
+ *
+ ******************************************************************************/
+
+#define FSCAN_FILE_S(typ, _postfix, fmt, _zval, _oval)                         \
+inline bool, typ fscan##typ(File &stream)                                      \
+{                                                                              \
+    typ res;                                                                   \
+    success, res = File::fscanf(stream, QUOTE(%fmt));                          \
+    return (success == 1, res);                                                \
+}
+
+NUM(FSCAN_FILE_S)
+CHAR(FSCAN_FILE_S)
+
+inline bool, bool fscanbool(File &stream)
+{
+    char c;
+    success, c = File::fscanf(stream, "%c");
+    res = (success == 1) && ((c == '0') || (c == 'f'))
+    return (success == 1, res);
+}
+
+inline bool, string fscanstring(File &stream, int length)
+{
+    string res;
+    res = File::fscans(stream, length);
+    return (strlen(res) > 0, res);
+}
+
+/******************************************************************************
+ *
+ * bool, <a> fscan<a>(TermFile &stream)
+ *
+ * We need to handle bool manually.
+ * Additionally we provide an overload for string.
+ *
+ ******************************************************************************/
+
+#define FSCAN_TERMFILE_S(typ, _postfix, fmt, _zval, _oval)                     \
+inline bool, typ fscan##typ(TermFile &stream)                                  \
+{                                                                              \
+    typ res;                                                                   \
+    success, res = TermFile::fscanf(stream, QUOTE(%fmt));                      \
+    return (success==1, res);                                                  \
+}
+
+NUM(FSCAN_TERMFILE_S)
+CHAR(FSCAN_TERMFILE_S)
+
+inline bool, bool fscanbool(TermFile &stream)
+{
+    char c;
+    success, c = TermFile::fscanf(stream, "%c");
+    res = (success == 1) && ((c == '0') || (c == 'f'))
+    return (success == 1, res);
+}
+
+inline bool, string fscanstring(TermFile &stream, int length)
+{
+    string res;
+    res = TermFile::fscans(stream, length);
+    return (strlen(res) > 0, res);
+}
+
+/******************************************************************************
+ *
+ * bool, <a> scan<a>()
+ *
+ * We need to handle bool manually.
+ * Additionally we provide an overload for string.
+ *
+ ******************************************************************************/
+
+#define SCAN_S(typ, _postfix, fmt, _zval, _oval)                               \
+inline bool, typ scan##typ()                                                   \
+{                                                                              \
+  typ res;                                                                     \
+  success, res = TermFile::scanf(QUOTE(%format));                              \
+  return (success==1, res);                                                    \
+}
+
+NUM(SCAN_S)
+CHAR(SCAN_S)
+
+inline bool, bool scanbool()
+{
+    char c;
+    success, c = TermFile::scanf("%c");
+    res = (success == 1) && ((c == '0') || (c == 'f'))
+    return (success == 1, res);
+}
+
+inline bool, string scanstring(int length)
+{
+    string res;
+    res = TermFile::scans(length);
+    return (strlen(res) > 0, res);
+}
