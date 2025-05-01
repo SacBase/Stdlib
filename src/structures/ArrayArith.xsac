@@ -103,7 +103,7 @@ b[n,d:shp] name(a[n,d:shp] A)                                                  \
  *
  ******************************************************************************/
 
-#define ARI_OPS_A(typ, postfix, zval, oval)                                    \
+#define ARI_OPS_A(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_ARI_OPS(AxA, typ)                                                          \
 MAP_ARI_OPS(AxS, typ)                                                          \
 MAP_ARI_OPS(SxA, typ)
@@ -112,12 +112,12 @@ NUM(ARI_OPS_A)
 
 /******************************************************************************/
 
-#define ABS_OP_A(type, postfix, zval, oval)                                    \
+#define ABS_OP_A(type, _postfix, _fmt, _zval, _oval)                           \
 MAP_ABS_OP(AxA, type)                                                          \
 MAP_ABS_OP(AxS, type)                                                          \
 MAP_ABS_OP(SxA, type)
 
-#define ABS_NOOP_A(type, postfix, zval, oval)                                  \
+#define ABS_NOOP_A(type, _postfix, _fmt, _zval, _oval)                         \
 MAP_ABS_NOOP(AxA, type)                                                        \
 MAP_ABS_NOOP(AxS, type)                                                        \
 MAP_ABS_NOOP(SxA, type)
@@ -128,7 +128,7 @@ UNSIGNED_INT_NUM(ABS_NOOP_A)
 
 /******************************************************************************/
 
-#define NEG_OP_A(typ, postfix, zval, oval)                                     \
+#define NEG_OP_A(typ, _postfix, _fmt, _zval, _oval)                            \
 MAP_NEG_OP(AxA, typ)                                                           \
 MAP_NEG_OP(AxS, typ)                                                           \
 MAP_NEG_OP(SxA, typ)
@@ -137,7 +137,7 @@ SIGNED_NUM(NEG_OP_A)
 
 /******************************************************************************/
 
-#define INT_OPS_A(typ, postfix, zval, oval)                                    \
+#define INT_OPS_A(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_INT_OPS(AxA, typ)                                                          \
 MAP_INT_OPS(AxS, typ)                                                          \
 MAP_INT_OPS(SxA, typ)
@@ -150,7 +150,7 @@ INT_NUM(INT_OPS_A)
  *
  ******************************************************************************/
 
-#define REL_OPS_A(typ, postfix, zval, oval)                                    \
+#define REL_OPS_A(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_REL_OPS(AxA, typ)                                                          \
 MAP_REL_OPS(AxS, typ)                                                          \
 MAP_REL_OPS(SxA, typ)
@@ -173,15 +173,15 @@ MAP_LOG_OPS(SxA)
  *
  ******************************************************************************/
 
-#define BOOL_CONV_OP_A(type, postfix, zero, one)                               \
-MAP_BOOL_CONV_OP(AxA, type)
+#define BOOL_CONV_OP_A(typ, _postfix, _fmt, _zero, _one)                       \
+MAP_BOOL_CONV_OP(AxA, typ)
 
 NUM(BOOL_CONV_OP_A)
 BOOL(BOOL_CONV_OP_A)
 
 /******************************************************************************/
 
-#define NUM_CONV_OPS_A(type, postfix, zero, one)                               \
-MAP_NUM_CONV_OPS(AxA, type)
+#define NUM_CONV_OPS_A(typ, _postfix, _fmt, _zero, _one)                       \
+MAP_NUM_CONV_OPS(AxA, typ)
 
 BUILT_IN(NUM_CONV_OPS_A)

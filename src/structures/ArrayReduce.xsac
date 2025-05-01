@@ -1,6 +1,6 @@
 module ArrayReduce;
 
- /******************************************************************************
+/******************************************************************************
  *
  * Depends on ScalarArith and Constants.
  *
@@ -28,7 +28,7 @@ inline typ name(typ[d:shp] arr)                                                \
     } : fold(fun, neutral);                                                    \
 }
 
-#define NUM_REDUCE(typ, postfix, zval, oval)                                   \
+#define NUM_REDUCE(typ, _postfix, _fmt, zval, oval)                            \
 REDUCE(sum,    typ, ScalarArith::+,   zval)                                    \
 REDUCE(prod,   typ, ScalarArith::*,   oval)                                    \
 REDUCE(minval, typ, ScalarArith::min, max##typ())                              \
@@ -36,7 +36,7 @@ REDUCE(maxval, typ, ScalarArith::max, min##typ())
 
 NUM(NUM_REDUCE)
 
-#define BOOL_REDUCE(typ, postfix, zval, oval)                                  \
+#define BOOL_REDUCE(typ, _postfix, _fmt, zval, oval)                           \
 REDUCE(any, typ, ScalarArith::|, zval)                                         \
 REDUCE(all, typ, ScalarArith::&, oval)
 

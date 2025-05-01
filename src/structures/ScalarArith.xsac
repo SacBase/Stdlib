@@ -13,9 +13,9 @@ export all;
  *
  ******************************************************************************/
 
-#define ZERO(typ, postfix, zval, oval)                                        \
+#define ZERO(typ, _postfix, _fmt, zval, _oval)                                 \
 inline                                                                         \
-typ zero(typ[*] A)                                                           \
+typ zero(typ[*] A)                                                             \
 {                                                                              \
     return zval;                                                               \
 }
@@ -30,9 +30,9 @@ BUILT_IN(ZERO)
  *
  ******************************************************************************/
 
-#define ONE(typ, postfix, zval, oval)                                         \
+#define ONE(typ, _postfix, _fmt, _zval, oval)                                  \
 inline                                                                         \
-typ one(typ[*] A)                                                            \
+typ one(typ[*] A)                                                              \
 {                                                                              \
     return oval;                                                               \
 }
@@ -75,17 +75,17 @@ a name(a A)                                                                    \
  *
  ******************************************************************************/
 
-#define ARI_OPS_S(typ, postfix, zval, oval)                                   \
+#define ARI_OPS_S(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_ARI_OPS(SxS, typ)
 
 NUM(ARI_OPS_S)
 
 /******************************************************************************/
 
-#define ABS_OP_S(typ, postfix, zval, oval)                                    \
+#define ABS_OP_S(typ, _postfix, _fmt, _zval, _oval)                            \
 MAP_ABS_OP(SxS, typ)
 
-#define ABS_NOOP_S(typ, postfix, zval, oval)                                  \
+#define ABS_NOOP_S(typ, _postfix, _fmt, _zval, _oval)                          \
 MAP_ABS_NOOP(SxS, typ)
 
 SIGNED_NUM(ABS_OP_S)
@@ -94,7 +94,7 @@ UNSIGNED_INT_NUM(ABS_NOOP_S)
 
 /******************************************************************************/
 
-#define NEG_OP_S(typ, postfix, zval, oval)                                    \
+#define NEG_OP_S(typ, _postfix, _fmt, _zval, _oval)                            \
 MAP_NEG_OP(SxS, typ)
 
 // neg only works on signed integers and reals
@@ -102,14 +102,14 @@ SIGNED_NUM(NEG_OP_S)
 
 /******************************************************************************/
 
-#define ANA_OPS_S(typ, postfix, zval, oval)                                   \
+#define ANA_OPS_S(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_ANA_OPS(S, typ)
 
 NUM(ANA_OPS_S)
 
 /******************************************************************************/
 
-#define INT_OPS_S(typ, postfix, zval, oval)                                   \
+#define INT_OPS_S(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_INT_OPS(SxS, typ)
 
 // mod only supports whole numbers
@@ -121,7 +121,7 @@ INT_NUM(INT_OPS_S)
  *
  ******************************************************************************/
 
-#define REL_OPS_S(typ, postfix, zero, one)                                    \
+#define REL_OPS_S(typ, _postfix, _fmt, _zval, _oval)                           \
 MAP_REL_OPS(SxS, typ)
 
 BUILT_IN(REL_OPS_S)
@@ -140,13 +140,13 @@ MAP_LOG_OPS(SxS)
  *
  ******************************************************************************/
 
-#define BOOL_CONV_OP_S(typ, postfix, zero, one)                               \
+#define BOOL_CONV_OP_S(typ, _postfix, _fmt, _zval, _oval)                      \
 MAP_BOOL_CONV_OP(SxS, typ)
 
 NUM(BOOL_CONV_OP_S)
 BOOL(BOOL_CONV_OP_S)
 
-#define NUM_CONV_OPS_S(typ, postfix, zero, one)                               \
+#define NUM_CONV_OPS_S(typ, _postfix, _fmt, _zval, _oval)                      \
 MAP_NUM_CONV_OPS(SxS, typ)
 
 BUILT_IN(NUM_CONV_OPS_S)

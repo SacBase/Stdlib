@@ -62,7 +62,7 @@ external void showarray(TermFile &stream, int d, int[.] s, char[*] a);
 
 /******************************************************************************/
 
-#define PRINT(typ, postfix, zero, one)                                         \
+#define PRINT(typ, _postfix, _fmt, _zero, _one)                                \
 inline void fprint(TermFile &stream, string fmt, typ[d:shp] arr)               \
 {                                                                              \
     printarray(stream, fmt, d, shp, arr);                                      \
