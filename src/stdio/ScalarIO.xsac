@@ -236,7 +236,7 @@ inline bool, bool fscanbool(File &stream)
 {
     char c;
     success, c = File::fscanf(stream, "%c");
-    res = (success == 1) && ((c == '0') || (c == 'f'))
+    res = (success == 1) && ((c == '0') || (c == 'f'));
     return (success == 1, res);
 }
 
@@ -271,7 +271,7 @@ inline bool, bool fscanbool(TermFile &stream)
 {
     char c;
     success, c = TermFile::fscanf(stream, "%c");
-    res = (success == 1) && ((c == '0') || (c == 'f'))
+    res = (success == 1) && ((c == '0') || (c == 'f'));
     return (success == 1, res);
 }
 
@@ -306,7 +306,7 @@ inline bool, bool scanbool()
 {
     char c;
     success, c = TermFile::scanf("%c");
-    res = (success == 1) && ((c == '0') || (c == 'f'))
+    res = (success == 1) && ((c == '0') || (c == 'f'));
     return (success == 1, res);
 }
 
