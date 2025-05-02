@@ -110,7 +110,7 @@ stringArray sel(int[n] idx, stringArray arr)
     }
     else if (_lt_SxS_(n, dim(arr))) {
         res_shp = drop([n], shape(arr));
-        if (Array::sel([0], res_shp) Array::== 0) {
+        if (_eq_SxS_(_sel_VxA_([0], res_shp), 0)) {
             RuntimeError::error(1, "res_shape is [0]");
         }
 
@@ -176,7 +176,7 @@ bool[*] ==(stringArray a, stringArray b)
         if (_eq_SxS_(dim(b), 0)) {
             res = { iv -> _sel(iv, a) String::== to_string(b)
                   | iv < shape(a) };
-        } else if (all(shape(a) Array::== shape(b))) {
+        } else if (all(_eq_VxV_(shape(a), shape(b)))) {
             res = { iv -> _sel(iv, a) String::== _sel(iv, b)
                   | iv < shape(a) };
         } else {
@@ -213,8 +213,8 @@ stringArray ++(stringArray m1, stringArray m2)
             "concat two stringArrays");
     }
 
-    m1Len = Array::sel([0], shape(m1));
-    m2Len = Array::sel([0], shape(m2));
+    m1Len = _sel_VxA_([0], shape(m1));
+    m2Len = _sel_VxA_([0], shape(m2));
     resShape = _cat_VxV_([_add_SxS_(m1Len, m2Len)], m1InnerShape);
     res = genarray(resShape, to_stringArray(""));
 
@@ -254,7 +254,7 @@ int[n] indexOf(string needle, stringArray haystack)
     res = transpose(res);
 
     res = { [i] -> sum(Array::sel([i], res))
-          | [i] < [Array::sel([0], Array::shape(res))] };
+          | [i] < [_sel_VxA_([0], _shape_A_(res))] };
 
     return res;
 }
