@@ -476,15 +476,10 @@ int[d:shp] log10(int[d:shp] arr)
 inline
 int[m] maxsl1(int[n,m] arr)
 {
-    return with {
-        ([0] <= iv < [n]) : arr[iv];
-    } : fold(maxv, genarray([m], Constants::minint()));
-}
-
-inline
-int[.] maxv(int[.] a, int[.] b)
-{
-    return { iv -> _max_SxS_(_sel_VxA_(iv, a), _sel_VxA_(iv, b)) };
+    return { [i] -> with {
+                        ([0] <= [j] < [n]) : _sel_VxA_([j,i], arr);
+                    } : fold(ScalarArith::max, Constants::minint())
+           | [i] < [m] };
 }
 
 /******************************************************************************
@@ -497,15 +492,10 @@ int[.] maxv(int[.] a, int[.] b)
 inline
 int[m] minsl1(int[n,m] arr)
 {
-    return with {
-        ([0] <= iv < [n]) : arr[iv];
-    } : fold(minv, genarray([m], Constants::maxint()));
-}
-
-inline
-int[.] minv(int[.] a, int[.] b)
-{
-    return { iv -> _min_SxS_(_sel_VxA_(iv, a), _sel_VxA_(iv, b)) };
+    return { [i] -> with {
+                        ([0] <= [j] < [n]) : _sel_VxA_([j,i], arr);
+                    } : fold(ScalarArith::min, Constants::maxint())
+           | [i] < [m] };
 }
 
 /******************************************************************************
