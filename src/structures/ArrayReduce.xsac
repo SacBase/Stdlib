@@ -14,14 +14,14 @@ export all;
 
 /******************************************************************************
  *
- * @fn <a> reduce(<a>[d:shp] arr)
+ * @fn <a> reduce(<a>[d>0:shp] arr)
  *
  * @brief Reduces the given array to a single element.
  *
  ******************************************************************************/
 
 #define REDUCE(name, typ, fun, neutral)                                        \
-inline typ name(typ[d:shp] arr)                                                \
+inline typ name(typ[d>0:shp] arr)                                              \
 {                                                                              \
     return with {                                                              \
         (_mul_SxV_(0, shp) <= iv < shp) : _sel_VxA_(iv, arr);                  \
