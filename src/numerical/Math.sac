@@ -3,272 +3,320 @@ module Math;
 use ScalarArith: all;
 export all;
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-  /* Trigonometric functions.  */
-
-
-external double cos(double X);
-    #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
-    #pragma header "<math.h>"
-#endif
-#ifdef NEED_LIBM
-    #pragma linkwith "m"
-#endif
-    /* Cosine of X.  */
+/******************************************************************************
+ *
+ * Trigonometric functions.
+ *
+ ******************************************************************************/
 
 external double sin(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Sine of X.  */
+
+external float sin(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "sinf"
+    #pragma header "<math.h>"
+
+external double cos(double X);
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
+
+external float cos(float X);
+    #pragma linkname "cosf"
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
 
 external double tan(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Tangent of X.  */
 
-external double acos(double X);
+external float tan(float X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
+    #pragma linkname "tanf"
     #pragma header "<math.h>"
-#endif
-    /* Arc cosine of X.  */
 
 external double asin(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Arc sine of X.  */
+
+external float asin(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "asinf"
+    #pragma header "<math.h>"
+
+external double acos(double X);
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
+
+external float acos(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "acosf"
+    #pragma header "<math.h>"
 
 external double atan(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Arc tangent of X.  */
-    
+
+external float atan(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "atanf"
+    #pragma header "<math.h>"
+
 external double atan2(double X, double Y);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Arc tangent of Y/X.  */
 
-
-
-  /* Hyperbolic functions.  */
-
-
-external double cosh(double X);
-    #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
+external float atan2(float X, float Y);
+    #pragma linksign [0,1,2]
+    #pragma linkname "atan2f"
     #pragma header "<math.h>"
-#endif
-    /* Hyperbolic cosine of X.  */
+
+inline double, double sincos(double x)
+{
+    return (sin(x), cos(x));
+}
+
+inline float, float sincos(float x)
+{
+    return (sin(x), cos(x));
+}
+
+/******************************************************************************
+ *
+ * Hyperbolic functions.
+ *
+ ******************************************************************************/
 
 external double sinh(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Hyperbolic sine of X.  */
+
+external float sinh(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "sinhf"
+    #pragma header "<math.h>"
+
+external double cosh(double X);
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
+
+external float cosh(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "coshf"
+    #pragma header "<math.h>"
 
 external double tanh(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Hyperbolic tangent of X.  */
 
-external double acosh(double X);
+external float tanh(float X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
+    #pragma linkname "tanhf"
     #pragma header "<math.h>"
-#endif
-    /* Hyperbolic arc cosine of X.  */
 
 external double asinh(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Hyperbolic arc sine of X.  */
+
+external float asinh(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "asinhf"
+    #pragma header "<math.h>"
+
+external double acosh(double X);
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
+
+external float acosh(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "acoshf"
+    #pragma header "<math.h>"
 
 external double atanh(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Hyperbolic arc tangent of X.  */
-    
 
+external float atanh(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "atanhf"
+    #pragma header "<math.h>"
 
-  /* Exponential and logarithmic functions.  */
-
+/******************************************************************************
+ *
+ * Exponential and logarithmic functions.
+ *
+ ******************************************************************************/
 
 external double exp(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Exponentional function of X.  */
 
-external float expf(float X);
+external float exp(float X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
+    #pragma linkname "expf"
     #pragma header "<math.h>"
-#endif
-    /* Exponentional function of X.  */
 
 external double, int frexp(double X);
     #pragma linksign [0,2,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Break X into a normalized fraction and an integral power of 2.  */
+
+external float, int frexp(float X);
+    #pragma linksign [0,2,1]
+    #pragma linkname "frexpf"
+    #pragma header "<math.h>"
 
 external double ldexp(double X, int EXP);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* X times (two to the EXP power).  */
+
+external float ldexp(float X, int EXP);
+    #pragma linksign [0,1,2]
+    #pragma linkname "ldexpf"
+    #pragma header "<math.h>"
 
 external double log(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Natural logarithm of X.  */
+
+external float log(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "logf"
+    #pragma header "<math.h>"
 
 external double log10(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Base-ten logarithm of X.  */
+
+external float log10(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "log10f"
+    #pragma header "<math.h>"
 
 external double log2(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
+
+external float log2(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "log2f"
+    #pragma header "<math.h>"
+
+external ulong log2(ulong X);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Math/int_log.o"
+    #pragma linkname "SAC_MATH_log2ul"
 
 external uint log2(uint X);
     #pragma linksign [0,1]
     #pragma linkobj "src/Math/int_log.o"
     #pragma linkname "SAC_MATH_log2u"
 
-external ulong log2(ulong X);
-    #pragma linksign [0,1]
-    #pragma linkobj "src/Math/int_log.o"
-    #pragma linkname "SAC_MATH_log2ul"
-    /* Base-two logarithm of X.  */
-
 external double expm1(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return exp(X) - 1.  */
+
+external float expm1(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "expm1f"
+    #pragma header "<math.h>"
 
 external double log1p(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return log(1 + X).  */
+
+external float log1p(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "log1pf"
+    #pragma header "<math.h>"
 
 external double, double modf(double X);
     #pragma linksign [0,2,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Break VALUE into integral and fractional parts.  */
 
+external float, float modf(float X);
+    #pragma linksign [0,2,1]
+    #pragma linkname "modff"
+    #pragma header "<math.h>"
 
-
-  /* Power functions.  */
+/******************************************************************************
+ *
+ * Power functions.
+ *
+ ******************************************************************************/
 
 inline int pow2(int a) {
-  return _shl_SxS_(1, a);
+    return _shl_SxS_(1, a);
 }
 
 external double pow(double X, double Y);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return X to the Y power.  */
 
-external float powf(float X, float Y);
+external float pow(float X, float Y);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
+    #pragma linkname "powf"
     #pragma header "<math.h>"
-#endif
-    /* Return X to the Y power.  */
 
 external double sqrt(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return the square root of X.  */
 
-external float sqrtf(float X);
+external float sqrt(float X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
+    #pragma linkname "sqrtf"
     #pragma header "<math.h>"
-#endif
-    /* Return the square root of X.  */
 
 external double cbrt(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return the cube root of X.  */
 
-
-
-  /* Nearest integer, absolute value, and remainder functions.  */
-
-
-external double ceil(double X);
+external float cbrt(float X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
+    #pragma linkname "cbrtf"
     #pragma header "<math.h>"
-#endif
-    /* Smallest integral value not less than X.  */
 
-external double fabs(double X);
-    #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
-    #pragma header "<math.h>"
-#endif
-    /* Absolute value of X.  */
+/******************************************************************************
+ *
+ * Nearest integer, absolute value, and remainder functions.
+ *
+ ******************************************************************************/
 
 external double floor(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Largest integer not greater than X.  */
+
+external float floor(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "floorf"
+    #pragma header "<math.h>"
+
+external double ceil(double X);
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
+
+external float ceil(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "ceilf"
+    #pragma header "<math.h>"
+
+external double fabs(double X);
+    #pragma linksign [0,1]
+    #pragma header "<math.h>"
+
+external float fabs(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "fabsf"
+    #pragma header "<math.h>"
 
 external double fmod(double X, double Y);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Floating-point modulo remainder of X/Y.  */
+
+external float fmod(float X, float Y);
+    #pragma linksign [0,1,2]
+    #pragma linkname "fmodf"
+    #pragma header "<math.h>"
 
 external int sign(double X);
     #pragma linksign [0,1]
@@ -280,432 +328,198 @@ external int sign(float X);
     #pragma linkobj "src/Math/sign.o"
     #pragma linkname "SAC_MATH_signf"
 
-  /* Range testing functions  */
-
+/******************************************************************************
+ *
+ * Range testing functions.
+ *
+ ******************************************************************************/
 
 external bool isinf(double X);
     #pragma linksign [0,1]
     #pragma linkobj "src/Math/isinf.o"
     #pragma linkname "SAC_MATH_isinf"
-    /* Check X for infinity.  */
-  
+
 external bool isnan(double X);
     #pragma linksign [0,1]
     #pragma linkobj "src/Math/isnan.o"
     #pragma linkname "SAC_MATH_isnan"
-    /* Check X for being NaN (not a number).  */
 
 external bool finite(double X);
     #pragma linksign [0,1]
     #pragma linkobj "src/Math/isfinite.o"
     #pragma linkname "SAC_MATH_isfinite"
-    /* Check X for being finite and not NaN.  */
 
-
-
-  /* Miscellaneous  */
+/******************************************************************************
+ *
+ * Miscellaneous.
+ *
+ ******************************************************************************/
 
 external double copysign(double X, double Y);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return X with its signed changed to Y's.  */
+
+external float copysign(float X, float Y);
+    #pragma linksign [0,1,2]
+    #pragma linkname "copysignf"
+    #pragma header "<math.h>"
 
 external double rint(double X);
     #pragma linksign [0,1]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return the integer nearest X in the direction of the
-       prevailing rounding mode.  */
+
+external float rint(float X);
+    #pragma linksign [0,1]
+    #pragma linkname "rintf"
+    #pragma header "<math.h>"
 
 external double hypot(double X, double Y);
     #pragma linksign [0,1,2]
-#ifdef HAVE_HEADER_PRAGMA
     #pragma header "<math.h>"
-#endif
-    /* Return `sqrt(X*X + Y*Y)'.  */
 
+external float hypot(float X, float Y);
+    #pragma linksign [0,1,2]
+    #pragma linkname "hypotf"
+    #pragma header "<math.h>"
 
-
-
-
-
-  /* Trigonometric functions.  */
-
-
-  inline float cos(float X)
-  {
-    return(tof(cos(tod(X))));
-  }
-    /* Cosine of X.  */
-
-  inline float sin(float X)
-  {
-    return(tof(sin(tod(X))));
-  }
-    /* Sine of X.  */
-
-  inline float, float sincos(float x)
-  {
-    return(sin(x), cos(x));
-  }
-
-  inline double, double sincos(double x)
-  {
-    return(sin(x), cos(x));
-  }
-
-  inline float tan(float X)
-  {
-    return(tof(tan(tod(X))));
-  }
-    /* Tangent of X.  */
-
-  inline float acos(float X)
-  {
-    return(tof(acos(tod(X))));
-  }
-    /* Arc cosine of X.  */
-
-  inline float asin(float X)
-  {
-    return(tof(asin(tod(X))));
-  }
-    /* Arc sine of X.  */
-
-  inline float atan(float X)
-  {
-    return(tof(atan(tod(X))));
-  }
-    /* Arc tangent of X.  */
-    
-  inline float atan2(float X, float Y)
-  {
-    return(tof(atan2(tod(X), tod(Y))));
-  }
-    /* Arc tangent of Y/X.  */
-
-
-
-  /* Hyperbolic functions.  */
-
-
-  inline float cosh(float X)
-  {
-    return(tof(cosh(tod(X))));
-  }
-    /* Hyperbolic cosine of X.  */
-
-  inline float sinh(float X)
-  {
-    return(tof(sinh(tod(X))));
-  }
-    /* Hyperbolic sine of X.  */
-
-  inline float tanh(float X)
-  {
-    return(tof(tanh(tod(X))));
-  }
-    /* Hyperbolic tangent of X.  */
-
-  inline float acosh(float X)
-  {
-    return(tof(acosh(tod(X))));
-  }
-    /* Hyperbolic arc cosine of X.  */
-
-  inline float asinh(float X)
-  {
-    return(tof(asinh(tod(X))));
-  }
-    /* Hyperbolic arc sine of X.  */
-
-  inline float atanh(float X)
-  {
-    return(tof(atanh(tod(X))));
-  }
-    /* Hyperbolic arc tangent of X.  */
-    
-
-
-  /* Exponential and logarithmic functions.  */
-
-
-  inline float exp(float X)
-  {
-    return(expf(X));
-  }
-    /* Exponentional function of X.  */
-
-  inline float, int frexp(float X)
-  {
-    a, b=frexp(tod(X));
-
-    return(tof(a), b);
-  }
-    /* Break X into a normalized fraction and an integral power of 2.  */
-
-  inline float ldexp(float X, int EXP)
-  {
-    return(tof(ldexp(tod(X), EXP)));
-  }
-    /* X times (two to the EXP power).  */
-
-  inline float log(float X)
-  {
-    return(tof(log(tod(X))));
-  }
-    /* Natural logarithm of X.  */
-
-  inline float log10(float X)
-  {
-    return(tof(log10(tod(X))));
-  }
-    /* Base-ten logarithm of X.  */
-
-  inline float log2(float X)
-  {
-    return(tof(log2(tod(X))));
-  }
-    /* Base-two logarithm of X.  */
-
-  inline float expm1(float X)
-  {
-    return(tof(expm1(tod(X))));
-  }
-    /* Return exp(X) - 1.  */
-
-  inline float log1p(float X)
-  {
-    return(tof(log1p(tod(X))));
-  }
-    /* Return log(1 + X).  */
-
-  inline float, float modf(float X)
-  {
-    a, b = modf(tod(X));
-    return(tof(a), tof(b));
-  }
-    /* Break VALUE into integral and fractional parts.  */
-
-
-
-  /* Power functions.  */
-
-
-  inline float pow(float X, float Y)
-  {
-    return(powf(X, Y));
-  }
-    /* Return X to the Y power.  */
-
-  inline float sqrt(float X)
-  {
-    return(sqrtf(X));
-  }
-    /* Return the square root of X.  */
-
-  inline float cbrt(float X)
-  {
-    return(tof(cbrt(tod(X))));
-  }
-    /* Return the cube root of X.  */
-
-
-
-  /* Nearest integer, absolute value, and remainder functions.  */
-
-
-  inline float ceil(float X)
-  {
-    return(tof(ceil(tod(X))));
-  }
-    /* Smallest integral value not less than X.  */
-
-  inline float fabs(float X)
-  {
-    return(tof(fabs(tod(X))));
-  }
-    /* Absolute value of X.  */
-
-  inline float floor(float X)
-  {
-    return(tof(floor(tod(X))));
-  }
-    /* Largest integer not greater than X.  */
-
-  inline float fmod(float X, float Y)
-  {
-    return(tof(fmod(tod(X), tod(Y))));
-  }
-    /* Floating-point modulo remainder of X/Y.  */
-
-
-
-
-  /* Miscellaneous  */
-
-  inline float copysign(float X, float Y)
-  {
-    return(tof(copysign(tod(X), tod(Y))));
-  }
-    /* Return X with its signed changed to Y's.  */
-
-  inline float rint(float X)
-  {
-    return(tof(rint(tod(X))));
-  }
-    /* Return the integer nearest X in the direction of the
-       prevailing rounding mode.  */
-
-  inline float hypot(float X, float Y)
-  {
-    return(tof(hypot(tod(X), tod(Y))));
-  }
-    /* Return `sqrt(X*X + Y*Y)'.  */
-
-/* Numerical constants */
-
+/******************************************************************************
+ *
+ * Numerical constants.
+ *
+ ******************************************************************************/
 
 inline float fl_e()
 {
-  return(2.7182818284590452354f);       /* e */
+    return 2.7182818284590452354f;      /* e */
 }
 
 inline float fl_log2e()
 {
-  return(1.4426950408889634074f);       /* log 2e */
+    return 1.4426950408889634074f;      /* log 2e */
 }
 
 inline float fl_log10e()
 {
-  return(0.43429448190325182765f);	/* log 10e */
+    return 0.43429448190325182765f;     /* log 10e */
 }
 
 inline float fl_ln2()
 {
-  return(0.69314718055994530942f);	/* log e2 */
+    return 0.69314718055994530942f;     /* log e2 */
 }
 
 inline float fl_ln10()
 {
-  return(2.30258509299404568402f);	/* log e10 */
+    return 2.30258509299404568402f;     /* log e10 */
 }
 
 inline float fl_pi()
 {
-  return(3.14159265358979323846f);	/* pi */
+    return 3.14159265358979323846f;     /* pi */
 }
 
 inline float fl_pi_2()
 {
-  return(1.57079632679489661923f);	/* pi/2 */
+    return 1.57079632679489661923f;     /* pi/2 */
 }
 
 inline float fl_pi_rec()
 {
-  return(0.31830988618379067154f);	/* 1/pi */
+    return 0.31830988618379067154f;     /* 1/pi */
 }
 
 inline float fl_pi_4()
 {
-  return(0.78539816339744830962f);	/* pi/4 */
+    return 0.78539816339744830962f;     /* pi/4 */
 }
 
 inline float fl_pi_rec_2()
 {
-  return(0.63661977236758134308f);	/* 2/pi */
+    return 0.63661977236758134308f;     /* 2/pi */
 }
 
 inline float fl_sqrtpi_rec_2()
 {
-  return(1.12837916709551257390f);	/* 2/sqrt(pi) */
+    return 1.12837916709551257390f;     /* 2/sqrt(pi) */
 }
 
 inline float fl_sqrt2()
 {
-  return(1.41421356237309504880f);	/* sqrt(2) */
+    return 1.41421356237309504880f;     /* sqrt(2) */
 }
 
 inline float fl_sqrt2_rec()
 {
-  return(0.7071067811865475244f);	/* 1/sqrt(2) */
+    return 0.7071067811865475244f;      /* 1/sqrt(2) */
 }
 
-
-
-
-
-
-
-
+/******************************************************************************
+ *
+ * Numerical constants.
+ *
+ ******************************************************************************/
 
 inline double e()
 {
-  return(2.7182818284590452354d);       /* e */
+    return 2.7182818284590452354d;      /* e */
 }
 
 inline double log2e()
 {
-  return(1.4426950408889634074d);       /* log 2e */
+    return 1.4426950408889634074d;      /* log 2e */
 }
 
 inline double log10e()
 {
-  return(0.43429448190325182765d);	/* log 10e */
+    return 0.43429448190325182765d;     /* log 10e */
 }
 
 inline double ln2()
 {
-  return(0.69314718055994530942d);	/* log e2 */
+    return 0.69314718055994530942d;     /* log e2 */
 }
 
 inline double ln10()
 {
-  return(2.30258509299404568402d);	/* log e10 */
+    return 2.30258509299404568402d;     /* log e10 */
 }
 
 inline double pi()
 {
-  return(3.14159265358979323846d);	/* pi */
+    return 3.14159265358979323846d;     /* pi */
 }
 
 inline double pi_2()
 {
-  return(1.57079632679489661923d);	/* pi/2 */
+    return 1.57079632679489661923d;     /* pi/2 */
 }
 
 inline double pi_rec()
 {
-  return(0.31830988618379067154d);	/* 1/pi */
+    return 0.31830988618379067154d;     /* 1/pi */
 }
 
 inline double pi_4()
 {
-  return(0.78539816339744830962d);	/* pi/4 */
+    return 0.78539816339744830962d;     /* pi/4 */
 }
 
 inline double pi_rec_2()
 {
-  return(0.63661977236758134308d);	/* 2/pi */
+    return 0.63661977236758134308d;     /* 2/pi */
 }
 
 inline double sqrtpi_rec_2()
 {
-  return(1.12837916709551257390d);	/* 2/sqrt(pi) */
+    return 1.12837916709551257390d;     /* 2/sqrt(pi) */
 }
 
 inline double sqrt2()
 {
-  return(1.41421356237309504880d);	/* sqrt(2) */
+    return 1.41421356237309504880d;     /* sqrt(2) */
 }
 
 inline double sqrt2_rec()
 {
-  return(0.7071067811865475244d);	/* 1/sqrt(2) */
+    return 0.70710678118654752440d;     /* 1/sqrt(2) */
 }
-
-
-
