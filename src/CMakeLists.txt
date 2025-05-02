@@ -86,11 +86,6 @@ CHECK_SAC2C_CC_FLAG("-Wno-gnu-line-marker" SAC2C_CC_FLAGS)
 # On some systems we get an error `argument 2 value -3 is negative` in an
 # application of `__fgets_alias` originating from `fscanl.c/term_fscanl`.
 CHECK_SAC2C_CC_FLAG("-Wno-stringop-overflow" SAC2C_CC_FLAGS)
-# Although the following two flags should be set in sac2c, for now we ignore
-# these two errors here in StdLib. Once the new package is available we
-# can remove the following two lines.
-CHECK_SAC2C_CC_FLAG("-Wno-sign-compare" SAC2C_CC_FLAGS)
-CHECK_SAC2C_CC_FLAG("-Wno-tautological-compare" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-comma" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-unreachable-code" SAC2C_CC_FLAGS)
 
