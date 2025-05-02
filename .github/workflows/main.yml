@@ -13,8 +13,8 @@ env:
 
 # action listing, all jobs run in parallel
 jobs:
-  build-ubuntu22:
-    runs-on: ubuntu-22.04
+  build-ubuntu24:
+    runs-on: ubuntu-24.04
     steps:
       - name: Get HEAD and submodules
         uses: actions/checkout@v2
@@ -40,12 +40,13 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
-          cmake --build . -j2 2>&1 | tee build.log
+          cmake --build . -j4 2>&1 | tee build.log
           if [ ${PIPESTATUS[0]} -ne 0 ]; then
             echo "!!! ERROR detected in build !!!";
             exit 1;
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
+
   build-macos-x86:
     runs-on: macos-13
     steps:
@@ -77,12 +78,13 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
-          cmake --build . -j2>&1 | tee build.log
+          cmake --build . -j4 >&1 | tee build.log
           if [ ${PIPESTATUS[0]} -ne 0 ]; then
             echo "!!! ERROR detected in build !!!";
             exit 1;
           fi
           ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
+
   build-macos-arm:
     runs-on: macos-15
     steps:
@@ -114,7 +116,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
-          cmake --build . -j2 2>&1 | tee build.log
+          cmake --build . -j3 2>&1 | tee build.log
           if [ ${PIPESTATUS[0]} -ne 0 ]; then
             echo "!!! ERROR detected in build !!!";
             exit 1;
