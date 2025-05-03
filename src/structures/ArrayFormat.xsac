@@ -439,11 +439,12 @@ char[wid] padWithBlanks(int wid, char[n] arr)
  *
  ******************************************************************************/
 inline
-int thCharsTo(char ch0, char ch1, char[lim] fry)
+int thCharsTo(char ch0, char ch1, char[n] fry)
 {
-    res = lim;
-    for (i = 0; i < lim; i = _add_SxS_(i, 1)) {
-        if (fry[i] == ch0 || fry[i] == ch1) {
+    res = n;
+    for (i = 0; _lt_SxS_(i, n); i = _add_SxS_(i, 1)) {
+        if (_or_SxS_(_eq_SxS_(fry[i], ch0),
+                     _eq_SxS_(fry[i], ch1))) {
             res = i;
             i = n;
         }
