@@ -33,13 +33,13 @@ export { format };
 
 /******************************************************************************
  *
- * @fn char[d>0:shp] format(char[d>0:shp] arr)
+ * @fn char[d:shp] format(char[d:shp] arr)
  *
  * @brief Default format for any character array.
  *
  ******************************************************************************/
 inline
-char[d>0:shp] format(char[d>0:shp] arr)
+char[d:shp] format(char[d:shp] arr)
 {
     return arr;
 }
@@ -257,7 +257,7 @@ char[.] format(double arr, int precision)
 
 /******************************************************************************
  *
- * @fn char[+] format(double[d>0:shp] arr, int precision)
+ * @fn char[+] format(double[d:shp] arr, int precision)
  *
  * @brief Precision-significant digit format on double non-scalar.
  *
@@ -340,12 +340,12 @@ char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 
 /******************************************************************************
  *
- * @fn int[d>0:shp] log10(int[d>0:shp] arr)
+ * @fn int[d:shp] log10(int[d:shp] arr)
  *
  * @brief Poor man's 10-logarithm, used to compute column widths.
  *
  ******************************************************************************/
-int[d>0:shp] log10(int[d>0:shp] arr)
+int[d:shp] log10(int[d:shp] arr)
 {
     // Avoid 10 log 0!
     return toi(MathArray::log10(tod(max(arr, 2)))) + 1;
