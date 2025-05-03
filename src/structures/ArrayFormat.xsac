@@ -1,16 +1,6 @@
 module ArrayFormat;
 
-/******************************************************************************
- *
- * Depends on ArrayBasics, ArrayArith, ArrayTransform, ArrayReduce,
- * Constants, MathArray, and String.
- *
- ******************************************************************************/
-
-use ArrayBasics: { sel, genarray };
-use ArrayArith: { +, -, <, <=, >=, abs, max, tod, toi };
-use ArrayTransform: { take, drop, rotate };
-use ArrayReduce: { sum, prod };
+use Array: all;
 use String: { tochar, sprintf };
 
 export { format };
@@ -68,11 +58,42 @@ inline
 char[d:shp,m] format(bool[d:shp,n] arr)
     | _eq_SxS_(m, max(2 * n - 1, 0))
 {
-    res = { iv -> _sel_VxA_(iv, arr) ? ['1', ' '] : ['0', ' '] };
-    res = _reshape_VxA_(_cat_VxV_(shp, [_mul_SxS_(2, n)]), res);
+    res = { iv -> arr[iv] ? ['1', ' '] : ['0', ' '] };
+    res = reshape(_cat_VxV_(shp, [2 * n]), res);
     lastcol = _cat_VxV_(genarray([d], 0), [-1]);
     res = drop(lastcol, res);
     return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(bool arr, int[2] w)
+ *
+ * @brief Defined-width and precision format on boolean scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(bool arr, int[2] w)
+{
+    return format(tod(arr), w);
+}
+
+/******************************************************************************
+ *
+ * @fn char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
+ *
+ * @brief Defined-width format on boolean non-scalar.
+ *
+ ******************************************************************************/
+inline
+char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
+    | _eq_SxS_(m, max(2 * n - 1, 0))
+{
+    return format(tod(arr), w);
 }
 
 /******************************************************************************
@@ -113,22 +134,22 @@ char[.] format(long arr)
 inline
 char[+] format(int[d:shp,n] arr)
 {
-    if (_eq_SxS_(_size_A_(arr), 0)) {
+    shpp = prod(shp);
+
+    if (shpp == 0 || n == 0) {
         res = genarray(shp, ' ');
     } else {
-        shpp = prod(shp);
-        m = _reshape_VxA_([shpp, n], arr);
+        m = reshape([shpp, n], arr);
 
         // Large negative number may need extra column for minus sign
         minm = minsl1(m);
-        maxneg = log10(_abs_V_(minm));
+        maxneg = log10(abs(minm));
         widths = log10(maxsl1(abs(m)));
-        widths += _mul_VxV_(toi(_lt_VxS_(minm, 0)),
-                            toi(_ge_VxV_(maxneg, widths)));
-        zcols = _sub_SxS_(_add_SxS_(sum(widths), shpp), 1);
+        widths += toi(minm < 0) * toi(maxneg >= widths);
+        zcols = sum(widths + 1) - 1;
 
         res = { [i] -> formatrow(widths, m[i]) | [i] < [shpp] };
-        res = _reshape_VxA_(_cat_VxV_(shp, [zcols]), res);
+        res = reshape(_cat_VxV_(shp, [zcols]), res);
     }
 
     return res;
@@ -144,7 +165,7 @@ char[+] format(int[d:shp,n] arr)
 inline
 char[.] format(int arr, int precision)
 {
-    return format(_tod_S_(arr), precision);
+    return format(tod(arr), precision);
 }
 
 /******************************************************************************
@@ -162,6 +183,25 @@ char[+] format(int[+] arr, int precision)
 
 /******************************************************************************
  *
+ * @fn char[.] format(int arr, int[2] w)
+ *
+ * @brief Defined-width and precision format on integer scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(int arr, int[2] w)
+{
+    res = tochar(sprintf("%*.*d", w[0], w[1], arr));
+    res = overflowCheck(res, w[0]);
+    return res;
+}
+
+/******************************************************************************
+ *
  * @fn char[.] format(float arr)
  *
  * @brief Default format on float scalar.
@@ -170,7 +210,7 @@ char[+] format(int[+] arr, int precision)
 inline
 char[.] format(float arr)
 {
-    return format(_tod_S_(arr), 15);
+    return format(tod(arr), 15);
 }
 
 /******************************************************************************
@@ -196,7 +236,7 @@ char[+] format(float[+] arr)
 inline
 char[.] format(float arr, int precision)
 {
-    return format(_tod_S_(arr), precision);
+    return format(tod(arr), precision);
 }
 
 /******************************************************************************
@@ -210,6 +250,40 @@ inline
 char[+] format(float[+] arr, int precision)
 {
     return format(tod(arr), precision);
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(float arr, int[2] w)
+ *
+ * @brief Defined-width and precision format on floating scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(float arr, int[2] w)
+{
+    return format(tod(arr), w);
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(float[+] arr, int[2] w)
+ *
+ * @brief Defined-width format on float non-scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[+] format(float[+] arr, int[2] w)
+{
+    return format(tod(arr), w);
 }
 
 /******************************************************************************
@@ -267,18 +341,17 @@ char[.] format(double arr, int precision)
 inline
 char[+] format(double[d:shp,n] arr, int precision)
 {
-    if (_eq_SxS_(_size_A_(arr), 0)) {
+    shpp = prod(shp);
+
+    if (shpp == 0 || n == 0) {
         res = genarray(shp, ' ');
     } else {
-        shpp = prod(shp);
-
-        ravel = _reshape_VxA_([_mul_SxS_(shpp, n)], arr);
+        ravel = reshape([shpp * n], arr);
 
         // Format each array element
         // See scalarFormatter for why we do 'precision + 7'
         fry = { [i] -> padWithBlanks(precision + 7,
-                                     scalarFormatter(_sel_VxA_([i], ravel),
-                                                     precision)) };
+                                     scalarFormatter(ravel[i], precision)) };
 
         // Determine width of each result column
         // First, chars left of decimal point
@@ -286,17 +359,60 @@ char[+] format(double[d:shp,n] arr, int precision)
         // Decimal point and # non-blankchars to right of decimal point
         rodp = { [i] -> thCharsTo(' ', ' ', drop([lodp[i]], fry[i])) };
 
-        lodpmax = maxsl1(_reshape_VxA_([shpp, n], lodp));
-        rodpmax = maxsl1(_reshape_VxA_([shpp, n], rodp));
-        widths = _add_VxV_(lodpmax, rodpmax);
+        lodpmax = maxsl1(reshape([shpp, n], lodp));
+        rodpmax = maxsl1(reshape([shpp, n], rodp));
+        widths = lodpmax + rodpmax;
         // Room for decimal point and blank
-        zcols = _sub_SxS_(sum(_add_VxS_(widths, 2)), 1);
+        zcols = sum(widths + 2) - 1;
 
         res = { [i] -> alignrow(fry, i, widths, lodp, lodpmax, zcols)
               | [i] < [shpp] };
-        res = _reshape_VxA_(_cat_VxV_(shp, [zcols]), res);
+        res = reshape(_cat_VxV_(shp, [zcols]), res);
     }
 
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[.] format(double arr, int[2] w)
+ *
+ * @brief Formatting for a double scalar.
+ *
+ * @note This is temporary, pending use of the Burger/Dybvig algorithm.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[.] format(double arr, int[2] w)
+{
+    res = tochar(sprintf("%*.*g", w[0], w[1], arr));
+    res = overflowCheck(res, w[0]);
+    return res;
+}
+
+/******************************************************************************
+ *
+ * @fn char[+] format(double[d:shp] arr, int[2] w)
+ *
+ * @brief Defined-width format on double non-scalar.
+ *
+ * @param w[0] The maximum legal result width. If result is wider than this,
+ *        the result will be filled with asterixs ('*').
+ * @param w[1] The number of significant digits to be printed.
+ *
+ ******************************************************************************/
+inline
+char[+] format(double[d:shp] arr, int[2] w)
+{
+    res = { iv -> format(arr[iv], w) | iv < shp };
+    zshp = shape(res);
+    zshp = _cat_VxV_(drop([-2], zshp),
+                     [prod(take([-2], zshp))]);
+    res = reshape(zshp, res);
     return res;
 }
 
@@ -316,23 +432,22 @@ char[+] format(double[d:shp,n] arr, int precision)
 inline
 char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 {
-    olen = _sub_SxS_(_add_SxS_(sum(wid), vlen), 1);
+    olen = sum(wid + 1) - 1;
     res = genarray([olen], ' ');
 
     // Can't use WL because widths may differ
     sink = 0;
-    for (i = 0; _lt_SxS_(i, vlen); i = _add_SxS_(i, 1)) {
-        curz = formatOverflow(_sel_VxA_([i], arr), _sel_VxA_([i], wid), 1);
-        lim  = _sel_VxA_([0], _shape_A_(curz));
+    for (i = 0; i < vlen; i = _add_SxS_(i, 1)) {
+        w = [wid[i], 1];
+        curz = format(arr[i], w);
+        lim  = shape(curz)[0];
 
-        for (src = 0; _lt_SxS_(src, lim); src = _add_SxS_(src, 1)) {
-            res = _modarray_AxVxS_(res,
-                                   [_add_SxS_(src, sink)],
-                                   _sel_VxA_([src], curz));
+        for (src = 0; src < lim; src = _add_SxS_(src, 1)) {
+            res = modarray(res, src + sink, curz[src]);
         }
 
         // Inter-element blank
-        sink = _add_SxS_(sink, _add_SxS_(_sel_VxA_([i], wid), 1));
+        sink += wid[i] + 1;
     }
 
     return res;
@@ -397,16 +512,11 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
     res = genarray([zcols], ' ');
 
     zci = 0;
-    for (ci = 0; _lt_SxS_(ci, cols); ci = _add_SxS_(ci, 1)) {
-        // Source item index
-        fi = _add_SxS_(ci, _mul_SxS_(cols, i));
-
-        // Shift count to align decimal
-        sc = _sub_SxS_(_sel_VxA_([fi], lodp),
-                       _sel_VxA_([ci], lodpmax));
-
+    for (ci = 0; ci < cols; ci = _add_SxS_(ci, 1)) {
+        fi = ci + cols * i;           // Source item index
+        sc = lodp[fi] - lodpmax[ci];  // Shift count to align decimal
         sefe = thCharsTo(' ', ' ', fry[fi]);
-        sz = _add_SxS_(sefe, _abs_S_(sc));
+        sz = sefe + abs(sc);
         zit = padWithBlanks(sz, rotate([-sc], fry[fi]));
         res, junk = thrnAppend(res, zci, zit);
         zci += widths[ci] + 1;
@@ -425,28 +535,28 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
 inline
 char[wid] padWithBlanks(int wid, char[n] arr)
 {
+    maxidx = max(wid, n);
     return with {
-        ([0] <= iv < [_max_SxS_(wid, n)]) : _sel_VxA_(iv, arr);
+        ([0] <= iv < [maxidx]) : arr[iv];
     } : genarray([wid], ' ');
 }
 
 /******************************************************************************
  *
- * @fn int thCharsTo(char ch0, char ch1, char[n] fry)
+ * @fn int thCharsTo(char[n] ch, char[lim] fry)
  *
  * @brief Find chars left of decimal point (or end).
  *        I.e., (fry member ch) iota 1.
  *
  ******************************************************************************/
 inline
-int thCharsTo(char ch0, char ch1, char[n] fry)
+int thCharsTo(char ch0, char ch1, char[lim] fry)
 {
-    res = n;
-    for (i = 0; _lt_SxS_(i, n); i = _add_SxS_(i, 1)) {
-        if (_or_SxS_(_eq_SxS_(fry[i], ch0),
-                     _eq_SxS_(fry[i], ch1))) {
+    res = lim;
+    for (i = 0; i < lim; i = _add_SxS_(i, 1)) {
+        if (fry[i] == ch0 || fry[i] == ch1) {
             res = i;
-            i = n;
+            i = lim;
         }
     }
 
@@ -464,8 +574,8 @@ inline
 char[d], int thrnAppend(char[d] vec, int sink, char[n] arr)
 {
     res = vec;
-    for (src = 0; _lt_SxS_(src, n); src = _add_SxS_(src, 1)) {
-        res = _modarray_AxVxS_(res, [sink], _sel_VxA_([src], arr));
+    for (src = 0; src < n; src = _add_SxS_(src, 1)) {
+        res[sink] = arr[src];
         sink = _add_SxS_(sink, 1);
     }
 
@@ -501,33 +611,12 @@ char[.] killPlusSign(char[n] arr)
 {
     res = arr;
     sink = 1;
-    for (src = 1; _lt_SxS_(src, n); src = _add_SxS_(src, 1)) {
-        res = _modarray_AxVxS_(res, [sink], _sel_VxA_([src], arr));
-        sink = _add_SxS_(sink,
-                         _toi_S_(_neq_SxS_(_sel_VxA_([sink], res),
-                                           '+')));
+    for (src = 1; src < n; src = _add_SxS_(src, 1)) {
+        res[sink] = arr[src];
+        sink += toi(res[sink] != '+');
     }
 
-    res = _take_SxV_(sink, res);
-    return res;
-}
-
-/******************************************************************************
- *
- * @fn char[.] formatOverflow(int arr, int width, int precision)
- *
- * @brief Defined-width and precision format on integer scalar.
- *
- * @param width The maximum legal result width. If result is wider than this,
- *        the result will be filled with asterixs ('*').
- * @param precision The number of significant digits to be printed.
- *
- ******************************************************************************/
-inline
-char[.] formatOverflow(int arr, int wid, int precision)
-{
-    res = tochar(sprintf("%*.*d", wid, precision, arr));
-    res = overflowCheck(res, wid);
+    res = take([sink], res);
     return res;
 }
 
@@ -541,5 +630,5 @@ char[.] formatOverflow(int arr, int wid, int precision)
 inline
 char[.] overflowCheck(char[n] arr, int wid)
 {
-    return _gt_SxS_(n, wid) ? genarray([wid], '*') : arr;
+    return wid < n ? genarray([wid], '*') : arr;
 }
