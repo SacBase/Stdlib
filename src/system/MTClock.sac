@@ -34,9 +34,9 @@ double timediff(long sec1, long nsec1, long sec2, long nsec2)
     sec = _sub_SxS_(sec2, sec1);
     nsec = _sub_SxS_(nsec2, nsec1);
 
-    if (_lt_SxS_(nsec, 0)) {
-        nsec = _add_SxS_(nsec, 1000000000);
-        sec = _sub_SxS_(sec, 1);
+    if (_lt_SxS_(nsec, 0l)) {
+        nsec = _add_SxS_(nsec, 1000000000l);
+        sec = _sub_SxS_(sec, 1l);
     }
 
     return _add_SxS_(_tod_S_(sec),
