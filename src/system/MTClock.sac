@@ -40,5 +40,10 @@ double timediff(long sec1, long nsec1, long sec2, long nsec2)
     }
 
     return _add_SxS_(_tod_S_(sec),
-                     _div_SxS_(nsec, 1e9d));
+                     _div_SxS_(_tod_S_(nsec), 1e9d));
+}
+
+void touch()
+{
+    touch(TheMTClock);
 }
