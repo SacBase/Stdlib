@@ -44,7 +44,6 @@ IF (NOT POW_WORKS)
 ENDIF ()
 
 SET (NEED_LIBRT)
-SET (HAVE_GETTIME_REALTIME 1)
 SET (LIBRT_TEST_PROG "
 #include <time.h>
 #include <sys/times.h>
@@ -64,27 +63,8 @@ IF (NOT RT_WORKS)
     SET (CMAKE_REQUIRED_LIBRARIES ${OLD_FLAGS})
     IF (RT_WORKS)
         SET (NEED_LIBRT 1)
-    ELSE ()
-        SET (HAVE_GETTIME_REALTIME 0)
     ENDIF ()
 ENDIF ()
-
-
-CHECK_C_SOURCE_COMPILES ("
-#include <time.h>
-#include <mach/clock.h>
-#include <mach/mach.h>
-int main (void) {
-  struct timespec ts;
-  clock_serv_t cclock;
-  mach_timespec_t mts;
-  host_get_clock_service (mach_host_self(), CALENDAR_CLOCK, &cclock);
-  clock_get_time (cclock, &mts);
-  mach_port_deallocate (mach_task_self(), cclock);
-  ts.tv_sec = mts.tv_sec;
-  ts.tv_nsec = mts.tv_nsec;
-"
-HAVE_MACH_CLOCK_GET_TIME)
 
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/cmake/config.h.in"
                 "${PROJECT_BINARY_DIR}/include/config.h")
@@ -99,8 +79,6 @@ MESSAGE ("
  * sac2c extra flags:      ${SAC2C_EXTRA_INC}
  *
  * Configuration state:
- * - realtime clock:       ${HAVE_GETTIME_REALTIME}
- * - mach clock:           ${HAVE_MACH_CLOCK_GET_TIME}
  * - full types:           ${FULLTYPES}
  * - build generic         ${BUILDGENERIC}
  * - build extended:       ${BUILD_EXT}

@@ -1,40 +1,26 @@
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 class RTClock;
 
 external classtype;
 
-#if defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
-export {TheRTClock,touch,gettime};
-
-#else //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
-export {TheRTClock,touch};
-
-#endif //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
+export { TheRTClock, touch, gettime };
 
 objdef RTClock TheRTClock = createTheRTClock();
 
-external RTClock createTheRTClock( );
-#pragma effect World::TheWorld
-#pragma linkname "SAC_RTClock_createTheRTClock"
-#pragma linkobj "src/RTClock/rtclock.o"
-#pragma linksign [1]
+external RTClock createTheRTClock();
+    #pragma effect World::TheWorld
+    #pragma linkname "SAC_RTClock_createTheRTClock"
+    #pragma linkobj "src/RTClock/rtclock.o"
+    #pragma linksign [1]
 #ifdef NEED_LIBRT
-#pragma linkwith "rt"
+    #pragma linkwith "rt"
 #endif
 
-external void touch( RTClock &rtclock);
-#pragma linkname "SAC_RTClock_touch"
-#pragma linkobj "src/RTClock/rtclock.o"
+external void touch(RTClock &rtclock);
+    #pragma linkname "SAC_RTClock_touch"
+    #pragma linkobj "src/RTClock/rtclock.o"
 
-#if defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
 external long, long gettime();
-#pragma effect  RTClock::TheRTClock  
-#pragma linkname "SAC_RTClock_gettime"
-#pragma linkobj "src/RTClock/rtclock.o"
-#pragma linksign [1,2]
-
-#endif //defined(HAVE_GETTIME_REALTIME) || defined(HAVE_MACH_CLOCK_GET_TIME)
-
+    #pragma effect RTClock::TheRTClock
+    #pragma linkname "SAC_RTClock_gettime"
+    #pragma linkobj "src/RTClock/rtclock.o"
+    #pragma linksign [1,2]
