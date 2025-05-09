@@ -3,68 +3,78 @@
 # to the Extended build of the standard library.
 #
 # The syntax of the file is:
-#       <filename><spaces>(Core|Ext)
+#   <filename><spaces>(Core|Ext)
 #
 # The filename is specified relatively to src directory.
 
-# The xsac files:
+# Auxiliary
+auxiliary/Benchmarking.sac                 Ext
+auxiliary/Hiding.xsac                       Ext
+auxiliary/Interval.sac                     Ext
+
+# Numerical
+numerical/ComplexMath.sac                  Ext
+numerical/Math.sac                         Core
+numerical/MathArray.sac                    Core
+numerical/Numerical.sac                    Core
+
+# Random
+random/Xoshiro.sac                         Core
+
+# StdIO
 stdio/ArrayIO.xsac                         Core
-structures/ScalarArith.xsac                Core
-structures/ArrayBasics.xsac                Core
+stdio/BinFile.sac                          Core
+stdio/ComplexIO.sac                        Ext
+stdio/FibreIO.sac                          Ext
+stdio/File.sac                             Core
+stdio/IOresources.sac                      Core
+stdio/ListIO.sac                           Ext
+stdio/ScalarIO.xsac                        Core
+stdio/StdIO.sac                            Core
+stdio/TermFile.sac                         Core
+
+# Structures
+structures/Array.sac                       Core
 structures/ArrayArith.xsac                 Core
+structures/ArrayBasics.xsac                Core
+structures/ArrayFormat.xsac                Core
 structures/ArrayReduce.xsac                Core
 structures/ArrayTransform.xsac             Core
 structures/ArrayTransformApl.xsac          Ext
-structures/ArrayFormat.xsac                Core
-structures/ComplexArrayBasics.xsac         Ext
+structures/Char.sac                        Core
+structures/Color8.sac                      Ext
+structures/Complex.sac                     Ext
 structures/ComplexArrayArith.xsac          Ext
+structures/ComplexArrayBasics.xsac         Ext
 structures/ComplexArrayTransform.xsac      Ext
+structures/ComplexBasics.sac               Ext
+structures/ComplexScalarArith.sac          Ext
+structures/Constants.sac                   Core
+structures/List.sac                        Ext
 structures/Quaternion.xsac                 Ext
+structures/ScalarArith.xsac                Core
+structures/String.sac                      Core
+structures/StringArray.sac                 Ext
+structures/Structures.sac                  Core
 
-# The sac files:
-utrace/UTrace.sac                          Core
-utrace/Indent.sac                          Core
-system/World.sac                           Core
-system/TimeStamp.sac                       Core
-system/Terminal.sac                        Core
+# System
 system/Clock.sac                           Core
-system/System.sac                          Core
-system/SysErr.sac                          Core
-system/RuntimeError.sac                    Core
+system/CommandLine.sac                     Core
+system/Dir.sac                             Core
+system/Environment.sac                     Core
+system/FileSystem.sac                      Core
+system/GetOpt.sac                          Core
+system/MTClock.sac                         Core
+system/Process.sac                         Core
 system/RTClock.sac                         Core
 system/RTimer.sac                          Core
-system/FileSystem.sac                      Core
-system/Process.sac                         Core
-system/MTClock.sac                         Core
-system/CommandLine.sac                     Core
-system/GetOpt.sac                          Core
-system/Environment.sac                     Core
-system/Dir.sac                             Core
-structures/Array.sac                       Core
-structures/Structures.sac                  Core
-structures/StringArray.sac                 Ext
-structures/List.sac                        Ext
-structures/Color8.sac                      Ext
-structures/Constants.sac                   Core
-structures/ComplexScalarArith.sac          Ext
-structures/ComplexBasics.sac               Ext
-structures/Complex.sac                     Ext
-structures/Char.sac                        Core
-structures/String.sac                      Core
-stdio/TermFile.sac                         Core
-stdio/ScalarIO.xsac                        Core
-stdio/ListIO.sac                           Ext
-stdio/IOresources.sac                      Core
-stdio/FibreIO.sac                          Ext
-stdio/ComplexIO.sac                        Ext
-stdio/BinFile.sac                          Core
-stdio/StdIO.sac                            Core
-stdio/File.sac                             Core
-numerical/ComplexMath.sac                  Ext
-numerical/Numerical.sac                    Core
-numerical/MathArray.sac                    Core
-numerical/Math.sac                         Core
-random/Xoshiro.sac                         Core
-auxiliary/Interval.sac                     Ext
-auxiliary/Hiding.xsac                      Ext
-auxiliary/Benchmarking.sac                 Ext
+system/RuntimeError.sac                    Core
+system/SysErr.sac                          Core
+system/System.sac                          Core
+system/Terminal.sac                        Core
+system/TimeStamp.sac                       Core
+system/World.sac                           Core
+
+# UTrace
+utrace/Indent.sac                          Ext
+utrace/UTrace.sac                          Ext

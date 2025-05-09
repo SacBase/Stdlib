@@ -3,13 +3,12 @@ module Structures;
 import Array: all;
 import Char: all;
 import String: all;
+
 #ifdef EXT_STDLIB
-import Complex: all;
-import Quaternion: all;
-#ifndef SAC_BACKEND_MUTC
 import Color8: all;
+import Complex: all;
 import List: all;
-#endif /* SAC_BACKEND_MUTC */
-#endif /* EXT_STDLIB */
+import Quaternion: all;
+#endif
 
 export all;
