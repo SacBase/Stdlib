@@ -39,7 +39,7 @@ typ[d:shp] hideValue(typ[d:shp] arr)                                           \
     return _hideValue_SxA_(0, arr);                                            \
 }
 
-#define HIDESHAPE_AxS(typ, postfix, zval, oval)                                \
+#define HIDEVALUE_AxS(typ, postfix, zval, oval)                                \
 inline                                                                         \
 typ[d:shp] hideValue(typ[d:shp] arr, int i)                                    \
 {                                                                              \
