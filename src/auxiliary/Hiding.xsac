@@ -1,0 +1,108 @@
+/******************************************************************************
+ *
+ * @brief This module is for hiding type information. It is commonly
+ * used for static inputs and is intentioned for benchmarking.
+ *
+ * Some functions take a single argument and hide the value, shape or
+ * dimensionality information of the input. Others in addition take an
+ * integer. This allows for calls to inlined kernel functions in a loop
+ * where where the call must be repeated N times for benchmarking.
+ *
+ * @example The following computes `kernel` N times even if `kernel` is inlined.
+ *      for(i = 0; i < N; i += 1) {
+ *          res[i] = kernel(hideValue(arr1, i), hideValue(arr2, i), ...);
+ *      }
+ *
+ ******************************************************************************/
+module Hiding;
+
+export all;
+
+#include "builtin.mac"
+
+/******************************************************************************
+ *
+ * <a>[d:shp] hideValue(<a>[d:shp] arr, int i = 0)
+ *
+ * AKV -> AKS
+ * AKS -> AKS
+ * AKD -> AKD
+ * AUD -> AUD
+ * SCALAR -> SCALAR
+ *
+ ******************************************************************************/
+
+#define HIDEVALUE_A(typ, postfix, zval, oval)                                  \
+inline                                                                         \
+typ[d:shp] hideValue(typ[d:shp] arr)                                           \
+{                                                                              \
+    return _hideValue_SxA_(0, arr);                                            \
+}
+
+#define HIDESHAPE_AxS(typ, postfix, zval, oval)                                \
+inline                                                                         \
+typ[d:shp] hideValue(typ[d:shp] arr, int i)                                    \
+{                                                                              \
+    return _hideValue_SxA_(i, arr);                                            \
+}
+
+BUILT_IN(HIDEVALUE_A)
+BUILT_IN(HIDEVALUE_AxS)
+
+/******************************************************************************
+ *
+ * <a>[d:shp] hideShape(<a>[d:shp] arr, int i = 0)
+ *
+ * AKV -> AKD
+ * AKS -> AKD
+ * AKD -> AKD
+ * AUD -> AUD
+ * SCALAR -> SCALAR
+ *
+ ******************************************************************************/
+
+#define HIDESHAPE_A(typ, postfix, zval, oval)                                  \
+inline                                                                         \
+typ[d:shp] hideShape(typ[d:shp] arr)                                           \
+{                                                                              \
+    return _hideShape_SxA_(0, arr);                                            \
+}
+
+#define HIDESHAPE_AxS(typ, postfix, zval, oval)                                \
+inline                                                                         \
+typ[d:shp] hideShape(typ[d:shp] arr, int i)                                    \
+{                                                                              \
+    return _hideShape_SxA_(i, arr);                                            \
+}
+
+BUILT_IN(HIDESHAPE_A)
+BUILT_IN(HIDESHAPE_AxS)
+
+/******************************************************************************
+ *
+ * <a>[d:shp] hideDim(<a>[d:shp] arr, int i = 0)
+ *
+ * AKV -> AUD
+ * AKS -> AUD
+ * AKD -> AUD
+ * AUD -> AUD
+ * SCALAR -> AUD
+ *
+ ******************************************************************************/
+
+#define HIDEDIM_A(typ, postfix, zval, oval)                                    \
+inline                                                                         \
+typ[d:shp] hideDim(typ[d:shp] arr)                                             \
+{                                                                              \
+    return _hideDim_SxA_(0, arr);                                              \
+}
+
+#define HIDEDIM_AxS(typ, postfix, zval, oval)                                  \
+inline                                                                         \
+typ[d:shp] hideDim(typ[d:shp] arr, int i)                                      \
+{                                                                              \
+    return _hideDim_SxA_(i, arr);                                              \
+}
+
+BUILT_IN(HIDEDIM_A)
+BUILT_IN(HIDEDIM_AxS)
