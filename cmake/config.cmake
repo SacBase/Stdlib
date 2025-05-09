@@ -43,29 +43,6 @@ IF (NOT POW_WORKS)
     ENDIF ()
 ENDIF ()
 
-SET (NEED_LIBRT)
-SET (LIBRT_TEST_PROG "
-#include <time.h>
-#include <sys/times.h>
-int main (void) {
- struct timespec ts;
- clock_gettime (CLOCK_REALTIME, &ts);
- return 0;
-}
-")
-
-CHECK_C_SOURCE_COMPILES ("${LIBRT_TEST_PROG}"   RT_WORKS)
-IF (NOT RT_WORKS)
-    UNSET (RT_WORKS)
-    SET (OLD_FLAGS ${CMAKE_REQUIRED_LIBRARIES})
-    LIST (APPEND CMAKE_REQUIRED_LIBRARIES rt)
-    CHECK_C_SOURCE_COMPILES ("${LIBRT_TEST_PROG}"   RT_WORKS)
-    SET (CMAKE_REQUIRED_LIBRARIES ${OLD_FLAGS})
-    IF (RT_WORKS)
-        SET (NEED_LIBRT 1)
-    ENDIF ()
-ENDIF ()
-
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/cmake/config.h.in"
                 "${PROJECT_BINARY_DIR}/include/config.h")
 

@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 class MTClock;
 
 external classtype;
@@ -15,9 +11,6 @@ external MTClock createTheMTClock();
     #pragma linkobj "src/MTClock/mtclock.o"
     #pragma effect World::TheWorld
     #pragma linksign [1]
-#ifdef NEED_LIBRT
-    #pragma linkwith "rt"
-#endif
 
 external void touch(MTClock& mtclock);
     #pragma linkname "SAC_MTClock_touch"
