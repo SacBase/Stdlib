@@ -11,9 +11,6 @@ external RTClock createTheRTClock();
     #pragma linkname "SAC_RTClock_createTheRTClock"
     #pragma linkobj "src/RTClock/rtclock.o"
     #pragma linksign [1]
-#ifdef NEED_LIBRT
-    #pragma linkwith "rt"
-#endif
 
 external void touch(RTClock &rtclock);
     #pragma linkname "SAC_RTClock_touch"
