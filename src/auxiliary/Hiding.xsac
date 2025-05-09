@@ -32,14 +32,14 @@ export all;
  *
  ******************************************************************************/
 
-#define HIDEVALUE_A(typ, postfix, zval, oval)                                  \
+#define HIDEVALUE_A(typ, _postfix, _fmt, _zval, _oval)                         \
 inline                                                                         \
 typ[d:shp] hideValue(typ[d:shp] arr)                                           \
 {                                                                              \
     return _hideValue_SxA_(0, arr);                                            \
 }
 
-#define HIDEVALUE_AxS(typ, postfix, zval, oval)                                \
+#define HIDEVALUE_AxS(typ, _postfix, _fmt, _zval, _oval)                       \
 inline                                                                         \
 typ[d:shp] hideValue(typ[d:shp] arr, int i)                                    \
 {                                                                              \
@@ -61,14 +61,14 @@ BUILT_IN(HIDEVALUE_AxS)
  *
  ******************************************************************************/
 
-#define HIDESHAPE_A(typ, postfix, zval, oval)                                  \
+#define HIDESHAPE_A(typ, _postfix, _fmt, _zval, _oval)                         \
 inline                                                                         \
 typ[d:shp] hideShape(typ[d:shp] arr)                                           \
 {                                                                              \
     return _hideShape_SxA_(0, arr);                                            \
 }
 
-#define HIDESHAPE_AxS(typ, postfix, zval, oval)                                \
+#define HIDESHAPE_AxS(typ, _postfix, _fmt, _zval, _oval)                       \
 inline                                                                         \
 typ[d:shp] hideShape(typ[d:shp] arr, int i)                                    \
 {                                                                              \
@@ -90,14 +90,14 @@ BUILT_IN(HIDESHAPE_AxS)
  *
  ******************************************************************************/
 
-#define HIDEDIM_A(typ, postfix, zval, oval)                                    \
+#define HIDEDIM_A(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp] hideDim(typ[d:shp] arr)                                             \
 {                                                                              \
     return _hideDim_SxA_(0, arr);                                              \
 }
 
-#define HIDEDIM_AxS(typ, postfix, zval, oval)                                  \
+#define HIDEDIM_AxS(typ, _postfix, _fmt, _zval, _oval)                         \
 inline                                                                         \
 typ[d:shp] hideDim(typ[d:shp] arr, int i)                                      \
 {                                                                              \
