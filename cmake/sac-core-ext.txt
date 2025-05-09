@@ -66,5 +66,5 @@ numerical/MathArray.sac                    Core
 numerical/Math.sac                         Core
 random/Xoshiro.sac                         Core
 auxiliary/Interval.sac                     Ext
-auxiliary/Hiding.sac                       Ext
+auxiliary/Hiding.xsac                      Ext
 auxiliary/Benchmarking.sac                 Ext
