@@ -1,8 +1,5 @@
 /* `mkdtemp' function */
 #cmakedefine HAVE_MKDTEMP
 
-/* Do we need to link with -lm.  */
-#cmakedefine NEED_LIBM
-
 /* Support sac2c #pragma header feature */
 #cmakedefine HAVE_HEADER_PRAGMA
