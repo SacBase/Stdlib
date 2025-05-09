@@ -1,12 +1,5 @@
 module String;
 
-#ifdef SAC_BACKEND_MUTC
-
-import MutcString: all;
-export all;
-
-#else
-
 /******************************************************************************
  *
  * Depends on ArrayBasics and Char.
@@ -399,5 +392,3 @@ inline string convert(string str)                                              \
 
 CONVERT_STRING(isupper, tolower)
 CONVERT_STRING(islower, toupper)
-
-#endif /* SAC_BACKEND_MUTC */
