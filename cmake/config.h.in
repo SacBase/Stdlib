@@ -1,5 +1,0 @@
-/* `mkdtemp' function */
-#cmakedefine HAVE_MKDTEMP
-
-/* Support sac2c #pragma header feature */
-#cmakedefine HAVE_HEADER_PRAGMA
