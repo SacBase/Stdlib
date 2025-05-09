@@ -1,68 +1,42 @@
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 class RTimer;
+
 external classtype;
 
 use RTClock: all;
 
 export all;
 
-external RTimer createRTimer( );
-#pragma effect RTClock::TheRTClock
-#pragma linkname "SAC_RTimer_createRTimer"
-#pragma linkobj "src/RTimer/rtimer.o"
-#pragma linksign [1]
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+external RTimer createRTimer();
+    #pragma linkname "SAC_RTimer_createRTimer"
+    #pragma linkobj "src/RTimer/rtimer.o"
+    #pragma effect RTClock::TheRTClock
+    #pragma linksign [1]
 
-external void destroyRTimer( RTimer rtimer);
-#pragma effect RTClock::TheRTClock
-#pragma linkname "SAC_RTimer_destroyRTimer"
-#pragma linkobj "src/RTimer/rtimer.o"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+external void destroyRTimer(RTimer rtimer);
+    #pragma linkname "SAC_RTimer_destroyRTimer"
+    #pragma linkobj "src/RTimer/rtimer.o"
+    #pragma effect RTClock::TheRTClock
 
-external void startRTimer( RTimer &rtimer);
-#pragma effect RTClock::TheRTClock
-#pragma linkname "SAC_RTimer_startRTimer"
-#pragma linkobj "src/RTimer/rtimer.o"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+external void startRTimer(RTimer &rtimer);
+    #pragma linkname "SAC_RTimer_startRTimer"
+    #pragma linkobj "src/RTimer/rtimer.o"
+    #pragma effect RTClock::TheRTClock
 
-external void stopRTimer( RTimer &rtimer);
-#pragma effect RTClock::TheRTClock
-#pragma linkname "SAC_RTimer_stopRTimer"
-#pragma linkobj "src/RTimer/rtimer.o"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+external void stopRTimer(RTimer &rtimer);
+    #pragma linkname "SAC_RTimer_stopRTimer"
+    #pragma linkobj "src/RTimer/rtimer.o"
+    #pragma effect RTClock::TheRTClock
 
-external void resetRTimer( RTimer &rtimer);
-#pragma linkname "SAC_RTimer_resetRTimer"
-#pragma linkobj "src/RTimer/rtimer.o"
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+external void resetRTimer(RTimer &rtimer);
+    #pragma linkname "SAC_RTimer_resetRTimer"
+    #pragma linkobj "src/RTimer/rtimer.o"
 
-external int, int getRTimerInts( RTimer &rtimer);
-#pragma linkname "SAC_RTimer_getRTimerInts"
-#pragma linkobj "src/RTimer/rtimer.o"
-#pragma linksign [2,3,1]
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
+external int, int getRTimerInts(RTimer &rtimer);
+    #pragma linkname "SAC_RTimer_getRTimerInts"
+    #pragma linkobj "src/RTimer/rtimer.o"
+    #pragma linksign [2,3,1]
 
-external double getRTimerDbl( RTimer &rtimer);
-#pragma linkname "SAC_RTimer_getRTimerDbl"
-#pragma linkobj "src/RTimer/rtimer.o"
-#pragma linksign [0,1]
-#ifdef NEED_LIBRT
-  #pragma linkwith "rt"
-#endif
-
-
+external double getRTimerDbl(RTimer &rtimer);
+    #pragma linkname "SAC_RTimer_getRTimerDbl"
+    #pragma linkobj "src/RTimer/rtimer.o"
+    #pragma linksign [0,1]
