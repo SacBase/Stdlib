@@ -17,32 +17,6 @@ CHECK_FUNCTION_EXISTS (mkdtemp HAVE_MKDTEMP)
 # Check if we support SAC2C header pragma
 CHECK_SAC2C_SUPPORT_HEADER_PRAGMA ()
 
-# Check whether we have/need -lm
-SET (NEED_LIBM)
-SET (LIB_M_SRC "
-#include <math.h>
-
-int main(void) {
-    return pow (3, 1.4);
-}
-")
-
-CHECK_C_SOURCE_COMPILES ("${LIB_M_SRC}"   POW_WORKS)
-IF (NOT POW_WORKS)
-    UNSET (POW_WORKS)
-    SET (OLD_FLAGS ${CMAKE_REQUIRED_LIBRARIES})
-    LIST (APPEND CMAKE_REQUIRED_LIBRARIES m)
-    CHECK_C_SOURCE_COMPILES ("${LIB_M_SRC}" POW_WORKS)
-    SET (CMAKE_REQUIRED_LIBRARIES ${OLD_FLAGS})
-    IF (POW_WORKS)
-        SET (NEED_LIBM 1)
-    ELSE ()
-        MESSAGE (FATAL_ERROR
-                 "Failed to compile math function `pow', "
-                 "both with and without -lm")
-    ENDIF ()
-ENDIF ()
-
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/cmake/config.h.in"
                 "${PROJECT_BINARY_DIR}/include/config.h")
 
