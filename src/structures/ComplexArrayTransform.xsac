@@ -1,7 +1,7 @@
 module ComplexArrayTransform;
 
-use ComplexArrayBasics: { dim, shape, sel };
-use ComplexBasics: { zero, complex };
+use ComplexBasics: { complex };
+use ComplexArrayBasics: { sel };
 
 export all;
 

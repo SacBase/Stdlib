@@ -6,14 +6,93 @@ import ComplexArrayBasics: { dim, shape, sel };
 
 export all;
 
-#include "Templates.mac"
-#include "UDTtemplates.mac"
+#include "templates.mac"
+
+/******************************************************************************
+ *
+ * Array-extensions for binary monary ops.
+ *
+ * Calls of these are created when using the macros provided in "templates.mac"
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS, etc.
+ *
+ ******************************************************************************/
+
+#define MAP_BIN_AxA(name, op, a, b)                                            \
+inline                                                                         \
+b[d:shp] name(a[d:shp] A, a[d:shp] B)                                          \
+{                                                                              \
+    return { iv -> name(A[iv], B[iv]) | iv < shp };                            \
+}
+
+#define MAP_BIN_AxS(name, op, a, b)                                            \
+inline                                                                         \
+b[d:shp] name(a[d:shp] A, a B)                                                 \
+{                                                                              \
+    return { iv -> name(A[iv], B) | iv < shp };                                \
+}
+
+#define MAP_BIN_SxA(name, op, a, b)                                            \
+inline                                                                         \
+b[d:shp] name(a A, a[d:shp] B)                                                 \
+{                                                                              \
+    return { iv -> name(A, B[iv]) | iv < shp };                                \
+}
+
+/******************************************************************************
+ *
+ * Array-extensions for monadic ops.
+ *
+ * Calls of these are created when using the macros provided in "templates.mac"
+ * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS, etc.
+ *
+ ******************************************************************************/
+
+#define MAP_MON_AxA(name, op, a, b)                                            \
+inline                                                                         \
+b[d:shp] name(a[d:shp] A)                                                      \
+{                                                                              \
+    return { iv -> name(A[iv]) | iv < shp };                                   \
+}
+
+#define MAP_MON_SxA(name, op, a, b)
+#define MAP_MON_AxS(name, op, a, b)
+
+/******************************************************************************
+ *
+ * AriOPS on arrays (see templates.mac for details).
+ *
+ ******************************************************************************/
+
+#define ARI_OPS_A(a)                                                           \
+MAP_ARI_OPS(AxA, a)                                                            \
+MAP_ARI_OPS(SxA, a)                                                            \
+MAP_ARI_OPS(AxS, a)
+
+/******************************************************************************
+ *
+ * RelOPS on arrays (see templates.mac for details).
+ *
+ ******************************************************************************/
+
+#define REL_OPS_A(a)                                                           \
+EQ_OPS_A(a)                                                                    \
+COMP_OPS_A(a)
+
+#define EQ_OPS_A(a)                                                            \
+MAP_EQ_OPS(AxA, a)                                                             \
+MAP_EQ_OPS(SxA, a)                                                             \
+MAP_EQ_OPS(AxS, a)
+
+#define COMP_OPS_A(a)                                                          \
+MAP_COMP_OPS(AxA, a)                                                           \
+MAP_COMP_OPS(SxA, a)                                                           \
+MAP_COMP_OPS(AxS, a)
 
 /******************************************************************************
  *
  * Array-Extensions for binary monary ops
  *
- * Calls of these are created when using the macros provided in "Templates.mac"
+ * Calls of these are created when using the macros provided in "templates.mac"
  * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS...
  *
  * NB: These could be defined in a way, that they are applicable to ALL (not
@@ -28,7 +107,7 @@ ARI_OPS_A(complex)
 
 /******************************************************************************
  *
- * RelOPS on arrays (see Templates.mac for details)
+ * RelOPS on arrays (see templates.mac for details)
  *
  ******************************************************************************/
 
