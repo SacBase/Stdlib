@@ -39,23 +39,23 @@ export all;
 
 #define MAP_BIN_AxA(name, op, a, b)                                            \
 inline                                                                         \
-b[n,d:shp] name(a[n,d:shp] A, a[n,d:shp] B)                                    \
+b[d>0:shp] name(a[d>0:shp] A, a[d>0:shp] B)                                    \
 {                                                                              \
-    return { iv -> op(_sel_VxA_(iv, A), _sel_VxA_(iv, B)) };                   \
+    return { iv -> op(_sel_VxA_(iv, A), _sel_VxA_(iv, B)) | iv < shp };        \
 }
 
 #define MAP_BIN_AxS(name, op, a, b)                                            \
 inline                                                                         \
-b[n,d:shp] name(a[n,d:shp] A, a B)                                             \
+b[d>0:shp] name(a[d>0:shp] A, a B)                                             \
 {                                                                              \
-    return { iv -> op(_sel_VxA_(iv, A), B) };                                  \
+    return { iv -> op(_sel_VxA_(iv, A), B) | iv < shp };                       \
 }
 
 #define MAP_BIN_SxA(name, op, a, b)                                            \
 inline                                                                         \
-b[n,d:shp] name(a A, a[n,d:shp] B)                                             \
+b[d>0:shp] name(a A, a[d>0:shp] B)                                             \
 {                                                                              \
-    return { iv -> op(A, _sel_VxA_(iv, B)) };                                  \
+    return { iv -> op(A, _sel_VxA_(iv, B)) | iv < shp };                       \
 }
 
 /******************************************************************************/
@@ -89,9 +89,9 @@ int[n] (name)(int A, int[n] B)                                                 \
 
 #define MAP_MON_AxA(name, op, a, b)                                            \
 inline                                                                         \
-b[n,d:shp] name(a[n,d:shp] A)                                                  \
+b[d>0:shp] name(a[d>0:shp] A)                                                  \
 {                                                                              \
-    return { iv -> op(_sel_VxA_(iv, A)) };                                     \
+    return { iv -> op(_sel_VxA_(iv, A)) | iv < shp };                          \
 }
 
 #define MAP_MON_AxS(name, op, a, b)
