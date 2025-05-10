@@ -250,51 +250,38 @@ SHIFT_V_Z(a)
 
 /******************************************************************************/
 
-#define ROTATE_S(a)                                                            \
+/******************************************************************************
+ *
+ * @fn <a>[o:oshp,n,i:ishp] rotate(int o, int count, <a>[o:oshp,n,i:ishp] A)
+ *
+ * @brief Rotates the given array, wrapping values that go out of bounds.
+ * Positive rotate is to right, negative to left.
+ *
+ * @example rotate([2], iota(5)) = [3, 4, 0, 1, 2]
+ *
+ ******************************************************************************/
+
+#define ROTATE_S(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
-a[+] rotate (int dimension, int count, a[+] A)                                 \
+typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
 {                                                                              \
-  if(_eq_SxS_(count, 0)) {                                                     \
-    result = A;                                                                \
-  } else {                                                                     \
-    max_rotate = _sel_VxA_([dimension], shape(A));                             \
-    if(_eq_SxS_(max_rotate, 0)) {                                              \
-      result = A;                                                              \
-    } else {                                                                   \
-      count = _mod_SxS_(count, max_rotate);                                    \
-      if (_lt_SxS_(count, 0)) {                                                \
-        count = _add_SxS_(count, max_rotate);                                  \
-      }                                                                        \
-                                                                               \
-      offset = _modarray_AxVxS_(_mul_SxV_(0, shape(A)),[dimension],count);     \
-      slice_shp = _modarray_AxVxS_(shape(A), [dimension], count);              \
-                                                                               \
-      result = with {                                                          \
-                 (offset <= iv < shape(A)) : sel(_sub_VxV_(iv,offset), A);     \
-               } : modarray(A);                                                \
-                                                                               \
-      result = with {                                                          \
-                 (_mul_SxV_(0,shape(result)) <= iv <  slice_shp)               \
-                 : sel(_add_VxV_(_sub_VxV_(shape(A), slice_shp),               \
-                                 iv), A);                                      \
-               } : modarray( result );                                         \
-    }                                                                          \
-  }                                                                            \
-  return(result);                                                              \
+    return { iv ->                                                             \
+            { [j] ->                                                           \
+                A[_cat_VxV_(iv, [_aplmod_SxS_(_sub_SxS_(j, count), n)])]       \
+            | [j] < [n] }                                                      \
+           | iv < oshp };                                                      \
 }
 
-#define ROTATE_V(a)                                                            \
+#define ROTATE_V(typ, _postfix, _fmt, _zval, _oval)                             \
 inline                                                                         \
-a[+] rotate (int[.] counts,  a[+] A)                                           \
+typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
 {                                                                              \
-  for(i=0; _lt_SxS_(i, _sel_VxA_([0], _shape_A_(counts)));                     \
-       i=_add_SxS_(i,1)) {                                                     \
-    offset = _sel_VxA_([i], counts);                                           \
-    A = rotate(i, offset, A);                                                  \
-  }                                                                            \
-  return(A);                                                                   \
+  return { iv ->                                                               \
+      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(iv[i], counts[i]), oshp[i])            \
+         | [i] < [n] } ]                                                       \
+    | iv < oshp };                                                             \
 }
 
-#define ROTATE(a)                                                              \
-ROTATE_S(a)                                                                    \
-ROTATE_V(a)
+#define ROTATE(typ, postfix, fmt, zval, oval)                                  \
+ROTATE_S(typ, postfix, fmt, zval, oval)                                        \
+ROTATE_V(typ, postfix, fmt, zval, oval)
