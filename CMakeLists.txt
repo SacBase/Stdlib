@@ -5,13 +5,13 @@ PROJECT (sac-stdlib)
 #             automatically pull sac2c compiler.
 
 # Where the compiled sac modules result
-SET (DLL_BUILD_DIR  "${PROJECT_BINARY_DIR}/lib")
+SET (DLL_BUILD_DIR "${PROJECT_BINARY_DIR}/lib")
 
 # For what targets we build modules
-SET (TARGETS            seq seq_checks mt_pth CACHE STRING "Build stdlib for these targets")
-SET (SAC2C_EXEC                     CACHE STRING "A path to sac2c compiler")
-SET (LINKSETSIZE        "500"       CACHE STRING "Set a value for -linksetsize parameter of sac2c")
-SET (IS_RELEASE         FALSE       CACHE BOOL "Indicate if we are building with release version of SAC2C")
+SET (TARGETS     seq seq_checks mt_pth CACHE STRING "Build stdlib for these targets")
+SET (SAC2C_EXEC                        CACHE STRING "A path to sac2c compiler")
+SET (LINKSETSIZE "500"                 CACHE STRING "Set a value for -linksetsize parameter of sac2c")
+SET (IS_RELEASE  FALSE                 CACHE BOOL "Indicate if we are building with release version of SAC2C")
 
 SET (SAC2C_EXTRA_INC
      -DHAVE_CONFIG_H
@@ -55,11 +55,8 @@ IF (BUILD_EXT)
 ENDIF ()
 
 # For every target run CMakeLists.txt in src
-SET (TARGET_COUNT 1)
 FOREACH (TARGET IN ITEMS ${TARGETS})
-    #MESSAGE ("target #${TARGET_COUNT} = ${TARGET}")
-    ADD_SUBDIRECTORY (src   src-${TARGET})
-    MATH (EXPR TARGET_COUNT "${TARGET_COUNT} + 1")
+    ADD_SUBDIRECTORY (src src-${TARGET})
 ENDFOREACH ()
 
 # This build target is responsible for generating the package sac2crc file
