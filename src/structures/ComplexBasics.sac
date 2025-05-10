@@ -2,7 +2,7 @@ module ComplexBasics;
 
 /******************************************************************************
  *
- * Depends on ScalarArith and Math.
+ * Depends on Math.
  *
  ******************************************************************************/
 
@@ -36,12 +36,12 @@ inline double imag(complex c)
 
 inline complex toc(int r, int i)
 {
-    return (complex)[ScalarArith::tod(r), ScalarArith::tod(i)];
+    return (complex)[_tod_S_(r), _tod_S_(i)];
 }
 
 inline complex toc(float r, float i)
 {
-    return (complex)[ScalarArith::tod(r), ScalarArith::tod(i)];
+    return (complex)[_tod_S_(r), _tod_S_(i)];
 }
 
 inline complex toc(double r, double i)
@@ -56,12 +56,12 @@ inline complex toc(double[2] c)
 
 inline complex toc(int r)
 {
-    return (complex)[ScalarArith::tod(r), 0d];
+    return (complex)[_tod_S_(r), 0d];
 }
 
 inline complex toc(float r)
 {
-    return (complex)[ScalarArith::tod(r), 0d];
+    return (complex)[_tod_S_(r), 0d];
 }
 
 inline complex toc(double r)
@@ -77,15 +77,15 @@ inline complex toc(double r)
 
 inline int, int toi(complex c)
 {
-    r = ScalarArith::toi(real(c));
-    i = ScalarArith::toi(imag(c));
+    r = _toi_S_(real(c));
+    i = _toi_S_(imag(c));
     return (r, i);
 }
 
 inline float, float tof(complex c)
 {
-    r = ScalarArith::tof(real(c));
-    i = ScalarArith::tof(imag(c));
+    r = _tof_S_(real(c));
+    i = _tof_S_(imag(c));
     return (r, i);
 }
 
@@ -104,15 +104,15 @@ inline double[2] todv(complex c)
 inline int, int ptoi(complex c)
 {
     x, y = ptof(c);
-    r = ScalarArith::toi(x);
-    i = ScalarArith::toi(y);
+    r = _toi_S_(x);
+    i = _toi_S_(y);
     return (r, i);
 }
 
 inline float, float ptof(complex c)
 {
     x, y = tof(c);
-    r = sqrt(ScalarArith::tof(norm(c)));
+    r = sqrt(_tof_S_(norm(c)));
     i = atan2(x, y);
     return (r, i);
 }

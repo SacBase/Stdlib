@@ -22,9 +22,9 @@ export all;
  * are not defined for user-defined types.
  *
  ******************************************************************************/
-inline int dim(complex[*] arr)
+inline int dim(complex[d:shp] arr)
 {
-    return _sub_SxS_(_dim_A_((double[+])arr), 1);
+    return d;
 }
 
 /******************************************************************************
@@ -39,11 +39,9 @@ inline int dim(complex[*] arr)
  * are not defined for user-defined types.
  *
  ******************************************************************************/
-inline int[.] shape(complex[*] arr)
+inline int[d] shape(complex[d:shp] arr)
 {
-    shp = _shape_A_((double[+])arr);
-    shp_len = _sel_VxA_([0], _shape_A_(shp));
-    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
+    return shp;
 }
 
 /******************************************************************************
