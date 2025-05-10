@@ -7,6 +7,15 @@ export all;
 
 #include "UDTtemplates.mac"
 
+#define COMPLEX(fun)                                                           \
+fun(complex,                                                                   \
+    /* no postfix */,                                                          \
+    /* no format */,                                                           \
+    ((complex)[0d,0d]),                                                        \
+    ((complex)[1d,1d]))
+
+QUATERNION(ROTATE)
+
 /******************************************************************************
  *
  * Structural OPS
@@ -31,5 +40,3 @@ CAT(complex)
 REVERSE(complex)
 
 SHIFT(complex)
-
-ROTATE(complex)
