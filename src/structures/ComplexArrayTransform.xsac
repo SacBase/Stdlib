@@ -5,7 +5,7 @@ use ComplexBasics: { zero, complex };
 
 export all;
 
-#include "UDTtemplates.mac"
+#include "arraytransform.mac"
 
 #define COMPLEX(fun)                                                           \
 fun(complex,                                                                   \
@@ -14,13 +14,13 @@ fun(complex,                                                                   \
     ((complex)[0d,0d]),                                                        \
     ((complex)[1d,1d]))
 
-QUATERNION(ROTATE)
-
-/******************************************************************************
- *
- * Structural OPS
- *
- ******************************************************************************/
+COMPLEX(TAKE)
+COMPLEX(DROP)
+COMPLEX(TILE)
+COMPLEX(CAT)
+COMPLEX(REVERSE)
+COMPLEX(ROTATE)
+COMPLEX(SHIFT)
 
 inline complex sum(complex[d:shp] arr)
 {
@@ -28,15 +28,3 @@ inline complex sum(complex[d:shp] arr)
         (_mul_SxV_(0, shp) <= iv < shp) : arr[iv];
     } : fold(ComplexScalarArith::+, (complex)[0d, 0d]);
 }
-
-TAKE(complex)
-
-DROP(complex)
-
-TILE(complex)
-
-CAT(complex)
-
-REVERSE(complex)
-
-SHIFT(complex)
