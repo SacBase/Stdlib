@@ -1,0 +1,193 @@
+/******************************************************************************
+ *
+ * Macros for transformations of arrays.
+ *
+ ******************************************************************************/
+
+ /******************************************************************************
+ *
+ * @fn <a>[o:sv,i:ishp] take(int[o] sv, typ[o:ohsp,i:ishp] A)
+ *
+ * @brief Takes a number of elements from the array, given a shape vector.
+ *
+ * @remark Take does NOT support overtake
+ *         E.g., take([5], [2, 3]) throws an error.
+ *
+ * @remark Take supports negative sv, taking the last elements
+ *         E.g., take([-1], [2, 3]) =
+ *           [3]
+ *
+ * @remark Take supports lower-dimensional sv, padding the missing elements
+ *         with corresponding elements from shp.
+ *         E.g., take([1], genarray([2,2], 42)) =
+ *           [[42, 42]]
+ *
+ ******************************************************************************/
+
+#define TAKE(typ, _postfix, _fmt, _zval, _oval)                                \
+inline                                                                         \
+typ[o:sv,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                         \
+    | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
+{                                                                              \
+    /* Start shows the index of the first element to be selected. */           \
+    start = where(_lt_VxS_(sv, 0),                                             \
+                  _add_VxV_(oshp, sv),                                         \
+                  0);                                                          \
+    /* Stop signals the location of the last index element of array. */        \
+    stop = _abs_V_(sv);                                                        \
+    return { iv -> A[_add_VxV_(start, iv)] | iv < stop };                      \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[o:shp_res,i:ishp] drop(int[o] sv, <a>[o:oshp,i:ishp] A)
+ *
+ * @brief Drops a number of elements from the array, given a shape vector.
+ *
+ * @remark drop does NOT support overdrop
+ *         E.g., drop([5], [2, 3]) throws an error.
+ *
+ * @remark drop supports negative sv, dropping the last elements
+ *         E.g., drop([-1], [2, 3]) =
+ *           [2]
+ *
+ * @remark drop supports lower-dimensional sv, padding the missing elements
+ *         with corresponding elements from shp.
+ *         E.g., drop([1], genarray([2,2], 42)) =
+ *           [[42, 42]]
+ *
+ ******************************************************************************/
+
+#define DROP(typ, _postfix, _fmt, _zval, _oval)                                \
+inline                                                                         \
+typ[o:shp_res,i:ishp] drop(int[o] sv, typ[o:oshp,i:ishp] A)                    \
+    | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
+{                                                                              \
+    /* Calculate shape of result array. */                                     \
+    shp_res = _sub_VxV_(oshp, _abs_V_(sv));                                    \
+    /* Start shows the index of the first element to be selected. */           \
+    start = _max_VxS_(sv, 0);                                                  \
+    return { iv -> A[_add_VxV_(start, iv)] | iv < shp_res };                   \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[d:shp] tile(int[d] shp, int[d] idx, <a>[d:oshp,i:ishp] A)
+ *
+ * @brief Takes a tile from the array, of shape shp, starting at index idx.
+ *
+ * @remark tile does NOT support overtile
+ *         E.g., tile([5], [1], [2, 3, 4]) throws an error.
+ *
+ ******************************************************************************/
+
+#define TILE(typ, _postfix, _fmt, _zval, _oval)                                \
+inline                                                                         \
+typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
+    | _all_V_(_ge_VxS_(shp, 0))                                                \
+    , _all_V_(_ge_VxS_(idx, 0))                                                \
+    , _all_V_(_le_VxV_(_add_VxV_(shp, idx), oshp))                             \
+{                                                                              \
+    return { iv -> A[_add_VxV_(idx, iv)] | iv < shp };                         \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[o,d:shp] ++(<a>[n,d:shp] A, <a>[m,d:shp] B)
+ *
+ * @brief First-axis catenation.
+ *
+ ******************************************************************************/
+
+#define CAT(typ, _postfix, _fmt, _zval, _oval)                                 \
+inline                                                                         \
+typ[o,d:shp] ++(typ[n,d:shp] A, typ[m,d:shp] B)                                \
+    | _eq_SxS_(o, _add_SxS_(n, m))                                             \
+{                                                                              \
+    o = _add_SxS_(n, m);                                                       \
+    return { [i] -> A[i] | [i] < [n];                                          \
+             [i] -> B[_sub_SxS_(i, n)] | [n] <= [i] < [o] };                   \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[d:shp,o] ++^(<a>[d:shp,n] A, <a>[d:shp,m] B)
+ *
+ * @brief Last-axis catenation. We assume that A and B are the same shape,
+ * except perhaps along the last axis.
+ *
+ ******************************************************************************/
+
+#define CATLAST(typ, _postfix, _fmt, _zval, _oval)                             \
+inline                                                                         \
+typ[d:shp,o] ++^(typ[d:shp,n] A, typ[d:shp,m] B)                               \
+    | _eq_SxS_(o, _add_SxS_(n, m))                                             \
+{                                                                              \
+    return { iv -> _cat_VxV_(A[iv], B[iv]) | iv < shp };                       \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[n,d:shp] reverse(<a>[n,d:shp] A)
+ *
+ * @brief First-axis reverse.
+ *
+ ******************************************************************************/
+
+#define REVERSE(typ, _postfix, _fmt, _zval, _oval)                             \
+inline                                                                         \
+typ[n,d:shp] reverse(typ[n,d:shp] A)                                           \
+{                                                                              \
+    return { [i] -> A[_sub_SxS_(_sub_SxS_(n, 1), i)] | [i] < [n] };            \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[axis:oshp,n,i:ishp] reverse(int axis, <a>[axis:oshp,n,i:ishp] A)
+ *
+ * @brief Reverse on specified axis: 0 is leading axis, dim-1 is trailing axis.
+ *
+ ******************************************************************************/
+
+#define REVERSEAXIS(typ, _postfix, _fmt, _zval, _oval)                         \
+inline                                                                         \
+typ[axis:oshp,n,i:ishp] reverse(int axis, typ[axis:oshp,n,i:ishp] A)           \
+{                                                                              \
+    return { iv -> reverse(A[iv]) | iv < oshp };                               \
+}
+
+/******************************************************************************
+ *
+ * @fn <a>[o:oshp,n,i:ishp] rotate(int o, int count, <a>[o:oshp,n,i:ishp] A)
+ *
+ * @brief Rotates the given array, wrapping values that go out of bounds.
+ * Positive rotate is to right, negative to left.
+ *
+ * @example rotate([2], iota(5)) = [3, 4, 0, 1, 2]
+ *
+ ******************************************************************************/
+
+#define ROTATE_S(typ, _postfix, _fmt, _zval, _oval)                             \
+inline                                                                         \
+typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
+{                                                                              \
+    return { iv ->                                                             \
+            { [j] ->                                                           \
+                A[_cat_VxV_(iv, [_aplmod_SxS_(_sub_SxS_(j, count), n)])]       \
+            | [j] < [n] }                                                      \
+           | iv < oshp };                                                      \
+}
+
+#define ROTATE_V(typ, _postfix, _fmt, _zval, _oval)                             \
+inline                                                                         \
+typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
+{                                                                              \
+  return { iv ->                                                               \
+      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(iv[i], counts[i]), oshp[i])            \
+         | [i] < [n] } ]                                                       \
+    | iv < oshp };                                                             \
+}
+
+#define ROTATE(typ, postfix, fmt, zval, oval)                                  \
+ROTATE_S(typ, postfix, fmt, zval, oval)                                        \
+ROTATE_V(typ, postfix, fmt, zval, oval)

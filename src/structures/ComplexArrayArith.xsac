@@ -6,6 +6,7 @@ import ComplexArrayBasics: { dim, shape, sel };
 
 export all;
 
+#include "Templates.mac"
 #include "UDTtemplates.mac"
 
 /******************************************************************************
