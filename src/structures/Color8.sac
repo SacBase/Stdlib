@@ -23,16 +23,14 @@ typedef int[3] Color8;
  *
  ******************************************************************************/
 
-inline int dim(Color8[*] arr)
+inline int dim(Color8[d:shp] arr)
 {
-    return _sub_SxS_(_dim_A_((int[*])arr), 1);
+    return d;
 }
 
-inline int[.] shape(Color8[*] arr)
+inline int[d] shape(Color8[d:shp] arr)
 {
-    shp = _shape_A_((int[+])arr);
-    shp_len = _sel_VxA_([0], _shape_A_(shp));
-    return _take_SxV_(_sub_SxS_(shp_len, 1), shp);
+    return shp;
 }
 
 inline Color8[i:ishp] sel(int[o] idx, Color8[o:oshp,i:ishp] arr)
