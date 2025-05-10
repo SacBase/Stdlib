@@ -30,9 +30,10 @@ typ[o:sv,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                         \
     | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
 {                                                                              \
     /* Start shows the index of the first element to be selected. */           \
-    start = where(_lt_VxS_(sv, 0),                                             \
-                  _add_VxV_(oshp, sv),                                         \
-                  0);                                                          \
+    start = { [i] -> _lt_SxS_(_sel_VxA_([i], sv), 0)                           \
+                        ? _add_SxS_(_sel_VxA_([i], oshp), _sel_VxA_([i], sv))  \
+                        : 0                                                    \
+            | [i] < [o] };                                                     \
     /* Stop signals the location of the last index element of array. */        \
     stop = _abs_V_(sv);                                                        \
     return { iv -> A[_add_VxV_(start, iv)] | iv < stop };                      \
@@ -167,7 +168,7 @@ typ[axis:oshp,n,i:ishp] reverse(int axis, typ[axis:oshp,n,i:ishp] A)           \
  *
  ******************************************************************************/
 
-#define ROTATE_S(typ, _postfix, _fmt, _zval, _oval)                             \
+#define ROTATE_S(typ, _postfix, _fmt, _zval, _oval)                            \
 inline                                                                         \
 typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
 {                                                                              \
@@ -178,12 +179,14 @@ typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
            | iv < oshp };                                                      \
 }
 
-#define ROTATE_V(typ, _postfix, _fmt, _zval, _oval)                             \
+#define ROTATE_V(typ, _postfix, _fmt, _zval, _oval)                            \
 inline                                                                         \
 typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
 {                                                                              \
   return { iv ->                                                               \
-      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(iv[i], counts[i]), oshp[i])            \
+      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(_sel_VxA_([i], iv),                    \
+                                        _sel_VxA_([i], counts)),               \
+                              _sel_VxA_([i], oshp))                            \
          | [i] < [n] } ]                                                       \
     | iv < oshp };                                                             \
 }
@@ -191,3 +194,48 @@ typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
 #define ROTATE(typ, postfix, fmt, zval, oval)                                  \
 ROTATE_S(typ, postfix, fmt, zval, oval)                                        \
 ROTATE_V(typ, postfix, fmt, zval, oval)
+
+/******************************************************************************
+ *
+ * @fn <a>[o:oshp,n,i:ishp] shift(int o, int count, <a> boundary,
+ *                                <a>[o:oshp,n,i:ishp] A)
+ *
+ * @brief shifts the given array. Positive shift is to right, negative to left.
+ *
+ ******************************************************************************/
+
+#define SHIFT_S(typ, _postfix, _fmt, _zval, _oval)                             \
+inline                                                                         \
+typ[o:oshp,n,i:ishp] shift(int o, int count, typ boundary,                     \
+                           typ[o:oshp,n,i:ishp] A)                             \
+{                                                                              \
+    return { iv ->                                                             \
+            { [j] -> _and_SxS_(_lt_SxS_(_sub_SxS_(j, count), n),               \
+                               _ge_SxS_(_sub_SxS_(j, count), 0))               \
+                     ? A[_cat_VxV_(iv, [_sub_SxS_(j, count)])]                 \
+                     : { iv -> boundary | iv < ishp }                          \
+            | [j] < [n] }                                                      \
+           | iv < oshp };                                                      \
+}
+
+#define SHIFT_V(typ, _postfix, _fmt, _zval, _oval)                             \
+inline                                                                         \
+typ[o:oshp,i:ishp] shift(int[o] counts, typ boundary, typ[o:oshp,i:ishp] A)    \
+{                                                                              \
+    counts_ext = _cat_VxV_(counts, _mul_SxV_(0, ishp));                        \
+    shp = _cat_VxV_(oshp, ishp);                                               \
+    idx = _neg_V_(counts_ext);                                                 \
+    return tile(shp, idx, A);                                                  \
+}
+
+#define SHIFT_VZ(typ, _postfix, _fmt, zval, _oval)                             \
+inline                                                                         \
+typ[o:oshp,i:ishp] shift(int[o] counts, typ[o:oshp,i:ishp] A)                  \
+{                                                                              \
+    return shift(counts, zval, A);                                             \
+}
+
+#define SHIFT(typ, postfix, fmt, zval, oval)                                   \
+SHIFT_S(typ, postfix, fmt, zval, oval)                                         \
+SHIFT_V(typ, postfix, fmt, zval, oval)                                         \
+SHIFT_VZ(typ, postfix, fmt, zval, oval)

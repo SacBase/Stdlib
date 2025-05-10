@@ -3,7 +3,7 @@ module ScalarArith;
 export all;
 
 #include "builtin.mac"
-#include "Templates.mac"
+#include "templates.mac"
 
 /******************************************************************************
  *
@@ -43,7 +43,7 @@ BUILT_IN(ONE)
  *
  * Scalar-extensions for binary monary ops.
  *
- * Calls of these are created when using the macros provided in "Templates.mac"
+ * Calls of these are created when using the macros provided in "templates.mac"
  * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS.
  *
  ******************************************************************************/
@@ -71,7 +71,7 @@ a name(a A)                                                                    \
 
 /******************************************************************************
  *
- * AriOPS on scalars (see Templates.mac for details).
+ * AriOPS on scalars (see templates.mac for details).
  *
  ******************************************************************************/
 
@@ -117,7 +117,7 @@ INT_NUM(INT_OPS_S)
 
 /******************************************************************************
  *
- * RelOPS on scalars (see Templates.mac for details).
+ * RelOPS on scalars (see templates.mac for details).
  *
  ******************************************************************************/
 
@@ -128,7 +128,7 @@ BUILT_IN(REL_OPS_S)
 
 /******************************************************************************
  *
- * LogOPS on scalars (see Templates.mac for details).
+ * LogOPS on scalars (see templates.mac for details).
  *
  ******************************************************************************/
 
@@ -136,7 +136,7 @@ MAP_LOG_OPS(SxS)
 
 /******************************************************************************
  *
- * ConvOPS on scalars (see Templates.mac for details).
+ * ConvOPS on scalars (see templates.mac for details).
  *
  ******************************************************************************/
 

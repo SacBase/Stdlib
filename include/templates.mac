@@ -2,18 +2,11 @@
  *
  * This file contains several macros for duplicating function definitions
  * in the standard library. When modifying them you should keep in mind
- * that these are used in several SaC modules. Among these are:
+ * that these are used in several SaC modules:
  *
  * ScalarArith.sac
  * ArrayArith.sac
- * ArrayReduce.sac
- * ArrayTransform.sac
- * ArrayTransformApl.sac
- *
- * As well as through uses of UDTtemplates.mac in:
- *
  * ComplexArrayArith.mac
- * ComplexArrayTransform.mac
  *
  ******************************************************************************/
 
