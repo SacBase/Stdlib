@@ -9,65 +9,65 @@ export all;
  *
  ******************************************************************************/
 
-external double sin(double X);
+external double sin(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float sin(float X);
+external float sin(float x);
     #pragma linksign [0,1]
     #pragma linkname "sinf"
     #pragma header "<math.h>"
 
-external double cos(double X);
+external double cos(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float cos(float X);
+external float cos(float x);
     #pragma linkname "cosf"
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external double tan(double X);
+external double tan(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float tan(float X);
+external float tan(float x);
     #pragma linksign [0,1]
     #pragma linkname "tanf"
     #pragma header "<math.h>"
 
-external double asin(double X);
+external double asin(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float asin(float X);
+external float asin(float x);
     #pragma linksign [0,1]
     #pragma linkname "asinf"
     #pragma header "<math.h>"
 
-external double acos(double X);
+external double acos(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float acos(float X);
+external float acos(float x);
     #pragma linksign [0,1]
     #pragma linkname "acosf"
     #pragma header "<math.h>"
 
-external double atan(double X);
+external double atan(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float atan(float X);
+external float atan(float x);
     #pragma linksign [0,1]
     #pragma linkname "atanf"
     #pragma header "<math.h>"
 
-external double atan2(double X, double Y);
+external double atan2(double x, double y);
     #pragma linksign [0,1,2]
     #pragma header "<math.h>"
 
-external float atan2(float X, float Y);
+external float atan2(float x, float y);
     #pragma linksign [0,1,2]
     #pragma linkname "atan2f"
     #pragma header "<math.h>"
@@ -88,56 +88,56 @@ inline float, float sincos(float x)
  *
  ******************************************************************************/
 
-external double sinh(double X);
+external double sinh(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float sinh(float X);
+external float sinh(float x);
     #pragma linksign [0,1]
     #pragma linkname "sinhf"
     #pragma header "<math.h>"
 
-external double cosh(double X);
+external double cosh(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float cosh(float X);
+external float cosh(float x);
     #pragma linksign [0,1]
     #pragma linkname "coshf"
     #pragma header "<math.h>"
 
-external double tanh(double X);
+external double tanh(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float tanh(float X);
+external float tanh(float x);
     #pragma linksign [0,1]
     #pragma linkname "tanhf"
     #pragma header "<math.h>"
 
-external double asinh(double X);
+external double asinh(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float asinh(float X);
+external float asinh(float x);
     #pragma linksign [0,1]
     #pragma linkname "asinhf"
     #pragma header "<math.h>"
 
-external double acosh(double X);
+external double acosh(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float acosh(float X);
+external float acosh(float x);
     #pragma linksign [0,1]
     #pragma linkname "acoshf"
     #pragma header "<math.h>"
 
-external double atanh(double X);
+external double atanh(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float atanh(float X);
+external float atanh(float x);
     #pragma linksign [0,1]
     #pragma linkname "atanhf"
     #pragma header "<math.h>"
@@ -148,93 +148,93 @@ external float atanh(float X);
  *
  ******************************************************************************/
 
-external double exp(double X);
+external double exp(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float exp(float X);
+external float exp(float x);
     #pragma linksign [0,1]
     #pragma linkname "expf"
     #pragma header "<math.h>"
 
-external double, int frexp(double X);
+external double, int frexp(double x);
     #pragma linksign [0,2,1]
     #pragma header "<math.h>"
 
-external float, int frexp(float X);
+external float, int frexp(float x);
     #pragma linksign [0,2,1]
     #pragma linkname "frexpf"
     #pragma header "<math.h>"
 
-external double ldexp(double X, int EXP);
+external double ldexp(double x, int EXP);
     #pragma linksign [0,1,2]
     #pragma header "<math.h>"
 
-external float ldexp(float X, int EXP);
+external float ldexp(float x, int EXP);
     #pragma linksign [0,1,2]
     #pragma linkname "ldexpf"
     #pragma header "<math.h>"
 
-external double log(double X);
+external double log(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float log(float X);
+external float log(float x);
     #pragma linksign [0,1]
     #pragma linkname "logf"
     #pragma header "<math.h>"
 
-external double log10(double X);
+external double log10(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float log10(float X);
+external float log10(float x);
     #pragma linksign [0,1]
     #pragma linkname "log10f"
     #pragma header "<math.h>"
 
-external double log2(double X);
+external double log2(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float log2(float X);
+external float log2(float x);
     #pragma linksign [0,1]
     #pragma linkname "log2f"
     #pragma header "<math.h>"
 
-external ulong log2(ulong X);
-    #pragma linksign [0,1]
-    #pragma linkobj "src/Math/int_log.o"
-    #pragma linkname "SAC_MATH_log2ul"
-
-external uint log2(uint X);
+external uint log2(uint x);
     #pragma linksign [0,1]
     #pragma linkobj "src/Math/int_log.o"
     #pragma linkname "SAC_MATH_log2u"
 
-external double expm1(double X);
+external ulong log2(ulong x);
+    #pragma linksign [0,1]
+    #pragma linkobj "src/Math/int_log.o"
+    #pragma linkname "SAC_MATH_log2ul"
+
+external double expm1(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float expm1(float X);
+external float expm1(float x);
     #pragma linksign [0,1]
     #pragma linkname "expm1f"
     #pragma header "<math.h>"
 
-external double log1p(double X);
+external double log1p(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float log1p(float X);
+external float log1p(float x);
     #pragma linksign [0,1]
     #pragma linkname "log1pf"
     #pragma header "<math.h>"
 
-external double, double modf(double X);
+external double, double modf(double x);
     #pragma linksign [0,2,1]
     #pragma header "<math.h>"
 
-external float, float modf(float X);
+external float, float modf(float x);
     #pragma linksign [0,2,1]
     #pragma linkname "modff"
     #pragma header "<math.h>"
@@ -245,33 +245,34 @@ external float, float modf(float X);
  *
  ******************************************************************************/
 
-inline int pow2(int a) {
+inline int pow2(int a)
+{
     return _shl_SxS_(1, a);
 }
 
-external double pow(double X, double Y);
+external double pow(double x, double y);
     #pragma linksign [0,1,2]
     #pragma header "<math.h>"
 
-external float pow(float X, float Y);
+external float pow(float x, float y);
     #pragma linksign [0,1,2]
     #pragma linkname "powf"
     #pragma header "<math.h>"
 
-external double sqrt(double X);
+external double sqrt(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float sqrt(float X);
+external float sqrt(float x);
     #pragma linksign [0,1]
     #pragma linkname "sqrtf"
     #pragma header "<math.h>"
 
-external double cbrt(double X);
+external double cbrt(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float cbrt(float X);
+external float cbrt(float x);
     #pragma linksign [0,1]
     #pragma linkname "cbrtf"
     #pragma header "<math.h>"
@@ -282,51 +283,41 @@ external float cbrt(float X);
  *
  ******************************************************************************/
 
-external double floor(double X);
+external double floor(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float floor(float X);
+external float floor(float x);
     #pragma linksign [0,1]
     #pragma linkname "floorf"
     #pragma header "<math.h>"
 
-external double ceil(double X);
+external double ceil(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float ceil(float X);
+external float ceil(float x);
     #pragma linksign [0,1]
     #pragma linkname "ceilf"
     #pragma header "<math.h>"
 
-external double fabs(double X);
+external double fabs(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float fabs(float X);
+external float fabs(float x);
     #pragma linksign [0,1]
     #pragma linkname "fabsf"
     #pragma header "<math.h>"
 
-external double fmod(double X, double Y);
+external double fmod(double x, double y);
     #pragma linksign [0,1,2]
     #pragma header "<math.h>"
 
-external float fmod(float X, float Y);
+external float fmod(float x, float y);
     #pragma linksign [0,1,2]
     #pragma linkname "fmodf"
     #pragma header "<math.h>"
-
-external int sign(double X);
-    #pragma linksign [0,1]
-    #pragma linkobj "src/Math/sign.o"
-    #pragma linkname "SAC_MATH_sign"
-
-external int sign(float X);
-    #pragma linksign [0,1]
-    #pragma linkobj "src/Math/sign.o"
-    #pragma linkname "SAC_MATH_signf"
 
 /******************************************************************************
  *
@@ -334,20 +325,17 @@ external int sign(float X);
  *
  ******************************************************************************/
 
-external bool isinf(double X);
+external bool isinf(double x);
     #pragma linksign [0,1]
-    #pragma linkobj "src/Math/isinf.o"
-    #pragma linkname "SAC_MATH_isinf"
+    #pragma header "<math.h>"
 
-external bool isnan(double X);
+external bool isnan(double x);
     #pragma linksign [0,1]
-    #pragma linkobj "src/Math/isnan.o"
-    #pragma linkname "SAC_MATH_isnan"
+    #pragma header "<math.h>"
 
-external bool finite(double X);
+external bool isfinite(double x);
     #pragma linksign [0,1]
-    #pragma linkobj "src/Math/isfinite.o"
-    #pragma linkname "SAC_MATH_isfinite"
+    #pragma header "<math.h>"
 
 /******************************************************************************
  *
@@ -355,32 +343,42 @@ external bool finite(double X);
  *
  ******************************************************************************/
 
-external double copysign(double X, double Y);
+external double copysign(double x, double y);
     #pragma linksign [0,1,2]
     #pragma header "<math.h>"
 
-external float copysign(float X, float Y);
+external float copysign(float x, float y);
     #pragma linksign [0,1,2]
     #pragma linkname "copysignf"
     #pragma header "<math.h>"
 
-external double rint(double X);
+external double rint(double x);
     #pragma linksign [0,1]
     #pragma header "<math.h>"
 
-external float rint(float X);
+external float rint(float x);
     #pragma linksign [0,1]
     #pragma linkname "rintf"
     #pragma header "<math.h>"
 
-external double hypot(double X, double Y);
+external double hypot(double x, double y);
     #pragma linksign [0,1,2]
     #pragma header "<math.h>"
 
-external float hypot(float X, float Y);
+external float hypot(float x, float y);
     #pragma linksign [0,1,2]
     #pragma linkname "hypotf"
     #pragma header "<math.h>"
+
+int sign(double x)
+{
+    return _toi_S_(copysign(1d, x));
+}
+
+int sign(float x)
+{
+    return _toi_S_(copysign(1f, x));
+}
 
 /******************************************************************************
  *
