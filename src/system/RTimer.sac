@@ -2,30 +2,30 @@ class RTimer;
 
 external classtype;
 
-use RTClock: all;
+use RTClock: { TheRTClock };
 
 export all;
 
 external RTimer createRTimer();
     #pragma linkname "SAC_RTimer_createRTimer"
     #pragma linkobj "src/RTimer/rtimer.o"
-    #pragma effect RTClock::TheRTClock
+    #pragma effect TheRTClock
     #pragma linksign [1]
 
 external void destroyRTimer(RTimer rtimer);
     #pragma linkname "SAC_RTimer_destroyRTimer"
     #pragma linkobj "src/RTimer/rtimer.o"
-    #pragma effect RTClock::TheRTClock
+    #pragma effect TheRTClock
 
 external void startRTimer(RTimer &rtimer);
     #pragma linkname "SAC_RTimer_startRTimer"
     #pragma linkobj "src/RTimer/rtimer.o"
-    #pragma effect RTClock::TheRTClock
+    #pragma effect TheRTClock
 
 external void stopRTimer(RTimer &rtimer);
     #pragma linkname "SAC_RTimer_stopRTimer"
     #pragma linkobj "src/RTimer/rtimer.o"
-    #pragma effect RTClock::TheRTClock
+    #pragma effect TheRTClock
 
 external void resetRTimer(RTimer &rtimer);
     #pragma linkname "SAC_RTimer_resetRTimer"
