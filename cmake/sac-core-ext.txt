@@ -9,7 +9,7 @@
 
 # Auxiliary
 auxiliary/Benchmarking.sac                 Ext
-auxiliary/Hiding.xsac                       Ext
+auxiliary/Hiding.xsac                      Ext
 auxiliary/Interval.sac                     Ext
 
 # Numerical
