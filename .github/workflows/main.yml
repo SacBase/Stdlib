@@ -111,8 +111,8 @@ jobs:
           submodules: 'recursive'
       - name: Install dependencies
         run: |
-          brew update
-          brew install xsltproc -y
+          sudo apt update
+          sudo apt install xsltproc -y
       - name: Set XCode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
