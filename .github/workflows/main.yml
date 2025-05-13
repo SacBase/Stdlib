@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install libxslt -y
+          sudo apt install xsltproc -y
       - name: Install sac2c
         run: |
           git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
