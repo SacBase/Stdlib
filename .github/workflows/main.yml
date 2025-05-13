@@ -13,6 +13,7 @@ jobs:
     - name: Get HEAD and submodules
       uses: actions/checkout@v2
       with:
+        fetch-depth: 0
         submodules: 'recursive'
     - name: Install dependencies
       run: |
@@ -50,6 +51,7 @@ jobs:
     - name: Get HEAD and submodules
       uses: actions/checkout@v2
       with:
+        fetch-depth: 0
         submodules: 'recursive'
     - name: Install dependencies
       run: |
@@ -91,6 +93,7 @@ jobs:
     - name: Get HEAD and submodules
       uses: actions/checkout@v2
       with:
+        fetch-depth: 0
         submodules: 'recursive'
     - name: Install dependencies
       run: |
