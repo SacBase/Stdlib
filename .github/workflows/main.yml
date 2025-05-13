@@ -4,139 +4,124 @@
 # specific version information can be found further below.
 name: Build On Changes
 
-# run action on all pushes and pull_request for all branches
 on: [pull_request]
 
-# high-level constants
-env:
-  BASE_URL: https://gitlab.sac-home.org/sac-group/sac-packages/-/raw/master/latest/weekly
-
-# action listing, all jobs run in parallel
 jobs:
   build-ubuntu24:
     runs-on: ubuntu-24.04
     steps:
-      - name: Get HEAD and submodules
-        uses: actions/checkout@v2
-        with:
-          # we need to get tag information
-          fetch-depth: 0
-          # we need to get all submodules
-          submodules: 'recursive'
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install xsltproc -y
-      - name: Install sac2c
-        run: |
-          git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-          cd sac2c && mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-          make -j4
-          cp sac2c_p /usr/local/bin/sac2c
-          sac2c -V
-      - name: Create build dir
-        run: |
-          cmake -E make_directory ${{runner.workspace}}/build
-      - name: Configure build-system
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake -DLINKSETSIZE=200 $GITHUB_WORKSPACE
-      - name: Build
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: |
-          cmake --build . -j4 2>&1 | tee build.log
-          if [ ${PIPESTATUS[0]} -ne 0 ]; then
-            echo "!!! ERROR detected in build !!!";
-            exit 1;
-          fi
-          ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
+    - name: Get HEAD and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install xsltproc -y
+    - name: Install sac2c
+      run: |
+        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        cd sac2c && mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+        make -j4
+        cp sac2c_p /usr/local/bin/sac2c
+        sac2c -V
+    - name: Create build dir
+      run: |
+        cmake -E make_directory ${{runner.workspace}}/build
+    - name: Configure build-system
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake -DLINKSETSIZE=200 $GITHUB_WORKSPACE
+    - name: Build
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        cmake --build . -j4 2>&1 | tee build.log
+        if [ ${PIPESTATUS[0]} -ne 0 ]; then
+          echo "!!! ERROR detected in build !!!";
+          exit 1;
+        fi
+        ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
 
   build-macos-x86:
     runs-on: macos-13
     steps:
-      - name: Get HEAD and submodules
-        uses: actions/checkout@v2
-        with:
-          # we need to get tag information
-          fetch-depth: 0
-          # we need to get all submodules
-          submodules: 'recursive'
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install libxslt
-      - name: Set XCode version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '14.2'
-      - name: Install sac2c
-        run: |
-          git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-          cd sac2c && mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-          make -j4
-          cp sac2c_p /usr/local/bin/sac2c
-          sac2c -V
-      - name: Create build dir
-        run: |
-          cmake -E make_directory ${{runner.workspace}}/build
-      - name: Configure build-system
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake ${GITHUB_WORKSPACE}
-      - name: Build
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: |
-          cmake --build . -j4 >&1 | tee build.log
-          if [ ${PIPESTATUS[0]} -ne 0 ]; then
-            echo "!!! ERROR detected in build !!!";
-            exit 1;
-          fi
-          ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
+    - name: Get HEAD and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install libxslt
+    - name: Set XCode version
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '14.2'
+    - name: Install sac2c
+      run: |
+        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        cd sac2c && mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+        make -j4
+        cp sac2c_p /usr/local/bin/sac2c
+        sac2c -V
+    - name: Create build dir
+      run: |
+        cmake -E make_directory ${{runner.workspace}}/build
+    - name: Configure build-system
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake ${GITHUB_WORKSPACE}
+    - name: Build
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        cmake --build . -j4 >&1 | tee build.log
+        if [ ${PIPESTATUS[0]} -ne 0 ]; then
+          echo "!!! ERROR detected in build !!!";
+          exit 1;
+        fi
+        ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
 
   build-macos-arm:
     runs-on: macos-15
     steps:
-      - name: Get HEAD and submodules
-        uses: actions/checkout@v2
-        with:
-          # we need to get tag information
-          fetch-depth: 0
-          # we need to get all submodules
-          submodules: 'recursive'
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install libxslt
-      - name: Set XCode version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '16.2'
-      - name: Install sac2c
-        run: |
-          git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-          cd sac2c && mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-          make -j3
-          cp sac2c_p /usr/local/bin/sac2c
-          sac2c -V
-      - name: Create build dir
-        run: |
-          cmake -E make_directory ${{runner.workspace}}/build
-      - name: Configure build-system
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake ${GITHUB_WORKSPACE}
-      - name: Build
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: |
-          cmake --build . -j3 2>&1 | tee build.log
-          if [ ${PIPESTATUS[0]} -ne 0 ]; then
-            echo "!!! ERROR detected in build !!!";
-            exit 1;
-          fi
-          ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
+    - name: Get HEAD and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install libxslt
+    - name: Set XCode version
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '16.2'
+    - name: Install sac2c
+      run: |
+        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        cd sac2c && mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+        make -j3
+        cp sac2c_p /usr/local/bin/sac2c
+        sac2c -V
+    - name: Create build dir
+      run: |
+        cmake -E make_directory ${{runner.workspace}}/build
+    - name: Configure build-system
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake ${GITHUB_WORKSPACE}
+    - name: Build
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        cmake --build . -j3 2>&1 | tee build.log
+        if [ ${PIPESTATUS[0]} -ne 0 ]; then
+          echo "!!! ERROR detected in build !!!";
+          exit 1;
+        fi
+        ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
