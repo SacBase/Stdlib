@@ -23,17 +23,17 @@ jobs:
           fetch-depth: 0
           # we need to get all submodules
           submodules: 'recursive'
-      - name: Install sac2c-basic
+      - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install xsltproc -y
+          brew update
+          brew install xsltproc -y
+      - name: Install sac2c
+        run: |
           git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-          cd sac2c
-          mkdir build
-          cd build
+          cd sac2c && mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=RELEASE ..
           make -j4
-          sac2c_p /usr/local/bin/sac2c
+          cp sac2c_p /usr/local/bin/sac2c
           sac2c -V
       - name: Create build dir
         run: |
@@ -64,15 +64,22 @@ jobs:
           fetch-depth: 0
           # we need to get all submodules
           submodules: 'recursive'
-      - name: Install sac2c-basic
+      - name: Install dependencies
         run: |
-          wget ${BASE_URL}/MacOS_x86/sac2c-basic.pkg
-          sudo installer -pkg ./sac2c-basic.pkg -target /
-          sac2c -V
+          brew update
+          brew install xsltproc -y
       - name: Set XCode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '14.2'
+      - name: Install sac2c
+        run: |
+          git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+          cd sac2c && mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+          make -j4
+          cp sac2c_p /usr/local/bin/sac2c
+          sac2c -V
       - name: Create build dir
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
@@ -102,15 +109,22 @@ jobs:
           fetch-depth: 0
           # we need to get all submodules
           submodules: 'recursive'
-      - name: Install sac2c-basic
+      - name: Install dependencies
         run: |
-          wget ${BASE_URL}/MacOS_arm64/sac2c-basic.pkg
-          sudo installer -pkg ./sac2c-basic.pkg -target /
-          sac2c -V
+          brew update
+          brew install xsltproc -y
       - name: Set XCode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.2'
+      - name: Install sac2c
+        run: |
+          git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+          cd sac2c && mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+          make -j3
+          cp sac2c_p /usr/local/bin/sac2c
+          sac2c -V
       - name: Create build dir
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
