@@ -25,6 +25,8 @@ jobs:
           submodules: 'recursive'
       - name: Install sac2c-basic
         run: |
+          sudo apt update
+          sudo apt install xsltproc -y
           git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
           cd sac2c
           mkdir build
