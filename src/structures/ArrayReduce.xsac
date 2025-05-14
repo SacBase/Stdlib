@@ -41,3 +41,21 @@ REDUCE(any, typ, ScalarArith::|, zval)                                         \
 REDUCE(all, typ, ScalarArith::&, oval)
 
 BOOL(BOOL_REDUCE)
+
+/******************************************************************************
+ *
+ * @fn <a>[i:ishp] rsum(int r, <a>[r:rshp,i:ishp] arr)
+ *
+ * @brief Sum along the first `r` axes of `arr`.
+ *
+ ******************************************************************************/
+
+#define RSUM(typ, _postfix, _fmt, _zval, _oval)                                \
+inline typ[i:ishp] rsum(int r, typ[r:rshp,i:ishp] arr)                         \
+{                                                                              \
+    return { iv -> sum({                                                       \
+                ov -> _sel_VxA_(_cat_VxV_(ov, iv), arr) | ov < rshp })         \
+           | iv < ishp };                                                      \
+}
+
+NUM(RSUM)
