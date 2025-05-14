@@ -1,376 +1,259 @@
 module ComplexIO;
 
-use IOresources: all;
+use File: { File };
+use TermFile: { TermFile };
 use String: { string, sprintf };
-use Complex: { complex, imag, real, toc, shape, dim };
-use ScalarArith : { == };
-use TermFile : { TermFile };
+use Complex: { complex, toc, real, imag };
 
-export {print, fprint};
+export { print, fprint };
 
-/*
- *  prototypes for externals (FUNDECS)
- */
+/******************************************************************************/
 
-external void printarray( File &stream, int d, int[.] s, complex[*] a)
-/*
- *  printarray ::  ---
- */;
-#pragma linkname "COMPLEXIO__PrintComplexArray"
-#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+external void printarray(File &stream, int d, int[.] s, complex[*] a);
+    #pragma linkname "COMPLEXIO__PrintComplexArray"
+    #pragma linkobj "src/ComplexIO/PrintComplexArray.o"
 
-external void  printarray( TermFile &stream, int d, int[.] s, complex[*] a)
-/*
- *  printarray ::  ---
- */;
-#pragma linkname "COMPLEXIO__PrintComplexArray"
-#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+external void  printarray(TermFile &stream, int d, int[.] s, complex[*] a);
+    #pragma linkname "COMPLEXIO__PrintComplexArray"
+    #pragma linkobj "src/ComplexIO/PrintComplexArray.o"
 
-external void printarray( File &stream, string format, int d, int[.] s, complex[*] a)
-/*
- *  printarray ::  ---
- */;
-#pragma linkname "COMPLEXIO__PrintComplexArrayFormat"
-#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+external void printarray(File &stream, string format,
+                         int d, int[.] s, complex[*] a);
+    #pragma linkname "COMPLEXIO__PrintComplexArrayFormat"
+    #pragma linkobj "src/ComplexIO/PrintComplexArray.o"
 
-external void  printarray( TermFile &stream, string format, int d, int[.] s, complex[*] a)
-/*
- *  printarray ::  ---
- */;
-#pragma linkname "COMPLEXIO__PrintComplexArrayFormat"
-#pragma linkobj "src/ComplexIO/PrintComplexArray.o"
+external void  printarray(TermFile &stream, string format,
+                          int d, int[.] s, complex[*] a);
+    #pragma linkname "COMPLEXIO__PrintComplexArrayFormat"
+    #pragma linkobj "src/ComplexIO/PrintComplexArray.o"
 
-
-/*****************************************************************/
+/******************************************************************************/
 
 inline void fprint(File &stream, complex c)
 {
-  File::fprintf(stream, "(%g,%g)", real(c), imag(c));
+    File::fprintf(stream, "(%g,%g)", real(c), imag(c));
 }
-
-
-/*****************************************************************/
 
 inline void fprint(File &stream, complex c, int mode)
 {
-  if (mode==2)
-  {
-    File::fprintf(stream, "%g %g", real(c), imag(c));
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      File::fprintf(stream, "%g+%gi", real(c), imag(c));
+        File::fprintf(stream, "%g %g", real(c), imag(c));
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        File::fprintf(stream, "%g+%gi", real(c), imag(c));
     }
     else
     {
-      File::fprintf(stream, "(%g, %g)", real(c), imag(c));
+        File::fprintf(stream, "(%g, %g)", real(c), imag(c));
     }
-  }
 }
-
-
-/*****************************************************************/
 
 inline void fprint(File &stream, complex c, int mode, int prec)
 {
-  if (mode==2)
-  {
-    File::fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      File::fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
+        File::fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        File::fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
     }
     else
     {
-      File::fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
+        File::fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
     }
-  }
 }
 
-
-/*****************************************************************/
-/*****************************************************************/
-
+/******************************************************************************/
 
 inline void fprint(TermFile &stream, complex c)
 {
-  TermFile::fprintf(stream, "(%g,%g)", real(c), imag(c));
+    TermFile::fprintf(stream, "(%g,%g)", real(c), imag(c));
 }
-
-
-/*****************************************************************/
 
 inline void fprint(TermFile &stream, complex c, int mode)
 {
-  if (mode==2)
-  {
-    TermFile::fprintf(stream, "%g %g", real(c), imag(c));
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      TermFile::fprintf(stream, "%g+%gi", real(c), imag(c));
+        TermFile::fprintf(stream, "%g %g", real(c), imag(c));
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        TermFile::fprintf(stream, "%g+%gi", real(c), imag(c));
     }
     else
     {
-      TermFile::fprintf(stream, "(%g, %g)", real(c), imag(c));
+        TermFile::fprintf(stream, "(%g, %g)", real(c), imag(c));
     }
-  }
 }
-
-
-/*****************************************************************/
 
 inline void fprint(TermFile &stream, complex c, int mode, int prec)
 {
-  if (mode==2)
-  {
-    TermFile::fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      TermFile::fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
+        TermFile::fprintf(stream, "%.*g %.*g", prec, real(c), prec, imag(c));
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        TermFile::fprintf(stream, "%.*g+%.*gi", prec, real(c), prec, imag(c));
     }
     else
     {
-      TermFile::fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
+        TermFile::fprintf(stream, "(%.*g, %.*g)", prec, real(c), prec, imag(c));
     }
-  }
 }
 
-
-/*****************************************************************/
-/*****************************************************************/
+/******************************************************************************/
 
 inline void print(complex c)
 {
-  fprint(TermFile::stdout, c);
+    fprint(TermFile::stdout, c);
 }
-
-
-/*****************************************************************/
 
 inline void print(complex c, int mode)
 {
-  fprint(TermFile::stdout, c, mode);
+    fprint(TermFile::stdout, c, mode);
 }
-
-
-/*****************************************************************/
 
 inline void print(complex c, int mode, int prec)
 {
-  fprint(TermFile::stdout, c, mode, prec);
+    fprint(TermFile::stdout, c, mode, prec);
 }
 
-/*****************************************************************/
-
-inline void print(complex[+] arr)
+inline void print(complex[d>0:shp] arr)
 {
-  printarray(TermFile::stdout, dim( arr), shape( arr), arr);
+    printarray(TermFile::stdout, d, shp, arr);
 }
 
-/*****************************************************************/
-
-inline void print(complex[+] arr, int mode)
+inline void print(complex[d>0:shp] arr, int mode)
 {
-  string format;
-  if (mode==2)
-  {
-    format = "%g %g ";
-  }
-  else
-  {
-    if (mode==1)
+    string format;
+    if (_eq_SxS_(mode, 2))
     {
-      format = "%g+%gi ";
+        format = "%g %g ";
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        format = "%g+%gi ";
     }
     else
     {
-      format = "(%g, %g) ";
+        format = "(%g, %g) ";
     }
-  }
-  printarray(TermFile::stdout, format, dim( arr), shape( arr), arr);
+
+    printarray(TermFile::stdout, format, d, shp, arr);
 }
 
-/*****************************************************************/
-
-inline void print(complex[+] arr, int mode, int prec)
+inline void print(complex[d>0:shp] arr, int mode, int prec)
 {
-  string format;
-  if (mode==2)
-  {
-    format = sprintf("%%.%dg %%.%dg ", prec, prec);
-  }
-  else
-  {
-    if (mode==1)
+    string format;
+    if (_eq_SxS_(mode, 2))
     {
-      format = sprintf("%%.%dg+%%.%dgi ", prec, prec);
+        format = sprintf("%%.%dg %%.%dg ", prec, prec);
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        format = sprintf("%%.%dg+%%.%dgi ", prec, prec);
     }
     else
     {
-      format = sprintf("(%%.%dg, %%.%dg) ", prec, prec);
+        format = sprintf("(%%.%dg, %%.%dg) ", prec, prec);
     }
-  }
-  printarray(TermFile::stdout, format, dim( arr), shape( arr), arr);
+
+    printarray(TermFile::stdout, format, d, shp, arr);
 }
 
-/*****************************************************************/
-/*****************************************************************/
+/******************************************************************************/
 
 inline bool, complex fscancomplex(File &stream)
 {
-  double re;
-  double im;
-
-  re=0.0d;
-  im=0.0d;
-
-  success, re, im=File::fscanf(stream, "(%lf,%lf)");
-
-  return(success==2, toc(re, im));
+    double re;
+    double im;
+    success, re, im = File::fscanf(stream, "(%lf,%lf)");
+    return (_eq_SxS_(success, 2), toc(re, im));
 }
-
-
-/*****************************************************************/
-
 
 inline bool, complex fscancomplex(File &stream, int mode)
 {
-  double re;
-  double im;
+    double re;
+    double im;
 
-  re=0.0d;
-  im=0.0d;
-
-  if (mode==2)
-  {
-    success, re, im=File::fscanf(stream, "%lf %lf");
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      success, re, im=File::fscanf(stream, "%lf+%lfi");
+        success, re, im = File::fscanf(stream, "%lf %lf");
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        success, re, im = File::fscanf(stream, "%lf+%lfi");
     }
     else
     {
-      success, re, im=File::fscanf(stream, "(%lf,%lf)");
+        success, re, im = File::fscanf(stream, "(%lf,%lf)");
     }
-  }
 
-
-  return(success==2, toc(re, im));
+    return (_eq_SxS_(success, 2), toc(re, im));
 }
 
-
-/*****************************************************************/
-/*****************************************************************/
-
+/******************************************************************************/
 
 inline bool, complex fscancomplex(TermFile &stream)
 {
-  double re;
-  double im;
-
-  re=0.0d;
-  im=0.0d;
-
-  success, re, im=TermFile::fscanf(stream, "(%lf,%lf)");
-
-  return(success==2, toc(re, im));
+    double re;
+    double im;
+    success, re, im = TermFile::fscanf(stream, "(%lf,%lf)");
+    return (_eq_SxS_(success, 2), toc(re, im));
 }
-
-
-/*****************************************************************/
-
 
 inline bool, complex fscancomplex(TermFile &stream, int mode)
 {
-  double re;
-  double im;
+    double re;
+    double im;
 
-  re=0.0d;
-  im=0.0d;
-
-  if (mode==2)
-  {
-    success, re, im=TermFile::fscanf(stream, "%lf %lf");
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      success, re, im=TermFile::fscanf(stream, "%lf+%lfi");
+        success, re, im = TermFile::fscanf(stream, "%lf %lf");
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        success, re, im = TermFile::fscanf(stream, "%lf+%lfi");
     }
     else
     {
-      success, re, im=TermFile::fscanf(stream, "(%lf,%lf)");
+        success, re, im = TermFile::fscanf(stream, "(%lf,%lf)");
     }
-  }
 
-
-  return(success==2, toc(re, im));
+    return (_eq_SxS_(success, 2), toc(re, im));
 }
 
-
-/*****************************************************************/
-/*****************************************************************/
-
+/******************************************************************************/
 
 inline bool, complex scancomplex()
 {
-  double re;
-  double im;
-
-  re=0.0d;
-  im=0.0d;
-
-  success, re, im=TermFile::scanf("(%lf,%lf)");
-
-  return(success==2, toc(re, im));
+    double re;
+    double im;
+    success, re, im = TermFile::scanf("(%lf,%lf)");
+    return (_eq_SxS_(success, 2), toc(re, im));
 }
-
-
-/*****************************************************************/
-
 
 inline bool, complex scancomplex(int mode)
 {
-  double re;
-  double im;
+    double re;
+    double im;
 
-  re=0.0d;
-  im=0.0d;
-
-  if (mode==2)
-  {
-    success, re, im=TermFile::scanf("%lf %lf");
-  }
-  else
-  {
-    if (mode==1)
+    if (_eq_SxS_(mode, 2))
     {
-      success, re, im=TermFile::scanf("%lf+%lfi");
+        success, re, im = TermFile::scanf("%lf %lf");
+    }
+    else if (_eq_SxS_(mode, 1))
+    {
+        success, re, im = TermFile::scanf("%lf+%lfi");
     }
     else
     {
-      success, re, im=TermFile::scanf("(%lf,%lf)");
+        success, re, im = TermFile::scanf("(%lf,%lf)");
     }
-  }
 
-
-  return(success==2, toc(re, im));
+    return (_eq_SxS_(success, 2), toc(re, im));
 }
-
-/*****************************************************************/
-/*****************************************************************/
