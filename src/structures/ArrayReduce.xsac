@@ -2,10 +2,11 @@ module ArrayReduce;
 
 /******************************************************************************
  *
- * Depends on ScalarArith and Constants.
+ * Depends on ScalarArith, ArrayBasics, and Constants.
  *
  ******************************************************************************/
 
+use ArrayBasics: { sel };
 use Constants: all;
 
 export all;
@@ -53,10 +54,8 @@ BOOL(BOOL_REDUCE)
 #define RSUM(typ, _postfix, _fmt, zval, _oval)                                 \
 inline typ[i:ishp] rsum(int r, typ[r:rshp,i:ishp] arr)                         \
 {                                                                              \
-    return { iv -> with {                                                      \
-                       (_mul_SxV_(0, rshp) <= ov < rshp)                       \
-                           : _sel_VxA_(_cat_VxV_(ov, iv), arr);                \
-                   } : fold(ScalarArith::+, zval)                              \
+    return { iv -> sum({                                                       \
+                ov -> arr[_cat_VxV_(ov, iv)] | ov < rshp })                    \
            | iv < ishp };                                                      \
 }
 
