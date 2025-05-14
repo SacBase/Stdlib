@@ -33,7 +33,7 @@ jobs:
     - name: Configure build-system
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake -DLINKSETSIZE=200 $GITHUB_WORKSPACE
+      run: cmake $GITHUB_WORKSPACE
     - name: Build
       shell: bash
       working-directory: ${{runner.workspace}}/build
