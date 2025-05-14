@@ -50,11 +50,13 @@ BOOL(BOOL_REDUCE)
  *
  ******************************************************************************/
 
-#define RSUM(typ, _postfix, _fmt, _zval, _oval)                                \
+#define RSUM(typ, _postfix, _fmt, zval, _oval)                                 \
 inline typ[i:ishp] rsum(int r, typ[r:rshp,i:ishp] arr)                         \
 {                                                                              \
-    return { iv -> sum({                                                       \
-                ov -> _sel_VxA_(_cat_VxV_(ov, iv), arr) | ov < rshp })         \
+    return { iv -> with {                                                      \
+                       (_mul_SxV_(0, rshp) <= ov < rshp)                       \
+                           : _sel_VxA_(_cat_VxV_(ov, iv), arr);                \
+                   } : fold(ScalarArith::+, zval)                              \
            | iv < ishp };                                                      \
 }
 
