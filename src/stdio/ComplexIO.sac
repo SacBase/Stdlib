@@ -1,9 +1,15 @@
 module ComplexIO;
 
+/******************************************************************************
+ *
+ * Depends on File, TermFile, String, and ComplexBasics.
+ *
+ ******************************************************************************/
+
 use File: { File };
 use TermFile: { TermFile };
 use String: { string, sprintf };
-use Complex: { complex, toc, real, imag };
+use ComplexBasics: { complex, toc, real, imag };
 
 export { print, fprint };
 
