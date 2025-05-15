@@ -24,7 +24,7 @@ jobs:
         git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c && mkdir build && cd build
         cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-        make -j4
+        make -j2
         cp sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
@@ -66,7 +66,7 @@ jobs:
         git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c && mkdir build && cd build
         cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-        make -j4
+        make -j2
         cp sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
@@ -108,7 +108,7 @@ jobs:
         git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c && mkdir build && cd build
         cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-        make -j3
+        make -j2
         cp sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir

@@ -5,13 +5,13 @@ import ScalarArith: all;
 export all;
 
 #include "builtin.mac"
-#include "Templates.mac"
+#include "templates.mac"
 
 /******************************************************************************
  *
  * Array-extensions for binary monary ops.
  *
- * Calls of these are created when using the macros provided in "Templates.mac"
+ * Calls of these are created when using the macros provided in "templates.mac"
  * such as MAP_ARI_OPS, MAP_INT_OPS, MAP_REL_OPS.
  *
  * NB: These could be defined in a way that they are applicable to all (not
@@ -99,7 +99,7 @@ b[d>0:shp] name(a[d>0:shp] A)                                                  \
 
 /******************************************************************************
  *
- * AriOPS on arrays (see Templates.mac for details).
+ * AriOPS on arrays (see templates.mac for details).
  *
  ******************************************************************************/
 
@@ -146,7 +146,7 @@ INT_NUM(INT_OPS_A)
 
 /******************************************************************************
  *
- * RelOPS on arrays (see Templates.mac for details).
+ * RelOPS on arrays (see templates.mac for details).
  *
  ******************************************************************************/
 
@@ -159,7 +159,7 @@ BUILT_IN(REL_OPS_A)
 
 /******************************************************************************
  *
- * LogOPS on scalars (see Templates.mac for details).
+ * LogOPS on scalars (see templates.mac for details).
  *
  ******************************************************************************/
 
@@ -169,7 +169,7 @@ MAP_LOG_OPS(SxA)
 
 /******************************************************************************
  *
- * ConvOPS on scalars (see Templates.mac for details).
+ * ConvOPS on scalars (see templates.mac for details).
  *
  ******************************************************************************/
 
