@@ -136,6 +136,8 @@ ADD_CUSTOM_COMMAND (
 
 # C files relatively to thes CMakeLists.txt.
 SET (C_DEPS_SRC
+    auxiliary/src/C99Benchmarking/bench.c
+    numerical/src/intlog.c
     system/src/World/World.c
     system/src/TimeStamp/TimeStamp.c
     system/src/Terminal/terminal.c
@@ -304,13 +306,7 @@ SET (C_DEPS_SRC
     stdio/src/BinFile/binfReadDblArr.c
     stdio/src/ArrayIO/ShowArray.c
     stdio/src/ArrayIO/PrintArray.c
-    numerical/src/Math/int_log.c
-    numerical/src/Math/sign.c
-    numerical/src/Math/isnan.c
-    numerical/src/Math/isinf.c
-    numerical/src/Math/isfinite.c
     random/src/Xoshiro.c
-    auxiliary/src/C99Benchmarking/bench.c
 )
 
 # Cuda files relatively to thes CMakeLists.txt.

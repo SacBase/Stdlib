@@ -1,10 +1,15 @@
 module ScalarIO;
 
-use IOresources: all;
-use String: { string, to_string, strlen };
-use ScalarArith: all;
-use ArrayFormat: all;
+/******************************************************************************
+ *
+ * Depends on File, TermFile, String, and ArrayFormat.
+ *
+ ******************************************************************************/
+
+use File: { File };
 use TermFile: { TermFile };
+use String: { string, to_string, strlen };
+use ArrayFormat: all;
 
 export all except { bool2str };
 
@@ -14,11 +19,11 @@ export all except { bool2str };
 
 inline string bool2str(bool val, int mode)
 {
-    if (mode == 2)
+    if (_eq_SxS_(mode, 2))
     {
         res = val ? "true" : "false";
     }
-    else if (mode == 1)
+    else if (_eq_SxS_(mode, 1))
     {
         res = val ? "t" : "f";
     }
@@ -49,12 +54,12 @@ CHAR(FPRINT_FILE_S)
 
 inline void fprint(File &stream, float val)
 {
-    File::fprintf(stream, "%g", tod(val));
+    File::fprintf(stream, "%g", _tod_S_(val));
 }
 
 inline void fprint(File &stream, float val, int prec)
 {
-    File::fprintf(stream, "%.*g", prec, tod(val));
+    File::fprintf(stream, "%.*g", prec, _tod_S_(val));
 }
 
 inline void fprint(File &stream, double val)
@@ -96,12 +101,12 @@ CHAR(FPRINT_TERMFILE_S)
 
 inline void fprint(TermFile &stream, float val)
 {
-    TermFile::fprintf(stream, "%g", tod(val));
+    TermFile::fprintf(stream, "%g", _tod_S_(val));
 }
 
 inline void fprint(TermFile &stream, float val, int prec)
 {
-    TermFile::fprintf(stream, "%.*g", prec, tod(val));
+    TermFile::fprintf(stream, "%.*g", prec, _tod_S_(val));
 }
 
 inline void fprint(TermFile &stream, double val)
@@ -145,7 +150,7 @@ BOOL(SHOW_TERMFILE_S)
 
 inline void show(float val)
 {
-    TermFile::printf("%g\n", tod(val));
+    TermFile::printf("%g\n", _tod_S_(val));
 }
 
 inline void show(double val)
@@ -173,13 +178,13 @@ INT_NUM(PRINT_TERMFILE_S)
 inline void print(float val)
 {
     TermFile::printf("Dimension:  0\nShape    : < >\n");
-    TermFile::printf(" %g\n", tod(val));
+    TermFile::printf(" %g\n", _tod_S_(val));
 }
 
 inline void print(float val, int prec)
 {
     TermFile::printf("Dimension:  0\nShape    : < >\n");
-    TermFile::printf(" %.*g\n", prec, tod(val));
+    TermFile::printf(" %.*g\n", prec, _tod_S_(val));
 }
 
 inline void print(double val)
@@ -226,7 +231,7 @@ inline bool, typ fscan##typ(File &stream)                                      \
 {                                                                              \
     typ res;                                                                   \
     success, res = File::fscanf(stream, QUOTE(%fmt));                          \
-    return (success == 1, res);                                                \
+    return (_eq_SxS_(success, 1), res);                                        \
 }
 
 NUM(FSCAN_FILE_S)
@@ -236,15 +241,16 @@ inline bool, bool fscanbool(File &stream)
 {
     char c;
     success, c = File::fscanf(stream, "%c");
-    res = (success == 1) && ((c == '0') || (c == 'f'));
-    return (success == 1, res);
+    res = _and_SxS_(_eq_SxS_(success, 1),
+                    _or_SxS_(_eq_SxS_(c, '0'), _eq_SxS_(c, 'f')));
+    return (_eq_SxS_(success, 1), res);
 }
 
 inline bool, string fscanstring(File &stream, int length)
 {
     string res;
     res = File::fscans(stream, length);
-    return (strlen(res) > 0, res);
+    return (_gt_SxS_(strlen(res), 0), res);
 }
 
 /******************************************************************************
@@ -261,7 +267,7 @@ inline bool, typ fscan##typ(TermFile &stream)                                  \
 {                                                                              \
     typ res;                                                                   \
     success, res = TermFile::fscanf(stream, QUOTE(%fmt));                      \
-    return (success==1, res);                                                  \
+    return (_eq_SxS_(success, 1), res);                                        \
 }
 
 NUM(FSCAN_TERMFILE_S)
@@ -271,15 +277,16 @@ inline bool, bool fscanbool(TermFile &stream)
 {
     char c;
     success, c = TermFile::fscanf(stream, "%c");
-    res = (success == 1) && ((c == '0') || (c == 'f'));
-    return (success == 1, res);
+    res = _and_SxS_(_eq_SxS_(success, 1),
+                    _or_SxS_(_eq_SxS_(c, '0'), _eq_SxS_(c, 'f')));
+    return (_eq_SxS_(success, 1), res);
 }
 
 inline bool, string fscanstring(TermFile &stream, int length)
 {
     string res;
     res = TermFile::fscans(stream, length);
-    return (strlen(res) > 0, res);
+    return (_gt_SxS_(strlen(res), 0), res);
 }
 
 /******************************************************************************
@@ -296,7 +303,7 @@ inline bool, typ scan##typ()                                                   \
 {                                                                              \
   typ res;                                                                     \
   success, res = TermFile::scanf(QUOTE(%format));                              \
-  return (success==1, res);                                                    \
+  return (_eq_SxS_(success, 1), res);                                          \
 }
 
 NUM(SCAN_S)
@@ -306,13 +313,14 @@ inline bool, bool scanbool()
 {
     char c;
     success, c = TermFile::scanf("%c");
-    res = (success == 1) && ((c == '0') || (c == 'f'));
-    return (success == 1, res);
+    res = _and_SxS_(_eq_SxS_(success, 1),
+                    _or_SxS_(_eq_SxS_(c, '0'), _eq_SxS_(c, 'f')));
+    return (_eq_SxS_(success, 1), res);
 }
 
 inline bool, string scanstring(int length)
 {
     string res;
     res = TermFile::scans(length);
-    return (strlen(res) > 0, res);
+    return (_gt_SxS_(strlen(res), 0), res);
 }
