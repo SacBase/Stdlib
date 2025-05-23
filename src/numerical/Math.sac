@@ -203,12 +203,12 @@ external float log2(float x);
 
 external uint log2(uint x);
     #pragma linksign [0,1]
-    #pragma linkobj "src/Math/intlog.o"
+    #pragma linkobj "src/intlog.o"
     #pragma linkname "SAC_MATH_log2u"
 
 external ulong log2(ulong x);
     #pragma linksign [0,1]
-    #pragma linkobj "src/Math/intlog.o"
+    #pragma linkobj "src/intlog.o"
     #pragma linkname "SAC_MATH_log2ul"
 
 external double expm1(double x);
