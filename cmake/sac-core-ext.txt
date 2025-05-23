@@ -37,7 +37,7 @@ stdio/TermFile.sac                         Core
 structures/Array.sac                       Core
 structures/ArrayArith.xsac                 Core
 structures/ArrayBasics.xsac                Core
-structures/ArrayFormat.xsac                Core
+structures/ArrayFormat.sac                 Core
 structures/ArrayReduce.xsac                Core
 structures/ArrayTransform.xsac             Core
 structures/ArrayTransformApl.xsac          Ext
