@@ -44,7 +44,7 @@ external void  printarray( TermFile &stream, string format, int d, int[.] s, com
 
 /*****************************************************************/
 
-inline void fprint(File &stream, complex c)
+void fprint(File &stream, complex c)
 {
   File::fprintf(stream, "(%g,%g)", real(c), imag(c));
 }
@@ -52,7 +52,7 @@ inline void fprint(File &stream, complex c)
 
 /*****************************************************************/
 
-inline void fprint(File &stream, complex c, int mode)
+void fprint(File &stream, complex c, int mode)
 {
   if (mode==2)
   {
@@ -74,7 +74,7 @@ inline void fprint(File &stream, complex c, int mode)
 
 /*****************************************************************/
 
-inline void fprint(File &stream, complex c, int mode, int prec)
+void fprint(File &stream, complex c, int mode, int prec)
 {
   if (mode==2)
   {
@@ -98,7 +98,7 @@ inline void fprint(File &stream, complex c, int mode, int prec)
 /*****************************************************************/
 
 
-inline void fprint(TermFile &stream, complex c)
+void fprint(TermFile &stream, complex c)
 {
   TermFile::fprintf(stream, "(%g,%g)", real(c), imag(c));
 }
@@ -106,7 +106,7 @@ inline void fprint(TermFile &stream, complex c)
 
 /*****************************************************************/
 
-inline void fprint(TermFile &stream, complex c, int mode)
+void fprint(TermFile &stream, complex c, int mode)
 {
   if (mode==2)
   {
@@ -128,7 +128,7 @@ inline void fprint(TermFile &stream, complex c, int mode)
 
 /*****************************************************************/
 
-inline void fprint(TermFile &stream, complex c, int mode, int prec)
+void fprint(TermFile &stream, complex c, int mode, int prec)
 {
   if (mode==2)
   {
@@ -151,7 +151,7 @@ inline void fprint(TermFile &stream, complex c, int mode, int prec)
 /*****************************************************************/
 /*****************************************************************/
 
-inline void print(complex c)
+void print(complex c)
 {
   fprint(TermFile::stdout, c);
 }
@@ -159,7 +159,7 @@ inline void print(complex c)
 
 /*****************************************************************/
 
-inline void print(complex c, int mode)
+void print(complex c, int mode)
 {
   fprint(TermFile::stdout, c, mode);
 }
@@ -167,21 +167,21 @@ inline void print(complex c, int mode)
 
 /*****************************************************************/
 
-inline void print(complex c, int mode, int prec)
+void print(complex c, int mode, int prec)
 {
   fprint(TermFile::stdout, c, mode, prec);
 }
 
 /*****************************************************************/
 
-inline void print(complex[+] arr)
+void print(complex[+] arr)
 {
   printarray(TermFile::stdout, dim( arr), shape( arr), arr);
 }
 
 /*****************************************************************/
 
-inline void print(complex[+] arr, int mode)
+void print(complex[+] arr, int mode)
 {
   string format;
   if (mode==2)
@@ -204,7 +204,7 @@ inline void print(complex[+] arr, int mode)
 
 /*****************************************************************/
 
-inline void print(complex[+] arr, int mode, int prec)
+void print(complex[+] arr, int mode, int prec)
 {
   string format;
   if (mode==2)
@@ -228,7 +228,7 @@ inline void print(complex[+] arr, int mode, int prec)
 /*****************************************************************/
 /*****************************************************************/
 
-inline bool, complex fscancomplex(File &stream)
+bool, complex fscancomplex(File &stream)
 {
   double re;
   double im;
@@ -245,7 +245,7 @@ inline bool, complex fscancomplex(File &stream)
 /*****************************************************************/
 
 
-inline bool, complex fscancomplex(File &stream, int mode)
+bool, complex fscancomplex(File &stream, int mode)
 {
   double re;
   double im;
@@ -278,7 +278,7 @@ inline bool, complex fscancomplex(File &stream, int mode)
 /*****************************************************************/
 
 
-inline bool, complex fscancomplex(TermFile &stream)
+bool, complex fscancomplex(TermFile &stream)
 {
   double re;
   double im;
@@ -295,7 +295,7 @@ inline bool, complex fscancomplex(TermFile &stream)
 /*****************************************************************/
 
 
-inline bool, complex fscancomplex(TermFile &stream, int mode)
+bool, complex fscancomplex(TermFile &stream, int mode)
 {
   double re;
   double im;
@@ -328,7 +328,7 @@ inline bool, complex fscancomplex(TermFile &stream, int mode)
 /*****************************************************************/
 
 
-inline bool, complex scancomplex()
+bool, complex scancomplex()
 {
   double re;
   double im;
@@ -345,7 +345,7 @@ inline bool, complex scancomplex()
 /*****************************************************************/
 
 
-inline bool, complex scancomplex(int mode)
+bool, complex scancomplex(int mode)
 {
   double re;
   double im;

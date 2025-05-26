@@ -64,32 +64,32 @@ external void showarray(TermFile &stream, int d, int[.] s, char[*] a);
 /******************************************************************************/
 
 #define PRINT(typ, _postfix, _fmt, _zero, _one)                                \
-inline void fprint(TermFile &stream, string fmt, typ[d:shp] arr)               \
+void fprint(TermFile &stream, string fmt, typ[d:shp] arr)                      \
 {                                                                              \
     printarray(stream, fmt, d, shp, arr);                                      \
 }                                                                              \
                                                                                \
-inline void fprint(TermFile &stream, typ[d:shp] arr)                           \
+void fprint(TermFile &stream, typ[d:shp] arr)                                  \
 {                                                                              \
     printarray(stream, d, shp, arr);                                           \
 }                                                                              \
                                                                                \
-inline void fprint(File &stream, string fmt, typ[d:shp] arr)                   \
+void fprint(File &stream, string fmt, typ[d:shp] arr)                          \
 {                                                                              \
     printarray(stream, fmt, d, shp, arr);                                      \
 }                                                                              \
                                                                                \
-inline void fprint(File &stream, typ[d:shp] arr)                               \
+void fprint(File &stream, typ[d:shp] arr)                                      \
 {                                                                              \
     printarray(stream, d, shp, arr);                                           \
 }                                                                              \
                                                                                \
-inline void print(string fmt, typ[d:shp] arr)                                  \
+void print(string fmt, typ[d:shp] arr)                                         \
 {                                                                              \
     printarray(stdout, fmt, d, shp, arr);                                      \
 }                                                                              \
                                                                                \
-inline void print(typ[d:shp] arr)                                              \
+void print(typ[d:shp] arr)                                                     \
 {                                                                              \
     printarray(stdout, d, shp, arr);                                           \
 }
@@ -99,7 +99,7 @@ BUILT_IN(PRINT)
 /******************************************************************************/
 
 #define SHOW(typ)                                                              \
-inline void show(typ[+] arr)                                                   \
+void show(typ[+] arr)                                                          \
 {                                                                              \
     carr = format(arr);                                                        \
     showarray(stdout, dim(carr), shape(carr), carr);                           \

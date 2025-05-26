@@ -30,7 +30,6 @@ export { format };
  * @brief Default format for any character array.
  *
  ******************************************************************************/
-inline
 char[d:shp] format(char[d:shp] arr)
 {
     return arr;
@@ -43,7 +42,6 @@ char[d:shp] format(char[d:shp] arr)
  * @brief Default format for boolean scalar.
  *
  ******************************************************************************/
-inline
 char[1] format(bool arr)
 {
     return [arr ? '1' : '0'];
@@ -56,7 +54,6 @@ char[1] format(bool arr)
  * Default format for boolean non-scalars.
  *
  ******************************************************************************/
-inline
 char[d:shp,m] format(bool[d:shp,n] arr)
     | _eq_SxS_(m, max(2 * n - 1, 0))
 {
@@ -78,7 +75,6 @@ char[d:shp,m] format(bool[d:shp,n] arr)
  * @param w[1] The number of significant digits to be printed.
  *
  ******************************************************************************/
-inline
 char[.] format(bool arr, int[2] w)
 {
     return format(tod(arr), w);
@@ -91,7 +87,6 @@ char[.] format(bool arr, int[2] w)
  * @brief Defined-width format on boolean non-scalar.
  *
  ******************************************************************************/
-inline
 char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
     | _eq_SxS_(m, max(2 * n - 1, 0))
 {
@@ -105,7 +100,6 @@ char[d:shp,m] format(bool[d:shp,n] arr, int[2] w)
  * @brief Default format on integer scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(int arr)
 {
     return tochar(sprintf("%d", arr));
@@ -118,7 +112,6 @@ char[.] format(int arr)
  * @brief Default format on long scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(long arr)
 {
     return tochar(sprintf("%ld", arr));
@@ -133,7 +126,6 @@ char[.] format(long arr)
  * Refer to UTThorn.dws <thint> for APL model of this.
  *
  ******************************************************************************/
-inline
 char[+] format(int[d:shp,n] arr)
 {
     shpp = prod(shp);
@@ -164,7 +156,6 @@ char[+] format(int[d:shp,n] arr)
  * @brief Defined-precision format on integer scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(int arr, int precision)
 {
     return format(tod(arr), precision);
@@ -177,7 +168,6 @@ char[.] format(int arr, int precision)
  * @brief Precision-significant digit format on integer non-scalar.
  *
  ******************************************************************************/
-inline
 char[+] format(int[+] arr, int precision)
 {
     return format(tod(arr), precision);
@@ -194,7 +184,6 @@ char[+] format(int[+] arr, int precision)
  * @param w[1] The number of significant digits to be printed.
  *
  ******************************************************************************/
-inline
 char[.] format(int arr, int[2] w)
 {
     res = tochar(sprintf("%*.*d", w[0], w[1], arr));
@@ -209,7 +198,6 @@ char[.] format(int arr, int[2] w)
  * @brief Default format on float scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(float arr)
 {
     return format(tod(arr), 15);
@@ -222,7 +210,6 @@ char[.] format(float arr)
  * @brief Default format on float non-scalar.
  *
  ******************************************************************************/
-inline
 char[+] format(float[+] arr)
 {
     return format(tod(arr), 15);
@@ -235,7 +222,6 @@ char[+] format(float[+] arr)
  * @brief Defined-precision format on floating scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(float arr, int precision)
 {
     return format(tod(arr), precision);
@@ -248,7 +234,6 @@ char[.] format(float arr, int precision)
  * @brief Precision-significant digit format on floating non-scalar.
  *
  ******************************************************************************/
-inline
 char[+] format(float[+] arr, int precision)
 {
     return format(tod(arr), precision);
@@ -265,7 +250,6 @@ char[+] format(float[+] arr, int precision)
  * @param w[1] The number of significant digits to be printed.
  *
  ******************************************************************************/
-inline
 char[.] format(float arr, int[2] w)
 {
     return format(tod(arr), w);
@@ -282,7 +266,6 @@ char[.] format(float arr, int[2] w)
  * @param w[1] The number of significant digits to be printed.
  *
  ******************************************************************************/
-inline
 char[+] format(float[+] arr, int[2] w)
 {
     return format(tod(arr), w);
@@ -295,7 +278,6 @@ char[+] format(float[+] arr, int[2] w)
  * @brief Default format on double scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(double arr)
 {
     return format(arr, 15);
@@ -310,7 +292,6 @@ char[.] format(double arr)
  * Refer to UTThorn.dws <threal> for APL model of this.
  *
  ******************************************************************************/
-inline
 char[+] format(double[+] arr)
 {
     return format(arr, 15);
@@ -323,7 +304,6 @@ char[+] format(double[+] arr)
  * @brief Formatting for a double scalar.
  *
  ******************************************************************************/
-inline
 char[.] format(double arr, int precision)
 {
     res = scalarFormatter(arr, precision);
@@ -340,7 +320,6 @@ char[.] format(double arr, int precision)
  * @note Refer to UTThorn.dws <threal> for APL model of this.
  *
  ******************************************************************************/
-inline
 char[+] format(double[d:shp,n] arr, int precision)
 {
     shpp = prod(shp);
@@ -388,7 +367,6 @@ char[+] format(double[d:shp,n] arr, int precision)
  * @param w[1] The number of significant digits to be printed.
  *
  ******************************************************************************/
-inline
 char[.] format(double arr, int[2] w)
 {
     res = tochar(sprintf("%*.*g", w[0], w[1], arr));
@@ -407,7 +385,6 @@ char[.] format(double arr, int[2] w)
  * @param w[1] The number of significant digits to be printed.
  *
  ******************************************************************************/
-inline
 char[+] format(double[d:shp] arr, int[2] w)
 {
     res = { iv -> format(arr[iv], w) | iv < shp };
@@ -431,7 +408,6 @@ char[+] format(double[d:shp] arr, int[2] w)
  * @brief Utility function for formatting an int vector to widths wid.
  *
  ******************************************************************************/
-inline
 char[olen] formatrow(int[vlen] wid, int[vlen] arr)
 {
     olen = sum(wid + 1) - 1;
@@ -475,7 +451,6 @@ int[d:shp] log10(int[d:shp] arr)
  * @brief First-axis max-reduce rank-2 matrix.
  *
  ******************************************************************************/
-inline
 int[m] maxsl1(int[n,m] arr)
 {
     return { [i] -> with {
@@ -491,7 +466,6 @@ int[m] maxsl1(int[n,m] arr)
  * @brief First-axis min-reduce rank-2 matrix.
  *
  ******************************************************************************/
-inline
 int[m] minsl1(int[n,m] arr)
 {
     return { [i] -> with {
@@ -534,7 +508,6 @@ char[zcols] alignrow(char[.,.] fry, int i, int[cols] widths,
  * @brief SAC does not have overtake, so this does the job.
  *
  ******************************************************************************/
-inline
 char[wid] padWithBlanks(int wid, char[n] arr)
 {
     maxidx = max(wid, n);
@@ -551,7 +524,6 @@ char[wid] padWithBlanks(int wid, char[n] arr)
  *        I.e., (fry member ch) iota 1.
  *
  ******************************************************************************/
-inline
 int thCharsTo(char ch0, char ch1, char[lim] fry)
 {
     res = lim;
@@ -572,7 +544,6 @@ int thCharsTo(char ch0, char ch1, char[lim] fry)
  * @brief Indexed assign array into vec for next result element.
  *
  ******************************************************************************/
-inline
 char[d], int thrnAppend(char[d] vec, int sink, char[n] arr)
 {
     res = vec;
@@ -608,7 +579,6 @@ char[.] scalarFormatter(double arr, int precision)
  *        This is "(arr != '+') compress arr", the hard way
  *
  ******************************************************************************/
-inline
 char[.] killPlusSign(char[n] arr)
 {
     res = arr;
@@ -629,7 +599,6 @@ char[.] killPlusSign(char[n] arr)
  * @brief Check for txt overflowing wid.
  *
  ******************************************************************************/
-inline
 char[.] overflowCheck(char[n] arr, int wid)
 {
     return wid < n ? genarray([wid], '*') : arr;
