@@ -1,4 +1,12 @@
-/**
+module Xoshiro;
+
+use Array: all;
+use Math: all;
+
+export all except {rotl, splitmix64, srand_time};
+
+/******************************************************************************
+ *
  * # Introduction
  *
  * This module implements pseudo-random number generators (PRNGs) for
@@ -79,14 +87,8 @@
  *       of SIMD-lanes, but struct is not yet mature enough to compile this
  *       efficiently.
  * TODO: The parallel method allocates and copies the rows.
- **/
-
-#pragma safe
-module Xoshiro;
-
-use Array: all;
-use Math: all;
-export all except {rotl, splitmix64, srand_time};
+ *
+ ******************************************************************************/
 
 struct State256 {
   ulong s0l;
@@ -155,10 +157,10 @@ uint, struct State128 xoshiro128p(struct State128 state)
 #define LOOP_BODY_ULONG(i)                                                     \
   for (b = 0; b < 64; b = b + 1) {                                             \
     if ((JUMP##i & 1ul) << _toul_S_(b) != 0ul) {                               \
-      s0 = s0 ^ state.s0l;                                                      \
-      s1 = s1 ^ state.s1l;                                                      \
-      s2 = s2 ^ state.s2l;                                                      \
-      s3 = s3 ^ state.s3l;                                                      \
+      s0 = s0 ^ state.s0l;                                                     \
+      s1 = s1 ^ state.s1l;                                                     \
+      s2 = s2 ^ state.s2l;                                                     \
+      s3 = s3 ^ state.s3l;                                                     \
     }                                                                          \
     unused, state = xoshiro256p(state);                                        \
   }

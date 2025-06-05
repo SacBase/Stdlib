@@ -1,4 +1,3 @@
-#pragma safe
 module Quaternion;
 
 export all;
