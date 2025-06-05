@@ -376,7 +376,7 @@ int sign(double x)
 
 int sign(float x)
 {
-    return _toi_S_(copysign(1f, x));
+    return _toi_S_(copysign(1d, _tod_S_(x)));
 }
 
 /******************************************************************************
