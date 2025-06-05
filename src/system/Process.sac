@@ -1,3 +1,4 @@
+#pragma safe;
 module Process;
 
 use FileSystem: { TheFileSystem };
@@ -30,7 +31,7 @@ external  void pclose(File STREAM);
     #pragma effect TheFileSystem
     #pragma linkname "SACpclose"
     /*
-     * Close the process stream given by the process handle STREAM. 
+     * Close the process stream given by the process handle STREAM.
      */
 
 
@@ -38,7 +39,7 @@ external  int system(string COMMAND);
     #pragma linkobj "src/Process/system.o"
     #pragma effect TheFileSystem
     #pragma linkname "SACsystem"
-    #pragma linksign [0,1] 
+    #pragma linksign [0,1]
     /*
      * Execute COMMAND by calling:  /bin/sh -c COMMAND
      * and wait until the command has completed execution.

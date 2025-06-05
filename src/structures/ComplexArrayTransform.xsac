@@ -1,3 +1,4 @@
+#pragma safe;
 module ComplexArrayTransform;
 
 use ComplexBasics: { complex };

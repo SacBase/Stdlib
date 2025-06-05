@@ -1,3 +1,4 @@
+#pragma safe;
 module SysErr;
 
 use String : {string};
@@ -25,14 +26,14 @@ external string strerror(syserr ERROR);
     #pragma linkobj  "src/SysErr/strerror.o"
     #pragma linksign [0,1]
     /*
-     * Generate a string containing the system error message 
+     * Generate a string containing the system error message
      * corresponding to ERROR.
      */
 
 
-  /* 
+  /*
    *  The following functions provide access to system dependend
-   *  error codes.  Not all of these error codes are useful in 
+   *  error codes.  Not all of these error codes are useful in
    *  connection with the SAC standard libraries. Nevertheless, they
    *  are included for reasons of completeness.
    */

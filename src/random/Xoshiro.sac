@@ -1,24 +1,24 @@
 /**
  * # Introduction
  *
- * This module implements pseudo-random number generators (PRNGs) for 
- * Monte-Carlo simulations and related algorithms. As of April 2025, 
- * the Xoshiro family is state of the art. We currently do not offer 
+ * This module implements pseudo-random number generators (PRNGs) for
+ * Monte-Carlo simulations and related algorithms. As of April 2025,
+ * the Xoshiro family is state of the art. We currently do not offer
  * cryptographically-secure PRNGS.
- * 
+ *
  * A PRNG is a function [state space] -> [unsigned int type] x [state space]
- * The unsigned integer can be converted to a real (float or double) of 
- * various distributions. 
+ * The unsigned integer can be converted to a real (float or double) of
+ * various distributions.
  *
  * # API
  *
  * The 64-bit version has an l-suffix to avoid name conflicts.
- * 
+ *
  * ## Basic
  *
  * For generating double
  *    ulong, struct State256 xoshiro256p(struct State256 state)
- * 
+ *
  * For generating float
  *    uint, struct State128 xoshiro128p(struct State128 state)
  *
@@ -39,7 +39,7 @@
  *    float , float  to_normal(uint  u1, uint  u2, float  mean, float  stddev)
  *
  * ## Multithreading
- * 
+ *
  * For parallel exeuction, we can generate an array of
  * states that are 2^192, 2^96 apart
  * This can be created with
@@ -81,6 +81,7 @@
  * TODO: The parallel method allocates and copies the rows.
  **/
 
+#pragma safe;
 module Xoshiro;
 
 use Array: all;
@@ -180,7 +181,7 @@ struct State256 jumpl(struct State256 state)
   LOOP_BODY_ULONG(1)
   LOOP_BODY_ULONG(2)
   LOOP_BODY_ULONG(3)
-    
+
   return State256 {.s0l = s0, .s1l = s1, .s2l = s2, .s3l = s3};
 }
 
@@ -213,7 +214,7 @@ struct State128 jump(struct State128 state)
   LOOP_BODY_UINT(1)
   LOOP_BODY_UINT(2)
   LOOP_BODY_UINT(3)
-    
+
   return State128 {.s0 = s0, .s1 = s1, .s2 = s2, .s3 = s3};
 }
 
@@ -267,7 +268,7 @@ double, double to_normal(ulong u1, ulong u2, double mean, double stddev)
 {
   U1 = to_uniform(u1, 0d, 1d);
   U2 = to_uniform(u2, 0d, 1d);
-  
+
   Z1 = sqrt(-2d * log(U1)) * cos(2d * pi() * U2);
   Z2 = sqrt(-2d * log(U1)) * sin(2d * pi() * U2);
 
@@ -279,7 +280,7 @@ float, float to_normal(uint u1, uint u2, float mean, float stddev)
 {
   U1 = to_uniform(u1, 0f, 1f);
   U2 = to_uniform(u2, 0f, 1f);
-  
+
   Z1 = sqrt(-2f * log(U1)) * cos(2f * tof(pi()) * U2);
   Z2 = sqrt(-2f * log(U1)) * sin(2f * tof(pi()) * U2);
 
@@ -300,7 +301,7 @@ external ulong srand_time();
 
 struct State256 srand256()
 {
-  s0 = srand_time(); 
+  s0 = srand_time();
   s1 = splitmix64(s0);
   s2 = splitmix64(s1);
   s3 = splitmix64(s2);
@@ -310,11 +311,11 @@ struct State256 srand256()
 
 struct State128 srand128()
 {
-  s0 = srand_time(); 
+  s0 = srand_time();
   s1 = splitmix64(s0);
   s2 = splitmix64(s1);
   s3 = splitmix64(s2);
 
-  return State128 {.s0 = _toui_S_(s0), .s1 = _toui_S_(s1), 
+  return State128 {.s0 = _toui_S_(s0), .s1 = _toui_S_(s1),
                    .s2 = _toui_S_(s2), .s3 = _toui_S_(s3)};
 }

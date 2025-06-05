@@ -1,3 +1,4 @@
+#pragma safe;
 module StringArray;
 
 use Array: { all, any, drop, iota, prod, sum, transpose };

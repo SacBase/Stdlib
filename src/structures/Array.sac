@@ -1,3 +1,4 @@
+#pragma safe;
 module Array;
 
 import ArrayArith: all;

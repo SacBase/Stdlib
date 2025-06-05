@@ -1,3 +1,4 @@
+#pragma safe;
 module System;
 
 import World:        all;

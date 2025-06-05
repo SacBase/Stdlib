@@ -1,3 +1,4 @@
+#pragma safe;
 module ScalarIO;
 
 use IOresources: all;
