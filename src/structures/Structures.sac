@@ -1,4 +1,4 @@
-#pragma safe;
+#pragma safe
 module Structures;
 
 import Array: all;

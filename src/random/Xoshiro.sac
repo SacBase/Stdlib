@@ -81,7 +81,7 @@
  * TODO: The parallel method allocates and copies the rows.
  **/
 
-#pragma safe;
+#pragma safe
 module Xoshiro;
 
 use Array: all;

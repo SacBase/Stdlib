@@ -1,4 +1,4 @@
-#pragma safe;
+#pragma safe
 module TimeStamp;
 
 export all;

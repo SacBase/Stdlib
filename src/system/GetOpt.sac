@@ -5,7 +5,7 @@
  * the rest is standardization effort.
  */
 
-#pragma safe;
+#pragma safe
 module GetOpt;
 
 use String:      { string };

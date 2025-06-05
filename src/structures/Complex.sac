@@ -1,4 +1,4 @@
-#pragma safe;
+#pragma safe
 module Complex;
 
 import ComplexBasics: all;
