@@ -1,4 +1,3 @@
-#pragma safe
 module Math;
 
 use ScalarArith: all;
