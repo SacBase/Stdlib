@@ -42,7 +42,7 @@ When running CMake it is possible to pass the following variables:
   (Useful when creating distributable packages)
   (Default is `OFF`)
 * `-DSAC2C_EXEC=/path/to/sac2c` --- specify `sac2c` executable directly.
-  Otherwise CMake will try to find `sac2c` on yout PATH.
+  Otherwise CMake will try to find `sac2c` on your PATH.
 * `-DLINKSETSIZE=n` --- set `-linksetsize n` when calling `sac2c`.  This option is responsible
   for the number of C functions that are put in a single C file when compiling a SaC program.
   The rule of thumb:
