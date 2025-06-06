@@ -16,7 +16,7 @@ To build the system one requires an operational [CMake](https://cmake.org/) >= 3
 The quick and dirty option is just
 
 ```
-make
+make -j4
 ```
 
 You can also use the `cmake` build system for more control
