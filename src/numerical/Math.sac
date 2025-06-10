@@ -1,6 +1,6 @@
+#pragma safe
 module Math;
 
-use ScalarArith: all;
 export all;
 
 /******************************************************************************
@@ -245,7 +245,8 @@ external float, float modf(float X);
  *
  ******************************************************************************/
 
-inline int pow2(int a) {
+inline int pow2(int a)
+{
     return _shl_SxS_(1, a);
 }
 
