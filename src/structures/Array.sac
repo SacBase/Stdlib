@@ -4,8 +4,12 @@ import ArrayArith: all;
 import ArrayBasics: all;
 import ArrayReduce: all;
 import ArrayTransform: all;
+
 #ifdef EXT_STDLIB
 import ArrayTransformApl: all;
 #endif /* EXT_STDLIB */
+
+// Do not import ScalarArith because it is already imported through ArrayArith
+// import ScalarArith: all;
 
 export all;
