@@ -1,3 +1,5 @@
+#pragma safe
+
 module Char;
 
 export all;

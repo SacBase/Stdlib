@@ -473,7 +473,7 @@ FOREACH (name ${SAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${src}"
+            ${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
         MAIN_DEPENDENCY "${src}"
@@ -550,7 +550,7 @@ FOREACH (name ${XSAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -linksetsize ${LINKSETSIZE} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${dir}/${dst}.sac"
+            ${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${dir}/${dst}.sac"
         WORKING_DIRECTORY
             "${dir}"
         MAIN_DEPENDENCY "${dir}/${dst}.sac"
