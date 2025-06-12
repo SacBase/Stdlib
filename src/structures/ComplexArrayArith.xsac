@@ -1,3 +1,5 @@
+#pragma safe
+
 module ComplexArrayArith;
 
 import ComplexBasics: all;
