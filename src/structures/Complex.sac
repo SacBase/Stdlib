@@ -3,9 +3,11 @@
 module Complex;
 
 import ComplexBasics: all;
-import ComplexScalarArith: all;
 import ComplexArrayBasics: all;
 import ComplexArrayArith: all;
 import ComplexArrayTransform: all;
+
+// Do not import ScalarArith again; it is already imported through ArrayArith
+// import ComplexScalarArith: all;
 
 export all;
