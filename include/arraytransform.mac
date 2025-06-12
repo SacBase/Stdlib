@@ -26,8 +26,9 @@
 
 #define TAKE(typ, _postfix, _fmt, _zval, _oval)                                \
 inline                                                                         \
-typ[o:sv,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                         \
+typ[o:stop,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                       \
     | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
+    , _all_V_(_eq_VxV_(_abs_V_(sv), stop))                                     \
 {                                                                              \
     /* Start shows the index of the first element to be selected. */           \
     start = { [i] -> _lt_SxS_(_sel_VxA_([i], sv), 0)                           \
