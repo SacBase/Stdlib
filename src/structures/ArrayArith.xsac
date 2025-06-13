@@ -2,8 +2,6 @@
 
 module ArrayArith;
 
-import ScalarArith: all;
-
 export all;
 
 #include "builtin.mac"
@@ -64,21 +62,21 @@ b[d>0:shp] name(a A, a[d>0:shp] B)                                             \
 
 #define MAP_BIN_INT_VxV(name, op)                                              \
 inline                                                                         \
-int[n] (name)(int[n] A, int[n] B)                                              \
+int[n] name(int[n] A, int[n] B)                                                \
 {                                                                              \
     return _##op##_VxV_(A, B);                                                 \
 }
 
 #define MAP_BIN_INT_VxS(name, op)                                              \
 inline                                                                         \
-int[n] (name)(int[n] A, int B)                                                 \
+int[n] name(int[n] A, int B)                                                   \
 {                                                                              \
     return _##op##_VxS_(A, B);                                                 \
 }
 
 #define MAP_BIN_INT_SxV(name, op)                                              \
 inline                                                                         \
-int[n] (name)(int A, int[n] B)                                                 \
+int[n] name(int A, int[n] B)                                                   \
 {                                                                              \
     return _##op##_SxV_(A, B);                                                 \
 }
