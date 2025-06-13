@@ -22,10 +22,9 @@ jobs:
     - name: Install sac2c
       run: |
         git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-        cd sac2c && mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-        make -j2
-        cp sac2c_p /usr/local/bin/sac2c
+        cd sac2c
+        make release -j2
+        cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
       run: |
@@ -64,10 +63,9 @@ jobs:
     - name: Install sac2c
       run: |
         git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-        cd sac2c && mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-        make -j2
-        cp sac2c_p /usr/local/bin/sac2c
+        cd sac2c
+        make release -j2
+        cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
       run: |
@@ -106,10 +104,9 @@ jobs:
     - name: Install sac2c
       run: |
         git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
-        cd sac2c && mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-        make -j2
-        cp sac2c_p /usr/local/bin/sac2c
+        cd sac2c
+        make release -j2
+        cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
       run: |
