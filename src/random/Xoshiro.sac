@@ -1,4 +1,5 @@
-/**
+/******************************************************************************
+ *
  * # Introduction
  *
  * This module implements pseudo-random number generators (PRNGs) for
@@ -79,12 +80,15 @@
  *       of SIMD-lanes, but struct is not yet mature enough to compile this
  *       efficiently.
  * TODO: The parallel method allocates and copies the rows.
- **/
+ *
+ ******************************************************************************/
+#pragma safe
 module Xoshiro;
 
-use Array: all;
+use ScalarArith: all;
 use Math: all;
-export all except {rotl, splitmix64, srand_time};
+
+export all except { rotl, splitmix64, srand_time };
 
 struct State256 {
   ulong s0l;
