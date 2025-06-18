@@ -1,11 +1,12 @@
+#pragma safe
 class TermFile;
 
 external classtype;
 
-use String : {string};
-use Terminal : { TheTerminal };
+use String: { string };
+use Terminal: { TheTerminal };
 
-export all except { createStdIn, createStdOut, createStdErr};
+export all except { createStdIn, createStdOut, createStdErr };
 
 objdef TermFile stdin = createStdIn();
 
@@ -13,9 +14,11 @@ objdef TermFile stdout = createStdOut();
 
 objdef TermFile stderr = createStdErr();
 
-  /*
-   * Initialiser Functions creating standard I/O TermFiles
-   */
+/******************************************************************************
+ *
+ * Initialiser Functions creating standard I/O TermFiles.
+ *
+ ******************************************************************************/
 
 external TermFile createStdIn();
     #pragma effect TheTerminal
@@ -34,43 +37,41 @@ external TermFile createStdErr();
     #pragma linkname "SAC_create_stderr"
     #pragma linkobj "src/TermFile/stdstreams.o"
     #pragma linksign [0]
+    /*
+     * Each function of class TermFile exists in two versions. One expects
+     * an I/O stream as an explicit argument, the other writes implicitly
+     * to stdout or reads implicitly from stdin, respectively.
+     */
 
-  /*
-   *  Each function of class TermFile exists in two versions. One expects
-   *  an I/O stream as an explicit argument, the other writes implicitly
-   *  to stdout or reads implicitly from stdin, respectively.
-   */
-
-
-
-  /*
-   *  Functions for low-level input / output operations
-   */
-
+/******************************************************************************
+ *
+ * Functions for low-level input / output operations.
+ *
+ ******************************************************************************/
 
 external void fputc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfputc_TF"
     #pragma linkobj "src/TermFile/fputc.o"
-inline void  putc(char C) { fputc( C, stdout); }
+
+inline void putc(char C) { fputc(C, stdout); }
     /*
      * Put the character C to the output stream STREAM which must be
      * either stdout or stderr.
      */
-
 
 external char fgetc(TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfgetc_TF"
     #pragma linkobj "src/TermFile/fgetc.o"
     #pragma linksign [0,1]
-inline char  getc() { return fgetc( stdin); }
+
+inline char getc() { return fgetc(stdin); }
     /*
-     * Get the next character from the input stream STREAM which must
-     * be stdin.
+     * Get the next character from the input stream STREAM which must be stdin.
      */
 
-external  void fputs(string S, TermFile &STREAM);
+external void fputs(string S, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfputs_TF"
     #pragma linkobj "src/TermFile/fputs.o"
@@ -78,7 +79,7 @@ external  void fputs(string S, TermFile &STREAM);
      * Write string S to stream.
      */
 
-external  void puts(string S);
+external void puts(string S);
     #pragma effect TheTerminal
     #pragma linkname "SACputs_TF"
     #pragma linkobj "src/TermFile/puts.o"
@@ -86,32 +87,31 @@ external  void puts(string S);
      * Write string S and a newline to stdout.
      */
 
-
 external void ungetc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACungetc_TF"
     #pragma linkobj "src/TermFile/ungetc.o"
-inline void ungetc(char C) { ungetc( C, stdin); }
+
+inline void ungetc(char C) { ungetc(C, stdin); }
     /*
-     * Put the character C back to the input stream STREAM 
-     * which must be stdin for further read operations.
-     * Only one character may be put back between two
-     * consecutive read operations, otherwise the character put back first
-     * is overwritten.
+     * Put the character C back to the input stream STREAM which must be
+     * stdin for further read operations. Only one character may be put back
+     * between two consecutive read operations, otherwise the character put
+     * back first is overwritten.
      */
 
-
-
-  /*
-   *  Functions for formatted input / output operations
-   */
-
+/******************************************************************************
+ *
+ * Functions for formatted input / output operations.
+ *
+ ******************************************************************************/
 
 external void fprintf(TermFile &STREAM, string FORMAT, ...);
     #pragma effect TheTerminal
     #pragma linkname "SACfprintf_TF"
     #pragma linkobj "src/TermFile/fprintf.o"
-external void  printf(string FORMAT, ...);
+
+external void printf(string FORMAT, ...);
     #pragma effect TheTerminal, stdout
     #pragma linkname "SACprintf_TF"
     #pragma linkobj "src/TermFile/printf.o"
@@ -119,88 +119,82 @@ external void  printf(string FORMAT, ...);
      * Print formatted output to STREAM which must be open for writing.
      * The syntax of format strings is identical to that known from C.
      * This function may be used to print values of types
-     * char, string, int, float, and double. 
+     * char, string, int, float, and double.
      */
-
 
 external int, ... fscanf(TermFile &STREAM, string FORMAT);
     #pragma effect TheTerminal
     #pragma linkname "SACfscanf_TF"
     #pragma linkobj "src/TermFile/fscanf.o"
     #pragma linksign [0,1,2]
-external int, ...  scanf(string FORMAT);
+
+external int, ... scanf(string FORMAT);
     #pragma effect TheTerminal, stdin
     #pragma linkname "SACscanf_TF"
     #pragma linkobj "src/TermFile/scanf.o"
     #pragma linksign [0,1]
     /*
-     * Scan the given stream STREAM concerning the format string FORMAT.
-     * The syntax of format strings is identical to C except that the
-     * string conversion specifier %s is not supported. 
-     * This function may be used to scan values of types
-     * char, int, float, and double. To scan strings use either fscans
-     * or fscanl, respectively.
-     * The int result gives the number of successfully performed 
-     * conversions.
+     * Scan the given stream STREAM concerning the format string FORMAT. The
+     * syntax of format strings is identical to C except that the string
+     * conversion specifier %s is not supported. This function may be used
+     * to scan values of types char, int, float, and double. To scan strings
+     * use either fscans or fscanl, respectively. The int result gives the
+     * number of successfully performed conversions.
      */
 
-      
 external string fscans(TermFile &STREAM, int MAX);
     #pragma effect TheTerminal
     #pragma linkname "term_fscans"
     #pragma linkobj "src/TermFile/fscans.o"
     #pragma linksign [0,1,2]
-inline string  scans(int MAX) { return fscans( stdin, MAX); }
-     /*
-      * Read the next character string from the input stream STREAM. Strings
-      * are delimited by any whitespace character including the 
-      * end-of-file symbol. Always read at most MAX characters.
-      * Upon failure an empty string is returned.
-      */
 
+inline string scans(int MAX) { return fscans(stdin, MAX); }
+    /*
+     * Read the next character string from the input stream STREAM. Strings
+     * are delimited by any whitespace character including the end-of-file
+     * symbol. Always read at most MAX characters.
+     * Upon failure an empty string is returned.
+     */
 
 external string fscanl(TermFile &STREAM, int MAX);
     #pragma effect TheTerminal
     #pragma linkname "term_fscanl"
     #pragma linkobj "src/TermFile/fscanl.o"
     #pragma linksign [0,1,2]
-inline string  scanl(int MAX) { return fscanl( stdin, MAX); }
-     /*
-      * Read the next line from the input stream STREAM. Lines are character
-      * strings delimited by any new-line or end-of-file symbol.
-      * Always read at most MAX characters.
-      * Upon failure an empty string is returned.
-      */
 
+inline string scanl(int MAX) { return fscanl(stdin, MAX); }
+    /*
+     * Read the next line from the input stream STREAM. Lines are character
+     * strings delimited by any new-line or end-of-file symbol. Always read
+     * at most MAX characters. Upon failure an empty string is returned.
+     */
 
-
-
-  /*
-   *  Miscellaneous functions for operating on standard I/O streams
-   */
-
+/******************************************************************************
+ *
+ * Miscellaneous functions for operating on standard I/O streams.
+ *
+ ******************************************************************************/
 
 external void fflush(TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfflush_TF"
-    #pragma  linkobj "src/TermFile/fflush.o"
-inline void  flush() { fflush( stdout); }
+    #pragma linkobj "src/TermFile/fflush.o"
+
+inline void flush() { fflush(stdout); }
     /*
-     * Write the buffer of a buffered output stream STREAM which must be 
+     * Write the buffer of a buffered output stream STREAM which must be
      * either stdout or stderr to the respective file or terminal device.
      */
- 
 
 external bool feof(TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfeof_TF"
-    #pragma  linkobj "src/TermFile/feof.o"
+    #pragma linkobj "src/TermFile/feof.o"
     #pragma linksign [0,1]
-inline bool  eof() { return feof( stdin); }
+
+inline bool eof() { return feof(stdin); }
     /*
-     * Test the stream STREAM for having reached the end of the respective 
+     * Test the stream STREAM for having reached the end of the respective
      * file. This function is useful if standard I/O streams are redirected
      * to or from files.
      */
-
-

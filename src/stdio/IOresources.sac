@@ -1,9 +1,10 @@
-module  IOresources;
+#pragma safe
+module IOresources;
 
-import File : { File };
-import TermFile : { TermFile, stdin, stdout, stderr };
-import Terminal : { TheTerminal };
-import FileSystem : { TheFileSystem };
-import World : { TheWorld };
+import File: { File };
+import TermFile: { TermFile, stdin, stdout, stderr };
+import Terminal: { TheTerminal };
+import FileSystem: { TheFileSystem };
+import World: { TheWorld };
 
 export all;
