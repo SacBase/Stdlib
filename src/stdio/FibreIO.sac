@@ -1,3 +1,4 @@
+#pragma safe
 module FibreIO;
 
 use Array: all;
