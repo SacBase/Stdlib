@@ -1,56 +1,53 @@
+#pragma safe
 class CommandLine;
 
 external classtype;
 
-use String : {string};
+use String: { string };
 
 export all;
 
-objdef CommandLine TheCommandLine = create_TheCommandLine( );
+objdef CommandLine TheCommandLine = create_TheCommandLine();
 
-  /*
-   *  The global object TheCommandLine of class CommandLine serves as a 
-   *  representation of the shell command used for starting program execution.
-   *  It is derived from the global object TheWorld in
-   *  order to represent this part or sub-world of the execution environment.
-   */
+/******************************************************************************
+ *
+ * The global object TheCommandLine of class CommandLine serves as a
+ * representation of the shell command used for starting program execution.
+ * It is derived from the global object TheWorld in order to represent this
+ * part or sub-world of the execution environment.
+ *
+ * These functions provide access to the shell command by which
+ * a program has been started.
+ *
+ * - argc()  Returns the number of command line parameters,
+ *           including the program's name itself.
+ *
+ * - argv()  Returns the entire command line.
+ *
+ * - argv(n) Returns the nth command line parameter.
+ *           Remember that argv(0) returns the program's name itself.
+ *
+ ******************************************************************************/
 
-external  CommandLine create_TheCommandLine( );
+external CommandLine create_TheCommandLine();
     #pragma effect World::TheWorld
+    #pragma linkobj "src/CommandLine/CommandLine.o"
     #pragma linksign [0]
-    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
-
-external  int argc();
+external int argc();
     #pragma effect TheCommandLine
+    #pragma linkobj "src/CommandLine/CommandLine.o"
     #pragma linkname "SACargc"
     #pragma linksign [0]
-    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
-external  string argv();
+external string argv();
     #pragma effect TheCommandLine
+    #pragma linkobj "src/CommandLine/CommandLine.o"
     #pragma linkname "SACargvall"
     #pragma linksign [0]
-    #pragma linkobj  "src/CommandLine/CommandLine.o"
 
-external  string argv(int N);
+external string argv(int N);
     #pragma effect TheCommandLine
+    #pragma linkobj "src/CommandLine/CommandLine.o"
     #pragma linkname "SACargv"
     #pragma linksign [0,1]
-    #pragma linkobj  "src/CommandLine/CommandLine.o"
-
-
-  /* These functions provide access to the shell command by which
-     a program has been started.
-
-     argc()  returns the number of command line parameters including the
-             program's name itself.
-
-     argv()  returns the entire command line.
-
-     argv(n) returns the nth command line parameter. Remember that argv(0)
-             returns the program's name itself.
-
-  */
-
-

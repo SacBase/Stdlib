@@ -1,10 +1,11 @@
+#pragma safe
 class Dir;
 
 external classtype;
 
-use SysErr : { syserr };
-use String : { string };
-use FileSystem : { TheFileSystem };
+use FileSystem: { TheFileSystem };
+use String: { string };
+use SysErr: { syserr };
 
 export all;
 

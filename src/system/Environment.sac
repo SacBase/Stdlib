@@ -1,8 +1,9 @@
+#pragma safe
 class Environment;
 
 external classtype;
 
-use String : {string};
+use String: { string };
 
 export all;
 
@@ -45,11 +46,11 @@ external bool SetEnv(string ENVVAR, string VALUE, bool OVERWRITE);
     #pragma linkobj  "src/Environment/SetEnv.o"
     /*
      * Set the environment variable ENVVAR to VALUE. If ENVVAR is already
-     * set in the current environment, then the old value is only 
+     * set in the current environment, then the old value is only
      * overwritten if OVERWRITE evaluates to true. The boolean result
      * informs about success or failure of this operation.
      */
-  
+
 external void UnsetEnv(string ENVVAR);
     #pragma effect TheEnvironment
     #pragma linkobj  "src/Environment/UnsetEnv.o"
