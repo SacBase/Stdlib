@@ -1,69 +1,65 @@
+#pragma safe
 class Clock;
 
 external classtype;
 
-use String : {string};
+use String: { string };
 
 export all;
 
-
 external typedef time;
 
-objdef Clock TheClock = create_TheClock( );
+objdef Clock TheClock = create_TheClock();
 
-external Clock create_TheClock( );
+external Clock create_TheClock();
     #pragma effect World::TheWorld
+    #pragma linkobj "src/Clock/clock.o"
     #pragma linksign [0]
-    #pragma linkobj  "src/Clock/clock.o"
+    /*
+     * Functions for generating time values.
+     */
 
-
-
-  /*
-   *  Functions for generating time values.
-   */
-
-external time to_time( int secs);
+external time to_time(int secs);
+    #pragma linkobj "src/Clock/to_time.o"
     #pragma linkname "SACto_time"
-    #pragma linkobj  "src/Clock/to_time.o"
     #pragma linksign [0,1]
-    /* 
-     * Convert seconds since the Epoch into a time value
+    /*
+     * Convert seconds since the Epoch into a time value.
      */
 
 external time gettime();
     #pragma effect TheClock
+    #pragma linkobj "src/Clock/gettime.o"
     #pragma linkname "SACgettime"
-    #pragma linkobj  "src/Clock/gettime.o"
     #pragma linksign [0]
     /* Get the current system time.
      *
-     *  Note: Although the system clock of course is not effected by a call
-     *        to this function, the pragma effect is used instead of touch.
-     *        This is done to achieve a sequentialization which is necessary
-     *        since the state of the clock is not constant although it may
-     *        not be modified from within a SAC program.
+     * Note: Although the system clock of course is not effected by a call
+     *       to this function, the pragma effect is used instead of touch.
+     *       This is done to achieve a sequentialization which is necessary
+     *       since the state of the clock is not constant although it may
+     *       not be modified from within a SAC program.
      */
-
 
 external time, bool mktime(int YEAR, int MON, int DAY, int HOUR, int MIN, int SEC);
+    #pragma linkobj "src/Clock/mktime.o"
     #pragma linkname "SACmktime"
-    #pragma linkobj  "src/Clock/mktime.o"
     #pragma linksign [0,1,2,3,4,5,6,7]
-    /*  Generate a time value for a given time. The boolean result informs
-     *  about success or failure (The given time may not be specified as
-     *  time value).
+    /*
+     * Generate a time value for a given time. The boolean result informs
+     * about success or failure (The given time may not be specified as
+     * time value).
      */
 
-
-
-  /*
-   *  Functions for decomposing time values.
-   */
-
+/******************************************************************************
+ *
+ * Functions for decomposing time values.
+ *
+ ******************************************************************************/
 
 external int sec(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACsec"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
      * The number of seconds after the minute, normally in
@@ -72,146 +68,140 @@ external int sec(time T);
      */
 
 external int min(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACmin"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The number of minutes after the hour, in the  range 0 to 59.
+     * The number of minutes after the hour, in the range 0 to 59.
      */
 
 external int hour(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SAChour"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The  number  of hours past midnight, in the range 0 to 23.  
+     * The number of hours past midnight, in the range 0 to 23.
      */
 
 external int mday(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACmday"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The day of the month, in the range 1 to 31.  
+     * The day of the month, in the range 1 to 31.
      */
 
 external int mon(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACmon"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The number of months since January, in the range 0 to 11.  
+     * The number of months since January, in the range 0 to 11.
      */
 
 external int year(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACyear"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The year, starting with 0=1900.  
+     * The year, starting with 0=1900.
      */
 
 external int wday(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACwday"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The  number of days since Sunday, in the range 0 to 6  
+     * The number of days since Sunday, in the range 0 to 6
      */
-              
+
 external int yday(time T);
+    #pragma linkobj "src/Clock/extracttime.o"
     #pragma linkname "SACyday"
-    #pragma linkobj  "src/Clock/extracttime.o"
     #pragma linksign [0,1]
     /*
-     * The number of days since January 1, in the range  0 to 365.  
+     * The number of days since January 1, in the range 0 to 365.
      */
 
 external int, int, int clock(time T);
+    #pragma linkobj "src/Clock/date.o"
     #pragma linkname "SACclock"
-    #pragma linkobj  "src/Clock/date.o"
     #pragma linksign [0,1,2,3]
     /*
-     * Extract hours, minutes, and seconds from time value T. 
+     * Extract hours, minutes, and seconds from time value T.
      */
 
 external int, int, int date(time T);
+    #pragma linkobj "src/Clock/date.o"
     #pragma linkname "SACdate"
-    #pragma linkobj  "src/Clock/date.o"
     #pragma linksign [0,1,2,3]
     /*
-     * Extract year, month, and day from time value T. 
+     * Extract year, month, and day from time value T.
      */
 
-   
-
-  /*
-   *  Functions for getting additional information about the time.
-   */
-
+/******************************************************************************
+ *
+ * Functions for getting additional information about the time.
+ *
+ ******************************************************************************/
 
 external int isdst(time T);
+    #pragma linkobj "src/Clock/isdst.o"
     #pragma linkname "SACisdst"
-    #pragma linkobj  "src/Clock/isdst.o"
     #pragma linksign [0,1]
     /*
-     * A flag that indicates whether daylight saving time
-     * is in effect at the time described.  The  value  is
-     * positive if daylight saving time is in effect, zero
-     * if it is not, and negative if  the  information  is
+     * A flag that indicates whether daylight saving time is in effect at
+     * the time described. The value is positive if daylight saving time
+     * is in effect, zero if it is not, and negative if the information is
      * not available.
      */
 
 external bool isleap(int YEAR);
+    #pragma linkobj "src/Clock/isleap.o"
     #pragma linkname "SACisleap"
-    #pragma linkobj  "src/Clock/isleap.o"
     #pragma linksign [0,1]
 
 external bool isleap(time T);
+    #pragma linkobj "src/Clock/isleap.o"
     #pragma linkname "SACisleapt"
-    #pragma linkobj  "src/Clock/isleap.o"
     #pragma linksign [0,1]
     /*
-     * Test the given year YEAR or the time value T respectively 
+     * Test the given year YEAR or the time value T respectively
      * for being a leap year.
      */
 
 external double difftime(time T1, time T0);
+    #pragma linkobj "src/Clock/difftime.o"
     #pragma linkname "SACdifftime"
-    #pragma linkobj  "src/Clock/difftime.o"
     #pragma linksign [0,1,2]
     /*
-     * This function returns  the  number of seconds
-     * elapsed between time T1 and time T0.
+     * The number of seconds elapsed between time T1 and time T0.
      */
 
-
-
-  /*
-   *  Functions for converting time values and string representations.
-   */
-
+/******************************************************************************
+ *
+ * Functions for converting time values and string representations.
+ *
+ ******************************************************************************/
 
 external string ctime(time T);
+    #pragma linkobj "src/Clock/ctime.o"
     #pragma linkname "SACctime"
-    #pragma linkobj  "src/Clock/ctime.o"
     #pragma linksign [0,1]
     /*
-     * The ctime() function converts the time T into
-     * a string of the form
+     * The ctime() function converts the time T into a string of the form
+     *   `Wed Jun 30 21:49:08 1993'
      *
-     *        "Wed Jun 30 21:49:08 1993\n"
-     *
-     * The abbreviations for the days  of  the  week  are  `Sun',
-     * `Mon',  `Tue', `Wed', `Thu', `Fri', and `Sat'.  
-     * The abbreviations for the months are `Jan',  `Feb',  `Mar',  `Apr',
-     * `May',  `Jun',  `Jul',  `Aug',  `Sep',  `Oct',  `Nov', and `Dec'
-     * 
+     * The abbreviations for the days of the week are:
+     *   `Mon', `Tue', `Wed', `Thu', `Fri', `Sat', and `Sun'.
+     * The abbreviations for the months are:
+     *   `Jan', `Feb', `Mar', `Apr', `May', `Jun', `Jul',
+     *   `Aug', `Sep', `Oct', `Nov', and `Dec'.
      */
 
 external string strftime(int LEN, string FORMAT, time T);
+    #pragma linkobj "src/Clock/strftime.o"
     #pragma linkname "SACstrftime"
-    #pragma linkobj  "src/Clock/strftime.o"
     #pragma linksign [0,1,2,3]
     /*
      * Convert the time T into a string of maximum length LEN
@@ -220,9 +210,9 @@ external string strftime(int LEN, string FORMAT, time T);
      * If an error occurs the returned string is empty.
      */
 
-external time, string strptime(string S, string FORMAT); 
+external time, string strptime(string S, string FORMAT);
+    #pragma linkobj "src/Clock/strptime.o"
     #pragma linkname "SACstrptime"
-    #pragma linkobj  "src/Clock/strptime.o"
     #pragma linksign [0,1,2,3]
     /*
      * Complementary function to strftime(),
@@ -235,14 +225,11 @@ external time, string strptime(string S, string FORMAT);
      * and the returned time is 0.
      */
 
-
-external  void sleep(int SECONDS);
+external void sleep(int SECONDS);
     #pragma effect World::TheWorld
+    #pragma linkobj "src/Clock/sleep.o"
     #pragma linkname "SACsleep"
-    #pragma linkobj  "src/Clock/sleep.o"
     #pragma linksign [1]
     /*
      * Make the calling thread sleep until SECONDS seconds have elapsed.
      */
-
-

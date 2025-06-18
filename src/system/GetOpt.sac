@@ -1,16 +1,18 @@
-/*
- * Provide getopt(3) functionality for SAC.
- * See the getopt(3) manual page for details.
- * You only need getopt(), optarg() and optEND(),
- * the rest is standardization effort.
- */
-
+#pragma safe
 module GetOpt;
 
-use String:      { string };
 use CommandLine: { TheCommandLine };
+use String: { string };
 
 export all;
+
+/******************************************************************************
+ *
+ * Provide getopt(3) functionality for SAC. See the getopt(3) manual page
+ * for details. You only need getopt(), optarg() and optEND(), the rest
+ * is standardization effort.
+ *
+ ******************************************************************************/
 
 external char getopt(string opts);
     #pragma effect TheCommandLine
@@ -86,4 +88,3 @@ external void opterr(bool set);
     /*
      * Enable/disable option error reporting.
      */
-

@@ -1,9 +1,10 @@
+#pragma safe
 class FileSystem;
 
 external classtype;
 
-use SysErr : {syserr};
-use String : {string};
+use String: { string };
+use SysErr: { syserr };
 
 export all;
 
@@ -21,7 +22,7 @@ external FileSystem create_TheFileSystem( );
     #pragma linkobj  "src/FileSystem/filesys.o"
 
 
-  /* 
+  /*
    *  Functions for manipulating entire files.
    */
 
@@ -32,7 +33,7 @@ external syserr rename(string OLDNAME, string NEWNAME);
     #pragma linkobj  "src/FileSystem/rename.o"
     #pragma linksign [0,1,2]
     /*
-     * Rename file OLDNAME to NEWNAME. 
+     * Rename file OLDNAME to NEWNAME.
      */
 
 
@@ -42,9 +43,9 @@ external syserr remove(string PATHNAME);
     #pragma linkobj  "src/FileSystem/remove.o"
     #pragma linksign [0,1]
     /*
-     * Remove the file given by PATHNAME from the file system. 
+     * Remove the file given by PATHNAME from the file system.
      */
-  
+
 
 external syserr symlink(string PATHNAME, string LINKNAME);
     #pragma effect TheFileSystem
@@ -52,7 +53,7 @@ external syserr symlink(string PATHNAME, string LINKNAME);
     #pragma linkobj  "src/FileSystem/symlink.o"
     #pragma linksign [0,1,2]
     /*
-     * Create a symbolic link to file PATHNAME which is called LINKNAME. 
+     * Create a symbolic link to file PATHNAME which is called LINKNAME.
      */
 
 
@@ -67,7 +68,7 @@ external bool, syserr access(string PATHNAME, int HOW);
      *  0: existence
      *  1: read access
      *  2: write access
-     *  3: execution access  
+     *  3: execution access
      *
      * In contrast to C, the result is true iff access is granted.
      */
@@ -79,7 +80,7 @@ external bool, syserr isdir(string PATHNAME);
     #pragma linkobj  "src/FileSystem/testfile.o"
     #pragma linksign [0,1,2]
     /*
-     * Test PATHNAME for being a directory. 
+     * Test PATHNAME for being a directory.
      */
 
 
@@ -89,7 +90,7 @@ external bool, syserr isreg(string PATHNAME);
     #pragma linkobj  "src/FileSystem/testfile.o"
     #pragma linksign [0,1,2]
     /*
-     * Test PATHNAME for being a regular file. 
+     * Test PATHNAME for being a regular file.
      */
 
 
@@ -99,7 +100,7 @@ external bool, syserr islnk(string PATHNAME);
     #pragma linkobj  "src/FileSystem/testfile.o"
     #pragma linksign [0,1,2]
     /*
-     * Test PATHNAME for being a symbolic link. 
+     * Test PATHNAME for being a symbolic link.
      */
 
 
@@ -114,7 +115,7 @@ external ulonglong, syserr filesize(string PATHNAME);
 
 
 
-  /* 
+  /*
    *  Functions for dealing with directories.
    */
 
@@ -125,7 +126,7 @@ external string getcwd();
     #pragma linkobj  "src/FileSystem/dir.o"
     #pragma linksign [0]
     /*
-     * Get the current working directory. 
+     * Get the current working directory.
      */
 
 
@@ -135,7 +136,7 @@ external syserr chdir(string PATHNAME);
     #pragma linkobj  "src/FileSystem/dir.o"
     #pragma linksign [0,1]
     /*
-     * Change the current working directory to PATHNAME. 
+     * Change the current working directory to PATHNAME.
      */
 
 
@@ -145,9 +146,9 @@ external syserr mkdir(string PATHNAME);
     #pragma linkobj  "src/FileSystem/dir.o"
     #pragma linksign [0,1]
     /*
-     * Create the directory PATHNAME. 
+     * Create the directory PATHNAME.
      */
-   
+
 
 external syserr rmdir(string PATHNAME);
     #pragma effect TheFileSystem
@@ -155,7 +156,7 @@ external syserr rmdir(string PATHNAME);
     #pragma linkobj  "src/FileSystem/dir.o"
     #pragma linksign [0,1]
     /*
-     * Remove the directory PATHNAME. 
+     * Remove the directory PATHNAME.
      */
 
 

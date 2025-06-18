@@ -1,13 +1,13 @@
+#pragma safe
 module System;
 
-import World:        all;
-import Terminal:     all;
-import FileSystem:   all;
-
-import CommandLine:  all;
-import Environment:  all;
-import Clock:        all;
-import SysErr:       all;
+import Clock: all;
+import CommandLine: all;
+import Environment: all;
+import FileSystem: all;
 import RuntimeError: all;
+import SysErr: all;
+import Terminal: all;
+import World: all;
 
 export all;

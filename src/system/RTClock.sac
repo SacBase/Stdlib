@@ -1,3 +1,4 @@
+#pragma safe
 class RTClock;
 
 external classtype;
@@ -8,16 +9,16 @@ objdef RTClock TheRTClock = createTheRTClock();
 
 external RTClock createTheRTClock();
     #pragma effect World::TheWorld
-    #pragma linkname "SAC_RTClock_createTheRTClock"
     #pragma linkobj "src/RTClock/rtclock.o"
+    #pragma linkname "SAC_RTClock_createTheRTClock"
     #pragma linksign [1]
 
 external void touch(RTClock &rtclock);
-    #pragma linkname "SAC_RTClock_touch"
     #pragma linkobj "src/RTClock/rtclock.o"
+    #pragma linkname "SAC_RTClock_touch"
 
 external long, long gettime();
     #pragma effect RTClock::TheRTClock
-    #pragma linkname "SAC_RTClock_gettime"
     #pragma linkobj "src/RTClock/rtclock.o"
+    #pragma linkname "SAC_RTClock_gettime"
     #pragma linksign [1,2]
