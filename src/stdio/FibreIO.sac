@@ -184,116 +184,116 @@ stringArray FibreScanStringArray()
 
 /******************************************************************************/
 
-inline void FibrePrint(File &stream, int[d:shp] arr)
+void FibrePrint(File &stream, int[d:shp] arr)
 {
     FibrePrint(stream, d, shp, arr);
 }
 
-inline void FibrePrint(File &stream, int arr)
+void FibrePrint(File &stream, int arr)
 {
     File::fprintf(stream, "%d\n", arr);
 }
 
-inline void FibrePrint(File &stream, float[d:shp] arr)
+void FibrePrint(File &stream, float[d:shp] arr)
 {
     FibrePrint(stream, d, shp, arr);
 }
 
-inline void FibrePrint(File &stream, float arr)
+void FibrePrint(File &stream, float arr)
 {
     File::fprintf(stream, "%.16f\n", tod(arr));
 }
 
-inline void FibrePrint(File &stream, double[d:shp] arr)
+void FibrePrint(File &stream, double[d:shp] arr)
 {
     FibrePrint(stream, d, shp, arr);
 }
 
-inline void FibrePrint(File &stream, double arr)
+void FibrePrint(File &stream, double arr)
 {
     File::fprintf(stream, "%.16f\n", arr);
 }
 
-inline void FibrePrint(File &stream, stringArray arr)
+void FibrePrint(File &stream, stringArray arr)
 {
     FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
 /******************************************************************************/
 
-inline void FibrePrint(TermFile &stream, int[d:shp] arr)
+void FibrePrint(TermFile &stream, int[d:shp] arr)
 {
     FibrePrint(stream, d, shp, arr);
 }
 
-inline void FibrePrint(TermFile &stream, int arr)
+void FibrePrint(TermFile &stream, int arr)
 {
     TermFile::fprintf(stream, "%d\n", arr);
 }
 
-inline void FibrePrint(TermFile &stream, float[d:shp] arr)
+void FibrePrint(TermFile &stream, float[d:shp] arr)
 {
     FibrePrint(stream, d, shp, arr);
 }
 
-inline void FibrePrint(TermFile &stream, float arr)
+void FibrePrint(TermFile &stream, float arr)
 {
     TermFile::fprintf(stream, "%.16f\n", tod(arr));
 }
 
-inline void FibrePrint(TermFile &stream, double[d:shp] arr)
+void FibrePrint(TermFile &stream, double[d:shp] arr)
 {
     FibrePrint(stream, d, shp, arr);
 }
 
-inline void FibrePrint(TermFile &stream, double arr)
+void FibrePrint(TermFile &stream, double arr)
 {
     TermFile::fprintf(stream, "%.16f\n", arr);
 }
 
-inline void FibrePrint(TermFile &stream, stringArray arr)
+void FibrePrint(TermFile &stream, stringArray arr)
 {
     FibrePrint(stream, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
 /******************************************************************************/
 
-inline void FibrePrint(int[d:shp] arr)
+void FibrePrint(int[d:shp] arr)
 {
     FibrePrint(stdout, d, shp, arr);
 }
 
-inline void FibrePrint(int arr)
+void FibrePrint(int arr)
 {
     TermFile::fprintf(stdout, "%d\n", arr);
 }
 
-inline void FibrePrint(float[d:shp] arr)
+void FibrePrint(float[d:shp] arr)
 {
     FibrePrint(stdout, d, shp, arr);
 }
 
-inline void FibrePrint(float arr)
+void FibrePrint(float arr)
 {
     TermFile::fprintf(stdout, "%.16f\n", tod(arr));
 }
 
-inline void FibrePrint(double[d:shp] arr)
+void FibrePrint(double[d:shp] arr)
 {
     FibrePrint(stdout, d, shp, arr);
 }
 
-inline void FibrePrint(double arr)
+void FibrePrint(double arr)
 {
     TermFile::fprintf(stdout, "%.16f\n", arr);
 }
 
-inline void FibrePrint(StringArray::stringArray arr)
+void FibrePrint(StringArray::stringArray arr)
 {
     FibrePrint(stdout, StringArray::dim(arr), StringArray::shape(arr), arr);
 }
 
-inline void FibrePrint(string scaler)
+void FibrePrint(string scaler)
 {
     TermFile::printf("%s", scaler);
 }
@@ -344,32 +344,32 @@ type[*] FibreScan##alias##Array()                                              \
 }
 
 #define FIBREPRINT(type,formatting)                                            \
-inline void FibrePrint(File &stream, type[d:shp] arr)                          \
+void FibrePrint(File &stream, type[d:shp] arr)                                 \
 {                                                                              \
     FibrePrint(stream, d, shp, arr);                                           \
 }                                                                              \
                                                                                \
-inline void FibrePrint(File &stream, type arr)                                 \
+void FibrePrint(File &stream, type arr)                                        \
 {                                                                              \
     File::fprintf(stream, SETFORMAT(formatting),  arr);                        \
 }                                                                              \
                                                                                \
-inline void FibrePrint(TermFile &stream, type[d:shp] arr)                      \
+void FibrePrint(TermFile &stream, type[d:shp] arr)                             \
 {                                                                              \
     FibrePrint(stream, d, shp, arr);                                           \
 }                                                                              \
                                                                                \
-inline void FibrePrint(TermFile &stream, type arr)                             \
+void FibrePrint(TermFile &stream, type arr)                                    \
 {                                                                              \
     TermFile::fprintf(stream, SETFORMAT(formatting), arr);                     \
 }                                                                              \
                                                                                \
-inline void FibrePrint(type[d:shp] arr)                                        \
+void FibrePrint(type[d:shp] arr)                                               \
 {                                                                              \
     FibrePrint(stdout, d, shp, arr);                                           \
 }                                                                              \
                                                                                \
-inline void FibrePrint(type arr)                                               \
+void FibrePrint(type arr)                                                      \
 {                                                                              \
     TermFile::fprintf(stdout, SETFORMAT(formatting), arr);                     \
 }
