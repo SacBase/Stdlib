@@ -32,14 +32,14 @@
 
 
 
-int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr, 
+int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
                   int typeflag, int indent, int done)
 {
   int i;
-  
+
   INDENT(stream, indent);
   fprintf(stream, "[ 0,%d:\n", (*shp) - 1);
-    
+
   if (dim==1)
   {
     for (i=0; i<*shp; i++)
@@ -106,7 +106,9 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         INDENT(stream, indent+1);
         fprintf(stream, "\"%s\"\n", ((array*)arr)->data[done + i]);
         break;
-      }    
+      }
+      default:
+        SAC_RuntimeError ("illegal typeflag %d", typeflag);
     }
     done+=*shp;
   }
@@ -168,13 +170,15 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         done = FibreWriteAll(stream, dim-1, shp+1, ((array*)arr),
                              typeflag, indent+1, done);
         break;
-      }    
+      }
+      default:
+        SAC_RuntimeError ("illegal typeflag %d", typeflag);
     }
   }
-    
+
   INDENT(stream, indent);
   fprintf(stream, "]\n");
-  
+
   return( done);
 }
 

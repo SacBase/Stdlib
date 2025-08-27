@@ -15,7 +15,7 @@
 int SACaccess(int *success, char *name, int how)
 {
   int result, mode;
-  
+
   switch (how)
   {
   case 0:
@@ -33,11 +33,11 @@ int SACaccess(int *success, char *name, int how)
   default:
     mode=F_OK;
   }
-  
+
   errno=0;
-  
+
   result=access(name, mode);
-  
+
   if (errno>0)
   {
     *success=errno;
@@ -46,7 +46,7 @@ int SACaccess(int *success, char *name, int how)
   {
     *success=-1;
   }
-  
+
   return(result==0);
 }
 
