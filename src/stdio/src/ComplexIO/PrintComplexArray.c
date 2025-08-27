@@ -60,7 +60,9 @@ static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * s
       case COMPLEX:
         fprintf(stream, format, (*((complex *)a))[0], (*((complex *)a))[1]);
         break;
-      }
+      default:
+        break;
+    }
    fprintf(stream,"\n");
 
   } else if (dim > 0) {
@@ -91,7 +93,10 @@ static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * s
           switch(typeflag) {
           case COMPLEX:
             fprintf(stream, format,
-	    	(((complex *)a)[Index2Offset(dim,shp,index)])[0], (((complex *)a)[Index2Offset(dim,shp,index)])[1]);
+	    	            (((complex *)a)[Index2Offset(dim,shp,index)])[0],
+                    (((complex *)a)[Index2Offset(dim,shp,index)])[1]);
+            break;
+          default:
             break;
           }
 

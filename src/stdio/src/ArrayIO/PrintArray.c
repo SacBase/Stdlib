@@ -133,6 +133,8 @@ static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * s
       case CHAR:
         fprintf(stream, format, ((char *)a)[0]); /* TODO: Isn't CHAR compiled to unsigned char? */
         break;
+      default:
+        SAC_RuntimeError ("illegal typeflag %d", typeflag);
       }
    fprintf(stream,"\n");
 
@@ -175,6 +177,8 @@ static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * s
             PRINT_CASE( FLOAT, float, double)
             PRINT_CASE( DOUBLE, double, double)
             PRINT_CASE( CHAR, char, char)  /* TODO: Isn't CHAR compiled to unsigned char? */
+            default:
+              SAC_RuntimeError ("illegal typeflag %d", typeflag);
           }
 
           index[n]++;

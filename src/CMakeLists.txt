@@ -83,6 +83,9 @@ ADD_CUSTOM_COMMAND (
 SET (SAC2C_CC_FLAGS "")
 CHECK_SAC2C_CC_FLAG("-Wno-c2x-compat" SAC2C_CC_FLAGS)
 CHECK_SAC2C_CC_FLAG("-Wno-gnu-line-marker" SAC2C_CC_FLAGS)
+# These flags are enabled by default since clang 17.0.0
+CHECK_SAC2C_CC_FLAG("-Wformat" SAC2C_CC_FLAGS)
+CHECK_SAC2C_CC_FLAG("-Wswitch-default" SAC2C_CC_FLAGS)
 # On some systems we get an error `argument 2 value -3 is negative` in an
 # application of `__fgets_alias` originating from `fscanl.c/term_fscanl`.
 CHECK_SAC2C_CC_FLAG("-Wno-stringop-overflow" SAC2C_CC_FLAGS)

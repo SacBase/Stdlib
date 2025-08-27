@@ -529,6 +529,8 @@ array: SQBR_L desc COLON
              case string_mode:
                stringarray = (char **) SAC_MALLOC( size * sizeof( char*));
                break;
+             default:
+               break;
            }
          }
          else {
