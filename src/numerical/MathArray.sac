@@ -39,6 +39,7 @@ MAP_REAL(MAP_A, floor)
 MAP_REAL(MAP_AxS, pow)
 
 inline float +(float a, float b) { return _add_SxS_(a, b); }
+
 inline float l2norm(float[d:shp] a)
 {
     return Math::sqrt(with {
@@ -47,11 +48,28 @@ inline float l2norm(float[d:shp] a)
     } : fold(+, 0.0));
 }
 
+inline float lnorm(float[d:shp] a, float x)
+{
+    return Math::sqrt(with {
+        (_mul_SxV_(0, shp) <= iv < shp)
+            : Math::pow(_sel_VxA_(iv, a), x);
+    } : fold(+, 0.0));
+}
+
 inline double +(double a, double b) { return _add_SxS_(a, b); }
+
 inline double l2norm(double[d:shp] a)
 {
     return Math::sqrt(with {
         (_mul_SxV_(0, shp) <= iv < shp)
             : _mul_SxS_(_sel_VxA_(iv, a), _sel_VxA_(iv, a));
+    } : fold(+, 0.0));
+}
+
+inline double lnorm(double[d:shp] a, double x)
+{
+    return Math::sqrt(with {
+        (_mul_SxV_(0, shp) <= iv < shp)
+            : Math::pow(_sel_VxA_(iv, a), x);
     } : fold(+, 0.0));
 }
