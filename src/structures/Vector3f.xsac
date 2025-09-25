@@ -1,0 +1,7 @@
+#define REAL float
+#define VECTOR3 Vector3f
+#define VX xf
+#define VY yf
+#define VZ zf
+
+#include "Vector3.mac"
