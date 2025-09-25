@@ -1,7 +1,7 @@
 #pragma safe
 module MathArray;
 
-export all;
+export all except { + };
 
 /******************************************************************************
  *
@@ -37,3 +37,21 @@ MAP_REAL(MAP_A, fabs)
 MAP_REAL(MAP_A, sqrt)
 MAP_REAL(MAP_A, floor)
 MAP_REAL(MAP_AxS, pow)
+
+inline float +(float a, float b) { return _add_SxS_(a, b); }
+inline float l2norm(float[d:shp] arr)
+{
+    return Math::sqrt(with {
+        (_mul_SxV_(0, shp) <= iv < shp)
+            : _mul_SxS_(_sel_VxA_(iv, arr), _sel_VxA_(iv, arr));
+    } : fold(+, 0.0));
+}
+
+inline double +(double a, double b) { return _add_SxS_(a, b); }
+inline double l2norm(double[d:shp] arr)
+{
+    return Math::sqrt(with {
+        (_mul_SxV_(0, shp) <= iv < shp)
+            : _mul_SxS_(_sel_VxA_(iv, arr), _sel_VxA_(iv, arr));
+    } : fold(+, 0.0));
+}
