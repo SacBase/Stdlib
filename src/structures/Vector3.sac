@@ -1,9 +1,0 @@
-#define VECTOR3 Vector3
-#define REAL double
-#define ZERO 0d
-
-#include "Vector3.mac"
-
-#undef VECTOR3
-#undef REAL
-#undef ZERO

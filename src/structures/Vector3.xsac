@@ -1,0 +1,7 @@
+#define REAL double
+#define VECTOR3 Vector3
+#define VX x
+#define VY y
+#define VZ z
+
+#include "Vector3.mac"
