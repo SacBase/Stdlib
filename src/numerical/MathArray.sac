@@ -50,7 +50,7 @@ inline float l2norm(float[d:shp] a)
     return Math::sqrt(with {
         (_mul_SxV_(0, shp) <= iv < shp)
             : _mul_SxS_(_sel_VxA_(iv, a), _sel_VxA_(iv, a));
-    } : fold(+, 0.0));
+    } : fold(+, 0f));
 }
 
 inline double +(double a, double b) { return _add_SxS_(a, b); }
@@ -59,5 +59,5 @@ inline double l2norm(double[d:shp] a)
     return Math::sqrt(with {
         (_mul_SxV_(0, shp) <= iv < shp)
             : _mul_SxS_(_sel_VxA_(iv, a), _sel_VxA_(iv, a));
-    } : fold(+, 0.0));
+    } : fold(+, 0d));
 }
