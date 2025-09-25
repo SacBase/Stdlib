@@ -49,6 +49,7 @@ jobs:
       run: |
         git clone --single-branch https://github.com/SacBase/sac-examples.git
         cd sac-examples
+        make all
         ./test.sh
 
   build-macos-x86:
@@ -97,6 +98,7 @@ jobs:
       run: |
         git clone --single-branch https://github.com/SacBase/sac-examples.git
         cd sac-examples
+        make all
         ./test.sh
 
   build-macos-arm:
@@ -145,4 +147,5 @@ jobs:
       run: |
         git clone --single-branch https://github.com/SacBase/sac-examples.git
         cd sac-examples
+        make all
         ./test.sh
