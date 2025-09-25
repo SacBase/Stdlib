@@ -56,7 +56,7 @@ structures/ScalarArith.xsac                Core
 structures/String.sac                      Core
 structures/StringArray.sac                 Ext
 structures/Structures.sac                  Core
-structures/Vector3.xsac                    Ext
+structures/Vector3d.xsac                   Ext
 structures/Vector3f.xsac                   Ext
 
 # System
