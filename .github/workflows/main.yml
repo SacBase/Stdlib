@@ -43,14 +43,14 @@ jobs:
           exit 1;
         fi
         ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-    - name: Test
+    - name: Run integration tests
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
         git clone --single-branch https://github.com/SacBase/sac-examples.git
         cd sac-examples
         make all
-        ./test.sh
+        MT=4 ./test.sh
 
   build-macos-x86:
     runs-on: macos-13
@@ -92,14 +92,14 @@ jobs:
           exit 1;
         fi
         ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-    - name: Test
+    - name: Run integration tests
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
         git clone --single-branch https://github.com/SacBase/sac-examples.git
         cd sac-examples
         make all
-        ./test.sh
+        MT=3 ./test.sh
 
   build-macos-arm:
     runs-on: macos-15
@@ -141,11 +141,11 @@ jobs:
           exit 1;
         fi
         ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-    - name: Test
+    - name: Run integration tests
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
         git clone --single-branch https://github.com/SacBase/sac-examples.git
         cd sac-examples
         make all
-        ./test.sh
+        MT=3 ./test.sh
