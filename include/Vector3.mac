@@ -1,3 +1,5 @@
+#pragma safe
+
 module VECTOR3;
 
 export all;
