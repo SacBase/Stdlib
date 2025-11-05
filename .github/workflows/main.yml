@@ -7,6 +7,50 @@ name: Build On Changes
 on: [pull_request]
 
 jobs:
+  build-ubuntu25:
+    runs-on: ubuntu-25.04
+    steps:
+    - name: Get HEAD and submodules
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: 'recursive'
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install xsltproc -y
+    - name: Install sac2c
+      run: |
+        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        cd sac2c
+        make release -j2
+        cp build_p/sac2c_p /usr/local/bin/sac2c
+        sac2c -V
+    - name: Create build dir
+      run: |
+        cmake -E make_directory ${{runner.workspace}}/build
+    - name: Configure build-system
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake -DLINKSETSIZE=200 $GITHUB_WORKSPACE
+    - name: Build
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        cmake --build . -j4 2>&1 | tee build.log
+        if [ ${PIPESTATUS[0]} -ne 0 ]; then
+          echo "!!! ERROR detected in build !!!";
+          exit 1;
+        fi
+        ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
+    - name: Test
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        git clone --single-branch https://github.com/SacBase/sac-examples.git
+        cd sac-examples
+        make all
+        ./test.sh
   build-ubuntu24:
     runs-on: ubuntu-24.04
     steps:
