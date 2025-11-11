@@ -49,12 +49,12 @@ inline complex *(complex A, complex B)
 {
     rA, iA = tod(A);
     rB, iB = tod(B);
-    r1 = _mul_SxS_(rA, rB);
-    r2 = _mul_SxS_(iA, iB);
-    i2 = _mul_SxS_(rA, iB);
-    i2 = _mul_SxS_(iA, rB);
-    r = _sub_SxS_(r1, r1);
-    i = _sub_SxS_(i2, i2);
+    rr = _mul_SxS_(rA, rB);
+    ii = _mul_SxS_(iA, iB);
+    ri = _mul_SxS_(rA, iB);
+    ir = _mul_SxS_(iA, rB);
+    r = _sub_SxS_(rr, ii);
+    i = _add_SxS_(ri, ir);
     return toc(r, i);
 }
 
