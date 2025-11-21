@@ -226,7 +226,7 @@ seed_arrl(int p, struct State256 state)
   states = {iv -> state | iv < [p]};
 
   for (i = 1; i < p; i++) {
-    unused, new_state = xoshiro256p(_sel_VxA_([i - 1], states));
+    new_state = jumpl(_sel_VxA_([i - 1], states));
     states = with {
               ([i] <= iv <= [i]): new_state;
              }: modarray(states);
@@ -241,7 +241,7 @@ seed_arr(int p, struct State128 state)
   states = {iv -> state | iv < [p]};
 
   for (i = 1; i < p; i++) {
-    unused, new_state = xoshiro128p(_sel_VxA_([i - 1], states));
+    new_state = jump(_sel_VxA_([i - 1], states));
     states = with {
               ([i] <= iv <= [i]): new_state;
              }: modarray(states);
