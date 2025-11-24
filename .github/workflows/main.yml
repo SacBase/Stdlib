@@ -7,13 +7,11 @@ name: Build On Changes
 on: [pull_request]
 
 jobs:
-  build-ubuntu24:
-    runs-on: ubuntu-24.04
+  build-ubuntu:
+    runs-on: ubuntu-25.04
     steps:
-    - name: Get HEAD and submodules
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v5
       with:
-        fetch-depth: 0
         submodules: 'recursive'
     - name: Install dependencies
       run: |
@@ -27,8 +25,7 @@ jobs:
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
-      run: |
-        cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{runner.workspace}}/build
     - name: Configure build-system
       shell: bash
       working-directory: ${{runner.workspace}}/build
@@ -55,10 +52,8 @@ jobs:
   build-macos-x86:
     runs-on: macos-13
     steps:
-    - name: Get HEAD and submodules
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v5
       with:
-        fetch-depth: 0
         submodules: 'recursive'
     - name: Install dependencies
       run: |
@@ -76,8 +71,7 @@ jobs:
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
-      run: |
-        cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{runner.workspace}}/build
     - name: Configure build-system
       shell: bash
       working-directory: ${{runner.workspace}}/build
@@ -104,10 +98,8 @@ jobs:
   build-macos-arm:
     runs-on: macos-15
     steps:
-    - name: Get HEAD and submodules
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v5
       with:
-        fetch-depth: 0
         submodules: 'recursive'
     - name: Install dependencies
       run: |
@@ -125,8 +117,7 @@ jobs:
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Create build dir
-      run: |
-        cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{runner.workspace}}/build
     - name: Configure build-system
       shell: bash
       working-directory: ${{runner.workspace}}/build
