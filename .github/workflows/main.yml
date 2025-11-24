@@ -47,8 +47,8 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
-        git clone --single-branch https://github.com/SacBase/sac-examples.git
-        cd sac-examples
+        git clone --single-branch https://github.com/SacBase/IntegrationTests.git
+        cd IntegrationTests
         make all
         ./test.sh
 
@@ -96,8 +96,8 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
-        git clone --single-branch https://github.com/SacBase/sac-examples.git
-        cd sac-examples
+        git clone --single-branch https://github.com/SacBase/IntegrationTests.git
+        cd IntegrationTests
         make all
         ./test.sh
 
@@ -145,7 +145,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
-        git clone --single-branch https://github.com/SacBase/sac-examples.git
-        cd sac-examples
+        git clone --single-branch https://github.com/SacBase/IntegrationTests.git
+        cd IntegrationTests
         make all
         ./test.sh
