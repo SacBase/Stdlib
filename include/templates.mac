@@ -87,10 +87,12 @@ MAP_MON_##ext(!, _not_S_, bool, bool)
 MAP_MON_##ext(tobool, _tobool_S_, a, bool)
 
 #define MAP_MIN_NUM_CONV_OPS(ext, a)                                           \
-MAP_MON_##ext(toi, _toi_S_, a, int)                                            \
-MAP_MON_##ext(tol, _tol_S_, a, long)                                           \
-MAP_MON_##ext(tof, _tof_S_, a, float)                                          \
-MAP_MON_##ext(tod, _tod_S_, a, double)
+MAP_MON_##ext(toi,  _toi_S_,  a, int)                                          \
+MAP_MON_##ext(tol,  _tol_S_,  a, long)                                         \
+MAP_MON_##ext(toui, _toui_S_, a, uint)                                         \
+MAP_MON_##ext(toul, _toul_S_, a, ulong)                                        \
+MAP_MON_##ext(tof,  _tof_S_,  a, float)                                        \
+MAP_MON_##ext(tod,  _tod_S_,  a, double)
 
 #ifdef FULLTYPES
 
@@ -100,8 +102,6 @@ MAP_MON_##ext(tosh, _tos_S_, a, short)                                         \
 MAP_MON_##ext(toll, _toll_S_, a, longlong)                                     \
 MAP_MON_##ext(toub, _toub_S_, a, ubyte)                                        \
 MAP_MON_##ext(tous, _tous_S_, a, ushort)                                       \
-MAP_MON_##ext(toui, _toui_S_, a, uint)                                         \
-MAP_MON_##ext(toul, _toul_S_, a, ulong)                                        \
 MAP_MON_##ext(toull, _toull_S_, a, ulonglong)
 
 #define MAP_NUM_CONV_OPS(ext, a)                                               \
