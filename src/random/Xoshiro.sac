@@ -80,6 +80,7 @@
  *       of SIMD-lanes, but struct is not yet mature enough to compile this
  *       efficiently.
  * TODO: The parallel method allocates and copies the rows.
+ * TODO: Implement sel and reshape. This gives problems with records.
  *
  ******************************************************************************/
 #pragma safe
@@ -88,7 +89,8 @@ module Xoshiro;
 use ScalarArith: all;
 use Math: all;
 
-export all except { rotl, splitmix64, srand_time };
+export all except { rotl, splitmix64, srand_time, to_row_major,
+                    reshape, reshapel };
 
 struct State256 {
   ulong s0l;
@@ -103,6 +105,42 @@ struct State128 {
   uint s2;
   uint s3;
 };
+
+inline
+int to_row_major(int[d] iv, int[d] shp)
+{
+  res = iv[0];
+  l = 1;
+  while (l < d) {
+    res = res * shp[l] + iv[l];
+    l   = l + 1;
+  }
+  return res;
+}
+
+struct State256[d:shp]
+reshapel(int[d] shp, struct State256[n] x)
+{
+#if 0
+  /* Not yet supported on structs. */
+  return _reshape_VxA_(new_shp, x);
+#else
+  res = {iv -> _sel_VxA_([to_row_major(iv, shp)], x) | iv < shp};
+  return res;
+#endif
+}
+
+struct State128[d:shp]
+reshape(int[d] shp, struct State128[n] x)
+{
+#if 0
+  /* Not yet supported on structs. */
+  return _reshape_VxA_(new_shp, x);
+#else
+  res = {iv -> _sel_VxA_([to_row_major(iv, shp)], x) | iv < shp};
+  return res;
+#endif
+}
 
 inline
 ulong rotl(ulong x, ulong k)
@@ -154,100 +192,151 @@ uint, struct State128 xoshiro128p(struct State128 state)
   return (result, state);
 }
 
-#define LOOP_BODY_ULONG(i)                                                     \
-  for (b = 0; b < 64; b = b + 1) {                                             \
-    if ((JUMP##i & 1ul) << _toul_S_(b) != 0ul) {                               \
-      s0 = s0 ^ state.s0l;                                                      \
-      s1 = s1 ^ state.s1l;                                                      \
-      s2 = s2 ^ state.s2l;                                                      \
-      s3 = s3 ^ state.s3l;                                                      \
-    }                                                                          \
-    unused, state = xoshiro256p(state);                                        \
-  }
-
+/**
+ * Advance by k * 2^192 states in O(log(k))
+ **/
 inline
-struct State256 jumpl(struct State256 state)
+struct State256 advancel(struct State256 state, int k)
 {
-  /* Array would be cleaner, but see issue #2470 */
-  JUMP0 = 8566230491382795199ul;
-  JUMP1 = 14195432079911694259ul;
-  JUMP2 = 8606660816089834049ul;
-  JUMP3 = 4111957640723818037ul;
+  /* jump[j, .] represents 128 bits that are the coefficients of
+   * x^(2^j * 2^96) mod charpoly. */
+  jump = [
+    [0x39109bb02acbe635ul, 0x77710069854ee241ul, 0xc5004e441c522fb3ul, 0x76e15d3efefdcbbful],
+    [0xba70f1bd97fc40b0ul, 0xe9edb73cb3e9fb7cul, 0xa4b0488571edcb9dul, 0x85d1837e6f0cd3feul],
+    [0x3727c275522644a7ul, 0xaff90eda09ea8b4cul, 0x0b893c16e4a7f3b3ul, 0xac54fa504c60e306ul],
+    [0x574e4d0093e3a2e4ul, 0xd4483ff9a9ac5a23ul, 0xc9a202b2322bb7f6ul, 0x302eda308643ab47ul],
+    [0xec6aa16a8ffc76faul, 0x236417db3b031424ul, 0xabfffe7ac9ea1612ul, 0x261882d92ec8429ful],
+    [0x88e5349d50f3ddeful, 0x285943d7fb75d765ul, 0xf7c39d8fc76906a3ul, 0x52f6a62700009087ul],
+    [0x21588c86cc534c29ul, 0xf055378c576c5c9aul, 0xfc0c646fb82afcebul, 0x3facc68ed0053ac4ul],
+    [0x443c1363fd5c7d43ul, 0x776751b126655d13ul, 0x3d38ff4fc965c1faul, 0xfe596054913ed407ul],
+    [0x5243e79672334390ul, 0x163160efcad9c046ul, 0x6217b3306e3e9557ul, 0x1a672a03c71adc2eul],
+    [0x2dcec71c419baa62ul, 0xdabe97e1dd9a59c1ul, 0x5348b64c107873b6ul, 0x58ce1e7d6ea9281ful],
+    [0xe91553475948d23eul, 0xfba1683b54b1e0f6ul, 0x37fae57370f8bc19ul, 0x955659c7b8793ecful],
+    [0x540fca0570720eb7ul, 0xa910bdeff21ce218ul, 0x9d7c00c8471ddc07ul, 0xbb5b5c8aa1ad89e1ul],
+    [0xc4b65c3551c83c69ul, 0x32f22fb19ac4550bul, 0x6d8abce0cf641cfcul, 0x0612914f1b46c912ul],
+    [0xb1170d0754beeaa4ul, 0xee7eb44f2fdbd1b8ul, 0xbe100596c8da9541ul, 0x536e6114e4189cfcul],
+    [0x45cac579389af5caul, 0x93f548c2cab0a32cul, 0x267d7103ef9f83a3ul, 0xbeb789dbbc4ea209ul],
+    [0x2b75c5d185461341ul, 0xa8e0425b0d01cd1eul, 0xd6f9074a4c2732f7ul, 0x65ceb6cde220e757ul],
+    [0x114dcbb43b155057ul, 0x470868184fcc3f5ful, 0x1af87374102c1031ul, 0xafbacb099d1967bdul],
+    [0x1b98494373c20b8aul, 0x7ebe95d47cd1daf2ul, 0xf27e722d27743cd9ul, 0x5f98e9b5ad62427dul],
+    [0x93d03eea25d1d816ul, 0x4ac6fab0688e4ccdul, 0x036e9886f63c9933ul, 0x8f1d0f5ec26521a6ul],
+    [0x08615908bcc4c8f2ul, 0x9c227b5ba376faeeul, 0xbb62b24404a1be96ul, 0xdd4e745e4412a26aul],
+    [0xf6a1ef6a7d3b2545ul, 0x64d85cc844957794ul, 0xc7a967d45d82bbcaul, 0xebe0d315a9cb279bul],
+    [0x2b8dd348e0f767aeul, 0xd188547deb3f0136ul, 0x611e5aedd44a4fd4ul, 0x29bfb1bdc678fcbeul],
+    [0xfcd653bc999d276bul, 0xbd9b522fb9f15d0bul, 0x5154a018eba8e309ul, 0xfad25fa87d091580ul],
+    [0xb36394657868f06eul, 0x04921932aaf82150ul, 0x946592914b67e34ful, 0x29c79a4cedb3baf2ul],
+    [0xfbdf21da0bb9add0ul, 0xba835279ffb6a358ul, 0xca9a2b49a6e6b16dul, 0x6cbfcd64bf69402cul],
+    [0xedcce16aeb59e5adul, 0xbb90914a9c9871a3ul, 0x0cf66f05d413a46dul, 0x23436782d086ca23ul],
+    [0x6608d757c7d36be3ul, 0x5cea7b8a1ac11de9ul, 0xf9ce20dec18c4b44ul, 0x130e23fa572004a9ul],
+    [0xd5d4c6699513858ful, 0xa955e448a10873d4ul, 0xd03a1ed309668f2ful, 0x70c7a48f09b95bb9ul],
+    [0x16cac53fc2905146ul, 0x59f1b7e5d5fbfdc3ul, 0x619c9d98f6f33bcbul, 0x72015cf80ce336f4ul],
+    [0xc6e96787aedc5c40ul, 0x14690cfa36c329edul, 0xce2129cd34ae493aul, 0x5f340fcb5be19401ul],
+    [0xf8d2e75e66d53d83ul, 0xd457241f6a9863acul, 0xb8052dcca0e13395ul, 0x7ad9f632881e960ful],
+    [0x9a5144da7f765fd8ul, 0x37fdeee585fdcd8eul, 0x33b2e33e1d4e5bdbul, 0x23336699f63c8e45ul]
+  ];
 
-  s0 = 0ul;
-  s1 = 0ul;
-  s2 = 0ul;
-  s3 = 0ul;
-
-  LOOP_BODY_ULONG(0)
-  LOOP_BODY_ULONG(1)
-  LOOP_BODY_ULONG(2)
-  LOOP_BODY_ULONG(3)
-
-  return State256 {.s0l = s0, .s1l = s1, .s2l = s2, .s3l = s3};
+  for (bit = 0; bit < 32; bit = bit + 1) {
+    if ((_toui_S_(k) & (1u << _toui_S_(bit))) != 0u) {
+      s0 = 0ul; s1 = 0ul; s2 = 0ul; s3 = 0ul;
+      for (i = 0; i < 4; i = i + 1) {
+        for (b = 0; b < 64; b = b + 1) {
+          if (((_sel_VxA_([bit, i], jump) & 1ul) << _toul_S_(b)) != 0ul) {
+            s0 = s0 ^ state.s0l;
+            s1 = s1 ^ state.s1l;
+            s2 = s2 ^ state.s2l;
+            s3 = s3 ^ state.s3l;
+          }
+          unused, state = xoshiro256p(state);
+        }
+      }
+      state = State256 {.s0l = s0, .s1l = s1, .s2l = s2, .s3l = s3};
+    }
+  }
+  return state;
 }
 
-#define LOOP_BODY_UINT(i)                                                      \
-  for (b = 0; b < 64; b = b + 1) {                                             \
-    if ((JUMP##i & 1u) << _toui_S_(b) != 0u) {                                 \
-      s0 = s0 ^ state.s0;                                                      \
-      s1 = s1 ^ state.s1;                                                      \
-      s2 = s2 ^ state.s2;                                                      \
-      s3 = s3 ^ state.s3;                                                      \
-    }                                                                          \
-    unused, state = xoshiro128p(state);                                        \
-  }
-
+/**
+ * Advance by k * 2^96 states in O(log(k))
+ **/
 inline
-struct State128 jump(struct State128 state)
+struct State128 advance(struct State128 state, int k)
 {
-  /* Array would be cleaner, but see issue #2470 */
-  JUMP0 = 3039008046u;
-  JUMP1 = 191826335u;
-  JUMP2 = 3438649583u;
-  JUMP3 = 475530850u;
+  /* jump[j, .] represents 128 bits that are the coefficients of
+   * x^(2^j * 2^96) mod charpoly. */
+  jump = [
+        [0x1c580662u, 0xccf5a0efu, 0x0b6f099fu, 0xb523952eu],
+        [0x97f55fe2u, 0xdc596025u, 0x77133e23u, 0xeeb0e0a4u],
+        [0x0356e935u, 0x69ac41e5u, 0x6d495900u, 0x9e9b45acu],
+        [0x662b6ac9u, 0x9065599bu, 0x547d4854u, 0x407883f3u],
+        [0x2fcdf7e4u, 0x6551c593u, 0x8a954d8bu, 0x667ee2deu],
+        [0x0f4183cau, 0xb233cd67u, 0xdaa2886au, 0xfb5707aau],
+        [0xc64784eeu, 0x224fc251u, 0x8e131a4fu, 0x40dbcd63u],
+        [0x563b1ea7u, 0xb29e13b7u, 0x7b6ea15fu, 0x4f4db4ffu],
+        [0x5ce3332fu, 0xd28ec540u, 0xebf544e9u, 0xbbd3ae5au],
+        [0xa9ac90e8u, 0x95a4e90fu, 0x1f4dd02eu, 0xd39c61ebu],
+        [0x725dcd70u, 0xd2660f23u, 0xd428b915u, 0x790c846cu],
+        [0xca4404cau, 0x513d8ba0u, 0xf39ff6c1u, 0x08eff263u],
+        [0xf84f07e3u, 0x6102f64bu, 0xcf8db66bu, 0x26534b4du],
+        [0xdc3d5d45u, 0x181f9787u, 0x0870d7d7u, 0xa88724c5u],
+        [0xd543edf1u, 0x43005e2eu, 0x0df0ec1fu, 0xdba73489u],
+        [0x58859a86u, 0xf9a46a20u, 0xfe43b2a7u, 0x6d73a1e7u],
+        [0xf904dd9fu, 0x1bf94979u, 0xafc4a733u, 0xa683b6d0u],
+        [0x7d256f6cu, 0x96efbfd6u, 0x75c74e3du, 0x2ee03d84u],
+        [0xa42bbfddu, 0x796d291cu, 0x13f14f31u, 0x3ad0ebe7u],
+        [0x8a6c4326u, 0xb6a00a91u, 0x1fc44a96u, 0xce04ddb0u],
+        [0x6dc7c036u, 0x40012492u, 0x0d7a869eu, 0x4e519967u],
+        [0x6cc51cebu, 0xae852b9bu, 0x6a86db67u, 0x9e4d0a48u],
+        [0x5ead7c39u, 0xb8030b6cu, 0x77beacceu, 0x5a52e97fu],
+        [0x6b644146u, 0x858bbdfeu, 0x7d88e3d4u, 0x022cefbeu],
+        [0x99853a2cu, 0xde4ac3e8u, 0xb7ce03bcu, 0x90067a45u],
+        [0x31ac55d8u, 0xbb5b8048u, 0x35c9b163u, 0xe3a7ccf3u],
+        [0x622cd32eu, 0x3788b4a3u, 0x169e96efu, 0x8d4a33dbu],
+        [0x4576959du, 0x93608184u, 0x06f60339u, 0x0513f190u],
+        [0x8abc30fau, 0xe2f50d3au, 0x05c745c5u, 0x1a64167bu],
+        [0x18bf57c6u, 0xb268faefu, 0x3afd4ba4u, 0x1741bb62u],
+        [0x5686c6e7u, 0xd95f2dccu, 0x31bb1001u, 0x39b7b7b9u],
+        [0x9d5e1791u, 0x3bef4345u, 0x0453f0feu, 0x54d81f7eu]
+  ];
 
-  s0 = 0u;
-  s1 = 0u;
-  s2 = 0u;
-  s3 = 0u;
-
-  LOOP_BODY_UINT(0)
-  LOOP_BODY_UINT(1)
-  LOOP_BODY_UINT(2)
-  LOOP_BODY_UINT(3)
-
-  return State128 {.s0 = s0, .s1 = s1, .s2 = s2, .s3 = s3};
+  for (bit = 0; bit < 32; bit = bit + 1) {
+    if ((_toui_S_(k) & (1u << _toui_S_(bit))) != 0u) {
+      s0 = 0u; s1 = 0u; s2 = 0u; s3 = 0u;
+      for (i = 0; i < 4; i = i + 1) {
+        for (b = 0; b < 32; b = b + 1) {
+          if (((_sel_VxA_([bit, i], jump) & 1u) << _toui_S_(b)) != 0u) {
+            s0 = s0 ^ state.s0;
+            s1 = s1 ^ state.s1;
+            s2 = s2 ^ state.s2;
+            s3 = s3 ^ state.s3;
+          }
+          unused, state = xoshiro128p(state);
+        }
+      }
+      state = State128 {.s0 = s0, .s1 = s1, .s2 = s2, .s3 = s3};
+    }
+  }
+  return state;
 }
 
-struct State256[p]
-seed_arrl(int p, struct State256 state)
+/**
+ * O(p log(p)) and embarassingly parallel.
+ * For small amount of parallelism, this is slower than the naive O(p)
+ * solution, but in that case the cost should be negligible anyway.
+ **/
+struct State256[d:shp]
+seed_arrl(int[d] shp, struct State256 state)
 {
-  states = {iv -> state | iv < [p]};
-
-  for (i = 1; i < p; i++) {
-    new_state = jumpl(_sel_VxA_([i - 1], states));
-    states = with {
-              ([i] <= iv <= [i]): new_state;
-             }: modarray(states);
-  }
-
-  return states;
+  p = prod(shp);
+  flat = {[k] -> advancel(state, k) | [k] < [p]};
+  return reshapel(shp, flat);
 }
 
-struct State128[p]
-seed_arr(int p, struct State128 state)
+struct State128[d:shp]
+seed_arr(int[d] shp, struct State128 state)
 {
-  states = {iv -> state | iv < [p]};
-
-  for (i = 1; i < p; i++) {
-    new_state = jump(_sel_VxA_([i - 1], states));
-    states = with {
-              ([i] <= iv <= [i]): new_state;
-             }: modarray(states);
-  }
-
-  return states;
+  p = prod(shp);
+  flat = {[k] -> advance(state, k) | [k] < [p]};
+  return reshape(shp, flat);
 }
 
 inline
