@@ -1,0 +1,52 @@
+use Array: all;
+use StdIO: all;
+use Xoshiro: all;
+
+bool test_advancel(struct State256 seed, int num)
+{
+  state1 = seed;
+  state2 = seed;
+  state1 = advancel(state1, num);
+
+  for (i = 0; i < num; i++) {
+    state2 = advancel(state2, 1);
+  }
+
+  return (state1.s0l == state2.s0l && state1.s1l == state2.s1l &&
+          state1.s2l == state2.s2l && state1.s3l == state2.s3l);
+}
+
+bool test_advance(struct State128 seed, int num)
+{
+  state1 = seed;
+  state2 = seed;
+  state1 = advance(state1, num);
+  for (i = 0; i < num; i++) {
+    state2 = advance(state2, 1);
+  }
+
+  return (state1.s0 == state2.s0 && state1.s1 == state2.s1 &&
+          state1.s2 == state2.s2 && state1.s3 == state2.s3);
+}
+
+int main()
+{
+  seedl = srand256();
+  seed  = srand128();
+  
+  printf("Test xoshiro128 advance\n");
+  for (i = 1; i < 12; i++) {
+    printf("Advance %d times: %s\n", i, test_advance(seed, i) ? 
+                                          "success" :
+                                          "failure");
+  }
+
+  printf("Test xoshiro256 advance\n");
+  for (i = 1; i < 12; i++) {
+    printf("Advance %d times: %s\n", i, test_advancel(seedl, i) ? 
+                                          "success" :
+                                          "failure");
+  }
+
+  return 0;
+}

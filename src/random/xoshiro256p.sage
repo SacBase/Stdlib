@@ -51,10 +51,12 @@ for k in range(32):
     # Polynomials in quotient rings apparently have no degree
     coeff      = pack_hex(q, 255)
     four_coeff = [coeff[i: i + 16] for i in range(0, 64, 16)]
-    print("[0x"  , four_coeff[0], 
-          "ul, 0x", four_coeff[1], 
+    # The xoshiro implementation traverses the coefficients back to front,
+    # so have to reverse.
+    print("[0x"  ,  four_coeff[3], 
           "ul, 0x", four_coeff[2], 
-          "ul, 0x", four_coeff[3], 
+          "ul, 0x", four_coeff[1], 
+          "ul, 0x", four_coeff[0], 
           "ul]",
           "" if k == 31 else ",",
           sep = "")
