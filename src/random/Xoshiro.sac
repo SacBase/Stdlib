@@ -45,8 +45,8 @@
  * states that are 2^192, 2^96 apart
  * This can be created with
  *
- *    struct State256[p] seed_arrl(struct State256 state, int p)
- *    struct State128[p] seed_arr (struct State128 state, int p)
+ *    struct State256[d:shp] seed_arrl(int[d] shp, struct State256 state)
+ *    struct State128[d:shp] seed_arr (int[d] shp, struct State128 state)
  *
  * You can then use reshape-ing techniques. For example if we have p threads
  * and we want to add normally distributed numbers to an array:
@@ -70,7 +70,7 @@
  *    return (x, state);
  * }
  *
- * states       = seed_arrl(state, p);
+ * states       = seed_arrl([p], state);
  * x_2d         = reshape([p, n / p], x);
  * x_2d, states = {[i] -> add_normal(x[i], states[i]) | [i] < [p]};
  * x            = reshape([n], x_2d);
@@ -155,6 +155,25 @@ uint rotl(uint x, uint k)
 }
 
 inline
+ulong, struct State256 xoshiro256pp(struct State256 state)
+{
+  result = rotl(state.s0l + state.s3l, 23ul) + state.s0l;
+
+  t = state.s1l << 17ul;
+
+  state.s2l = state.s2l ^ state.s0l;
+  state.s3l = state.s3l ^ state.s1l;
+  state.s1l = state.s1l ^ state.s2l;
+  state.s0l = state.s0l ^ state.s3l;
+
+  state.s2l = state.s2l ^ t;
+
+  state.s3l = rotl(state.s3l, 45ul);
+
+  return (result, state);
+}
+
+inline
 ulong, struct State256 xoshiro256p(struct State256 state)
 {
   result = state.s0l + state.s3l;
@@ -174,9 +193,66 @@ ulong, struct State256 xoshiro256p(struct State256 state)
 }
 
 inline
+ulong, struct State256 xoshiro256ss(struct State256 state)
+{
+  result = rotl(state.s1l * 5ul, 7ul) * 9ul;
+
+  t = state.s1l << 17ul;
+
+  state.s2l = state.s2l ^ state.s0l;
+  state.s3l = state.s3l ^ state.s1l;
+  state.s1l = state.s1l ^ state.s2l;
+  state.s0l = state.s0l ^ state.s3l;
+
+  state.s2l = state.s2l ^ t;
+
+  state.s3l = rotl(state.s3l, 45ul);
+
+  return (result, state);
+}
+
+inline
+uint, struct State128 xoshiro128pp(struct State128 state)
+{
+  result = rotl(state.s0 + state.s3, 7u) + state.s0;
+
+  t = state.s1 << 9u;
+
+  state.s2 = state.s2 ^ state.s0;
+  state.s3 = state.s3 ^ state.s1;
+  state.s1 = state.s1 ^ state.s2;
+  state.s0 = state.s0 ^ state.s3;
+
+  state.s2 = state.s2 ^ t;
+
+  state.s3 = rotl(state.s3, 11u);
+
+  return (result, state);
+}
+
+inline
 uint, struct State128 xoshiro128p(struct State128 state)
 {
   result = state.s0 + state.s3;
+
+  t = state.s1 << 9u;
+
+  state.s2 = state.s2 ^ state.s0;
+  state.s3 = state.s3 ^ state.s1;
+  state.s1 = state.s1 ^ state.s2;
+  state.s0 = state.s0 ^ state.s3;
+
+  state.s2 = state.s2 ^ t;
+
+  state.s3 = rotl(state.s3, 11u);
+
+  return (result, state);
+}
+
+inline
+uint, struct State128 xoshiro128ss(struct State128 state)
+{
+  result = rotl(state.s1 * 5u, 7u) * 9u;
 
   t = state.s1 << 9u;
 
