@@ -5,6 +5,7 @@ external classtype;
 
 use String: { string };
 use Terminal: { TheTerminal };
+use SysErr: { syserr };
 
 export all except { createStdIn, createStdOut, createStdErr };
 
@@ -85,6 +86,38 @@ external void puts(string S);
     #pragma linkobj "src/TermFile/puts.o"
     /*
      * Write string S and a newline to stdout.
+     */
+
+external syserr, string fgets (int size, TermFile &STREAM);
+    #pragma effect TheTerminal
+    #pragma linkname "SACfgets_TF"
+    #pragma linkobj "src/TermFile/fgets.o"
+    /*
+     * Read a string of max. length size from the provided TermFile.
+     */
+
+external syserr, string fgets (int size);
+    #pragma effect TheTerminal
+    #pragma linkname "SACfgets_TF"
+    #pragma linkobj "src/TermFile/fgets.o"
+    /*
+     * Read a string of max. length size from stdin.
+     */
+
+external syserr, string fgetl (TermFile &STREAM);
+    #pragma effect TheTerminal
+    #pragma linkname "SACfgetl_TF"
+    #pragma linkobj "src/TermFile/fgetl.o"
+    /*
+     *  Read an entire line from the provided TermFile.
+     */
+
+external syserr, string fgetl ();
+    #pragma effect TheTerminal
+    #pragma linkname "SACfgetl_TF"
+    #pragma linkobj "src/TermFile/fgetl.o"
+    /*
+     * Read an entire line from stdin.
      */
 
 external void ungetc(char C, TermFile &STREAM);
