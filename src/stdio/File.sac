@@ -3,8 +3,9 @@ class File;
 
 external classtype;
 
+use Array: all;
+use String: { string, strsel, strlen, strtake, strcat };
 use FileSystem: { TheFileSystem };
-use String: { string };
 use SysErr: { syserr };
 
 export all;
@@ -111,6 +112,28 @@ external void fputs(string S, File &STREAM);
     /*
      * Write string S to stream.
      */
+
+external syserr, string fgets (int size, File &STREAM);
+    #pragma linkname "SACfgets_F"
+    #pragma linkobj "src/File/fgets.o"
+    #pragma linksign [0,1,2,3]
+    /*
+     * Read a string of max. length size from the provided TermFile.
+     */
+
+syserr, string fgetl (File &stream)
+{
+    err, str = fgets (80, stream);
+    res = str;
+    while (!SysErr::fail(err)
+           && strsel (str, strlen(str)-1) != '\n') {
+        err, str = fgets (80, stream);
+        res = strcat (res, str);
+    }
+    if (!SysErr::fail(err))
+        res = strtake (res, strlen(res)-1);
+    return (err, res);
+}
 
 /******************************************************************************
  *

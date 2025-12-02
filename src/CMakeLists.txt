@@ -279,6 +279,7 @@ SET (C_DEPS_SRC
     stdio/src/File/fputc.c
     stdio/src/File/fgetc.c
     stdio/src/File/fputs.c
+    stdio/src/File/fgets.c
     stdio/src/File/ungetc.c
     stdio/src/File/fflush.c
     stdio/src/File/feof.c
