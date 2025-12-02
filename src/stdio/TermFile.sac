@@ -3,7 +3,8 @@ class TermFile;
 
 external classtype;
 
-use String: { string };
+use Array: all;
+use String: { string, strsel, strlen, strtake, strcat };
 use Terminal: { TheTerminal };
 use SysErr: { syserr };
 
@@ -92,33 +93,36 @@ external syserr, string fgets (int size, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfgets_TF"
     #pragma linkobj "src/TermFile/fgets.o"
+    #pragma linksign [0,1,2,3]
     /*
      * Read a string of max. length size from the provided TermFile.
      */
 
-external syserr, string fgets (int size);
-    #pragma effect TheTerminal
-    #pragma linkname "SACfgets_TF"
-    #pragma linkobj "src/TermFile/fgets.o"
-    /*
-     * Read a string of max. length size from stdin.
-     */
+syserr, string gets (int size)
+{
+    err, str = fgets (size, stdin);
+    return (err, str);
+}
 
-external syserr, string fgetl (TermFile &STREAM);
-    #pragma effect TheTerminal
-    #pragma linkname "SACfgetl_TF"
-    #pragma linkobj "src/TermFile/fgetl.o"
-    /*
-     *  Read an entire line from the provided TermFile.
-     */
+syserr, string fgetl (TermFile &stream)
+{
+    err, str = fgets (80, stream);
+    res = str;
+    while (!SysErr::fail(err)
+           && strsel (str, strlen(str)-1) != '\n') {
+        err, str = fgets (80, stream);
+        res = strcat (res, str);
+    }
+    if (!SysErr::fail(err))
+        res = strtake (res, strlen(res)-1);
+    return (err, res);
+}
 
-external syserr, string fgetl ();
-    #pragma effect TheTerminal
-    #pragma linkname "SACfgetl_TF"
-    #pragma linkobj "src/TermFile/fgetl.o"
-    /*
-     * Read an entire line from stdin.
-     */
+syserr, string getl ()
+{
+    err, str = fgetl (stdin);
+    return (err, str);
+}
 
 external void ungetc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
