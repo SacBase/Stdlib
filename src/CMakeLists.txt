@@ -260,6 +260,7 @@ SET (C_DEPS_SRC
     stdio/src/TermFile/fgetc.c
     stdio/src/TermFile/fputs.c
     stdio/src/TermFile/puts.c
+    stdio/src/TermFile/fgets.c
     stdio/src/TermFile/ungetc.c
     stdio/src/TermFile/fscanf.c
     stdio/src/TermFile/scanf.c
