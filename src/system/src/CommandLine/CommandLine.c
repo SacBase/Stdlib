@@ -48,17 +48,18 @@ char *SACargv(sac_int n)
 
 char *SACargvall(void)
 {
-    int len = 0;
-    for (int i = 0; i < SACo_CommandLine__TheCommandLine->argc; i++)
+    size_t len = 0;
+    for (sac_int i = 0; i < SACo_CommandLine__TheCommandLine->argc; i++)
     {
         char *arg = (SACo_CommandLine__TheCommandLine->argv)[i];
         len += strlen(arg);
     }
 
-    char *res = (char *)SAC_MALLOC(len + 1 + SACo_CommandLine__TheCommandLine->argc);
+    size_t spaces = (size_t)SACo_CommandLine__TheCommandLine->argc;
+    char *res = (char *)SAC_MALLOC(len + spaces + 1);
 
     strcpy(res, (SACo_CommandLine__TheCommandLine->argv)[0]);
-    for (int i = 1; i < SACo_CommandLine__TheCommandLine->argc; i++)
+    for (sac_int i = 1; i < SACo_CommandLine__TheCommandLine->argc; i++)
     {
         strcat(res, " ");
         char *arg = (SACo_CommandLine__TheCommandLine->argv)[i];
