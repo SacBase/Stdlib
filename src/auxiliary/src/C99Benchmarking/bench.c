@@ -16,9 +16,9 @@
 static const char * unitName[] = {"s", "ms", "us", "ns"};
 
 struct bench {                                                   
-  int                num;
+  sac_int            num;
   char *             name;
-  int                timeUnit;
+  sac_int            timeUnit;
   double             startTime;
   double             stopTime;
 };
@@ -51,7 +51,7 @@ char* benchName( struct bench* interval)
   return( newName);
 }
 
-int benchNum( struct bench* interval)
+sac_int benchNum( struct bench* interval)
 {
   return( interval->num);
 }
@@ -64,7 +64,7 @@ char* benchUnitName( struct bench* interval)
   return( unit_name);
 }
 
-int benchUnit( struct bench* interval)
+sac_int benchUnit( struct bench* interval)
 {
   return( interval->timeUnit);
 }
@@ -74,7 +74,7 @@ void benchCreate( struct bench** interval)
   /* benchGetInterval actually creates the data structure */
 }     
 
-struct bench* benchGetInterval_si(char * name, int num)
+struct bench* benchGetInterval_si(char * name, sac_int num)
 {                                                                        
   struct bench *interval;
   char* newName;
@@ -87,7 +87,7 @@ struct bench* benchGetInterval_si(char * name, int num)
   return( interval);
 }                                                                        
  
-struct bench* benchGetInterval_i( int num)               
+struct bench* benchGetInterval_i( sac_int num)               
 {                                                                        
   struct bench *interval;
   interval = benchGetInterval_si("\0", num);
@@ -101,7 +101,7 @@ struct bench* benchGetInterval_s( char *name)
   return( interval);
 }                                                                        
 
-struct bench* benchGetInterval_siu(char * name, int num, int timeunit)
+struct bench* benchGetInterval_siu(char * name, sac_int num, sac_int timeunit)
 {                                                                        
   struct bench *interval;
   char* newName;
@@ -114,14 +114,14 @@ struct bench* benchGetInterval_siu(char * name, int num, int timeunit)
   return( interval);
 }                                                                        
 
-struct bench* benchGetInterval_iu( int num, int timeunit)               
+struct bench* benchGetInterval_iu( sac_int num, sac_int timeunit)               
 {                                                                        
   struct bench *interval;
   interval = benchGetInterval_siu("\0", num, timeunit);
   return( interval);
 }                                                                        
 
-struct bench* benchGetInterval_su( char *name, int timeunit) 
+struct bench* benchGetInterval_su( char *name, sac_int timeunit) 
 {                                                                        
   struct bench *interval;
   interval = benchGetInterval_siu(name, -1, timeunit);
