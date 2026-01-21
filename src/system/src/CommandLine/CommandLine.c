@@ -55,7 +55,7 @@ char *SACargvall(void)
         len += strlen(arg);
     }
 
-    size_t spaces = (size_t)SACo_CommandLine__TheCommandLine->argc;
+    size_t spaces = (size_t)(SACo_CommandLine__TheCommandLine->argc);
     char *res = (char *)SAC_MALLOC(len + spaces + 1);
 
     strcpy(res, (SACo_CommandLine__TheCommandLine->argv)[0]);
