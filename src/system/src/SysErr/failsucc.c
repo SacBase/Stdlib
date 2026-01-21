@@ -1,29 +1,19 @@
 /*
- *  implementation of external standard module SysErr
+ * Implementation of external standard module SysErr
  */
 
-
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
+#include "sacinterface.h"
 
-
-/*****************************************************************/
-
-int clear(int err)
+bool clear(sac_int err)
 {
-  return(err==-1);
+    return (err == -1);
 }
 
-/*****************************************************************/
-
-int fail(int err)
+bool fail(sac_int err)
 {
-  return(err!=-1);
+    return (err != -1);
 }
-
-/*****************************************************************/
-
-
-
-
