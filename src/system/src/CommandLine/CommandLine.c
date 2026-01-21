@@ -2,108 +2,68 @@
  *  Implementation of external standard class CommandLine.
  */
 
-
 #include <string.h>
 
 #include "sac.h"
+#include "sacinterface.h"
 
-
-/*****************************************************/
-
-
-typedef struct COMLINE
-{
-  int argc;
-  char **argv;
-}
-ComLine;
-
-
-/*****************************************************/
-
+typedef struct COMLINE {
+    sac_int argc;
+    char **argv;
+} ComLine;
 
 extern ComLine *SACo_CommandLine__TheCommandLine;
 
-
-/*****************************************************/
-
-
-ComLine *create_TheCommandLine( void)
+ComLine *create_TheCommandLine(void)
 {
-  ComLine *parameters;
-  
-  parameters=(ComLine *)SAC_MALLOC(sizeof(ComLine));
-  
-  SAC_COMMANDLINE_GET( parameters->argc, parameters->argv);
-  
-  return(parameters);
+    ComLine *parameters = (ComLine *)SAC_MALLOC(sizeof(ComLine));
+    parameters->argc = (sac_int)SAC_commandline_argc;
+    parameters->argv = SAC_commandline_argv;
+    return parameters;
 }
 
-
-/*****************************************************/
-
-
-int SACargc( void)
+sac_int SACargc(void)
 {
-  return(SACo_CommandLine__TheCommandLine->argc);
+    return SACo_CommandLine__TheCommandLine->argc;
 }
 
-
-/*****************************************************/
-
-
-char *SACargv(int n)
+char *SACargv(sac_int n)
 {
-  char *result;
-  
-  if (n<SACo_CommandLine__TheCommandLine->argc)
-  {
-    result=(char*)SAC_MALLOC(strlen((SACo_CommandLine__TheCommandLine->argv)[n])+1);
-  
-    strcpy(result, (SACo_CommandLine__TheCommandLine->argv)[n]);
-  }
-  else
-  {
-    result=(char*)SAC_MALLOC(1);
-    result[0]=0;
-  }
-  
-  return(result);
+    char *res;
+
+    if (n < SACo_CommandLine__TheCommandLine->argc)
+    {
+        char *arg = (SACo_CommandLine__TheCommandLine->argv)[n];
+        res = (char *)SAC_MALLOC(strlen(arg) + 1);
+        strcpy(res, arg);
+    }
+    else
+    {
+        res = (char *)SAC_MALLOC(1);
+        res[0] = '\0';
+    }
+
+    return res;
 }
 
-
-/*****************************************************/
-
-
-char *SACargvall( void)
+char *SACargvall(void)
 {
-  char *result;
-  int len,i;
-  
-  len=0;
-  
-  for (i=0; i<SACo_CommandLine__TheCommandLine->argc; i++)
-  {
-    len += strlen(SACo_CommandLine__TheCommandLine->argv[i]);
-  }
-  
-  result=(char*)SAC_MALLOC(len+1+SACo_CommandLine__TheCommandLine->argc);
+    int len = 0;
+    for (int i = 0; i < SACo_CommandLine__TheCommandLine->argc; i++)
+    {
+        char *arg = (SACo_CommandLine__TheCommandLine->argv)[i];
+        len += strlen(arg);
+    }
 
-  strcpy(result, (SACo_CommandLine__TheCommandLine->argv)[0]);
-  
-  for (i=1; i<SACo_CommandLine__TheCommandLine->argc; i++)
-  {
-    strcat(result, " ");
-    strcat(result, (SACo_CommandLine__TheCommandLine->argv)[i]);
-  }
-  
-  return(result);
+    char *res = (char *)SAC_MALLOC(len + 1 + SACo_CommandLine__TheCommandLine->argc);
+
+    strcpy(res, (SACo_CommandLine__TheCommandLine->argv)[0]);
+    for (int i = 1; i < SACo_CommandLine__TheCommandLine->argc; i++)
+    {
+        strcat(res, " ");
+        char *arg = (SACo_CommandLine__TheCommandLine->argv)[i];
+        strcat(res, arg);
+    }
+
+    return res;
 }
-
-
-/*****************************************************/
-
-
-
-
-
