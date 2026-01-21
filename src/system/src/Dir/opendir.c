@@ -1,28 +1,19 @@
 /*
- *  implementation of directory functions.
+ * Implementation of directory functions.
  */
-
-
 
 #include "Dir.h"
 
-
-
-/*****************************************************************/
-
-int SACopendir( DIR ** stream, string name)
+sac_int SACopendir(DIR **stream, string name)
 {
-  int error = -1;
+    sac_int err = -1;
 
-  *stream = opendir( name);
+    *stream = opendir(name);
 
-  if (*stream == NULL)
-  {
-    error = errno;
-  }
+    if (*stream == NULL)
+    {
+        err = errno;
+    }
 
-  return( error);
+    return err;
 }
-
-
-/*****************************************************************/

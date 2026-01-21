@@ -9,7 +9,7 @@ use SysErr: { syserr };
 
 export all;
 
-external  syserr, Dir opendir( string NAME);
+external syserr, Dir opendir(string NAME);
     #pragma effect TheFileSystem
     #pragma linksign [0,1,2]
     #pragma linkobj "src/Dir/opendir.o"
@@ -22,7 +22,7 @@ external  syserr, Dir opendir( string NAME);
      * before using the directory handle.
      */
 
-external  void closedir( Dir& DIR);
+external void closedir(Dir& DIR);
     #pragma effect TheFileSystem
     #pragma linksign [1]
     #pragma linkobj "src/Dir/closedir.o"
@@ -31,7 +31,7 @@ external  void closedir( Dir& DIR);
      * Close the directory stream DIR.
      */
 
-external  string readdir( Dir& DIR);
+external string readdir(Dir& DIR);
     #pragma effect TheFileSystem
     #pragma linksign [0,1]
     #pragma linkobj "src/Dir/readdir.o"
@@ -43,7 +43,7 @@ external  string readdir( Dir& DIR);
      * an empty string is returned.
      */
 
-external  void rewinddir( Dir& DIR);
+external void rewinddir(Dir& DIR);
     #pragma effect TheFileSystem
     #pragma linksign [1]
     #pragma linkobj "src/Dir/rewinddir.o"
@@ -52,7 +52,7 @@ external  void rewinddir( Dir& DIR);
      * Reposition the directory stream DIR to the beginning.
      */
 
-external  long telldir( Dir& DIR);
+external long telldir(Dir& DIR);
     #pragma effect TheFileSystem
     #pragma linksign [0,1]
     #pragma linkobj "src/Dir/telldir.o"
@@ -62,7 +62,7 @@ external  long telldir( Dir& DIR);
      * On error -1 is returned.
      */
 
-external  void seekdir( Dir& DIR, long POS);
+external void seekdir(Dir& DIR, long POS);
     #pragma effect TheFileSystem
     #pragma linksign [1,2]
     #pragma linkobj "src/Dir/seekdir.o"
@@ -70,4 +70,3 @@ external  void seekdir( Dir& DIR, long POS);
     /*
      * Reposition the directory stream DIR to POS.
      */
-

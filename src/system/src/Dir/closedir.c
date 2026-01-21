@@ -1,19 +1,10 @@
 /*
- *  implementation of directory functions.
+ * Implementation of directory functions.
  */
-
-
 
 #include "Dir.h"
 
-
-
-/*****************************************************************/
-
-void SACclosedir( DIR* stream)
+void SACclosedir(DIR* stream)
 {
-  closedir( stream);
+    closedir(stream);
 }
-
-
-/*****************************************************************/
