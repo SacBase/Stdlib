@@ -37,11 +37,11 @@ static void PrintArr(FILE *stream, int typeflag, string format, sac_int dim, sac
   char *space=" ";
   sac_int *index;
 
-  fprintf(stream, "Dimension: " PRIisac "\n", dim);
+  fprintf(stream, "Dimension: %" PRIisac "\n", dim);
   fprintf(stream, "Shape    : <");
   element_count = 1;
   for (i=0;i<dim;) {
-    fprintf(stream, " " PRIisac, shp[i]);
+    fprintf(stream, " %" PRIisac, shp[i]);
     element_count = element_count * shp[i];
     i++;
     if (i<dim) {
