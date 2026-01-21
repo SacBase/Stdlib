@@ -77,7 +77,7 @@ static void badopt(void)
 {
     if (SAC_opterr) {
         char *prog = SACargv(0);
-        fprintf(stderr, "%s: invalid option -- '%c'\n", prog, SAC_optopt);
+        fprintf(stderr, "%s: invalid option -- '%"PRIisac"'\n", prog, SAC_optopt);
         free(prog);
     }
 }
@@ -95,7 +95,7 @@ static void missing( void)
 {
     if (SAC_opterr == 1) {
         char *prog = SACargv(0);
-        fprintf(stderr, "%s: option requires an argument -- '%c'\n", prog, SAC_optopt);
+        fprintf(stderr, "%s: option requires an argument -- '%"PRIisac"'\n", prog, SAC_optopt);
         free(prog);
     }
 }
