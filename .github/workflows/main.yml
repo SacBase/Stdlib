@@ -21,7 +21,7 @@ jobs:
         sudo apt install xsltproc -y
     - name: Install sac2c
       run: |
-        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        git clone --single-branch --recursive -b index-types https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
@@ -70,7 +70,7 @@ jobs:
         xcode-version: '14.2'
     - name: Install sac2c
       run: |
-        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        git clone --single-branch --recursive -b index-types https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
@@ -119,7 +119,7 @@ jobs:
         xcode-version: '16.2'
     - name: Install sac2c
       run: |
-        git clone --recursive --single-branch https://gitlab.sac-home.org/sac-group/sac2c.git
+        git clone --single-branch --recursive -b index-types https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
