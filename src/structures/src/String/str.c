@@ -1,0 +1,437 @@
+/*
+ *  C implementation of standard module StringC
+ */
+
+
+#include <stddef.h>
+#include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "str.h"
+
+string copy_string (string s)
+{
+    string s2 = malloc ((strlen(s) + 1) * sizeof (char));
+    strcpy (s2, s);
+    return s2;
+}
+
+void free_string (string s)
+{
+    free (s);
+}
+
+
+
+
+string SACtostring (string arr, sac_int length)
+{
+    string res = malloc ((size_t) length + 1);
+
+    strncpy (res, arr, (size_t)length);
+    res[length] = '\0';
+
+    return res;
+}
+
+string SACautotostring (SACarg *sarr)
+{
+    string *parr = SACARGgetSharedData(SACTYPE__MAIN__char, sarr);
+    string arr = parr[0];
+    sac_int length = SACARGgetShape(sarr, 0);
+
+    string res = malloc ((size_t) length + 1);
+
+    strncpy (res, arr, (size_t)length);
+    res[length] = '\0';
+
+    return res;
+}
+
+void SACstrmod (string str, sac_int pos, char c)
+{
+    if (strlen(str) <= pos)
+        ; // TODO runtime error
+
+    str[pos] = c;
+}
+
+string SACstrins (string outer, sac_int pos, string inner)
+{
+    size_t outer_length = strlen (outer);
+    size_t inner_length = strlen (inner);
+
+    string res = malloc(outer_length + inner_length + 1);
+
+    strncpy(res, outer, pos);
+    strcpy(res+pos, inner);
+    strcpy(res+pos+inner_length, outer+pos);
+
+    return res;
+}
+
+void SACstrovwt (string outer, sac_int pos, string inner)
+{
+    size_t outer_length = strlen (outer);
+    size_t inner_length = strlen (inner);
+
+    if (pos+inner_length > outer_length)
+        ; // TODO runtime error
+
+    strncpy(outer+pos, inner, inner_length);
+}
+
+char SACstrsel (string str, sac_int pos)
+{
+    int strlength = strlen(str);
+    if (pos >= strlength)
+        ; // TODO runtime error
+
+    return str[pos];
+}
+
+string SACstrcat (string fst, string snd)
+{
+    size_t fstlength = strlen (fst);
+    size_t sndlength = sndlen (fst);
+
+    string res = malloc (fstlength + sndlength + 1);
+
+    strcpy(res, fst);
+    strcpy(res+fstlength, snd);
+
+    return res;
+}
+
+string SACstrncat (string fst, string snd, sac_int n)
+{
+    size_t fstlength = strlen (fst);
+    size_t sndlength = sndlen (fst);
+
+    string res = malloc (fstlength + sndlength + 1);
+
+    strcpy(res, fst);
+    strncpy(res+fstlength, snd, n);
+
+    return res;
+}
+
+sac_int SACstrcmp (string fst, string snd)
+{
+    return (sac_int) strcmp (fst, snd);
+}
+
+sac_int SACstrncmp (string fst, string snd, sac_int n)
+{
+    return (sac_int) strncmp (fst, snd, (size_t) n);
+}
+
+sac_int SACstrcasecmp (string fst, string snd)
+{
+    return (sac_int) strcasecmp (fst, snd);
+}
+
+sac_int SACstrncasecmp (string fst, string snd, sac_int n)
+{
+    return (sac_int) strncasecmp (fst, snd, (size_t) n);
+}
+
+sac_int SACstrlen (string fst)
+{
+    return (sac_int) strlen (fst);
+}
+
+char SACstrtake(string str, sac_int pos)
+{
+    size_t strlength = strlen (str);
+
+    if (pos >= strlength)
+        ; // TODO runtime error
+    
+    return str[pos];
+}
+
+string SACstrdrop (string str, sac_int pos)
+{
+    size_t strlength = strlen (str);
+
+    string res = malloc(strlength - (size_t)pos + 1);
+
+    strcpy(res, str+pos);
+
+    return res;
+}
+
+string SACstrext (string str, sac_int pos, sac_int len)
+{
+    size_t strlength = strlen(str);
+
+    string res = malloc(strlength - (size_t)len + 1);
+
+    if (pos + strlength >= len)
+        ; // TODO runtime error
+
+    strncpy(res, str+pos, len);
+
+    return res;
+}
+
+string SACsprintf (string format, ...)
+{
+    va_list args;
+
+    // Compute the length of the string
+    va_start (args, format);
+    int lengthwo0 = vsnprintf (NULL, 0, format, args);
+    va_end (args);
+
+    if (lengthwo0 < 0)
+        ; // TODO runtime error
+
+    size_t length = lengthwo0 + 1;
+
+    // Allocate result string
+    string res = malloc(length);
+
+    // Printf string
+    va_start (args, format);
+    vsnprintf (res, length, format, args);
+    va_end (args);
+
+    return res;
+}
+
+sac_int SACsscanf (string s, string format, ...)
+{
+    va_list arg_p;
+
+    va_start( arg_p, format);
+    sac_int res = (sac_int)vsscanf( s, format, arg_p);
+    va_end( arg_p);
+
+    return res;
+}
+
+string SACsscanf_str (string source, string format)
+{
+    string res = malloc (strlen (source) + 1);
+    res[0] = '\0';
+
+    sscanf (source, format, res);
+
+    return res;
+}
+
+sac_int SACstrchr (string str, char c)
+{
+    string occurrence = strchr (str, c);
+
+    if (occurrence == NULL)
+        return -1;
+    return (sac_int)(occurrence - str);
+}
+
+sac_int SACstrrchr (string str, char c)
+{
+    string occurrence = strrchr (str, c);
+
+    if (occurrence == NULL)
+        return -1;
+    return (sac_int)(occurrence - str);
+}
+
+sac_int SACstrcspn(string str, string reject)
+{
+    return (sac_int) strcspn(str, reject);
+}
+
+sac_int SACstrspn(string str, string accept)
+{
+    return (sac_int) strspn(str, accept);
+}
+
+sac_int SACstrstr (string haystack, string needle)
+{
+    return (sac_int) strstr (haystack, needle);
+}
+
+bool chr_in_delims (char c, string delimiters)
+{
+    while (true)
+    {
+        if (delimiters[0] == '\0')
+            return false;
+        if (delimiters[0] == c)
+            return true;
+        delimiters ++;
+    }
+}
+
+string next_in_delims (string str, string delimiters, bool is_delimiter)
+{
+    while (true)
+    {
+        if (str[0] == '\0')
+            return NULL;
+        if (chr_in_delims(str[0], delimiters) == is_delimiter)
+            return str;
+        str ++;
+    }
+}
+
+void SACstrtok (string* out_token, string* out_rest, string str, string delimiters)
+{
+    string start = next_in_delims(str, delimiters, false);
+    string end = next_in_delims(start, delimiters, true);
+
+    size_t tokenlength = end - start;
+    *out_token = malloc((tokenlength + 1) * sizeof (char));
+    strncpy(*out_token, start, tokenlength);
+    *out_token[tokenlength] = '\0';
+
+    *out_rest = malloc((strlend(end) + 1) * sizeof (char));
+    strcpy(*out_rest, end);
+}
+
+void SACchomp (string str) 
+{
+    string end = str + strlen(str);
+
+    while (end > str)
+    {
+        end --;
+        if (*end == '\n' || *end == '\r')
+            *end = '\0';
+        else
+            break;
+    }
+}
+
+void SACrtrim (string str) 
+{
+    string end = str + strlen(str);
+
+    while (end > str)
+    {
+        end --;
+        if (isspace(*end))
+            *end = '\0';
+        else
+            break;
+    }
+}
+
+string SACltrim (string str) 
+{
+    string end = str + strlen(str);
+
+    while (str < end)
+    {
+        if (!isspace(*end))
+            *end = '\0';
+        else
+            break;
+        str ++;
+    }
+
+    string res = malloc ((strlen(str) + 1) * sizeof (char));
+    strcpy(res, str);
+    
+    return res;
+}
+
+string SACtrim (string str)
+{
+    string res = SACltrim(str);
+    SACrtrim (res);
+    return res;
+}
+
+sac_int SACstrtoi (string* remain, string input, sac_int base)
+{
+    string rem;
+    sac_int res = (sac_int) strtol (input, &rem, base);
+
+    *remain = malloc ((strlen(rem) + 1) * sizeof (char));
+    strcpy (*remain, rem);
+
+    return res;
+}
+
+
+float SACstrtof (string* remain, string input)
+{
+    string rem;
+    float res = (float) strtod (input, &rem);
+
+    *remain = malloc ((strlen(rem) + 1) * sizeof (char));
+    strcpy (*remain, rem);
+
+    return res;
+}
+
+double SACstrtod (string* remain, string input)
+{
+    string rem;
+    double res = strtod (input, &rem);
+
+    *remain = malloc ((strlen(rem) + 1) * sizeof (char));
+    strcpy (*remain, rem);
+
+    return res;
+}
+
+sac_int SACtoi (string input)
+{
+    return (sac_int) strtol (input, NULL, 0);
+}
+
+float SACtof (string input)
+{
+    return (float) strtod (input, NULL);
+}
+
+double SACtod (string input)
+{
+    return strtod (input, NULL);
+}
+
+string SACitos (sac_int n)
+{
+    string res = malloc(40);
+
+    sprintf (res, "%"PRIisac, n);
+
+    return res;
+}
+
+string SACftos (float n)
+{
+    string res = malloc(40);
+
+    sprintf (res, "%g", n);
+
+    return res;
+}
+
+string SACdtos (double n)
+{
+    string res = malloc(40);
+
+    sprintf (res, "%g", n);
+
+    return res;
+}
+
+string SACbtos (bool n)
+{
+    string res = malloc(6 * sizeof(char));
+
+    if (n)
+        strcpy (res, "true");
+    else
+        strcpy (res, "false");
+
+    return res;
+}
