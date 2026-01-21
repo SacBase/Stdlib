@@ -160,20 +160,26 @@ external float exp(float X);
 
 external double, int frexp(double X);
     #pragma linksign [0,2,1]
+    #pragma linkname "SAC_MATH_frexp"
+    #pragma linkobj "src/Math/frexp.o"
     #pragma header "<math.h>"
 
 external float, int frexp(float X);
     #pragma linksign [0,2,1]
-    #pragma linkname "frexpf"
+    #pragma linkname "SAC_MATH_frexpf"
+    #pragma linkobj "src/Math/frexp.o"
     #pragma header "<math.h>"
 
 external double ldexp(double X, int EXP);
     #pragma linksign [0,1,2]
+    #pragma linkname "SAC_MATH_ldexp"
+    #pragma linkobj "src/Math/ldexp.o"
     #pragma header "<math.h>"
 
 external float ldexp(float X, int EXP);
     #pragma linksign [0,1,2]
-    #pragma linkname "ldexpf"
+    #pragma linkname "SAC_MATH_ldexpf"
+    #pragma linkobj "src/Math/ldexp.o"
     #pragma header "<math.h>"
 
 external double log(double X);
