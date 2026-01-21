@@ -99,10 +99,10 @@ void SAC_RTimer_resetRTimer( struct rtimer *timer)
     }
 }
 
-void SAC_RTimer_getRTimerInts(struct rtimer *timer, int *sec, int *nsec)
+void SAC_RTimer_getRTimerLong(struct rtimer *timer, long *sec, long *nsec)
 {
-  *sec = (int)(timer->elapsed.tv_sec);
-  *nsec = (int)(timer->elapsed.tv_nsec);
+  *sec = timer->elapsed.tv_sec;
+  *nsec = timer->elapsed.tv_nsec;
 }
 
 double SAC_RTimer_getRTimerDbl(struct rtimer *timer)
