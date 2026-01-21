@@ -52,57 +52,8 @@ jobs:
         make all
         ./test.sh
 
-  build-macos-x86:
-    runs-on: macos-15-intel
-    steps:
-    - name: Get HEAD and submodules
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        submodules: 'recursive'
-    - name: Install dependencies
-      run: |
-        brew update
-        brew install libxslt
-    - name: Set XCode version
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '14.2'
-    - name: Install sac2c
-      run: |
-        git clone --single-branch --recursive -b index-types https://gitlab.sac-home.org/sac-group/sac2c.git
-        cd sac2c
-        make release -j2
-        cp build_p/sac2c_p /usr/local/bin/sac2c
-        sac2c -V
-    - name: Create build dir
-      run: |
-        cmake -E make_directory ${{runner.workspace}}/build
-    - name: Configure build-system
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: cmake ${GITHUB_WORKSPACE}
-    - name: Build
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: |
-        cmake --build . -j4 >&1 | tee build.log
-        if [ ${PIPESTATUS[0]} -ne 0 ]; then
-          echo "!!! ERROR detected in build !!!";
-          exit 1;
-        fi
-        ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
-    - name: Test
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: |
-        git clone --single-branch https://github.com/SacBase/IntegrationTests.git
-        cd IntegrationTests
-        make all
-        ./test.sh
-
   build-macos-arm:
-    runs-on: macos-26
+    runs-on: macos-latest
     steps:
     - name: Get HEAD and submodules
       uses: actions/checkout@v2
@@ -116,7 +67,7 @@ jobs:
     - name: Set XCode version
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '16.2'
+        xcode-version: latest-stable
     - name: Install sac2c
       run: |
         git clone --single-branch --recursive -b index-types https://gitlab.sac-home.org/sac-group/sac2c.git
