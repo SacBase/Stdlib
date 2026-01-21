@@ -1,4 +1,4 @@
-#include <limits.h>
+#include <sacinterface.h>
 
 #include <stdint.h>
 
@@ -10,5 +10,6 @@ sac_int maxint( void)
      * 2^(num_bits - 1) - 1 = 2 * 2^(num_bits - 2) - 1 = 
      * 2^(num_bits - 2) + (2^(num_bits - 2) - 1)
      **/
-   return (sac_int)1 << (num_bits - 2) + ((sac_int)1 << (num_bits - 2) - 1);
+    sac_int half = (sac_int)1 << (num_bits - 2);
+    return half + (half - 1);
 }
