@@ -1,8 +1,9 @@
+#include <sacinterface.h>
 #include <stdlib.h>
 
-int SACsystem (char *command)
+sac_int SACsystem (char *command)
 {
   const char *  cmd = command;
-  return system (cmd);
+  return (sac_int)system (cmd);
 }
 
