@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "sac.h"
+#include "sacinterface.h"
 
 #define COMPLEX     1
 
@@ -15,11 +15,11 @@ typedef char* string;
 typedef double complex[2];
 
 static
-int Index2Offset( int dim, int *shp, int *index)
+sac_int Index2Offset( sac_int dim, sac_int *shp, sac_int *index)
 {
-  int i,n;
-  int offset=0;
-  int fact;
+  sac_int i,n;
+  sac_int offset=0;
+  sac_int fact;
 
   for (i=0; i<dim; i++) {
     fact=1;
@@ -31,17 +31,17 @@ int Index2Offset( int dim, int *shp, int *index)
   return(offset);
 }
 
-static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * shp, void *a)
+static void PrintArr(FILE *stream, int typeflag, string format, sac_int dim, sac_int * shp, void *a)
 {
-  int i,n, element_count;
+  sac_int i,n, element_count;
   char *space=" ";
-  int *index;
+  sac_int *index;
 
-  fprintf(stream, "Dimension: %2i\n", dim);
+  fprintf(stream, "Dimension: " PRIisac "\n", dim);
   fprintf(stream, "Shape    : <");
   element_count = 1;
   for (i=0;i<dim;) {
-    fprintf(stream, " %2i", shp[i]);
+    fprintf(stream, " " PRIisac, shp[i]);
     element_count = element_count * shp[i];
     i++;
     if (i<dim) {
@@ -70,7 +70,7 @@ static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * s
       fprintf(stream, "<>\n");
     } else {
 
-      index = SAC_MALLOC(dim * sizeof(int));
+      index = SAC_MALLOC(dim * sizeof(sac_int));
       for (i=0; i<dim; i++) {
         index[i]=0;
       }
@@ -138,12 +138,12 @@ static void PrintArr(FILE *stream, int typeflag, string format, int dim, int * s
 
 }
 
-void COMPLEXIO__PrintComplexArray( FILE *stream, int dim, int * shp, complex * a)
+void COMPLEXIO__PrintComplexArray( FILE *stream, sac_int dim, sac_int * shp, complex * a)
 {
   PrintArr(stream, COMPLEX, "(%.g, %.g) ", dim, shp, a);
 }
 
-void COMPLEXIO__PrintComplexArrayFormat( FILE *stream, string format, int dim, int * shp, complex * a)
+void COMPLEXIO__PrintComplexArrayFormat( FILE *stream, string format, sac_int dim, sac_int * shp, complex * a)
 {
   PrintArr(stream, COMPLEX, format, dim, shp, a);
 }
