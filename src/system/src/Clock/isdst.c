@@ -1,24 +1,11 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
-
-
 
 #include "Clock.h"
 
-/******************************************************************/
-
-
-int SACisdst(time_t *t)
+sac_int SACisdst(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_isdst);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_isdst);
 }
-
-
-/******************************************************************/
-
-

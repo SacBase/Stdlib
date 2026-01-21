@@ -1,119 +1,53 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
-
-
 
 #include "Clock.h"
 
-/******************************************************************/
-
-
-int SACsec(time_t *t)
+sac_int SACsec(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_sec);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_sec);
 }
 
-
-/******************************************************************/
-
-
-int SACmin(time_t *t)
+sac_int SACmin(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_min);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_min);
 }
 
-
-/******************************************************************/
-
-
-int SAChour(time_t *t)
+sac_int SAChour(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_hour);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_hour);
 }
 
-
-/******************************************************************/
-
-
-int SACmday(time_t *t)
+sac_int SACmday(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_mday);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_mday);
 }
 
-
-/******************************************************************/
-
-
-int SACmon(time_t *t)
+sac_int SACmon(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_mon);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_mon);
 }
 
-
-
-/******************************************************************/
-
-
-int SACyear(time_t *t)
+sac_int SACyear(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_year);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_year);
 }
 
-
-
-/******************************************************************/
-
-
-int SACwday(time_t *t)
+sac_int SACwday(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_wday);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_wday);
 }
-
-
-
-/******************************************************************/
-
 
 int SACyday(time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  return(tt->tm_yday);
+    struct tm *tt = localtime(t);
+    return (sac_int)(tt->tm_yday);
 }
-
-
-
-/******************************************************************/
-
-

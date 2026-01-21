@@ -1,15 +1,12 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
-
-
 
 #include "Clock.h"
 
-
 extern char *strptime(const char *, const char *, struct tm *);
 
-/* 
+/*
  * Unfortunately, the function strptime() is not declared in time.h !
  * Fortunately, the standard library libc.a contains an implementation
  * of  strptime().
@@ -18,38 +15,26 @@ extern char *strptime(const char *, const char *, struct tm *);
  * then _XOPEN_SOURCE must be defined before including time.h.
  */
 
-
-
-/******************************************************************/
-
-
-time_t *SACstrptime(string * result, string s, string format)
+time_t *SACstrptime(string *res, string s, string format)
 {
-  struct tm tt;
-  string remain;
-  time_t *t;
+    time_t *t = (time_t *) SAC_MALLOC(sizeof(time_t));
 
-  t = (time_t *) SAC_MALLOC(sizeof(time_t));
+    struct tm tt;
+    memset(&tt, 0, sizeof tt);
+    string remain = strptime(s, format, &tt);
 
-  memset(&tt, 0, sizeof tt);
-  remain = strptime(s, format, &tt);
+    /* strptime() may return NULL if it fails to match all of the format string.
+    * In that case an error occurred and the contents of tt is undefined.
+    */
+    if (remain == NULL) {
+        *t = 0;
+        *res = (string)SAC_MALLOC(1);
+        **res = '\0';
+    } else {
+        *t = mktime(&tt);
+        *res = (string)SAC_MALLOC(strlen(remain) + 1);
+        strcpy(*res, remain);
+    }
 
-  /* strptime() may return NULL if it fails to match all of the format string.
-   * In that case an error occurred and the contents of tt is undefined.
-   */
-  if (remain == NULL) {
-    *t = 0;
-    *result = (string) SAC_MALLOC(1);
-    **result = '\0';
-  } else {
-    *t = mktime(&tt);
-    *result = (string) SAC_MALLOC(strlen(remain) + 1);
-    strcpy(*result, remain);
-  }
-
-  return (t);
+    return t;
 }
-
-
-
-/******************************************************************/

@@ -1,14 +1,12 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
 
-
-#include <time.h>
+#include <stdbool.h>
 #include <string.h>
-
+#include <time.h>
 
 #include "sac.h"
+#include "sacinterface.h"
 
 typedef char* string;
-
-

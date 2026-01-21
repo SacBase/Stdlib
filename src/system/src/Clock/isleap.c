@@ -1,37 +1,17 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
-
-
 
 #include "Clock.h"
 
-/******************************************************************/
-
-
-int SACisleap(int year)
+bool SACisleap(sac_int year)
 {
-  return((year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0));
+    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
 }
 
-
-
-/******************************************************************/
-
-
-int SACisleapt(time_t *t)
+bool SACisleapt(time_t *t)
 {
-  struct tm *tt;
-  int year;
-  
-  tt=localtime(t);
-  year=tt->tm_year + 1900;
-  
-  return((year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0));
+    struct tm *tt = localtime(t);
+    int year=tt->tm_year + 1900;
+    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
 }
-
-
-
-/******************************************************************/
-
-
