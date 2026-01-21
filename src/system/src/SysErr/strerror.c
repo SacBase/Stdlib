@@ -1,34 +1,18 @@
 /*
- *  implementation of external standard module SysErr
+ * Implementation of external standard module SysErr
  */
-
 
 #include <stdio.h>
 #include <string.h>
 
 #include "sac.h"
+#include "sacinterface.h"
 
-
-/*****************************************************************/
-
-extern char *strerror(int num);
-
-
-/*****************************************************************/
-
-
-char *SACstrerror(int num)
+char *SACstrerror(sac_int num)
 {
-  char *buffer, *result;
-  
-  buffer=strerror(num);
-  
-  result=(char *)SAC_MALLOC(strlen(buffer)+1);
-  strcpy(result, buffer);
-  
-  return(result);
+    char *buf, *res;
+    buf = strerror((int)num);
+    res = (char *)SAC_MALLOC(strlen(buf) + 1);
+    strcpy(res, buf);
+    return res;
 }
-
-/*****************************************************************/
-
-
