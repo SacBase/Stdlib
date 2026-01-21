@@ -1,43 +1,21 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
-
-
 
 #include "Clock.h"
 
-/******************************************************************/
-
-
-int SACdate(int *mon, int *day, time_t *t)
+sac_int SACdate(sac_int *mon, sac_int *day, time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  *mon=tt->tm_mon;
-  *day=tt->tm_mday;
-  
-  return(tt->tm_year);
+    struct tm *tt = localtime(t);
+    *mon = (sac_int)(tt->tm_mon);
+    *day = (sac_int)(tt->tm_mday);
+    return (sac_int)(tt->tm_year);
 }
 
-
-
-/******************************************************************/
-
-
-int SACclock(int *min, int *sec, time_t *t)
+sac_int SACclock(sac_int *min, sac_int *sec, time_t *t)
 {
-  struct tm *tt;
-  
-  tt=localtime(t);
-  
-  *sec=tt->tm_sec;
-  *min=tt->tm_min;
-  
-  return(tt->tm_hour);
+    struct tm *tt = localtime(t);
+    *sec = (sac_int)(tt->tm_sec);
+    *min = (sac_int)(tt->tm_min);
+    return (sac_int)(tt->tm_hour);
 }
-
-
-
-/******************************************************************/

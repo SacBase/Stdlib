@@ -1,28 +1,14 @@
 /*
- *  Implementation of standard module Time
+ * Implementation of standard module Time
  */
-
-
 
 #include "Clock.h"
 
-/******************************************************************/
-
-
 string SACctime(time_t *t)
 {
-  string buffer, result;
-  
-  buffer=ctime(t);
-  
-  result=(string)SAC_MALLOC(strlen(buffer)+1);
-  strcpy(result, buffer);
-  
-  return(result);
+    string buf, res;
+    buf = ctime(t);
+    res = (string)SAC_MALLOC(strlen(buf)+1);
+    strcpy(res, buf);
+    return res;
 }
-
-
-
-/******************************************************************/
-
-
