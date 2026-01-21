@@ -17,9 +17,9 @@ extern "C" {
 static const char * unitName[] = {"s", "ms", "us", "ns"};
 
 struct cudabench {                                                   
-  int                num;
+  sac_int                num;
   char *             name;
-  int                timeUnit;
+  sac_int                timeUnit;
   cudaEvent_t        start;
   cudaEvent_t        stop;
 };
@@ -57,7 +57,7 @@ char* benchName( struct cudabench* interval)
   return( newName);
 }
 
-int benchNum( struct cudabench* interval)
+sac_int benchNum( struct cudabench* interval)
 {
   return( interval->num);
 }
@@ -70,7 +70,7 @@ char* benchUnitName( struct cudabench* interval)
   return( unit_name);
 }
 
-int benchUnit( struct cudabench* interval)
+sac_int benchUnit( struct cudabench* interval)
 {
   return( interval->timeUnit);
 }
@@ -80,7 +80,7 @@ void benchCreate( struct cudabench** interval)
   /* benchGetInterval actually creates the data structure */
 }     
 
-struct cudabench* benchGetInterval_si(char * name, int num)
+struct cudabench* benchGetInterval_si(char * name, sac_int num)
 {                                                                        
   struct cudabench *interval;
   char* newName;
@@ -93,7 +93,7 @@ struct cudabench* benchGetInterval_si(char * name, int num)
   return( interval);
 }                                                                        
  
-struct cudabench* benchGetInterval_i( int num)               
+struct cudabench* benchGetInterval_i( sac_int num)               
 {                                                                        
   struct cudabench *interval;
   interval = benchGetInterval_si("\0", num);
@@ -107,7 +107,7 @@ struct cudabench* benchGetInterval_s( char *name)
   return( interval);
 }                                                                        
 
-struct cudabench* benchGetInterval_siu(char * name, int num, int timeunit)
+struct cudabench* benchGetInterval_siu(char * name, sac_int num, sac_int timeunit)
 {                                                                        
   struct cudabench *interval;
   char* newName;
@@ -120,14 +120,14 @@ struct cudabench* benchGetInterval_siu(char * name, int num, int timeunit)
   return( interval);
 }                                                                        
 
-struct cudabench* benchGetInterval_iu( int num, int timeunit)               
+struct cudabench* benchGetInterval_iu( sac_int num, sac_int timeunit)               
 {                                                                        
   struct cudabench *interval;
   interval = benchGetInterval_siu("\0", num, timeunit);
   return( interval);
 }                                                                        
 
-struct cudabench* benchGetInterval_su( char *name, int timeunit) 
+struct cudabench* benchGetInterval_su( char *name, sac_int timeunit) 
 {                                                                        
   struct cudabench *interval;
   interval = benchGetInterval_siu(name, -1, timeunit);
