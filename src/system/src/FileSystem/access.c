@@ -12,8 +12,9 @@
 
 
 
-int SACaccess(int *success, char *name, int how)
+int SACaccess(int *success, char *name, sac_int how_in)
 {
+  int how = (int)how_in;
   int result, mode;
 
   switch (how)
