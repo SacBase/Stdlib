@@ -5,9 +5,9 @@
 
 extern char **environ;
 
-int EnvCount( void)
+sac_int EnvCount( void)
 {
-  int i = 0;
+  sac_int i = 0;
 
   if (environ) {
     while (environ[i]) {
@@ -18,10 +18,10 @@ int EnvCount( void)
   return i;
 }
 
-char* IndexEnv( int i)
+char* IndexEnv( sac_int i)
 {
   char* res;
-  int k = 0;
+  sac_int k = 0;
 
   if (environ) {
     while (k < i && environ[k]) {
