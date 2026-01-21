@@ -17,45 +17,46 @@
 #include <stdio.h>
 
 #include "sac.h"
+#include "sacinterface.h"
 
 /* Import the following two prototypes from SAC's commandline parser:
  *  stdlib/world/system/src/CommandLine/CommandLine.c */
 int SACargc( void);
 char *SACargv(int n);
 
-static int SAC_optind = 1;
-static int SAC_opterr = 1;
-static int SAC_optopt;
+static sac_int SAC_optind = 1;
+static sac_int SAC_opterr = 1;
+static sac_int SAC_optopt;
 static char *SAC_optarg;
-static int SAC_argind = 1;
+static sac_int SAC_argind = 1;
 
-int optEND(void)
+char optEND(void)
 {
     return '\0';
 }
 
-int get_optind(void)
+sac_int get_optind(void)
 {
     return SAC_optind;
 }
 
-void set_optind(int set)
+void set_optind(sac_int set)
 {
     SAC_optind = set;
     SAC_argind = 1;
 }
 
-int get_opterr(void)
+sac_int get_opterr(void)
 {
     return SAC_opterr;
 }
 
-void set_opterr(int set)
+void set_opterr(sac_int set)
 {
     SAC_opterr = set;
 }
 
-int get_optopt(void)
+sac_int get_optopt(void)
 {
     return SAC_optopt;
 }
@@ -99,10 +100,10 @@ static void missing( void)
     }
 }
 
-int getopt_sac(const char *opts)
+char getopt_sac(const char *opts)
 {
     const int argc = SACargc();
-    int retval;
+    char retval;
 
     setarg(NULL);
 
