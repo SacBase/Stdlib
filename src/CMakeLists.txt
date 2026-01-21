@@ -309,6 +309,8 @@ SET (C_DEPS_SRC
     numerical/src/Math/int_log.c
     numerical/src/Math/sign.c
     numerical/src/Math/isnan.c
+    numerical/src/Math/frexp.c
+    numerical/src/Math/ldexp.c
     numerical/src/Math/isinf.c
     numerical/src/Math/isfinite.c
     random/src/Xoshiro.c
