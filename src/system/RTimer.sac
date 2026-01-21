@@ -32,9 +32,9 @@ external void resetRTimer(RTimer &rtimer);
     #pragma linkobj "src/RTimer/rtimer.o"
     #pragma linkname "SAC_RTimer_resetRTimer"
 
-external int, int getRTimerInts(RTimer &rtimer);
+external long, long getRTimerLong(RTimer &rtimer);
     #pragma linkobj "src/RTimer/rtimer.o"
-    #pragma linkname "SAC_RTimer_getRTimerInts"
+    #pragma linkname "SAC_RTimer_getRTimerLong"
     #pragma linksign [2,3,1]
 
 external double getRTimerDbl(RTimer &rtimer);
