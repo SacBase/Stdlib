@@ -9,6 +9,7 @@
  *  They may return any non-zero value when true, but a SAC bool is true if 1.
  */
 
+#include <sacinterface.h>
 #include <ctype.h>
 
 typedef unsigned char uchar;
@@ -68,12 +69,12 @@ int SACiscntrl(uchar c)
   return iscntrl(c) != 0;
 }
 
-int SACisascii(int c)
+int SACisascii(sac_int c)
 {
   return c >= 0 && c < 256 && isascii(c) != 0;
 }
 
-int SACtoascii(int c)
+int SACtoascii(sac_int c)
 {
   return toascii(c & 0xFF);
 }
