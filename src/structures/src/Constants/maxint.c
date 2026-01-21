@@ -1,7 +1,14 @@
 #include <limits.h>
 
+#include <stdint.h>
 
-int maxint( void)
+sac_int maxint( void)
 {
-  return( INT_MAX);
+    sac_int num_bits = 8 * sizeof(sac_int);
+    /**
+     * To avoid overflow:
+     * 2^(num_bits - 1) - 1 = 2 * 2^(num_bits - 2) - 1 = 
+     * 2^(num_bits - 2) + (2^(num_bits - 2) - 1)
+     **/
+   return (sac_int)1 << (num_bits - 2) + ((sac_int)1 << (num_bits - 2) - 1);
 }
