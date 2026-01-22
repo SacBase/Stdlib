@@ -30,8 +30,6 @@ sac_int SACstrrchr (string str, unsigned char c);
 sac_int SACstrcspn(string str, string reject);
 sac_int SACstrspn(string str, string accept);
 sac_int SACstrstr (string haystack, string needle);
-bool chr_in_delims (unsigned char c, string delimiters);
-string next_in_delims (string str, string delimiters, bool is_delimiter);
 void SACstrtok (string* out_token, string* out_rest, string str, string delimiters);
 void SACchomp (string str) ;
 void SACrtrim (string str) ;

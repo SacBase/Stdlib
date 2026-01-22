@@ -214,7 +214,7 @@ string find_fmtstr_spec_loc(string format)
     do
     {
         // Find %
-        format = strchr(fmtstart, format);
+        format = strchr(format, fmtstart);
         // Skip modifiers
         format = next_in_delims(format, fmtmodifiers, false);
     }
@@ -275,7 +275,7 @@ string SACsprintf (string format_raw, ...)
     va_list args;
 
     // Compute the length of the string
-    va_start (args, format);
+    va_start (args, format_raw);
     int lengthwo0 = vsnprintf (NULL, 0, format, args);
     va_end (args);
 
@@ -288,7 +288,7 @@ string SACsprintf (string format_raw, ...)
     string res = malloc(length);
 
     // Printf string
-    va_start (args, format);
+    va_start (args, format_raw);
     vsnprintf (res, length, format, args);
     va_end (args);
 
@@ -301,7 +301,7 @@ sac_int SACsscanf (string s, string format_raw, ...)
     
     va_list arg_p;
 
-    va_start( arg_p, format);
+    va_start( arg_p, format_raw);
     sac_int res = (sac_int)vsscanf( s, format, arg_p);
     va_end( arg_p);
 
