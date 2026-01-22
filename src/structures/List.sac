@@ -18,45 +18,46 @@ external typedef list;
 external list nil();
     #pragma linkname "SAClistnil"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external list cons( int ELEM, list LIST);
     #pragma linkname "SAClistcons"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external int  hd( list LIST);
     #pragma linkname "SAClisthead"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external list tl( list LIST);
     #pragma linkname "SAClisttail"
     #pragma sacarg [0]
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external bool empty( list LIST);
     #pragma linkname "SAC_List_empty"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external list append( list LIST1, list LIST2);
     #pragma linkname "SAClistappend"
     #pragma sacarg [0, 1, 2]
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external int  nth( int N, list LIST);
     #pragma linkname "SAClistnth"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external int  length( list LIST);
     #pragma linkname "SAClistlength"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external list drop( int N, list LIST);
     #pragma linkname "SAClistdrop"
+    #pragma sacarg [0, 2]
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 external list take( int N, list LIST);
     #pragma linkname "SAClisttake"
     #pragma linkobj "src/List/List.o"
-    #pragma header "src/List/List.h"
+    // #pragma header "src/List/List.h"
 
 
 
