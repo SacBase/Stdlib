@@ -32,6 +32,6 @@ extern SACarg *shape(array *s);
 
 extern array *SAC_StringArray_genarray(SACarg *shp, SACarg *s);
 
-extern SACarg *SAC_StringArray_sel(SACarg *idx, stringArray labs);
+extern SACarg *SAC_StringArray_sel(SACarg *idx, array *labs);
 
-extern array *SAC_StringArray_modarray(array *labs, SACarg *idx, SACarg *str);
+extern void SAC_StringArray_modarray(array *labs, SACarg *idx, SACarg *str);

@@ -12,7 +12,7 @@ array *SAC_StringArray_copy(array *arr)
     }
 
     for (sac_int i = 0; i < arr->size; i++) {
-        (res->elems)[l] = SACARGduplicateSaCArray((arr->elems)[l]);
+        (res->elems)[i] = SACARGduplicateSaCArray((arr->elems)[i]);
     }
 
     return res;
