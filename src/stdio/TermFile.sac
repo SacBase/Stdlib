@@ -55,6 +55,7 @@ external int fputc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfputc_TF"
     #pragma linkobj "src/TermFile/fputc.o"
+    #pragma linksign [0,1,2]
 
 inline int putc(char C) { fputc(C, stdout); }
     /*
@@ -77,6 +78,7 @@ external int fputs(string S, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfputs_TF"
     #pragma linkobj "src/TermFile/fputs.o"
+    #pragma linksign [0,1,2]
     /*
      * Write string S to stream.
      */
@@ -131,6 +133,7 @@ external int ungetc(char C, TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACungetc_TF"
     #pragma linkobj "src/TermFile/ungetc.o"
+    #pragma linksign [0,1,2]
 
 inline int ungetc(char C) { ungetc(C, stdin); }
     /*
@@ -150,11 +153,13 @@ external int fprintf(TermFile &STREAM, string FORMAT, ...);
     #pragma effect TheTerminal
     #pragma linkname "SACfprintf_TF"
     #pragma linkobj "src/TermFile/fprintf.o"
+    #pragma linksign [0,1,2]
 
 external int printf(string FORMAT, ...);
     #pragma effect TheTerminal, stdout
     #pragma linkname "SACprintf_TF"
     #pragma linkobj "src/TermFile/printf.o"
+    #pragma linksign [0,1]
     /*
      * Print formatted output to STREAM which must be open for writing.
      * The syntax of format strings is identical to that known from C.
@@ -219,6 +224,7 @@ external int fflush(TermFile &STREAM);
     #pragma effect TheTerminal
     #pragma linkname "SACfflush_TF"
     #pragma linkobj "src/TermFile/fflush.o"
+    #pragma linksign [0,1]
 
 inline int flush() { fflush(stdout); }
     /*
