@@ -51,7 +51,7 @@ void deepcopy(list** out_root, list** out_last, const list* lst, sac_int n)
 
 
 
-list* SAClistnil ()
+list* SAClistnil (void)
 {
     return NULL;
 }
