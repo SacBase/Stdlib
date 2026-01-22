@@ -10,5 +10,6 @@ void SAC_StringArray_free(array *arr)
     }
     free(arr->shp);
     free(arr->elems);
+    free(arr);
 }
 
