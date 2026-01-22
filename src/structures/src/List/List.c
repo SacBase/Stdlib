@@ -42,7 +42,7 @@ void deepcopy(list** out_root, list** out_last, const list* lst, sac_int n)
             SAC_RuntimeError("Nth element outside of list");
         if (lst == NULL) break;
         list* next = malloc(sizeof(list));
-        (*out_last)->cons = SACARGcreateFromPointer(SACTYPE__LIST__list, next, 0);
+        (*out_last)->cons = SACARGcreateFromPointer(SACTYPE__LIST__list, next, 0, NULL);
         *out_last = next;
         (*out_last)->elem = lst->elem;
         n--;
@@ -97,7 +97,7 @@ SACarg* SAClistappend (SACarg* sa, SACarg* sb)
     deepcopy(&res, &taila, a, 0);
     taila->cons = sb;
 
-    SACarg* sres = SACARGcreateFromPointer(SACTYPE__LIST__list, res, 0);
+    SACarg* sres = SACARGcreateFromPointer(SACTYPE__LIST__list, res, 0, NULL);
 
     return sres;
 }
@@ -162,7 +162,7 @@ list* SAClisttake(sac_int n, list* lst)
     list* res = NULL;
     list* taila = NULL;
     deepcopy(&res, &taila, lst, n);
-    taila -> cons = SACARGcreateFromPointer(SACTYPE__LIST__list, NULL, 0);
+    taila -> cons = SACARGcreateFromPointer(SACTYPE__LIST__list, NULL, 0, NULL);
 
     return res;
 }
