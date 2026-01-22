@@ -3,7 +3,7 @@
 
 #include "StringArray.h"
 
-void SAC_StringArray_free(array *arr)
+array *SAC_StringArray_free(array *arr)
 {
     for (sac_int i = 0; i < arr->size; i++) {
         SACARGdeleteSacArray(&(arr->elems)[i]);
@@ -11,5 +11,6 @@ void SAC_StringArray_free(array *arr)
     free(arr->shp);
     free(arr->elems);
     free(arr);
+    return NULL;
 }
 

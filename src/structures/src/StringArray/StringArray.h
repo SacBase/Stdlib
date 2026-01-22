@@ -25,7 +25,7 @@ extern sac_int dim(array *s);
 /* This is just a helper function */
 extern sac_int SAC_StringArray_index2offset(SACarg *idx, sac_int *shp);
 
-extern void SAC_StringArray_free(array *arr);
+extern array *SAC_StringArray_free(array *arr);
 extern array *SAC_StringArray_copy(array *arr);
 
 extern SACarg *shape(array *s);
