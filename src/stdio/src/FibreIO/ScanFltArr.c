@@ -6,52 +6,29 @@
 #include "FibreScan.h"
 #include "FibreScan.tab.h"
 
-
-#define array_nt (array, T_OLD((AUD, (NHD, (NUQ, )))))
-#define ret_nt   (ret,   T_OLD((AUD, (NHD, (NUQ, )))))
-
-void FibreScanFloatArray( SAC_ND_PARAM_out( array_nt, float), FILE *stream)
+SACarg *FibreScanFloatArray(FILE *stream)
 {
-  SAC_ND_DECL__DATA( ret_nt, float, )
-  SAC_ND_DECL__DESC( ret_nt, )
-  int i;
-  start_token = PARSE_FLOAT_ARRAY;
-  doScan( stream);
-  int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;
-  SAC_ND_ALLOC__DESC( ret_nt, dims)
-  SAC_ND_SET__RC( ret_nt, 1)
-  for( i = 0; i < dims; i++) {
-    SAC_ND_A_DESC_SHAPE( ret_nt, i) = shape[i];
-  }
-  SAC_ND_A_DESC_SIZE( ret_nt) = size;
-  SAC_ND_A_FIELD( ret_nt) = floatarray;
-  SAC_ND_RET_out( array_nt, ret_nt)
+    /**
+     * Global variables created by the .y file:
+     *      float  *floatarray
+     *      sac_int *shp
+     *      sac_int dims
+     *      sac_int size
+     **/
+    sac_int i;
+    start_token = PARSE_FLOAT_ARRAY;
+    doScan(stream);
+  
+    return SACARGcreateFromPointer(SACTYPE__MAIN__float, floatarray, dims, shp);
 }
 
-#undef array_nt
-#undef ret_nt
-
-#define array_nt (array, T_OLD((AUD, (NHD, (NUQ, )))))
-#define ret_nt   (ret,   T_OLD((AUD, (NHD, (NUQ, )))))
-
-void FibreScanFloatArrayStr( SAC_ND_PARAM_out( array_nt, float), char *stream)
+SACarg *FibreScanFloatArrayStr(SACarg *stream_in)
 {
-  SAC_ND_DECL__DATA( ret_nt, float, )
-  SAC_ND_DECL__DESC( ret_nt, )
-  int i;
-  start_token = PARSE_FLOAT_ARRAY;
-  yy_scan_string( stream);
-  FibreScanparse();
-  int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;
-  SAC_ND_ALLOC__DESC( ret_nt, dims)
-  SAC_ND_SET__RC( ret_nt, 1)
-  for( i = 0; i < dims; i++) {
-    SAC_ND_A_DESC_SHAPE( ret_nt, i) = shape[i];
-  }
-  SAC_ND_A_DESC_SIZE( ret_nt) = size;
-  SAC_ND_A_FIELD( ret_nt) = floatarray;
-  SAC_ND_RET_out( array_nt, ret_nt)
-}
+    char *stream = SACARGgetSharedData(SACARGgetType(stream_in), stream_in);
+    sac_int i;
+    start_token = PARSE_FLOAT_ARRAY;
+    yy_scan_string(stream);
+    FibreScanparse();
 
-#undef array_nt
-#undef ret_nt
+    return SACARGcreateFromPointer(SACTYPE__MAIN__float, floatarray, dims, shp);
+}
