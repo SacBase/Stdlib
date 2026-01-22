@@ -48,6 +48,7 @@ string SACautotostring (SACarg *sarr)
     strncpy (res, arr, (size_t)length);
     res[length] = '\0';
 
+    SACARGdeleteSacArray(sarr);
     return res;
 }
 
