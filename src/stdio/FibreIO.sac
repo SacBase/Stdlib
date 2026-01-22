@@ -40,8 +40,8 @@ external float[*] FibreScanFloatArray(File &stream);
     #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
 external double[*] FibreScanDoubleArray(File &stream);
-    #pragma refcounting [0]
-    #pragma linksign [1,2]
+    #pragma linksign [0, 1]
+    #pragma sacarg   [0]
     #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
 external stringArray FibreScanStringArray(File &stream);
@@ -106,8 +106,8 @@ external float[*] FibreScanFloatArrayStr(string stream);
     #pragma linkobj "src/FibreIO/ScanFltArr.o"
 
 external double[*] FibreScanDoubleArrayStr(string stream);
-    #pragma refcounting [0]
-    #pragma linksign [1,2]
+    #pragma linksign [0, 1]
+    #pragma sacarg   [0, 1]
     #pragma linkobj "src/FibreIO/ScanDblArr.o"
 
 external stringArray FibreScanStringArrayStr(string stream);
