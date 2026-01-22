@@ -1,75 +1,66 @@
-/* $Id$ */
-
 /*
- *  Implementation of printing functions for Arrays as used in ArrayIO,
- *  conforming with ISO Standard APL N8485.
- *  The show() functions print data only - no rank, shape, or decorators
- *
+ * Implementation of printing functions for Arrays as used in ArrayIO,
+ * conforming with ISO Standard APL N8485.
+ * The show() functions print data only - no rank, shape, or decorators.
  */
 
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-
-#include "sac.h"
-
-#define INT    1
-#define FLOAT  2
-#define DOUBLE 3
-#define CHAR   4
-#define BOOL   5
-
-typedef char* string;
+#include "ArrayIO.h"
 
 static
-void ShowArr(FILE *stream, int typeflag, string fmt, int dim, int * shp, char *a)
+void ShowArr(FILE *stream, string fmt, sac_int dim, sac_int *shp, char *a)
 {
-  // Introduce new lines at end of ultimate and penultimate dimensions
-  int i, element_count;
-  int rownum, colnum, planenum;
-  int rownums, colnums, planenums; 
-  int rowoffset = 0;
+    // Introduce new lines at end of ultimate and penultimate dimensions
+    sac_int element_count;
+    sac_int rownums, colnums, planenums;
+    sac_int rowoffset = 0;
 
-  planenums = 1;
-  for (i=0;i<(dim-2);i++) {
-    planenums = planenums * shp[i];
-  }
+    planenums = 1;
+    for (sac_int i = 0; i < (dim - 2); i++) {
+        planenums = planenums * shp[i];
+    }
 
-
-  if( 0 == dim) {  // show scalar
+    if (dim == 0) {
+        // Show scalar
         fprintf(stream, fmt, a[0]);
-        fprintf(stream, "\n");  // End row with new line
-  } else {
-    colnums = shp[dim-1];
-    if (dim >= 2) { // row count for matrix and tensor
-      rownums = shp[dim-2];
+        // End row with new line
+        fprintf(stream, "\n");
     } else {
-      rownums = 1; // vector row count
-    }
-
-    element_count = planenums * colnums * rownums;
-
-    if (element_count != 0) {  // no output for empty array
-      for ( planenum=0; planenum<planenums; planenum++) {
-       for ( rownum=0; rownum<rownums; rownum++) {  
-        for ( colnum=0; colnum<colnums; colnum++) { // format one row
-            fprintf(stream, fmt, a[rowoffset + colnum]);
+        colnums = shp[dim - 1];
+        if (dim >= 2) {
+            // Row count for matrix and tensor
+            rownums = shp[dim - 2];
+        } else {
+            // Vector row count
+            rownums = 1;
         }
-        fprintf(stream, "\n");  // End row with new line
 
-        if ((rownum == (rownums-1)) && (planenum != (planenums-1))) {
-          fprintf(stream, "\n");  // End all but last plane with new line
+        element_count = planenums * colnums * rownums;
+
+        if (element_count != 0) {
+            // No output for empty array
+            for (sac_int planenum = 0; planenum < planenums; planenum++) {
+                for (sac_int rownum = 0; rownum < rownums; rownum++) {
+                    for (sac_int colnum = 0; colnum < colnums; colnum++) {
+                        // Format one row
+                        fprintf(stream, fmt, a[rowoffset + colnum]);
+                    }
+
+                    // End row with new line
+                    fprintf(stream, "\n");
+
+                    if ((rownum == (rownums - 1)) && (planenum != (planenums - 1))) {
+                        // End all but last plane with new line
+                        fprintf(stream, "\n");
+                    }
+
+                    rowoffset += colnums;
+                }
+            }
         }
-        rowoffset = rowoffset + colnums;
-       }
-      }
     }
-  }
 }
 
-
-void ARRAYIO__ShowCharArray( FILE *stream, int dim, int * shp, char * a)
+void ARRAYIO__ShowCharArray(FILE *stream, sac_int dim, sac_int *shp, char *a)
 {
-  ShowArr(stream, CHAR, "%c", dim, shp, a);
+    ShowArr(stream, CHAR, "%c", dim, shp, a);
 }
