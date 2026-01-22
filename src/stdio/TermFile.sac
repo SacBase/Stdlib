@@ -57,7 +57,7 @@ external int fputc(char C, TermFile &STREAM);
     #pragma linkobj "src/TermFile/fputc.o"
     #pragma linksign [0,1,2]
 
-inline int putc(char C) { fputc(C, stdout); }
+inline int putc(char C) { return fputc(C, stdout); }
     /*
      * Put the character C to the output stream STREAM which must be
      * either stdout or stderr.
@@ -226,7 +226,7 @@ external int fflush(TermFile &STREAM);
     #pragma linkobj "src/TermFile/fflush.o"
     #pragma linksign [0,1]
 
-inline int flush() { fflush(stdout); }
+inline int flush() { return fflush(stdout); }
     /*
      * Write the buffer of a buffered output stream STREAM which must be
      * either stdout or stderr to the respective file or terminal device.
