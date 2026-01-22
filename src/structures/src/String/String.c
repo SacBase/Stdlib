@@ -55,7 +55,7 @@ void SACstrmod (string str, sac_int pos, unsigned char c)
 {
     size_t strlength = strlen (str);
 
-    if (strlength <= pos)
+    if (strlength <= (size_t)pos)
         SAC_RuntimeError("strmod: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
 
     str[pos] = c;
@@ -68,9 +68,9 @@ string SACstrins (string outer, sac_int pos, string inner)
 
     string res = malloc(outer_length + inner_length + 1);
 
-    strncpy(res, outer, pos);
-    strcpy(res+pos, inner);
-    strcpy(res+pos+inner_length, outer+pos);
+    strncpy(res, outer, (size_t)pos);
+    strcpy(res+(size_t)pos, inner);
+    strcpy(res+(size_t)pos+inner_length, outer+(size_t)pos);
 
     return res;
 }
@@ -80,16 +80,16 @@ void SACstrovwt (string outer, sac_int pos, string inner)
     size_t outer_length = strlen (outer);
     size_t inner_length = strlen (inner);
 
-    if (pos+inner_length > outer_length)
+    if ((size_t)pos+inner_length > outer_length)
         SAC_RuntimeError("strovwt: Overwriting string ends at position "PRIisac" while string is of length %zu", pos+inner_length, outer_length);
 
-    memcpy(outer+pos, inner, inner_length * sizeof (char));
+    memcpy(outer+(size_t)pos, inner, inner_length * sizeof (char));
 }
 
 unsigned char SACstrsel (string str, sac_int pos)
 {
-    int strlength = strlen(str);
-    if (pos >= strlength)
+    size_t strlength = strlen(str);
+    if ((size_t)pos >= strlength)
         SAC_RuntimeError("strsel: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
 
     return str[pos];
@@ -112,11 +112,11 @@ string SACstrncat (string fst, string snd, sac_int n)
 {
     size_t fstlength = strlen (fst);
 
-    string res = malloc (fstlength + n + 1);
+    string res = malloc (fstlength + (size_t)n + 1);
 
     strcpy(res, fst);
-    strncpy(res+fstlength, snd, n);
-    res[fstlength+n] = '\n';
+    strncpy(res+fstlength, snd, (size_t)n);
+    res[fstlength+(size_t)n] = '\n';
 
     return res;
 }
@@ -150,7 +150,7 @@ void SACstrtake(string str, sac_int pos)
 {
     size_t strlength = strlen (str);
 
-    if (pos >= strlength)
+    if ((size_t)pos >= strlength)
         SAC_RuntimeError("strtake: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
 
     str[pos] = '\0';
@@ -162,7 +162,7 @@ string SACstrdrop (string str, sac_int pos)
 
     string res = malloc(strlength - (size_t)pos + 1);
 
-    strcpy(res, str+pos);
+    strcpy(res, str+(size_t)pos);
 
     return res;
 }
@@ -173,10 +173,10 @@ string SACstrext (string str, sac_int pos, sac_int len)
 
     string res = malloc(strlength - (size_t)len + 1);
 
-    if (pos + len >= strlength)
+    if ((size_t)(pos + len) >= strlength)
         SAC_RuntimeError("strext: Selecting substring ends at position "PRIisac" while string is of length %zu", pos+len, strlength);
 
-    strncpy(res, str+pos, len);
+    strncpy(res, str+(size_t)pos, (size_t)len);
 
     return res;
 }
@@ -424,7 +424,7 @@ string SACtrim (string str)
 sac_int SACstrtoi (string* remain, string input, sac_int base)
 {
     string rem;
-    sac_int res = (sac_int) strtol (input, &rem, base);
+    sac_int res = (sac_int) strtol (input, &rem, (size_t)base);
 
     *remain = malloc ((strlen(rem) + 1) * sizeof (char));
     strcpy (*remain, rem);
