@@ -8,7 +8,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "str.h"
+#include <stdlib.h>
+#include <ctype.h>
+#include "String.h"
 
 string copy_string (string s)
 {
@@ -25,11 +27,11 @@ void free_string (string s)
 
 
 
-string SACtostring (string arr, sac_int length)
+string SACtostring (unsigned char* arr, sac_int length)
 {
     string res = malloc ((size_t) length + 1);
 
-    strncpy (res, arr, (size_t)length);
+    memcpy (res, arr, (size_t)length);
     res[length] = '\0';
 
     return res;
@@ -37,7 +39,7 @@ string SACtostring (string arr, sac_int length)
 
 string SACautotostring (SACarg *sarr)
 {
-    string *parr = SACARGgetSharedData(SACTYPE__MAIN__char, sarr);
+    const string *parr = SACARGgetSharedData(SACTYPE__MAIN__char, sarr);
     string arr = parr[0];
     sac_int length = SACARGgetShape(sarr, 0);
 
@@ -49,10 +51,12 @@ string SACautotostring (SACarg *sarr)
     return res;
 }
 
-void SACstrmod (string str, sac_int pos, char c)
+void SACstrmod (string str, sac_int pos, unsigned char c)
 {
-    if (strlen(str) <= pos)
-        ; // TODO runtime error
+    size_t strlength = strlen (str);
+
+    if (strlength <= pos)
+        SAC_RuntimeError("strmod: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
 
     str[pos] = c;
 }
@@ -77,16 +81,16 @@ void SACstrovwt (string outer, sac_int pos, string inner)
     size_t inner_length = strlen (inner);
 
     if (pos+inner_length > outer_length)
-        ; // TODO runtime error
+        SAC_RuntimeError("strovwt: Overwriting string ends at position "PRIisac" while string is of length %zu", pos+inner_length, outer_length);
 
-    strncpy(outer+pos, inner, inner_length);
+    memcpy(outer+pos, inner, inner_length * sizeof (char));
 }
 
-char SACstrsel (string str, sac_int pos)
+unsigned char SACstrsel (string str, sac_int pos)
 {
     int strlength = strlen(str);
     if (pos >= strlength)
-        ; // TODO runtime error
+        SAC_RuntimeError("strsel: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
 
     return str[pos];
 }
@@ -94,7 +98,7 @@ char SACstrsel (string str, sac_int pos)
 string SACstrcat (string fst, string snd)
 {
     size_t fstlength = strlen (fst);
-    size_t sndlength = sndlen (fst);
+    size_t sndlength = strlen (snd);
 
     string res = malloc (fstlength + sndlength + 1);
 
@@ -107,12 +111,12 @@ string SACstrcat (string fst, string snd)
 string SACstrncat (string fst, string snd, sac_int n)
 {
     size_t fstlength = strlen (fst);
-    size_t sndlength = sndlen (fst);
 
-    string res = malloc (fstlength + sndlength + 1);
+    string res = malloc (fstlength + n + 1);
 
     strcpy(res, fst);
     strncpy(res+fstlength, snd, n);
+    res[fstlength+n] = '\n';
 
     return res;
 }
@@ -142,14 +146,14 @@ sac_int SACstrlen (string fst)
     return (sac_int) strlen (fst);
 }
 
-char SACstrtake(string str, sac_int pos)
+void SACstrtake(string str, sac_int pos)
 {
     size_t strlength = strlen (str);
 
     if (pos >= strlength)
-        ; // TODO runtime error
-    
-    return str[pos];
+        SAC_RuntimeError("strtake: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
+
+    str[pos] = '\0';
 }
 
 string SACstrdrop (string str, sac_int pos)
@@ -169,8 +173,8 @@ string SACstrext (string str, sac_int pos, sac_int len)
 
     string res = malloc(strlength - (size_t)len + 1);
 
-    if (pos + strlength >= len)
-        ; // TODO runtime error
+    if (pos + len >= strlength)
+        SAC_RuntimeError("strext: Selecting substring ends at position "PRIisac" while string is of length %zu", pos+len, strlength);
 
     strncpy(res, str+pos, len);
 
@@ -187,7 +191,7 @@ string SACsprintf (string format, ...)
     va_end (args);
 
     if (lengthwo0 < 0)
-        ; // TODO runtime error
+        SAC_RuntimeError("printf error %d", lengthwo0);
 
     size_t length = lengthwo0 + 1;
 
@@ -223,7 +227,7 @@ string SACsscanf_str (string source, string format)
     return res;
 }
 
-sac_int SACstrchr (string str, char c)
+sac_int SACstrchr (string str, unsigned char c)
 {
     string occurrence = strchr (str, c);
 
@@ -232,7 +236,7 @@ sac_int SACstrchr (string str, char c)
     return (sac_int)(occurrence - str);
 }
 
-sac_int SACstrrchr (string str, char c)
+sac_int SACstrrchr (string str, unsigned char c)
 {
     string occurrence = strrchr (str, c);
 
@@ -256,7 +260,7 @@ sac_int SACstrstr (string haystack, string needle)
     return (sac_int) strstr (haystack, needle);
 }
 
-bool chr_in_delims (char c, string delimiters)
+bool chr_in_delims (unsigned char c, string delimiters)
 {
     while (true)
     {
@@ -290,7 +294,7 @@ void SACstrtok (string* out_token, string* out_rest, string str, string delimite
     strncpy(*out_token, start, tokenlength);
     *out_token[tokenlength] = '\0';
 
-    *out_rest = malloc((strlend(end) + 1) * sizeof (char));
+    *out_rest = malloc((strlen(end) + 1) * sizeof (char));
     strcpy(*out_rest, end);
 }
 
