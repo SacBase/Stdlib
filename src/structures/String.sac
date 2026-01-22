@@ -23,7 +23,7 @@ external string to_string(char[.] A, int LENGTH);
     #pragma header "src/String/String.h"
     /* Convert character array to string. */
 
-external string to_string(char[.] A);
+external string to_auto_string(char[.] A);
     #pragma linkname "SACautotostring"
     #pragma sacarg [1]
     #pragma linkobj "src/String/String.o"

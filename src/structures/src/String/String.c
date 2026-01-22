@@ -181,8 +181,97 @@ string SACstrext (string str, sac_int pos, sac_int len)
     return res;
 }
 
-string SACsprintf (string format, ...)
+bool chr_in_delims (char c, string delimiters)
 {
+    while (true)
+    {
+        if (delimiters[0] == '\0')
+            return false;
+        if (delimiters[0] == c)
+            return true;
+        delimiters ++;
+    }
+}
+
+string next_in_delims (string str, string delimiters, bool is_delimiter)
+{
+    while (true)
+    {
+        if (str[0] == '\0')
+            return NULL;
+        if (chr_in_delims(str[0], delimiters) == is_delimiter)
+            return str;
+        str ++;
+    }
+}
+
+static char fmtstart = '%';
+static char fmtspecifiers[] = "di";
+static char fmtmodifiers[] = "+- #.*0123456789";
+
+string find_fmtstr_spec_loc(string format)
+{
+    do
+    {
+        // Find %
+        format = strchr(fmtstart, format);
+        // Skip modifiers
+        format = next_in_delims(format, fmtmodifiers, false);
+    }
+    // Check if at end, or delimiter has been found
+    while (format != NULL && !chr_in_delims(*format, fmtspecifiers));
+    return format;
+}
+
+string fix_fmtstr_sac_int (string format)
+{
+    // Count the number of replaces that need to occur, to comput the format string new size
+    size_t replaces = 0;
+    string fmt = find_fmtstr_spec_loc(format);
+    while (fmt != NULL)
+    {
+        replaces ++;
+        fmt = find_fmtstr_spec_loc(fmt);
+    }
+
+    // Compute the size of the new string, and allocat enough memory
+    // For each replace, we remove 1 character and add the length of PRIisac
+    size_t priisaclength = strlen(PRIisac);
+    size_t formatlength = strlen(format);
+    string res = malloc ((formatlength + replaces * (formatlength-1) + 1) * sizeof (char));
+
+    // Copy parts of strings into the result
+    string start = format;
+    string respos = res;
+    while (format != NULL)
+    {
+        // Find the next occurence of a format string specifier to be found
+        format = find_fmtstr_spec_loc(start);
+        if (format == NULL)
+        {
+            // If at end, simply copy over the rest of the string
+            strcpy(respos, start);
+        }
+        else
+        {
+            // If found, copy the part of the string until the specifier, including the % and modifiers
+            strncpy(respos, start, format-start);
+            respos += format-start;
+            // Set new start to just after the i or d character
+            start = format+1;
+            // Add the format string specifier for our SaC ints
+            strcpy(respos, PRIisac);
+            respos += priisaclength;
+        }
+    }
+
+    return res;
+}
+
+string SACsprintf (string format_raw, ...)
+{
+    string format = fix_fmtstr_sac_int(format_raw);
+
     va_list args;
 
     // Compute the length of the string
@@ -206,8 +295,10 @@ string SACsprintf (string format, ...)
     return res;
 }
 
-sac_int SACsscanf (string s, string format, ...)
+sac_int SACsscanf (string s, string format_raw, ...)
 {
+    string format = fix_fmtstr_sac_int(format_raw);
+    
     va_list arg_p;
 
     va_start( arg_p, format);
@@ -217,8 +308,10 @@ sac_int SACsscanf (string s, string format, ...)
     return res;
 }
 
-string SACsscanf_str (string source, string format)
+string SACsscanf_str (string source, string format_raw)
 {
+    string format = fix_fmtstr_sac_int(format_raw);
+
     string res = malloc (strlen (source) + 1);
     res[0] = '\0';
 
@@ -258,30 +351,6 @@ sac_int SACstrspn(string str, string accept)
 sac_int SACstrstr (string haystack, string needle)
 {
     return (sac_int) strstr (haystack, needle);
-}
-
-bool chr_in_delims (unsigned char c, string delimiters)
-{
-    while (true)
-    {
-        if (delimiters[0] == '\0')
-            return false;
-        if (delimiters[0] == c)
-            return true;
-        delimiters ++;
-    }
-}
-
-string next_in_delims (string str, string delimiters, bool is_delimiter)
-{
-    while (true)
-    {
-        if (str[0] == '\0')
-            return NULL;
-        if (chr_in_delims(str[0], delimiters) == is_delimiter)
-            return str;
-        str ++;
-    }
 }
 
 void SACstrtok (string* out_token, string* out_rest, string str, string delimiters)
