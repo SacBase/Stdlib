@@ -195,7 +195,7 @@ SET (C_DEPS_SRC
     structures/src/StringArray/dim.c
     structures/src/StringArray/copy.c
     structures/src/StringArray/alloc.c
-    structures/src/String/String.c
+    structures/src/String/Str.c
     structures/src/List/List.c
     structures/src/Format/wordsize.c
     structures/src/Constants/Constants.c
