@@ -16,57 +16,57 @@ export all;
 external bool isalpha(char c);
     #pragma linkname "SACisalpha"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isupper(char c);
     #pragma linkname "SACisupper"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool islower(char c);
     #pragma linkname "SACislower"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isdigit(char c);
     #pragma linkname "SACisdigit"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isxdigit(char c);
     #pragma linkname "SACisxdigit"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isspace(char c);
     #pragma linkname "SACisspace"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool ispunct(char c);
     #pragma linkname "SACispunct"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isalnum(char c);
     #pragma linkname "SACisalnum"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isprint(char c);
     #pragma linkname "SACisprint"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool isgraph(char c);
     #pragma linkname "SACisgraph"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external bool iscntrl(char c);
     #pragma linkname "SACiscntrl"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 /******************************************************************************
  *
@@ -78,12 +78,12 @@ external bool iscntrl(char c);
 external bool isascii(int N);
     #pragma linkname "SACisascii"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external char toascii(int N);
     #pragma linkname "SACtoascii"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 /******************************************************************************
  *
@@ -94,12 +94,12 @@ external char toascii(int N);
 external char tolower(char c);
     #pragma linkname "SACtolower"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 external char toupper(char c);
     #pragma linkname "SACtoupper"
     #pragma linkobj "src/Char/Char.o"
-    #pragma header "src/Char/Char.h"
+    // #pragma header "src/Char/Char.h"
 
 /******************************************************************************
  *

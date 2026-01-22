@@ -12,15 +12,17 @@
 #include <stdbool.h>
 #include "sacinterface.h"
 
+extern SACtypes* SACTYPE__LIST__list;
+
 typedef struct LIST {
     sac_int elem;
     SACarg* cons;
 } list;
 
 list* SAClistcopy (list* lst);
-void SAClistfree (list* lst);
+list* SAClistfree (list* lst);
 
-list* SAClistnil ();
+list* SAClistnil (void);
 list* SAClistcons (sac_int elem, list* cons);
 sac_int SAClisthead (list* lst);
 SACarg* SAClisttail (list* lst);

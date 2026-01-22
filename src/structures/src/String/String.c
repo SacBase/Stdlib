@@ -19,9 +19,10 @@ string copy_string (string s)
     return s2;
 }
 
-void free_string (string s)
+string free_string (string s)
 {
     free (s);
+    return NULL;
 }
 
 
@@ -48,7 +49,7 @@ string SACautotostring (SACarg *sarr)
     strncpy (res, arr, (size_t)length);
     res[length] = '\0';
 
-    SACARGdeleteSacArray(sarr);
+    SACARGdeleteSacArray(&sarr);
     return res;
 }
 

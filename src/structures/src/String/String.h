@@ -6,6 +6,9 @@
 
 typedef char* string;
 
+string copy_string (string s);
+string free_string (string s);
+
 string SACtostring (unsigned char* arr, sac_int length);
 string SACautotostring (SACarg *sarr);
 void SACstrmod (string str, sac_int pos, unsigned char c);

@@ -8,110 +8,110 @@ export all;
 
 external byte minbyte();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external byte maxbyte();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external short minshort();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external short maxshort();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external longlong minlonglong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external longlong maxlonglong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ubyte minubyte();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ubyte maxubyte();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ushort minushort();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ushort maxushort();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ulonglong minulonglong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ulonglong maxulonglong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 #endif /* FULLTYPES */
 
 external int minint();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external int maxint();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external long minlong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external long maxlong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external uint minuint();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external uint maxuint();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ulong minulong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external ulong maxulong();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external float minfloat();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external float maxfloat();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external double mindouble();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external double tinydouble();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external double maxdouble();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external double epidouble();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
 
 external int randmax();
     #pragma linkobj "src/Constants/Constants.o"
-    #pragma header "src/Constants/Constants.h"
+    // #pragma header "src/Constants/Constants.h"
