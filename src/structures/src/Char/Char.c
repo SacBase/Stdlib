@@ -12,79 +12,77 @@
 #include <ctype.h>
 #include "Char.h"
 
-typedef unsigned char uchar;
-
-int SACisalpha(uchar c)
+bool SACisalpha(uchar c)
 {
   return isalpha(c) != 0;
 }
 
-int SACisupper(uchar c)
+bool SACisupper(uchar c)
 {
   return isupper(c) != 0;
 }
 
-int SACislower(uchar c)
+bool SACislower(uchar c)
 {
   return islower(c) != 0;
 }
 
-int SACisdigit(uchar c)
+bool SACisdigit(uchar c)
 {
   return isdigit(c) != 0;
 }
 
-int SACisxdigit(uchar c)
+bool SACisxdigit(uchar c)
 {
   return isxdigit(c) != 0;
 }
 
-int SACisspace(uchar c)
+bool SACisspace(uchar c)
 {
   return isspace(c) != 0;
 }
 
-int SACispunct(uchar c)
+bool SACispunct(uchar c)
 {
   return ispunct(c) != 0;
 }
 
-int SACisalnum(uchar c)
+bool SACisalnum(uchar c)
 {
   return isalnum(c) != 0;
 }
 
-int SACisprint(uchar c)
+bool SACisprint(uchar c)
 {
   return isprint(c) != 0;
 }
 
-int SACisgraph(uchar c)
+bool SACisgraph(uchar c)
 {
   return isgraph(c) != 0;
 }
 
-int SACiscntrl(uchar c)
+bool SACiscntrl(uchar c)
 {
   return iscntrl(c) != 0;
 }
 
-int SACisascii(sac_int c)
+bool SACisascii(sac_int c)
 {
   return c >= 0 && c < 256 && isascii(c) != 0;
 }
 
-int SACtoascii(sac_int c)
+uchar SACtoascii(sac_int c)
 {
   return toascii(c & 0xFF);
 }
 
-int SACtolower(uchar c)
+uchar SACtolower(uchar c)
 {
   return tolower(c);
 }
 
-int SACtoupper(uchar c)
+uchar SACtoupper(uchar c)
 {
   return toupper(c);
 }
