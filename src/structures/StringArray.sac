@@ -42,15 +42,15 @@ external int[.] shape(stringArray s);
 external stringArray _to_stringArray(int[.] shp, string s);
     #pragma linkname "SAC_StringArray_genarray"
     #pragma linkobj "src/StringArray/genarray.o"
-    #pragma linksign [1,2,3]
-    #pragma sacarg   [1]
+    #pragma linksign [0,1,2]
+    #pragma sacarg   [1, 2]
     #pragma header  "src/structures/src/StringArray/StringArray.h"
 
 external string _sel(int[.] idx, stringArray labs);
     #pragma linkname "SAC_StringArray_sel"
     #pragma linkobj "src/StringArray/sel.o"
     #pragma linkobj "src/StringArray/index2offset.o"
-    #pragma linksign [1,2,3]
+    #pragma linksign [0,1,2]
     #pragma sacarg   [0, 1]
     #pragma header  "src/structures/src/StringArray/StringArray.h"
 
