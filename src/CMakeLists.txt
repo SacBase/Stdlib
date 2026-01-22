@@ -218,7 +218,7 @@ SET (C_DEPS_SRC
     structures/src/Constants/maxdouble.c
     structures/src/Constants/epidouble.c
     structures/src/Constants/randmax.c
-    structures/src/Char/ctype.c
+    structures/src/Char/Char.c
     stdio/src/TermFile/stdstreams.c
     stdio/src/TermFile/printf.c
     stdio/src/TermFile/fputc.c
