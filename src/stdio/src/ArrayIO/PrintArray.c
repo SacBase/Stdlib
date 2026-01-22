@@ -40,7 +40,7 @@ sac_int Index2Offset(sac_int dim, sac_int *shp, sac_int *index)
     return offset;
 }
 
-static void PrintArr(FILE *stream, sac_int typeflag, string format,
+static void PrintArr(FILE *stream, int typeflag, string format,
                      sac_int dim, sac_int *shp, void *a)
 {
     fprintf(stream, "Dimension: %2"PRIisac"\n", dim);
