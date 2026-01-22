@@ -381,7 +381,7 @@ FOREACH (name ${SAC_SRC})
     # of the call to sac2c.
     GET_FILENAME_COMPONENT (dir "${CMAKE_CURRENT_BINARY_DIR}/${name}" DIRECTORY)
     GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
-    GET_FILENAME_COMPONENT (src_dir "${src}" DIRECTORY)
+    //GET_FILENAME_COMPONENT (src_dir "${src}" DIRECTORY)
     SET (mod
         "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${VARIANT}${MODEXT}")
     SET (tree
@@ -420,7 +420,8 @@ FOREACH (name ${SAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -Xc -I"${src_dir}" -o ${DLL_BUILD_DIR} "${src}"
+            //${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -Xc -I"${src_dir}" -o ${DLL_BUILD_DIR} "${src}"
+            ${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
         MAIN_DEPENDENCY "${src}"
