@@ -195,41 +195,7 @@ SET (C_DEPS_SRC
     structures/src/StringArray/dim.c
     structures/src/StringArray/copy.c
     structures/src/StringArray/alloc.c
-    structures/src/String/trim.c
-    structures/src/String/tostring.c
-    structures/src/String/strtok.c
-    structures/src/String/strtoi.c
-    structures/src/String/strtof.c
-    structures/src/String/strtod.c
-    structures/src/String/strtake.c
-    structures/src/String/strstr.c
-    structures/src/String/strsel.c
-    structures/src/String/strrchr.c
-    structures/src/String/strovwt.c
-    structures/src/String/strncat.c
-    structures/src/String/strmod.c
-    structures/src/String/strlen.c
-    structures/src/String/strins.c
-    structures/src/String/strext.c
-    structures/src/String/strdrop.c
-    structures/src/String/strcmp.c
-    structures/src/String/strncmp.c
-    structures/src/String/strcasecmp.c
-    structures/src/String/strncasecmp.c
-    structures/src/String/strchr.c
-    structures/src/String/strcat.c
-    structures/src/String/sscanf.c
-    structures/src/String/sscanfstr.c
-    structures/src/String/strcspn.c
-    structures/src/String/strspn.c
-    structures/src/String/sprintf.c
-    structures/src/String/itos.c
-    structures/src/String/ftos.c
-    structures/src/String/dtos.c
-    structures/src/String/ctos.c
-    structures/src/String/copystr.c
-    structures/src/String/freestr.c
-    structures/src/String/btos.c
+    structures/src/String/String.c
     structures/src/List/tl.c
     structures/src/List/take.c
     structures/src/List/nth.c
@@ -253,7 +219,6 @@ SET (C_DEPS_SRC
     structures/src/Constants/epidouble.c
     structures/src/Constants/randmax.c
     structures/src/Char/ctype.c
-    structures/src/Char/Char.c
     stdio/src/TermFile/stdstreams.c
     stdio/src/TermFile/printf.c
     stdio/src/TermFile/fputc.c
@@ -435,6 +400,7 @@ FOREACH (name ${SAC_SRC})
     # of the call to sac2c.
     GET_FILENAME_COMPONENT (dir "${CMAKE_CURRENT_BINARY_DIR}/${name}" DIRECTORY)
     GET_FILENAME_COMPONENT (dst ${name} NAME_WE)
+    GET_FILENAME_COMPONENT (src_dir "${src}" DIRECTORY)
     SET (mod
         "${DLL_BUILD_DIR}/${TARGET_ENV}/${SBI}/lib${dst}Mod${VARIANT}${MODEXT}")
     SET (tree
@@ -473,7 +439,7 @@ FOREACH (name ${SAC_SRC})
     ADD_CUSTOM_COMMAND (
         OUTPUT "${mod}" "${tree}"
         COMMAND
-            ${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -o ${DLL_BUILD_DIR} "${src}"
+            ${SAC2C} -v0 -maxoptcyc 2 -linksetsize ${LINKSETSIZE} ${NOTREE_FLAG} ${SAC2C_CC_FLAGS} -Xc -I"${src_dir}" -o ${DLL_BUILD_DIR} "${src}"
         WORKING_DIRECTORY
             "${dir}"
         MAIN_DEPENDENCY "${src}"
