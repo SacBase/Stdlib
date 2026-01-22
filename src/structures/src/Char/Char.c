@@ -9,8 +9,8 @@
  *  They may return any non-zero value when true, but a SAC bool is true if 1.
  */
 
-#include <sacinterface.h>
 #include <ctype.h>
+#include "Char.h"
 
 typedef unsigned char uchar;
 
