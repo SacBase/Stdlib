@@ -21,7 +21,7 @@ rtype min##SACtype( void )			\
   return( typeucase##_MIN);			\
 }
 
-#include "minmax.mac"
+#include "Constants.mac"
 #undef minmax
 //----------
 

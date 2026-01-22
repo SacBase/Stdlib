@@ -196,17 +196,7 @@ SET (C_DEPS_SRC
     structures/src/StringArray/copy.c
     structures/src/StringArray/alloc.c
     structures/src/String/String.c
-    structures/src/List/tl.c
-    structures/src/List/take.c
-    structures/src/List/nth.c
-    structures/src/List/nil.c
-    structures/src/List/length.c
-    structures/src/List/hd.c
-    structures/src/List/free.c
-    structures/src/List/empty.c
-    structures/src/List/drop.c
-    structures/src/List/cons.c
-    structures/src/List/append.c
+    structures/src/List/List.c
     structures/src/Format/wordsize.c
     structures/src/Constants/Constants.c
     structures/src/Char/Char.c

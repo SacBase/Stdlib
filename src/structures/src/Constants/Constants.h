@@ -8,7 +8,7 @@
 rtype max##SACtype( void );		\
 rtype min##SACtype( void );		
 
-#include "minmax.mac"
+#include "Constants.mac"
 #undef minmax
 //----------
 

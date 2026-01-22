@@ -11,11 +11,10 @@ module String;
 export all except { indent };
 
 external typedef string;
+    #pragma ctype "char*"
     #pragma freefun "free_string"
-    #pragma linkobj "src/String/String.o"
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/String.o"
-    #pragma ctype "char*"
 
 external string to_string(char[.] A, int LENGTH);
     #pragma linkname "SACtostring"
