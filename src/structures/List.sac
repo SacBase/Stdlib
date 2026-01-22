@@ -10,7 +10,7 @@ export all;
  */
 
 external typedef list;
-    #pragma ctype "list*"
+    //#pragma ctype "list*"
     #pragma copyfun "SAClistcopy"
     #pragma freefun "SAClistfree"
     #pragma linkobj "src/List/List.o"
