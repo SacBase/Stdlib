@@ -12,25 +12,25 @@
  *  They may return any non-zero value when true, but a SAC bool is true if 1.
  */
 
-#include <sacinterface.h>
-#include <ctype.h>
+#include "sacinterface.h"
+#include <stdbool.h>
 
 typedef unsigned char uchar;
 
-int SACisalpha(uchar c);
-int SACisupper(uchar c);
-int SACislower(uchar c);
-int SACisdigit(uchar c);
-int SACisxdigit(uchar c);
-int SACisspace(uchar c);
-int SACispunct(uchar c);
-int SACisalnum(uchar c);
-int SACisprint(uchar c);
-int SACisgraph(uchar c);
-int SACiscntrl(uchar c);
-int SACisascii(sac_int c);
-int SACtoascii(sac_int c);
-int SACtolower(uchar c);
-int SACtoupper(uchar c);
+bool SACisalpha(uchar c);
+bool SACisupper(uchar c);
+bool SACislower(uchar c);
+bool SACisdigit(uchar c);
+bool SACisxdigit(uchar c);
+bool SACisspace(uchar c);
+bool SACispunct(uchar c);
+bool SACisalnum(uchar c);
+bool SACisprint(uchar c);
+bool SACisgraph(uchar c);
+bool SACiscntrl(uchar c);
+bool SACisascii(sac_int c);
+uchar SACtoascii(sac_int c);
+uchar SACtolower(uchar c);
+uchar SACtoupper(uchar c);
 
 #endif // STDLIB__CHAR__H

@@ -208,16 +208,7 @@ SET (C_DEPS_SRC
     structures/src/List/cons.c
     structures/src/List/append.c
     structures/src/Format/wordsize.c
-    structures/src/Constants/tinydouble.c
-    structures/src/Constants/minmax.c
-    structures/src/Constants/minint.c
-    structures/src/Constants/minfloat.c
-    structures/src/Constants/mindouble.c
-    structures/src/Constants/maxint.c
-    structures/src/Constants/maxfloat.c
-    structures/src/Constants/maxdouble.c
-    structures/src/Constants/epidouble.c
-    structures/src/Constants/randmax.c
+    structures/src/Constants/Constants.c
     structures/src/Char/Char.c
     stdio/src/TermFile/stdstreams.c
     stdio/src/TermFile/printf.c
