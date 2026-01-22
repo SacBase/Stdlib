@@ -36,12 +36,14 @@ external int[.] shape(stringArray s);
     #pragma linkname "SAC_StringArray_shape"
     #pragma linkobj "src/StringArray/shape.o"
     #pragma linksign [0,1]
+    #pragma sacarg   [0]
     #pragma header  "src/StringArray/StringArray.h"
 
 external stringArray _to_stringArray(int[.] shp, string s);
     #pragma linkname "SAC_StringArray_genarray"
     #pragma linkobj "src/StringArray/genarray.o"
     #pragma linksign [1,2,3]
+    #pragma sacarg   [1]
     #pragma header  "src/StringArray/StringArray.h"
 
 external string _sel(int[.] idx, stringArray labs);
@@ -49,6 +51,7 @@ external string _sel(int[.] idx, stringArray labs);
     #pragma linkobj "src/StringArray/sel.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma linksign [1,2,3]
+    #pragma sacarg   [0, 1]
     #pragma header  "src/StringArray/StringArray.h"
 
 external stringArray _modarray(stringArray labs, int[.] idx, string str);
@@ -56,6 +59,7 @@ external stringArray _modarray(stringArray labs, int[.] idx, string str);
     #pragma linkobj "src/StringArray/modarray.o"
     #pragma linkobj "src/StringArray/index2offset.o"
     #pragma linksign [1,1,2,3]
+    #pragma sacarg   [2, 3]
     #pragma header  "src/StringArray/StringArray.h"
 
 stringArray modarray(stringArray arr, int[n] idx, stringArray val)
