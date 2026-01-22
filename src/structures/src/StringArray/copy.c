@@ -3,26 +3,18 @@
 
 #include "StringArray.h"
 
-#define subs_nt (subs, T_OLD((SCL, (HID, (NUQ,)))))
-
-array *SAC_StringArray_copy( array *arr)
+array *SAC_StringArray_copy(array *arr)
 {
-  int i;
-  array *res;
-  SAC_ND_DECL__DESC( subs_nt, );
-  char * SAC_ND_A_FIELD( subs_nt);
+    array *res = SAC_StringArray_alloc(arr->dim, arr->size);
 
-  res = SAC_StringArray_alloc( arr->dim, arr->size);
-  for( i=0; i<arr->dim; i++) {
-     res->shp[i] = arr->shp[i];
-  }
-  for( i=0; i<arr->size; i++) {
-    SAC_ND_A_DESC( subs_nt) = arr->descs[i];
-    SAC_ND_A_FIELD( subs_nt) = arr->data[i];
-    SAC_ND_INC_RC( subs_nt, 1 );
-    res->descs[i] = SAC_ND_A_DESC( subs_nt);
-    res->data[i] = SAC_ND_A_FIELD( subs_nt);
-  }
-  return( res);
+    for (sac_int l = 0; l < arr->dim; l++) {
+        (res->shp)[l] = (arr->shp)[l];
+    }
+
+    for (sac_int i = 0; i < arr->size; i++) {
+        (res->elems)[l] = SACARGduplicateSaCArray((arr->elems)[l]);
+    }
+
+    return res;
 }
 

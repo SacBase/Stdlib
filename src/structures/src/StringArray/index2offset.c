@@ -3,17 +3,16 @@
 
 #include "StringArray.h"
 
-int SAC_StringArray_index2offset( int dim, int *idx, int *shp)
+sac_int SAC_StringArray_index2offset(SACarg *idx, sac_int *shp)
 {
-  int i, offset, size;
-
-  offset = 0;
-  size = 1;
-  for( i=dim - 1; i >= 0; i--) {
-    offset += size * idx[i];
-    size *= shp[i];
-  }
-
-  return( offset);
+    sac_int dim = SACARGgetDim(idx);
+  
+    sac_int offset = 0;
+    sac_int size = 1;
+    for (sac_int i = dim - 1; i >= 0; i--) {
+        offset += size * idx[i];
+        size *= shp[i];
+    }
+  
+    return offset;
 }
-
