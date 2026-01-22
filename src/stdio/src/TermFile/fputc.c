@@ -1,22 +1,10 @@
 /*
- *  implementation of class File
+ * Implementation of class File
  */
-
-
 
 #include "TermFile.h"
 
-
-/*****************************************************************/
-
-
-int SACfputc_TF(char c, FILE *stream)
+sac_int SACfputc_TF(char c, FILE *stream)
 {
-  return fputc( c, stream);
+    return (sac_int)fputc(c, stream);
 }
-
-
-/*****************************************************************/
-
-
-

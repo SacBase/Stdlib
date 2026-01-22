@@ -1,22 +1,10 @@
 /*
- *  implementation of class File
+ * Implementation of class File
  */
-
-
 
 #include "TermFile.h"
 
-
-/*****************************************************************/
-
-
-void SACfflush_TF(FILE *f)
+sac_int SACfflush_TF(FILE *f)
 {
-  fflush( f);
+    return (sac_int)fflush(f);
 }
-
-
-/*****************************************************************/
-
-
-

@@ -1,29 +1,16 @@
 /*
- *  implementation of class File
+ * Implementation of class File
  */
-
-
 
 #include "TermFile.h"
 
-
-/*****************************************************************/
-
-
-int SACscanf_TF( char *format, ...)
+sac_int SACscanf_TF(char *format, ...)
 {
-  va_list args;
-  int ret;
+    va_list args;
 
-  va_start(args, format);
-  ret = vscanf( format, args);
-  va_end(args);
+    va_start(args, format);
+    sac_int ret = (sac_int)vscanf(format, args);
+    va_end(args);
 
-  return ret;
+    return ret;
 }
-
-
-/*****************************************************************/
-
-
-

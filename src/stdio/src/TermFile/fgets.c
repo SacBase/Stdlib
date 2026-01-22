@@ -1,8 +1,6 @@
 /*
- *  implementation of class File
+ * Implementation of class File
  */
-
-
 
 #include "TermFile.h"
 
@@ -10,32 +8,24 @@
 SAC_C_EXTERN SACtypes *SACTYPE_String__string;
 #endif
 
-/*****************************************************************/
-
 #ifdef SACARG_WORKS
-int SACfgets_TF(SACarg **str, int size, FILE *stream)
+sac_int SACfgets_TF(SACarg **str, sac_int size, FILE *stream)
 #else
-int SACfgets_TF(char **str, int size, FILE *stream)
+sac_int SACfgets_TF(char **str, sac_int size, FILE *stream)
 #endif
 {
-    int error=-1;
-    char *buf, *buf2;
-    
-    buf = malloc (sizeof(char) * size);
-    buf2 = fgets (buf, size, stream);
+    char *buf = malloc(sizeof(char) * (size_t)size);
+    char *buf2 = fgets(buf, (int)size, stream);
     if (buf2 == NULL) {
-        error = errno;
         free (buf);
+        return errno;
     }
+
 #ifdef SACARG_WORKS
     *str = SACARGcreateFromPointer (SACTYPE_String__string, buf2, 1, 5);
 #else
     *str = buf2;
 #endif
- 
-    return error;
+
+    return -1;
 }
-
-
-/*****************************************************************/
-

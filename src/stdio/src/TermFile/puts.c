@@ -1,22 +1,10 @@
 /*
- *  implementation of class File
+ * Implementation of class File
  */
-
-
 
 #include "TermFile.h"
 
-
-/*****************************************************************/
-
-
-void SACputs_TF(char *s)
+sac_int SACputs_TF(char *s)
 {
-  puts( s);
+    return (sac_int)puts(s);
 }
-
-
-/*****************************************************************/
-
-
-

@@ -1,22 +1,10 @@
 /*
- *  implementation of class File
+ * Implementation of class File
  */
-
-
 
 #include "TermFile.h"
 
-
-/*****************************************************************/
-
-
-void SACungetc_TF(char c, FILE *stream)
+sac_int SACungetc_TF(char c, FILE *stream)
 {
-  ungetc( c, stream);
+    return (sac_int)ungetc(c, stream);
 }
-
-
-/*****************************************************************/
-
-
-

@@ -1,32 +1,18 @@
 /*
- *  implementation of class TermFile
+ * Implementation of class TermFile
  */
-
-
 
 #include "TermFile.h"
 
-
-
-/*****************************************************************/
-
-char* term_fscanl(FILE *stream, int length)
+char *term_fscanl(FILE *stream, sac_int length)
 {
-  char *input, *success;
-  
-  input=(char*)SAC_MALLOC(length+3);
-  
-  success=fgets(input, length+1, stream);
-  
-  if (success==NULL)
-  {
-    input[0]=0;
-  }
-    
-  return(input);
+    char *input= (char *)SAC_MALLOC((size_t)length + 3);
+    char *success = fgets(input, (int)length + 1, stream);
+
+    if (success == NULL)
+    {
+        input[0] = '\0';
+    }
+
+    return input;
 }
-
-
-/*****************************************************************/
-
-

@@ -1,33 +1,20 @@
 /*
- *  implementation of class TermFile
+ * Implementation of class TermFile
  */
-
-
 
 #include "TermFile.h"
 
-
-
-/*****************************************************************/
-
-char* term_fscans(FILE *stream, int length)
+char *term_fscans(FILE *stream, sac_int length)
 {
-  int success;
-  char *input;
-  char format[32];
+    char format[32];
+    char *input = (char *)SAC_MALLOC((size_t)length + 1);
+    snprintf(format, sizeof(format), " %%%ds", (int)length);
 
-  input = (char *) SAC_MALLOC(length + 1);
-  snprintf(format, sizeof format, " %%%ds", length);
+    int success = fscanf(stream, format, input);
+    if (success != 1)
+    {
+        input[0] = '\0';
+    }
 
-  success = fscanf(stream, format, input);
-
-  if (success != 1)
-  {
-    input[0] = 0;
-  }
-
-  return (input);
+    return input;
 }
-
-
-/*****************************************************************/

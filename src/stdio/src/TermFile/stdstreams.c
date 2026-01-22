@@ -1,33 +1,20 @@
 /*
- *  implementation of standard class TermFile
+ * Implementation of standard class TermFile
  */
-
-
 
 #include "TermFile.h"
 
-
-
-/*****************************************************************/
-
-void *SAC_create_stdin( void)
+void *SAC_create_stdin(void)
 {
-  return(stdin);
+    return stdin;
 }
 
-
-void *SAC_create_stdout( void)
+void *SAC_create_stdout(void)
 {
-  return(stdout);
+    return stdout;
 }
 
-
-void *SAC_create_stderr( void)
+void *SAC_create_stderr(void)
 {
-  return(stderr);
+    return stderr;
 }
-
-
-/*****************************************************************/
-
-
