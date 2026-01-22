@@ -15,6 +15,7 @@ external typedef string;
     #pragma linkobj "src/String/str.o"
     #pragma copyfun "copy_string"
     #pragma linkobj "src/String/str.o"
+    #pragma ctype "char*"
 
 external string to_string(char[.] A, int LENGTH);
     #pragma linkname "SACtostring"
