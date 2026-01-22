@@ -62,5 +62,5 @@ void ShowArr(FILE *stream, string fmt, sac_int dim, sac_int *shp, char *a)
 
 void ARRAYIO__ShowCharArray(FILE *stream, sac_int dim, sac_int *shp, char *a)
 {
-    ShowArr(stream, CHAR, "%c", dim, shp, a);
+    ShowArr(stream, "%c", dim, shp, a);
 }
