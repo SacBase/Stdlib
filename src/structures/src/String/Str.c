@@ -2,7 +2,6 @@
  *  C implementation of standard module StringC
  */
 
-
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
@@ -10,7 +9,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "String.h"
+
+#include "Str.h"
 
 string copy_string (string s)
 {
@@ -24,9 +24,6 @@ string free_string (string s)
     free (s);
     return NULL;
 }
-
-
-
 
 string SACtostring (unsigned char* arr, sac_int length)
 {
@@ -152,8 +149,9 @@ void SACstrtake(string str, sac_int pos)
 {
     size_t strlength = strlen (str);
 
-    if ((size_t)pos >= strlength)
+    if ((size_t)pos >= strlength) {
         SAC_RuntimeError("strtake: pos ("PRIisac") outside of string (length %zu)", pos, strlength);
+    }
 
     str[pos] = '\0';
 }
@@ -175,8 +173,9 @@ string SACstrext (string str, sac_int pos, sac_int len)
 
     string res = malloc(strlength - (size_t)len + 1);
 
-    if ((size_t)(pos + len) >= strlength)
+    if ((size_t)(pos + len) >= strlength) {
         SAC_RuntimeError("strext: Selecting substring ends at position "PRIisac" while string is of length %zu", pos+len, strlength);
+    }
 
     strncpy(res, str+(size_t)pos, (size_t)len);
 
@@ -187,23 +186,30 @@ bool chr_in_delims (char c, string delimiters)
 {
     while (true)
     {
-        if (delimiters[0] == '\0')
+        if (delimiters[0] == '\0') {
             return false;
-        if (delimiters[0] == c)
+        }
+        
+        if (delimiters[0] == c) {
             return true;
-        delimiters ++;
+        }
+        
+        delimiters++;
     }
 }
 
 string next_in_delims (string str, string delimiters, bool is_delimiter)
 {
-    while (true)
-    {
-        if (str[0] == '\0')
+    while (true) {
+        if (str[0] == '\0') {
             return NULL;
-        if (chr_in_delims(str[0], delimiters) == is_delimiter)
+        }
+        
+        if (chr_in_delims(str[0], delimiters) == is_delimiter) {
             return str;
-        str ++;
+        }
+        
+        str++;
     }
 }
 
@@ -326,8 +332,10 @@ sac_int SACstrchr (string str, unsigned char c)
 {
     string occurrence = strchr (str, c);
 
-    if (occurrence == NULL)
+    if (occurrence == NULL) {
         return -1;
+    }
+    
     return (sac_int)(occurrence - str);
 }
 
@@ -335,8 +343,10 @@ sac_int SACstrrchr (string str, unsigned char c)
 {
     string occurrence = strrchr (str, c);
 
-    if (occurrence == NULL)
+    if (occurrence == NULL) {
         return -1;
+    }
+    
     return (sac_int)(occurrence - str);
 }
 
@@ -376,10 +386,11 @@ void SACchomp (string str)
     while (end > str)
     {
         end --;
-        if (*end == '\n' || *end == '\r')
+        if (*end == '\n' || *end == '\r') {
             *end = '\0';
-        else
+        } else {
             break;
+        }
     }
 }
 
@@ -390,10 +401,11 @@ void SACrtrim (string str)
     while (end > str)
     {
         end --;
-        if (isspace(*end))
+        if (isspace(*end)) {
             *end = '\0';
-        else
+        } else {
             break;
+        }
     }
 }
 
@@ -403,10 +415,11 @@ string SACltrim (string str)
 
     while (str < end)
     {
-        if (!isspace(*end))
+        if (!isspace(*end)) {
             *end = '\0';
-        else
+        } else {
             break;
+        }
         str ++;
     }
 
@@ -433,7 +446,6 @@ sac_int SACstrtoi (string* remain, string input, sac_int base)
 
     return res;
 }
-
 
 float SACstrtof (string* remain, string input)
 {
@@ -503,10 +515,11 @@ string SACbtos (bool n)
 {
     string res = malloc(6 * sizeof(char));
 
-    if (n)
+    if (n) {
         strcpy (res, "true");
-    else
+    } else {
         strcpy (res, "false");
+    }
 
     return res;
 }
