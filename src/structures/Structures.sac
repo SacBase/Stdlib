@@ -9,7 +9,6 @@ import String: all;
 #ifdef EXT_STDLIB
 import Color8: all;
 import Complex: all;
-import List: all;
 import Quaternion: all;
 /* Importing both currently causes a name clash, because the same C function
  * name is being generated for both the double and float variants.
