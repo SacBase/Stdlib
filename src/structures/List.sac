@@ -1,6 +1,6 @@
 #pragma safe
 
-module List deprecated "The List module contains a space leak.";
+module List; // deprecated "The List module contains a space leak.";
 
 export all;
 
