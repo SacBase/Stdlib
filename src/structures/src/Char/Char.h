@@ -1,19 +1,19 @@
-#ifndef STDLIB__CHAR__H
-#define STDLIB__CHAR__H
+#ifndef _SAC_CHAR_H_
+#define _SAC_CHAR_H_
 
 /*
- *  Implementation of standard module Char ctype functions.
- *  It is sort of unfortunate that we have to use these
- *  functions as they incur a per-character overhead.
- *  However, without them incorrect values were produced.
- *  There were two problems:
- *  The isxxx(.) functions work on unsigned chars and not on chars.
- *  They may segfault when not in the range [-1,255].
- *  They may return any non-zero value when true, but a SAC bool is true if 1.
+ * Implementation of standard module Char ctype functions. It is sort of
+ * unfortunate that we have to use these functions as they incur a per-character
+ * overhead. However, without them incorrect values were produced.
+ * There were two problems:
+ *  - The isxxx(.) functions work on unsigned chars and not on chars.
+ *    They may segfault when not in the range [-1,255].
+ *  - They may return any non-zero value when true, but a SaC bool is true if 1.
  */
 
-#include "sacinterface.h"
 #include <stdbool.h>
+
+#include "sacinterface.h"
 
 typedef unsigned char uchar;
 
@@ -33,4 +33,4 @@ uchar SACtoascii(sac_int c);
 uchar SACtolower(uchar c);
 uchar SACtoupper(uchar c);
 
-#endif // STDLIB__CHAR__H
+#endif /* _SAC_CHAR_H_ */
