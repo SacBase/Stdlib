@@ -245,11 +245,7 @@ SET (C_DEPS_SRC
     stdio/src/FibreIO/ScanDbl.c
     stdio/src/FibreIO/FibrePrint.c
     stdio/src/ComplexIO/PrintComplexArray.c
-    stdio/src/BinFile/binfopen.c
-    stdio/src/BinFile/binfflags.c
-    stdio/src/BinFile/binfclose.c
-    stdio/src/BinFile/binfWriteDblArr.c
-    stdio/src/BinFile/binfReadDblArr.c
+    stdio/src/BinFile.c
     stdio/src/ArrayIO/ShowArray.c
     stdio/src/ArrayIO/PrintArray.c
     numerical/src/Math/int_log.c

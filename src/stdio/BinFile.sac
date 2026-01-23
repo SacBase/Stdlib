@@ -2,6 +2,7 @@
 class BinFile;
 
 external classtype;
+    #pragma ctype "int"
 
 use FileSystem: { TheFileSystem };
 use String: { string };
@@ -16,7 +17,8 @@ export all;
  ******************************************************************************/
 
 external syserr, BinFile binfopen(string filename, int flags);
-    #pragma linkobj "src/BinFile/binfopen.o"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
     #pragma effect TheFileSystem
     #pragma linkname "SACbinfopen"
     #pragma linksign [0,1,2,3]
@@ -29,7 +31,8 @@ external syserr, BinFile binfopen(string filename, int flags);
      */
 
 external syserr binfclose(BinFile stream);
-    #pragma linkobj "src/BinFile/binfclose.o"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
     #pragma effect TheFileSystem
     #pragma linkname "SACbinfclose"
     #pragma linksign [0,1]
@@ -45,8 +48,9 @@ external syserr binfclose(BinFile stream);
  ******************************************************************************/
 
 external int O_RDONLY();
-    #pragma linkobj "src/BinFile/binfflags.o"
-    #pragma linkname "SACbinf_O_RDONLY"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
+    #pragma linkname "SAC_O_RDONLY"
     #pragma linksign [0]
     /*
      * Returns the C constant O_RDONLY, which is used to open files with
@@ -54,8 +58,9 @@ external int O_RDONLY();
      */
 
 external int O_WRONLY();
-    #pragma linkobj "src/BinFile/binfflags.o"
-    #pragma linkname "SACbinf_O_WRONLY"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
+    #pragma linkname "SAC_O_WRONLY"
     #pragma linksign [0]
     /*
      * Returns the C constant O_WRONLY, which is used to open files with
@@ -63,8 +68,9 @@ external int O_WRONLY();
      */
 
 external int O_RDWR();
-    #pragma linkobj "src/BinFile/binfflags.o"
-    #pragma linkname "SACbinf_O_RDWR"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
+    #pragma linkname "SAC_O_RDWR"
     #pragma linksign [0]
     /*
      * Returns the C constant O_RDWR, which is used to open files with
@@ -72,8 +78,9 @@ external int O_RDWR();
      */
 
 external int O_CREAT();
-    #pragma linkobj "src/BinFile/binfflags.o"
-    #pragma linkname "SACbinf_O_CREAT"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
+    #pragma linkname "SAC_O_CREAT"
     #pragma linksign [0]
     /*
      * Returns the C constant O_CREAT, meaning that a file with the designated
@@ -81,8 +88,9 @@ external int O_CREAT();
      */
 
 external int O_TRUNC();
-    #pragma linkobj "src/BinFile/binfflags.o"
-    #pragma linkname "SACbinf_O_TRUNC"
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
+    #pragma linkname "SAC_O_TRUNC"
     #pragma linksign [0]
     /*
      * Returns the C constant O_TRUNC. If a file already exists and the
@@ -96,10 +104,11 @@ external int O_TRUNC();
  ******************************************************************************/
 
 external double[*] binfReadDoubleArray(BinFile &stream, int d, int[.] shp);
-    #pragma refcounting [0]
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
     #pragma linkname "SACbinfReadDoubleArray"
-    #pragma linksign[1,2,3,4]
-    #pragma linkobj "src/BinFile/binfReadDblArr.o"
+    #pragma linksign [0,1,2,3]
+    #pragma sacarg [0]
     /*
      * Reads an array of dimension d and shape shp of doubles from
      * file stream. Caution: This function does not check whether
@@ -108,8 +117,10 @@ external double[*] binfReadDoubleArray(BinFile &stream, int d, int[.] shp);
 
 external void binfWriteDoubleArray(BinFile &stream, int d, int[.] shp,
                                    double[*] arr);
+    // #pragma header "src/BinFile.h"
+    #pragma linkobj "src/BinFile.o"
     #pragma linkname "SACbinfWriteDoubleArray"
-    #pragma linkobj "src/BinFile/binfWriteDblArr.o"
+    #pragma linksign [1,2,3,4]
     /*
      * Writes the array arr of dimension d and shape shp to file stream.
      */
