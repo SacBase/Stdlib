@@ -10,7 +10,6 @@ import TermFile: all;
 #ifdef EXT_STDLIB
 import ComplexIO: all;
 import FibreIO: all;
-import ListIO: all;
 #endif
 
 export all;
