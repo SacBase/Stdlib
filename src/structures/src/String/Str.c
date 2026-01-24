@@ -360,7 +360,10 @@ sac_int SACstrspn(string str, string accept)
 
 sac_int SACstrstr(string haystack, string needle)
 {
-    return (sac_int)strstr(haystack, needle);
+    char * found = strstr(haystack, needle);
+    if (found == NULL) return -1;
+    sac_int index = found - haystack;
+    return index;
 }
 
 void SACstrtok(string* out_token, string* out_rest, string str, string delimiters)
