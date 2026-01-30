@@ -7,7 +7,7 @@
 #include "TermFile.h"
 
 #ifdef SACARG_WORKS
-SAC_C_EXTERN SACtypes *SACTYPE_String__string;
+SAC_C_EXTERN SACtypes *SACTYPE__String__string;
 #endif
 
 /*****************************************************************/
@@ -28,7 +28,7 @@ int SACfgets_TF(char **str, int size, FILE *stream)
         free (buf);
     }
 #ifdef SACARG_WORKS
-    *str = SACARGcreateFromPointer (SACTYPE_String__string, buf2, 1, 5);
+    *str = SACARGcreateFromPointer (SACTYPE__String__string, buf2, 1, 5);
 #else
     *str = buf2;
 #endif
