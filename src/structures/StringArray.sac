@@ -24,7 +24,7 @@ external typedef stringArray;
     #pragma linkobj "src/StringArray/alloc.o"
     #pragma freefun "SAC_StringArray_free"
     #pragma copyfun "SAC_StringArray_copy"
-    #pragma ctype   "array *"
+//    #pragma ctype   "array *"
 
 external int dim(stringArray s);
     #pragma linkname "SAC_StringArray_dim"

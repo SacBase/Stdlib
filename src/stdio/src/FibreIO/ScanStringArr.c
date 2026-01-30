@@ -19,16 +19,20 @@ SACarg *FibreScanStringArray(FILE *stream)
     
     size = 1;
     for (i = 0; i < dims; i++) {
-      size *= shape[i];
+      size *= shp[i];
     }
     
     res = SAC_StringArray_alloc(dims, size);
     
     for (i = 0; i < dims; i++) {
-      res->shp[i] = shape[i];
+      res->shp[i] = shp[i];
     }
     
-    res->elems = stringarray;
+    /* stringarray is char ** */
+    for (i = 0; i < size; i++) {
+        res->elems[i] = SACARGcreateFromPointer(SACTYPE_String_string,
+                                                stringarray[i]);
+    }
     
     return SACARGcreateFromPointer(SACTYPE__StringArray__stringArray,
                                    res, dims, shp);
@@ -46,14 +50,17 @@ SACarg *FibreScanStringArrayStr(char *stream)
   
     size = 1;
     for (i = 0; i < dims; i++) {
-      size *= shape[i];
+      size *= shp[i];
     }
   
     for (i = 0; i < dims; i++) {
-      res->shp[i] = shape[i];
+      res->shp[i] = shp[i];
     }
   
-    res->elems = stringarray;
+    for (i = 0; i < size; i++) {
+        res->elems[i] = SACARGcreateFromPointer(SACTYPE_String_string,
+                                                stringarray[i]);
+    }
   
     return SACARGcreateFromPointer(SACTYPE__StringArray__stringArray,
                                    res, dims, shp);

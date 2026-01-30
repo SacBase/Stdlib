@@ -9,4 +9,3 @@ void SAC_StringArray_modarray(array *labs, SACarg *idx, SACarg *str)
     SACARGdeleteSacArray(&(labs->elems[offset]));
     labs->elems[offset] = SACARGduplicateSaCArray(str);
 }
-

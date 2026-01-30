@@ -24,7 +24,7 @@ SACarg *FibreScanIntArray(FILE *stream)
 
 SACarg *FibreScanIntArrayStr(SACarg *stream_in)
 {
-    char *stream = SACARGgetSharedData(SACARGgetType(stream_in), stream_in);
+    char *stream = SACARGgetUniqueData(SACARGgetType(stream_in), stream_in);
     sac_int i;
     start_token = PARSE_INT_ARRAY;
     yy_scan_string(stream);

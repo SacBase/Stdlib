@@ -53,7 +53,7 @@ unsigned long long    *ulonglongarray;
 char    **stringarray;
 
 static sac_int i;
-sac_int shape[ MAXDIM];
+sac_int shp[ MAXDIM];
 static sac_int dim_pos;
 static enum READMODE mode;
 
@@ -69,10 +69,10 @@ extern int yynerrs;
 
 %}
 
-
+/* TODO: this flex/bison(?) thing does not accept sac_int in %union */
 %union { char            cbyte;
          short           cshort;
-         sac_int         cint;
+         long            cint;
          long            clong;
          long long       clonglong;
          unsigned char   cubyte;
@@ -246,15 +246,15 @@ parse_array: {dims=0;
 
 parse_scalar: NUM
                 { if( mode == double_mode) {
-                    doublearray = (double *) SAC_MALLOC( sizeof( double));
+                    doublearray = (double *) malloc( sizeof( double));
                     *doublearray = $1;
                   }
                   else if( mode == float_mode) {
-                    floatarray = (float *) SAC_MALLOC( sizeof( float));
+                    floatarray = (float *) malloc( sizeof( float));
                     *floatarray = $1;
                   }
                   else if( mode == int_mode) {
-                    intarray = (int *) SAC_MALLOC( sizeof( sac_int));
+                    intarray = (sac_int *) malloc( sizeof( sac_int));
                     *intarray = $1;
                   }
                   else {
@@ -269,7 +269,7 @@ parse_scalar: NUM
                     yyerror( "byte numeric expected!");
                   }
                   else {
-                    bytearray = (char *) SAC_MALLOC( sizeof( char));
+                    bytearray = (char *) malloc( sizeof( char));
                     *bytearray = $1;
                   }
                  got_scalar = 1;
@@ -281,7 +281,7 @@ parse_scalar: NUM
                     yyerror( "short numeric expected!");
                   }
                   else {
-                    shortarray = (short *) SAC_MALLOC( sizeof( short));
+                    shortarray = (short *) malloc( sizeof( short));
                     *shortarray = $1;
                   }
                  got_scalar = 1;
@@ -293,7 +293,7 @@ parse_scalar: NUM
                     yyerror( "long numeric expected!");
                   }
                   else {
-                    longarray = (long *) SAC_MALLOC( sizeof( long));
+                    longarray = (long *) malloc( sizeof( long));
                     *longarray = $1;
                   }
                  got_scalar = 1;
@@ -306,7 +306,7 @@ parse_scalar: NUM
                   }
                   else {
                     longlongarray =
-		    (long long*) SAC_MALLOC( sizeof( long long));
+		    (long long*) malloc( sizeof( long long));
                     *longlongarray = $1;
                   }
                  got_scalar = 1;
@@ -319,7 +319,7 @@ parse_scalar: NUM
                   }
                   else {
                     ubytearray =
-		    (unsigned char *) SAC_MALLOC( sizeof( unsigned char));
+		    (unsigned char *) malloc( sizeof( unsigned char));
                     *ubytearray = $1;
                   }
                  got_scalar = 1;
@@ -332,7 +332,7 @@ parse_scalar: NUM
                   }
                   else {
                     ushortarray =
-		    (unsigned short *) SAC_MALLOC( sizeof( unsigned short));
+		    (unsigned short *) malloc( sizeof( unsigned short));
                     *ushortarray = $1;
                   }
                  got_scalar = 1;
@@ -345,7 +345,7 @@ parse_scalar: NUM
                   }
                   else {
                     uintarray =
-		    (unsigned int *) SAC_MALLOC( sizeof( unsigned int));
+		    (unsigned int *) malloc( sizeof( unsigned int));
                     *uintarray = $1;
                   }
                  got_scalar = 1;
@@ -358,7 +358,7 @@ parse_scalar: NUM
                   }
                   else {
                     ulongarray =
-		    (unsigned long *) SAC_MALLOC( sizeof( unsigned long));
+		    (unsigned long *) malloc( sizeof( unsigned long));
                     *ulongarray = $1;
                   }
                  got_scalar = 1;
@@ -371,7 +371,7 @@ parse_scalar: NUM
                   }
                   else {
                     ulonglongarray = (unsigned long long*)
-		    SAC_MALLOC( sizeof( unsigned long long));
+		    malloc( sizeof( unsigned long long));
                     *ulonglongarray = $1;
                   }
                  got_scalar = 1;
@@ -386,13 +386,13 @@ parse_scalar: NUM
                  got_scalar = 1;
                  switch( mode) {
                    case float_mode:
-                     floatarray = (float *) SAC_MALLOC( sizeof( float));
+                     floatarray = (float *) malloc( sizeof( float));
                      *floatarray = (float)$1;
                      dims = 0;
                      size = 1;
                      break;
                    case double_mode:
-                     doublearray = (double *) SAC_MALLOC( sizeof( double));
+                     doublearray = (double *) malloc( sizeof( double));
                      *doublearray = $1;
                       dims = 0;
                      size = 1;
@@ -418,7 +418,7 @@ parse_scalar: NUM
                   got_scalar = 1;
                   switch( mode) {
                     case string_mode:
-                      stringarray = (char **) SAC_MALLOC( sizeof( char*));
+                      stringarray = (char **) malloc( sizeof( char*));
                       stringarray[0] = (char*)$1;
                       dims = 0;
                       size = 1;
@@ -483,53 +483,53 @@ array: SQBR_L desc COLON
        { if( ! size_fixed) {
            size_fixed = 1;
            for( i = 0, size = 1; i < dims; i++) {
-             size *= shape[ i];
+             size *= shp[ i];
            }
            switch( mode) {
              case byte_mode:
-               bytearray = (char *) SAC_MALLOC( size * sizeof( char));
+               bytearray = (char *) malloc( size * sizeof( char));
                break;
              case short_mode:
-               shortarray = (short *) SAC_MALLOC( size * sizeof( short));
+               shortarray = (short *) malloc( size * sizeof( short));
                break;
              case int_mode:
-               intarray = (sac_int *) SAC_MALLOC( size * sizeof( sac_int));
+               intarray = (sac_int *) malloc( size * sizeof( sac_int));
                break;
              case long_mode:
-               longarray = (long *) SAC_MALLOC( size * sizeof( long));
+               longarray = (long *) malloc( size * sizeof( long));
                break;
              case longlong_mode:
                longlongarray = (long long *)
-	       SAC_MALLOC( size * sizeof( long long));
+	       malloc( size * sizeof( long long));
                break;
              case ubyte_mode:
                ubytearray = (unsigned char *)
-	       SAC_MALLOC( size * sizeof( unsigned char));
+	       malloc( size * sizeof( unsigned char));
                break;
              case ushort_mode:
                ushortarray = (unsigned short *)
-	       SAC_MALLOC( size * sizeof( unsigned short));
+	       malloc( size * sizeof( unsigned short));
                break;
              case uint_mode:
                uintarray = (unsigned int *)
-	       SAC_MALLOC( size * sizeof( unsigned int));
+	       malloc( size * sizeof( unsigned int));
                break;
              case ulong_mode:
                ulongarray = (unsigned long *)
-	       SAC_MALLOC( size * sizeof( unsigned long));
+	       malloc( size * sizeof( unsigned long));
                break;
              case ulonglong_mode:
                ulonglongarray = (unsigned long long *)
-	       SAC_MALLOC( size * sizeof( unsigned long long));
+	       malloc( size * sizeof( unsigned long long));
                break;
              case float_mode:
-               floatarray = (float *) SAC_MALLOC( size * sizeof( float));
+               floatarray = (float *) malloc( size * sizeof( float));
                break;
              case double_mode:
-               doublearray = (double *) SAC_MALLOC( size * sizeof( double));
+               doublearray = (double *) malloc( size * sizeof( double));
                break;
              case string_mode:
-               stringarray = (char **) SAC_MALLOC( size * sizeof( char*));
+               stringarray = (char **) malloc( size * sizeof( char*));
                break;
              default:
                break;
@@ -679,17 +679,17 @@ desc: NUM COMMA NUM
         }
         if( ! size_fixed) {
           dims++;
-          shape[ dim_pos] = $3 - $1 + 1;
+          shp[ dim_pos] = $3 - $1 + 1;
         }
         else {
           if( dim_pos >= dims) {
             yyerror( "array of lower dimensionality expected!");
           }
-          if( shape[ dim_pos] != $3 - $1 + 1) {
+          if( shp[ dim_pos] != $3 - $1 + 1) {
             yyerror( "shape does not match specification!");
           }
         }
-        elems_left[ dim_pos] = shape[ dim_pos];
+        elems_left[ dim_pos] = shp[ dim_pos];
       }
     ;
 

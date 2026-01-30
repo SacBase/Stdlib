@@ -24,7 +24,7 @@ SACarg *FibreScanDoubleArray(FILE *stream)
 
 SACarg *FibreScanDoubleArrayStr(SACarg *stream_in)
 {
-    char *stream = SACARGgetSharedData(SACARGgetType(stream_in), stream_in);
+    char *stream = SACARGgetUniqueData(SACARGgetType(stream_in), stream_in);
     sac_int i;
     start_token = PARSE_DOUBLE_ARRAY;
     yy_scan_string(stream);

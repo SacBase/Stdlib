@@ -31,9 +31,8 @@ typedef enum {
  }
 
 
-static
 sac_int FibreWriteAll(FILE *stream, sac_int dim, sac_int *shp, void *arr,
-                   typeflag_t typeflag, bool indent, sac_int done)
+                   typeflag_t typeflag, int indent, sac_int done)
 {
   sac_int i;
 
@@ -104,7 +103,9 @@ sac_int FibreWriteAll(FILE *stream, sac_int dim, sac_int *shp, void *arr,
         break;
       case STRING:
         INDENT(stream, indent+1);
-        fprintf(stream, "\"%s\"\n", ((array*)arr)->data[done + i]);
+        const char *str = SACARGgetSharedData(SAC__String__string,
+                                              ((array*)arr)->elems[done + i]);
+        fprintf(stream, "\"%s\"\n", str);
         break;
       default:
         SAC_RuntimeError ("illegal typeflag (int)%d", typeflag);

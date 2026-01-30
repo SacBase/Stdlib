@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "sacinterface.h"
 
@@ -51,7 +52,7 @@ extern int start_token;
 extern int FibreScanlex(void);
 extern void doScan( FILE *stream);
 
-extern int boolval;
+extern bool boolval;
 extern char byteval;
 extern short shortval;
 extern sac_int intval;
@@ -69,7 +70,7 @@ extern double *doublearray;
 extern float *floatarray;
 extern char *bytearray;
 extern short *shortarray;
-extern int *intarray;
+extern sac_int *intarray;
 extern long *longarray;
 extern long long *longlongarray;
 extern unsigned char *ubytearray;
@@ -82,5 +83,5 @@ extern char **stringarray;
 extern int got_scaler;
 extern sac_int size;
 extern sac_int dims;
-extern sac_int shape[ MAXDIM];
+extern sac_int shp[ MAXDIM];
 

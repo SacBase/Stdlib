@@ -23,7 +23,7 @@ FILE *stream)								\
   SAC_ND_ALLOC__DESC( ret_nt, dims)					\
   SAC_ND_SET__RC( ret_nt, 1)						\
   for( i = 0; i < dims; i++) {						\
-    SAC_ND_A_DESC_SHAPE( ret_nt, i) = shape[i];				\
+    SAC_ND_A_DESC_SHAPE( ret_nt, i) = shp[i];				\
   }									\
   SAC_ND_A_DESC_SIZE( ret_nt) = size;					\
   SAC_ND_A_FIELD( ret_nt) = type##array;				\
@@ -43,7 +43,7 @@ char *stream)								\
   SAC_ND_ALLOC__DESC( ret_nt, dims)					\
   SAC_ND_SET__RC( ret_nt, 1)						\
   for( i = 0; i < dims; i++) {						\
-    SAC_ND_A_DESC_SHAPE( ret_nt, i) = shape[i];				\
+    SAC_ND_A_DESC_SHAPE( ret_nt, i) = shp[i];				\
   }									\
   SAC_ND_A_DESC_SIZE( ret_nt) = size;					\
   SAC_ND_A_FIELD( ret_nt) = type##array;				\
