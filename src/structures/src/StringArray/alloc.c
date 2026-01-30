@@ -4,6 +4,7 @@
 #include <sacinterface.h>
 #include "StringArray.h"
 
+/* Or should this return SACarg? */
 array *SAC_StringArray_alloc(sac_int dim, sac_int size)
 {
   array *res;
@@ -16,4 +17,3 @@ array *SAC_StringArray_alloc(sac_int dim, sac_int size)
   
   return res;
 }
-

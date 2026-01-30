@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "sac.h"
+#include "sacinterface.h"
 
 
 #define yyFlexLexer FibreScanFlexLexer
@@ -54,7 +54,7 @@ extern void doScan( FILE *stream);
 extern int boolval;
 extern char byteval;
 extern short shortval;
-extern int intval;
+extern sac_int intval;
 extern long longval;
 extern long long longlongval;
 extern unsigned char ubyteval;
@@ -80,7 +80,7 @@ extern unsigned long long *ulonglongarray;
 extern char **stringarray;
 
 extern int got_scaler;
-extern int size;
-extern int dims;
-extern int shape[ MAXDIM];
+extern sac_int size;
+extern sac_int dims;
+extern sac_int shape[ MAXDIM];
 
