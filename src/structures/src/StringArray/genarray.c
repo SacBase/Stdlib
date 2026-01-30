@@ -3,46 +3,23 @@
 
 #include "StringArray.h"
 
-#define resout_nt (resout, T_OLD((SCL, (HID, (NUQ,)))))
-#define res_nt    (res, T_OLD((SCL, (HID, (NUQ,)))))
-#define shp_nt    (shp, T_OLD((AKD, (NHD, (NUQ,)))))
-#define s_nt      (s,   T_OLD((SCL, (HID, (NUQ,)))))
-
-void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
-                               SAC_ND_PARAM_in( shp_nt, int ),
-                               SAC_ND_PARAM_in( s_nt, char *))
+array *SAC_StringArray_genarray(SACarg *shp, SACarg *s)
 {
-  SAC_ND_DECL__DESC( res_nt, );
-  array *SAC_ND_A_FIELD( res_nt );
-  int dim, size;
-  int i;
+    sac_int dim  = SACARGgetDim(shp); 
+    sac_int size = 1;
+    for (sac_int pos = 0; pos < dim; pos++) {
+        size *= SACARGgetShape(shp, pos);
+    }
+    array *res = SAC_StringArray_alloc(dim, size);
+    for (sac_int pos = 0; pos < dim; pos++) {
+        res->shp[pos] = SACARGgetShape(shp, pos);
+    }
 
-  SAC_ND_ALLOC__DESC( res_nt, 0);
-  SAC_ND_SET__RC( res_nt, 1);
+    for (sac_int i = 0; i < size; i++) {
+        res->elems[i] = SACARGduplicateSaCArray(s);
+    }
 
-  dim = SAC_ND_A_DESC_SIZE( shp_nt );
-  size = 1;
-  for( i=0; i < dim; i++) {
-    size *= SAC_ND_READ( shp_nt, i);
-  }
-
-  res = SAC_StringArray_alloc( dim, size);
-
-  for( i=0; i < dim; i++) {
-    res->shp[i] = SAC_ND_READ( shp_nt, i);
-  }
-
-  for( i=0; i < size ; i++) {
-    res->data[i] = SAC_ND_A_FIELD( s_nt );
-    res->descs[i] = SAC_ND_A_DESC( s_nt );
-    SAC_ND_INC_RC( s_nt, 1);
-  }
-
-  SAC_ND_DEC_RC_FREE( s_nt, 1 , free );
-  SAC_ND_DEC_RC_FREE( shp_nt, 1,);
-
-  SAC_ND_RET_out( resout_nt , res_nt )
-
+    return res;
 }
 
 

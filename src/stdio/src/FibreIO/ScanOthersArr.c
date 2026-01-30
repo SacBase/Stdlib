@@ -16,10 +16,10 @@ FILE *stream)								\
 {									\
   SAC_ND_DECL__DATA( ret_nt, type, )					\
   SAC_ND_DECL__DESC( ret_nt, )						\
-  int i;								\
+  sac_int i;								\
   start_token = PARSE_##token##_ARRAY;					\
   doScan( stream);                           \
-  int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;				\
+  sac_int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;				\
   SAC_ND_ALLOC__DESC( ret_nt, dims)					\
   SAC_ND_SET__RC( ret_nt, 1)						\
   for( i = 0; i < dims; i++) {						\
@@ -35,11 +35,11 @@ char *stream)								\
 {									\
   SAC_ND_DECL__DATA( ret_nt, type, )					\
   SAC_ND_DECL__DESC( ret_nt, )						\
-  int i;								\
+  sac_int i;								\
   start_token = PARSE_##token##_ARRAY;					\
   yy_scan_string( stream);						\
   FibreScanparse();							\
-  int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;				\
+  sac_int SAC_ND_A_MIRROR_DIM( ret_nt) = dims;				\
   SAC_ND_ALLOC__DESC( ret_nt, dims)					\
   SAC_ND_SET__RC( ret_nt, 1)						\
   for( i = 0; i < dims; i++) {						\

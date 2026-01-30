@@ -4,6 +4,8 @@ extern int linenum;
 extern char yytext[];
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <sacinterface.h>
 #include "FibreScan.h"
 
 enum READMODE {
@@ -22,10 +24,10 @@ enum READMODE {
   string_mode,
 };
 
-int     boolval;
+bool     boolval;
 char    byteval;
 short   shortval;
-int     intval;
+sac_int     intval;
 long    longval;
 long long    longlongval;
 unsigned char    ubyteval;
@@ -40,7 +42,7 @@ double  *doublearray;
 float   *floatarray;
 char    *bytearray;
 short   *shortarray;
-int     *intarray;
+sac_int     *intarray;
 long    *longarray;
 long long    *longlongarray;
 unsigned char    *ubytearray;
@@ -50,17 +52,17 @@ unsigned long    *ulongarray;
 unsigned long long    *ulonglongarray;
 char    **stringarray;
 
-static int i;
-int shape[ MAXDIM];
-static int dim_pos;
+static sac_int i;
+sac_int shape[ MAXDIM];
+static sac_int dim_pos;
 static enum READMODE mode;
 
 static int got_scalar;
 static int size_fixed;
-int dims;
-int size;
-static int array_pos;
-static int elems_left[MAXDIM];
+sac_int dims;
+sac_int size;
+static sac_int array_pos;
+static sac_int elems_left[MAXDIM];
 
 extern int yychar;
 extern int yynerrs;
@@ -70,7 +72,7 @@ extern int yynerrs;
 
 %union { char            cbyte;
          short           cshort;
-         int             cint;
+         sac_int         cint;
          long            clong;
          long long       clonglong;
          unsigned char   cubyte;
@@ -252,7 +254,7 @@ parse_scalar: NUM
                     *floatarray = $1;
                   }
                   else if( mode == int_mode) {
-                    intarray = (int *) SAC_MALLOC( sizeof( int));
+                    intarray = (int *) SAC_MALLOC( sizeof( sac_int));
                     *intarray = $1;
                   }
                   else {
@@ -491,7 +493,7 @@ array: SQBR_L desc COLON
                shortarray = (short *) SAC_MALLOC( size * sizeof( short));
                break;
              case int_mode:
-               intarray = (int *) SAC_MALLOC( size * sizeof( int));
+               intarray = (sac_int *) SAC_MALLOC( size * sizeof( sac_int));
                break;
              case long_mode:
                longarray = (long *) SAC_MALLOC( size * sizeof( long));

@@ -8,20 +8,21 @@
 
 #include "../../../structures/src/StringArray/StringArray.h"
 
-#define INT    		1
-#define FLOAT  		2
-#define DOUBLE 		3
-#define STRING 		4
-#define BYTE    	5
-#define SHORT    	6
-#define LONG    	7
-#define LONGLONG    	8
-#define UBYTE    	9
-#define USHORT    	10
-#define UINT    	11
-#define ULONG    	12
-#define ULONGLONG    	13
-
+typedef enum {
+    INT,
+    FLOAT,
+    DOUBLE,
+    STRING,
+    BYTE,
+    SHORT,
+    LONG,
+    LONGLONG,
+    UBYTE,
+    USHORT,
+    UINT,
+    ULONG,
+    ULONGLONG
+} typeflag_t;
 
 #define INDENT(stream, ind)                     \
 {                                               \
@@ -30,15 +31,14 @@
  }
 
 
-
-
-int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
-                  int typeflag, int indent, int done)
+static
+sac_int FibreWriteAll(FILE *stream, sac_int dim, sac_int *shp, void *arr,
+                   typeflag_t typeflag, bool indent, sac_int done)
 {
-  int i;
+  sac_int i;
 
   INDENT(stream, indent);
-  fprintf(stream, "[ 0,%d:\n", (*shp) - 1);
+  fprintf(stream, "[ 0,%" PRIisac ":\n", (*shp) - 1);
 
   if (dim==1)
   {
@@ -56,7 +56,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         break;
       case INT:
         INDENT(stream, indent+1);
-        fprintf(stream, "%i\n", ((int*)arr)[done + i]);
+        fprintf(stream, "%" PRIisac "\n", ((sac_int*)arr)[done + i]);
         break;
       case LONG:
         INDENT(stream, indent+1);
@@ -107,7 +107,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
         fprintf(stream, "\"%s\"\n", ((array*)arr)->data[done + i]);
         break;
       default:
-        SAC_RuntimeError ("illegal typeflag %d", typeflag);
+        SAC_RuntimeError ("illegal typeflag (int)%d", typeflag);
       }
     }
     done+=*shp;
@@ -127,7 +127,7 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
                              typeflag, indent+1, done);
         break;
       case INT:
-        done = FibreWriteAll(stream, dim-1, shp+1, ((int*)arr),
+        done = FibreWriteAll(stream, dim-1, shp+1, ((sac_int*)arr),
                              typeflag, indent+1, done);
         break;
       case LONG:
@@ -183,31 +183,31 @@ int FibreWriteAll(FILE *stream, int dim, int *shp, void *arr,
 }
 
 
-void FibrePrintIntArray( FILE *stream, int dim, int *shape, int *array)
+void FibrePrintIntArray(FILE *stream, sac_int dim, sac_int *shape, sac_int *array)
 {
   (void) FibreWriteAll(stream, dim, shape, array, INT, 0, 0);
 }
 
 
-void FibrePrintFloatArray( FILE *stream, int dim, int *shape, float *array)
+void FibrePrintFloatArray( FILE *stream, sac_int dim, sac_int *shape, float *array)
 {
   (void) FibreWriteAll(stream, dim, shape, array, FLOAT, 0, 0);
 }
 
 
-void FibrePrintDoubleArray( FILE *stream, int dim, int *shape, double *array)
+void FibrePrintDoubleArray( FILE *stream, sac_int dim, sac_int *shape, double *array)
 {
   (void) FibreWriteAll(stream, dim, shape, array, DOUBLE, 0, 0);
 }
 
-void FibrePrintStringArray( FILE *stream, int dim, int *shape, array *array)
+void FibrePrintStringArray( FILE *stream, sac_int dim, sac_int *shape, array *array)
 {
   (void) FibreWriteAll(stream, dim, shape, array, STRING, 0, 0);
 }
 
 #define PRINTARR(type,alias,switchname)					     \
 									     \
-void FibrePrint##alias##Array( FILE *stream, int dim, int *shape, type *array) \
+void FibrePrint##alias##Array( FILE *stream, sac_int dim, sac_int *shape, type *array) \
 {									     \
   (void) FibreWriteAll(stream, dim, shape, array, switchname, 0, 0);	     \
 }

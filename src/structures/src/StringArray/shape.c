@@ -1,31 +1,15 @@
 #include "StringArray.h"
 
-#define s_nt      (s,   T_OLD((SCL, (HID, (NUQ,)))))
-#define shp_nt    (shp, T_OLD((AKD, (NHD, (NUQ,)))))
-#define res_nt    (res, T_OLD((AKD, (NHD, (NUQ,)))))
-
-void SAC_StringArray_shape( SAC_ND_PARAM_out( shp_nt, int),
-                            SAC_ND_PARAM_in( s_nt, array *))
+SACarg *SAC_StringArray_shape(array *x)
 {
-  int i;
-  int SAC_ND_A_MIRROR_DIM( res_nt) = 1;
-  SAC_ND_DECL__DESC( res_nt, );
-  SAC_ND_DECL__DATA( res_nt, int, ); 
+    sac_int d    = x->dim;
+    sac_int *shp = malloc(d * sizeof(sac_int));
 
-  SAC_ND_ALLOC__DESC( res_nt, 1);
+    for (sac_int l = 0; l < d; l++) {
+        shp[l] = x->shp[l];
+    }
 
-  SAC_ND_A_DESC_SHAPE( res_nt, 0) = s->dim;
+    sac_int n[1] = {d};
 
-  SAC_ND_SET__RC( res_nt, 1);
-  SAC_ND_A_DESC_SIZE( res_nt) = SAC_ND_A_DESC_SHAPE( res_nt, 0);
-  SAC_ND_A_FIELD( res_nt) = SAC_MALLOC( s->dim * sizeof( int));
-  for( i=0; i<s->dim; i++) {
-    SAC_ND_A_FIELD( res_nt)[i] = s->shp[i];
-  }
-
-  SAC_ND_RET_out( shp_nt , res_nt )
+    return SACARGcreateFromPointer(SACTYPE__MAIN__int, shp, d, n);
 }
-
-#undef s_nt  
-#undef shp_nt
-#undef res_nt
