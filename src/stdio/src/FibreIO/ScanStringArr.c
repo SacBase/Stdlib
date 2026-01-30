@@ -30,8 +30,8 @@ SACarg *FibreScanStringArray(FILE *stream)
     
     /* stringarray is char ** */
     for (i = 0; i < size; i++) {
-        res->elems[i] = SACARGcreateFromPointer(SACTYPE_String_string,
-                                                stringarray[i]);
+        res->elems[i] = SACARGcreateFromPointer(SACTYPE__String__string,
+                                                stringarray[i], 0, NULL);
     }
     
     return SACARGcreateFromPointer(SACTYPE__StringArray__stringArray,
@@ -58,8 +58,9 @@ SACarg *FibreScanStringArrayStr(char *stream)
     }
   
     for (i = 0; i < size; i++) {
-        res->elems[i] = SACARGcreateFromPointer(SACTYPE_String_string,
-                                                stringarray[i]);
+        res->elems[i] = SACARGcreateFromPointer(SACTYPE__String__string,
+                                                stringarray[i],
+                                                0, NULL);
     }
   
     return SACARGcreateFromPointer(SACTYPE__StringArray__stringArray,
