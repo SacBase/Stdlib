@@ -96,9 +96,9 @@ external int O_TRUNC();
  ******************************************************************************/
 
 external double[*] binfReadDoubleArray(BinFile &stream, int d, int[.] shp);
-    #pragma refcounting [0]
     #pragma linkname "SACbinfReadDoubleArray"
-    #pragma linksign[1,2,3,4]
+    #pragma linksign[0,1,2,3]
+    #pragma sacarg[0]
     #pragma linkobj "src/BinFile/binfReadDblArr.o"
     /*
      * Reads an array of dimension d and shape shp of doubles from
