@@ -344,12 +344,11 @@ IF ("${TARGET}" MATCHES "^cuda.*" OR "${TARGET}" MATCHES "multi_gpu")
         MAIN_DEPENDENCY "${src}"
         IMPLICIT_DEPENDS C "${src}"
         COMMAND
-            nvcc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
-                 -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
-                 -O3
-                 --compiler-options -fPIC
-                 -c "${src}"
-                 -o "${dst}"
+            ${SAC2C} -Xc -I${CMAKE_CURRENT_SOURCE_DIR}/${dir}
+                     -Xc -I${CMAKE_CURRENT_BINARY_DIR}/${dir}
+                     -cc ccrmod
+                     "${src}"
+                     -o "${dst}"
         WORKING_DIRECTORY
             "${CMAKE_CURRENT_BINARY_DIR}/${dir}"
         COMMENT "Generating ${dst} for target `${TARGET}'"

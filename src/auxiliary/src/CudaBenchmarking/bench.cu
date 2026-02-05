@@ -5,6 +5,7 @@
 extern "C" {
 
 #include <stdarg.h>
+#include <sacinterface.h>
 #include <string.h>
 #include <time.h>
 #include <cuda.h>
@@ -80,7 +81,7 @@ void benchCreate( struct cudabench** interval)
   /* benchGetInterval actually creates the data structure */
 }     
 
-struct cudabench* benchGetInterval_si(char * name, sac_int num)
+struct cudabench* benchGetInterval_si(const char * name, sac_int num)
 {                                                                        
   struct cudabench *interval;
   char* newName;
@@ -100,14 +101,14 @@ struct cudabench* benchGetInterval_i( sac_int num)
   return( interval);
 }                                                                        
 
-struct cudabench* benchGetInterval_s( char *name) 
+struct cudabench* benchGetInterval_s(const char *name)
 {                                                                        
   struct cudabench *interval;
   interval = benchGetInterval_si(name, -1);
   return( interval);
 }                                                                        
 
-struct cudabench* benchGetInterval_siu(char * name, sac_int num, sac_int timeunit)
+struct cudabench* benchGetInterval_siu(const char * name, sac_int num, sac_int timeunit)
 {                                                                        
   struct cudabench *interval;
   char* newName;
@@ -127,7 +128,7 @@ struct cudabench* benchGetInterval_iu( sac_int num, sac_int timeunit)
   return( interval);
 }                                                                        
 
-struct cudabench* benchGetInterval_su( char *name, sac_int timeunit) 
+struct cudabench* benchGetInterval_su(const char *name, sac_int timeunit)
 {                                                                        
   struct cudabench *interval;
   interval = benchGetInterval_siu(name, -1, timeunit);
