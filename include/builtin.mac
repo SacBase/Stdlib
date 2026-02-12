@@ -48,7 +48,7 @@ REAL_NUM(fun)
 INT_NUM(fun)                                                                   \
 REAL_NUM(fun)
 
-#define CHAR(fun)	                                                           \
+#define CHAR(fun)	                                                       \
 fun(char, /* no postfix */, c, ' ', ' ')
 
 #define BOOL(fun)                                                              \

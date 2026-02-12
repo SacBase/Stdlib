@@ -16,35 +16,35 @@
  *
  ******************************************************************************/
 
-#define MAP_ARI_OPS(ext, a)                                                    \
-MAP_BIN_##ext(+, _add_SxS_, a, a)                                              \
-MAP_BIN_##ext(-, _sub_SxS_, a, a)                                              \
-MAP_BIN_##ext(*, _mul_SxS_, a, a)                                              \
-MAP_BIN_##ext(/, _div_SxS_, a, a)                                              \
-MAP_BIN_##ext(min, _min_SxS_, a, a)                                            \
-MAP_BIN_##ext(max, _max_SxS_, a, a)
+#define MAP_ARI_OPS(ext, a, _zval)                                             \
+MAP_BIN_##ext(+, _add_SxS_, a, a, _zval, _zval)                                \
+MAP_BIN_##ext(-, _sub_SxS_, a, a, _zval, _zval)                                \
+MAP_BIN_##ext(*, _mul_SxS_, a, a, _zval, _zval)                                \
+MAP_BIN_##ext(/, _div_SxS_, a, a, _zval, _zval)                                \
+MAP_BIN_##ext(min, _min_SxS_, a, a, _zval, _zval)                              \
+MAP_BIN_##ext(max, _max_SxS_, a, a, _zval, _zval)
 
-#define MAP_ABS_OP(ext, a)                                                     \
-MAP_MON_##ext(abs, _abs_S_, a, a)
+#define MAP_ABS_OP(ext, a, _zval)                                              \
+MAP_MON_##ext(abs, _abs_S_, a, a, _zval, _zval)
 
-#define MAP_ABS_NOOP(ext, a)                                                   \
-MAP_MON_##ext(abs, /* no postfix */, a, a)
+#define MAP_ABS_NOOP(ext, a, _zval)                                            \
+MAP_MON_##ext(abs, /* no postfix */, a, a, _zval, _zval)
 
-#define MAP_NEG_OP(ext, a)                                                     \
-MAP_MON_##ext(-, _neg_S_, a, a)
+#define MAP_NEG_OP(ext, a, _zval)                                              \
+MAP_MON_##ext(-, _neg_S_, a, a, _zval, _zval)
 
 #define MAP_ANA_OPS(ext, a)                                                    \
 MAP_UNA_##ext(++, _add_SxS_, a, a)                                             \
 MAP_UNA_##ext(--, _sub_SxS_, a, a)
 
-#define MAP_INT_OPS(ext, a)                                                    \
-MAP_BIN_##ext(mod, _aplmod_SxS_, a, a)                                         \
-MAP_BIN_##ext(%, _mod_SxS_, a, a)                                              \
-MAP_BIN_##ext(^, _bitxor_SxS_, a, a)                                           \
-MAP_BIN_##ext(|, _bitor_SxS_, a, a)                                            \
-MAP_BIN_##ext(&, _bitand_SxS_, a, a)                                           \
-MAP_BIN_##ext(<<, _shl_SxS_, a, a)                                             \
-MAP_BIN_##ext(>>, _shr_SxS_, a, a)
+#define MAP_INT_OPS(ext, a, _zval)                                             \
+MAP_BIN_##ext(mod, _aplmod_SxS_, a, a, _zval, _zval)                           \
+MAP_BIN_##ext(%, _mod_SxS_, a, a, _zval, _zval)                                \
+MAP_BIN_##ext(^, _bitxor_SxS_, a, a, _zval, _zval)                             \
+MAP_BIN_##ext(|, _bitor_SxS_, a, a, _zval, _zval)                              \
+MAP_BIN_##ext(&, _bitand_SxS_, a, a, _zval, _zval)                             \
+MAP_BIN_##ext(<<, _shl_SxS_, a, a, _zval, _zval)                               \
+MAP_BIN_##ext(>>, _shr_SxS_, a, a, _zval, _zval)
 
 /******************************************************************************
  *
@@ -52,19 +52,19 @@ MAP_BIN_##ext(>>, _shr_SxS_, a, a)
  *
  ******************************************************************************/
 
-#define MAP_REL_OPS(ext, a)                                                    \
-MAP_EQ_OPS(ext, a)                                                             \
-MAP_COMP_OPS(ext, a)
+#define MAP_REL_OPS(ext, a, _zval)                                             \
+MAP_EQ_OPS(ext, a, _zval)                                                      \
+MAP_COMP_OPS(ext, a, _zval)
 
-#define MAP_EQ_OPS(ext, a)                                                     \
-MAP_BIN_##ext(==, _eq_SxS_, a, bool)                                           \
-MAP_BIN_##ext(!=, _neq_SxS_, a, bool)
+#define MAP_EQ_OPS(ext, a, _zval)                                              \
+MAP_BIN_##ext(==, _eq_SxS_, a, bool, _zval, true)                              \
+MAP_BIN_##ext(!=, _neq_SxS_, a, bool, _zval, true)
 
-#define MAP_COMP_OPS(ext, a)                                                   \
-MAP_BIN_##ext(<, _lt_SxS_, a, bool)                                            \
-MAP_BIN_##ext(<=, _le_SxS_, a, bool)                                           \
-MAP_BIN_##ext(>, _gt_SxS_, a, bool)                                            \
-MAP_BIN_##ext(>=, _ge_SxS_, a, bool)
+#define MAP_COMP_OPS(ext, a, _zval)                                            \
+MAP_BIN_##ext(<, _lt_SxS_, a, bool, _zval, true)                               \
+MAP_BIN_##ext(<=, _le_SxS_, a, bool, _zval, true)                              \
+MAP_BIN_##ext(>, _gt_SxS_, a, bool, _zval, true)                               \
+MAP_BIN_##ext(>=, _ge_SxS_, a, bool, _zval, true)
 
 /******************************************************************************
  *
@@ -72,10 +72,10 @@ MAP_BIN_##ext(>=, _ge_SxS_, a, bool)
  *
  ******************************************************************************/
 
-#define MAP_LOG_OPS(ext)                                                       \
-MAP_BIN_##ext(&, _and_SxS_, bool, bool)                                        \
-MAP_BIN_##ext(|, _or_SxS_, bool, bool)                                         \
-MAP_MON_##ext(!, _not_S_, bool, bool)
+#define MAP_LOG_OPS(ext, _zval)                                                \
+MAP_BIN_##ext(&, _and_SxS_, bool, bool, _zval, true)                           \
+MAP_BIN_##ext(|, _or_SxS_, bool, bool, _zval, true)                            \
+MAP_MON_##ext(!, _not_S_, bool, bool, _zval, true)
 
 /******************************************************************************
  *
@@ -83,34 +83,34 @@ MAP_MON_##ext(!, _not_S_, bool, bool)
  *
  ******************************************************************************/
 
-#define MAP_BOOL_CONV_OP(ext, a)                                               \
-MAP_MON_##ext(tobool, _tobool_S_, a, bool)
+#define MAP_BOOL_CONV_OP(ext, a, _zval)                                        \
+MAP_MON_##ext(tobool, _tobool_S_, a, bool, _zval, true)
 
-#define MAP_MIN_NUM_CONV_OPS(ext, a)                                           \
-MAP_MON_##ext(toi,  _toi_S_,  a, int)                                          \
-MAP_MON_##ext(tol,  _tol_S_,  a, long)                                         \
-MAP_MON_##ext(toui, _toui_S_, a, uint)                                         \
-MAP_MON_##ext(toul, _toul_S_, a, ulong)                                        \
-MAP_MON_##ext(tof,  _tof_S_,  a, float)                                        \
-MAP_MON_##ext(tod,  _tod_S_,  a, double)
+#define MAP_MIN_NUM_CONV_OPS(ext, a, _zval)                                    \
+MAP_MON_##ext(toi,  _toi_S_,  a, int, _zval, 0i)                               \
+MAP_MON_##ext(tol,  _tol_S_,  a, long, _zval, 0l)                              \
+MAP_MON_##ext(toui, _toui_S_, a, uint, _zval, 0ui)                             \
+MAP_MON_##ext(toul, _toul_S_, a, ulong, _zval, 0ul)                            \
+MAP_MON_##ext(tof,  _tof_S_,  a, float, _zval, 0f)                             \
+MAP_MON_##ext(tod,  _tod_S_,  a, double, _zval, 0d)
 
 #ifdef FULLTYPES
 
-#define MAP_FULL_NUM_CONV_OPS(ext, a)                                          \
-MAP_MON_##ext(tob, _tob_S_, a, byte)                                           \
-MAP_MON_##ext(tosh, _tos_S_, a, short)                                         \
-MAP_MON_##ext(toll, _toll_S_, a, longlong)                                     \
-MAP_MON_##ext(toub, _toub_S_, a, ubyte)                                        \
-MAP_MON_##ext(tous, _tous_S_, a, ushort)                                       \
-MAP_MON_##ext(toull, _toull_S_, a, ulonglong)
+#define MAP_FULL_NUM_CONV_OPS(ext, a, _zval)                                   \
+MAP_MON_##ext(tob, _tob_S_, a, byte, _zval, 0b)                                \
+MAP_MON_##ext(tosh, _tos_S_, a, short, _zval, 0s)                              \
+MAP_MON_##ext(toll, _toll_S_, a, longlong, _zval, 0ll)                         \
+MAP_MON_##ext(toub, _toub_S_, a, ubyte, _zval, 0ub)                            \
+MAP_MON_##ext(tous, _tous_S_, a, ushort, _zval, 0us)                           \
+MAP_MON_##ext(toull, _toull_S_, a, ulonglong, _zval, 0ull)
 
-#define MAP_NUM_CONV_OPS(ext, a)                                               \
-MAP_MIN_NUM_CONV_OPS(ext, a)                                                   \
-MAP_FULL_NUM_CONV_OPS(ext, a)
+#define MAP_NUM_CONV_OPS(ext, a, _zval)                                        \
+MAP_MIN_NUM_CONV_OPS(ext, a, _zval)                                            \
+MAP_FULL_NUM_CONV_OPS(ext, a, _zval)
 
 #else /* FULLTYPES */
 
-#define MAP_NUM_CONV_OPS(ext, a)                                               \
-MAP_MIN_NUM_CONV_OPS(ext, a)
+#define MAP_NUM_CONV_OPS(ext, a, _zval)                                        \
+MAP_MIN_NUM_CONV_OPS(ext, a, _zval)
 
 #endif /* FULLTYPES */

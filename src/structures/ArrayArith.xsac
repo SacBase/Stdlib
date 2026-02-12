@@ -37,25 +37,28 @@ export all;
  *
  ******************************************************************************/
 
-#define MAP_BIN_AxA(name, op, a, b)                                            \
+#define MAP_BIN_AxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d>0:shp] name(a[d>0:shp] A, a[d>0:shp] B)                                    \
 {                                                                              \
-    return { iv -> op(_sel_VxA_(iv, A), _sel_VxA_(iv, B)) | iv < shp };        \
+    return { iv -> op(_sel_VxA_(iv, A), _sel_VxA_(iv, B)) | iv < shp;          \
+             iv -> bdef                                   | iv < shp };        \
 }
 
-#define MAP_BIN_AxS(name, op, a, b)                                            \
+#define MAP_BIN_AxS(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d>0:shp] name(a[d>0:shp] A, a B)                                             \
 {                                                                              \
-    return { iv -> op(_sel_VxA_(iv, A), B) | iv < shp };                       \
+    return { iv -> op(_sel_VxA_(iv, A), B) | iv < shp;                         \
+             iv -> bdef                    | iv < shp };                       \
 }
 
-#define MAP_BIN_SxA(name, op, a, b)                                            \
+#define MAP_BIN_SxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d>0:shp] name(a A, a[d>0:shp] B)                                             \
 {                                                                              \
-    return { iv -> op(A, _sel_VxA_(iv, B)) | iv < shp };                       \
+    return { iv -> op(A, _sel_VxA_(iv, B)) | iv < shp;                         \
+             iv -> bdef                    | iv < shp };                       \
 }
 
 /******************************************************************************/
@@ -87,15 +90,16 @@ int[n] name(int A, int[n] B)                                                   \
  *
  ******************************************************************************/
 
-#define MAP_MON_AxA(name, op, a, b)                                            \
+#define MAP_MON_AxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d>0:shp] name(a[d>0:shp] A)                                                  \
 {                                                                              \
-    return { iv -> op(_sel_VxA_(iv, A)) | iv < shp };                          \
+    return { iv -> op(_sel_VxA_(iv, A)) | iv < shp;                            \
+             iv -> bdef                 | iv < shp };                          \
 }
 
-#define MAP_MON_AxS(name, op, a, b)
-#define MAP_MON_SxA(name, op, a, b)
+#define MAP_MON_AxS(name, op, a, b, adef, bdef)
+#define MAP_MON_SxA(name, op, a, b, adef, bdef)
 
 /******************************************************************************
  *
@@ -104,23 +108,23 @@ b[d>0:shp] name(a[d>0:shp] A)                                                  \
  ******************************************************************************/
 
 #define ARI_OPS_A(typ, _postfix, _fmt, _zval, _oval)                           \
-MAP_ARI_OPS(AxA, typ)                                                          \
-MAP_ARI_OPS(AxS, typ)                                                          \
-MAP_ARI_OPS(SxA, typ)
+MAP_ARI_OPS(AxA, typ, _zval)                                                   \
+MAP_ARI_OPS(AxS, typ, _zval)                                                   \
+MAP_ARI_OPS(SxA, typ, _zval)
 
 NUM(ARI_OPS_A)
 
 /******************************************************************************/
 
 #define ABS_OP_A(type, _postfix, _fmt, _zval, _oval)                           \
-MAP_ABS_OP(AxA, type)                                                          \
-MAP_ABS_OP(AxS, type)                                                          \
-MAP_ABS_OP(SxA, type)
+MAP_ABS_OP(AxA, type, _zval)                                                   \
+MAP_ABS_OP(AxS, type, _zval)                                                   \
+MAP_ABS_OP(SxA, type, _zval)
 
 #define ABS_NOOP_A(type, _postfix, _fmt, _zval, _oval)                         \
-MAP_ABS_NOOP(AxA, type)                                                        \
-MAP_ABS_NOOP(AxS, type)                                                        \
-MAP_ABS_NOOP(SxA, type)
+MAP_ABS_NOOP(AxA, type, _zval)                                                 \
+MAP_ABS_NOOP(AxS, type, _zval)                                                 \
+MAP_ABS_NOOP(SxA, type, _zval)
 
 SIGNED_NUM(ABS_OP_A)
 // abs is noop on unsigned numbers
@@ -129,18 +133,18 @@ UNSIGNED_INT_NUM(ABS_NOOP_A)
 /******************************************************************************/
 
 #define NEG_OP_A(typ, _postfix, _fmt, _zval, _oval)                            \
-MAP_NEG_OP(AxA, typ)                                                           \
-MAP_NEG_OP(AxS, typ)                                                           \
-MAP_NEG_OP(SxA, typ)
+MAP_NEG_OP(AxA, typ, _zval)                                                    \
+MAP_NEG_OP(AxS, typ, _zval)                                                    \
+MAP_NEG_OP(SxA, typ, _zval)
 
 SIGNED_NUM(NEG_OP_A)
 
 /******************************************************************************/
 
 #define INT_OPS_A(typ, _postfix, _fmt, _zval, _oval)                           \
-MAP_INT_OPS(AxA, typ)                                                          \
-MAP_INT_OPS(AxS, typ)                                                          \
-MAP_INT_OPS(SxA, typ)
+MAP_INT_OPS(AxA, typ, _zval)                                                   \
+MAP_INT_OPS(AxS, typ, _zval)                                                   \
+MAP_INT_OPS(SxA, typ, _zval)
 
 INT_NUM(INT_OPS_A)
 
@@ -151,9 +155,9 @@ INT_NUM(INT_OPS_A)
  ******************************************************************************/
 
 #define REL_OPS_A(typ, _postfix, _fmt, _zval, _oval)                           \
-MAP_REL_OPS(AxA, typ)                                                          \
-MAP_REL_OPS(AxS, typ)                                                          \
-MAP_REL_OPS(SxA, typ)
+MAP_REL_OPS(AxA, typ, _zval)                                                   \
+MAP_REL_OPS(AxS, typ, _zval)                                                   \
+MAP_REL_OPS(SxA, typ, _zval)
 
 BUILT_IN(REL_OPS_A)
 
@@ -163,9 +167,9 @@ BUILT_IN(REL_OPS_A)
  *
  ******************************************************************************/
 
-MAP_LOG_OPS(AxA)
-MAP_LOG_OPS(AxS)
-MAP_LOG_OPS(SxA)
+MAP_LOG_OPS(AxA, true)
+MAP_LOG_OPS(AxS, true)
+MAP_LOG_OPS(SxA, true)
 
 /******************************************************************************
  *
@@ -173,15 +177,15 @@ MAP_LOG_OPS(SxA)
  *
  ******************************************************************************/
 
-#define BOOL_CONV_OP_A(typ, _postfix, _fmt, _zero, _one)                       \
-MAP_BOOL_CONV_OP(AxA, typ)
+#define BOOL_CONV_OP_A(typ, _postfix, _fmt, _zval, _oval)                     \
+MAP_BOOL_CONV_OP(AxA, typ, _zval)
 
 NUM(BOOL_CONV_OP_A)
 BOOL(BOOL_CONV_OP_A)
 
 /******************************************************************************/
 
-#define NUM_CONV_OPS_A(typ, _postfix, _fmt, _zero, _one)                       \
-MAP_NUM_CONV_OPS(AxA, typ)
+#define NUM_CONV_OPS_A(typ, _postfix, _fmt, _zval, _oval)                      \
+MAP_NUM_CONV_OPS(AxA, typ, _zval)
 
 BUILT_IN(NUM_CONV_OPS_A)

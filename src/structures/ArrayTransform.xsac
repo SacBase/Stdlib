@@ -58,28 +58,32 @@ BUILT_IN(TRANSPOSE)
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ[d:shp] B)                    \
 {                                                                              \
-    return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : _sel_VxA_(iv, B) };   \
+    return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : _sel_VxA_(iv, B);     \
+             iv -> _zval                                       | iv < shp };   \
 }
 
 #define WHERE_AxS(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ B)                           \
 {                                                                              \
-    return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : B };                  \
+    return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : B;                    \
+             iv -> _zval                        | iv < shp };                  \
 }
 
 #define WHERE_SxA(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[d:shp] where(bool[d:shp] p, typ A, typ[d:shp] B)                           \
 {                                                                              \
-    return { iv -> _sel_VxA_(iv, p) ? A : _sel_VxA_(iv, B) };                  \
+    return { iv -> _sel_VxA_(iv, p) ? A : _sel_VxA_(iv, B);                    \
+             iv -> _zval                        | iv < shp };                  \
 }
 
 #define WHERE_SxS(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
 typ[b:shp] where(bool[b:shp] p, typ A, typ B)                                  \
 {                                                                              \
-    return { iv -> _sel_VxA_(iv, p) ? A : B };                                 \
+    return { iv -> _sel_VxA_(iv, p) ? A : B;                                   \
+             iv -> _zval         | iv < shp };                                 \
 }
 
 #define WHERE(typ, postfix, fmt, zval, oval)                                   \
