@@ -19,25 +19,28 @@ export all;
  *
  ******************************************************************************/
 
-#define MAP_BIN_AxA(name, op, a, b)                                            \
+#define MAP_BIN_AxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d:shp] name(a[d:shp] A, a[d:shp] B)                                          \
 {                                                                              \
-    return { iv -> name(A[iv], B[iv]) | iv < shp };                            \
+    return { iv -> name(A[iv], B[iv]) | iv < shp;                              \
+             iv -> bdef               | iv < shp };                            \
 }
 
-#define MAP_BIN_AxS(name, op, a, b)                                            \
+#define MAP_BIN_AxS(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d:shp] name(a[d:shp] A, a B)                                                 \
 {                                                                              \
-    return { iv -> name(A[iv], B) | iv < shp };                                \
+    return { iv -> name(A[iv], B) | iv < shp;                                  \
+             iv -> bdef           | iv < shp };                                \
 }
 
-#define MAP_BIN_SxA(name, op, a, b)                                            \
+#define MAP_BIN_SxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d:shp] name(a A, a[d:shp] B)                                                 \
 {                                                                              \
-    return { iv -> name(A, B[iv]) | iv < shp };                                \
+    return { iv -> name(A, B[iv]) | iv < shp;                                  \
+             iv -> bdef           | iv < shp };                                \
 }
 
 /******************************************************************************
@@ -49,15 +52,16 @@ b[d:shp] name(a A, a[d:shp] B)                                                 \
  *
  ******************************************************************************/
 
-#define MAP_MON_AxA(name, op, a, b)                                            \
+#define MAP_MON_AxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
 b[d:shp] name(a[d:shp] A)                                                      \
 {                                                                              \
-    return { iv -> name(A[iv]) | iv < shp };                                   \
+    return { iv -> name(A[iv]) | iv < shp;                                     \
+             iv -> bdef        | iv < shp };                                   \
 }
 
-#define MAP_MON_SxA(name, op, a, b)
-#define MAP_MON_AxS(name, op, a, b)
+#define MAP_MON_SxA(name, op, a, b, adef, bdef)
+#define MAP_MON_AxS(name, op, a, b, adef, bdef)
 
 /******************************************************************************
  *
@@ -65,10 +69,10 @@ b[d:shp] name(a[d:shp] A)                                                      \
  *
  ******************************************************************************/
 
-#define ARI_OPS_A(a)                                                           \
-MAP_ARI_OPS(AxA, a)                                                            \
-MAP_ARI_OPS(SxA, a)                                                            \
-MAP_ARI_OPS(AxS, a)
+#define ARI_OPS_A(a, _zval)                                                    \
+MAP_ARI_OPS(AxA, a, _zval)                                                     \
+MAP_ARI_OPS(SxA, a, _zval)                                                     \
+MAP_ARI_OPS(AxS, a, _zval)
 
 /******************************************************************************
  *
@@ -76,19 +80,19 @@ MAP_ARI_OPS(AxS, a)
  *
  ******************************************************************************/
 
-#define REL_OPS_A(a)                                                           \
-EQ_OPS_A(a)                                                                    \
-COMP_OPS_A(a)
+#define REL_OPS_A(a, _zval)                                                    \
+EQ_OPS_A(a, _zval)                                                             \
+COMP_OPS_A(a, _zval)
 
-#define EQ_OPS_A(a)                                                            \
-MAP_EQ_OPS(AxA, a)                                                             \
-MAP_EQ_OPS(SxA, a)                                                             \
-MAP_EQ_OPS(AxS, a)
+#define EQ_OPS_A(a, _zval)                                                     \
+MAP_EQ_OPS(AxA, a, _zval)                                                      \
+MAP_EQ_OPS(SxA, a, _zval)                                                      \
+MAP_EQ_OPS(AxS, a, _zval)
 
-#define COMP_OPS_A(a)                                                          \
-MAP_COMP_OPS(AxA, a)                                                           \
-MAP_COMP_OPS(SxA, a)                                                           \
-MAP_COMP_OPS(AxS, a)
+#define COMP_OPS_A(a, _zval)                                                   \
+MAP_COMP_OPS(AxA, a, _zval)                                                    \
+MAP_COMP_OPS(SxA, a, _zval)                                                    \
+MAP_COMP_OPS(AxS, a, _zval)
 
 /******************************************************************************
  *
@@ -105,7 +109,7 @@ MAP_COMP_OPS(AxS, a)
  *
  ******************************************************************************/
 
-ARI_OPS_A(complex)
+ARI_OPS_A(complex, ((complex)[0d,0d]))
 
 /******************************************************************************
  *
@@ -113,4 +117,4 @@ ARI_OPS_A(complex)
  *
  ******************************************************************************/
 
-REL_OPS_A(complex)
+REL_OPS_A(complex, ((complex)[0d,0d]))
