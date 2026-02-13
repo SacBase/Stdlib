@@ -72,10 +72,10 @@ MAP_BIN_##ext(>=, _ge_SxS_, a, bool, _zval, true)
  *
  ******************************************************************************/
 
-#define MAP_LOG_OPS(ext, _zval)                                                \
-MAP_BIN_##ext(&, _and_SxS_, bool, bool, _zval, true)                           \
-MAP_BIN_##ext(|, _or_SxS_, bool, bool, _zval, true)                            \
-MAP_MON_##ext(!, _not_S_, bool, bool, _zval, true)
+#define MAP_LOG_OPS(ext)                                                       \
+MAP_BIN_##ext(&, _and_SxS_, bool, bool, true, true)                            \
+MAP_BIN_##ext(|, _or_SxS_, bool, bool, true, true)                             \
+MAP_MON_##ext(!, _not_S_, bool, bool, true, true)
 
 /******************************************************************************
  *

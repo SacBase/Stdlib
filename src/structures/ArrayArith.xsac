@@ -167,9 +167,9 @@ BUILT_IN(REL_OPS_A)
  *
  ******************************************************************************/
 
-MAP_LOG_OPS(AxA, true)
-MAP_LOG_OPS(AxS, true)
-MAP_LOG_OPS(SxA, true)
+MAP_LOG_OPS(AxA)
+MAP_LOG_OPS(AxS)
+MAP_LOG_OPS(SxA)
 
 /******************************************************************************
  *
