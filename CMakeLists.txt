@@ -16,12 +16,15 @@ SET (IS_RELEASE  FALSE                 CACHE BOOL "Indicate if we are building w
 SET (SAC2C_EXTRA_INC
      -DHAVE_CONFIG_H
      -I${PROJECT_BINARY_DIR}/include
-     -I${PROJECT_SOURCE_DIR}/include)
+     -I${PROJECT_SOURCE_DIR}/include
+     -I${PROJECT_SOURCE_DIR}
+     )
 
 SET (SAC2C_CPP_INC
      -DHAVE_CONFIG_H
      -cppI${PROJECT_BINARY_DIR}/include
-     -cppI${PROJECT_SOURCE_DIR}/include)
+     -cppI${PROJECT_SOURCE_DIR}/include
+     -cppI${PROJECT_SOURCE_DIR})
 
 # Check whether sac2c is operational
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-common")

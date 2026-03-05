@@ -1,20 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <sacinterface.h>
 #include "StringArray.h"
 
-array *SAC_StringArray_alloc( int dim, int size)
+array *SAC_StringArray_alloc(sac_int dim, sac_int size)
 {
   array *res;
 
-  res = (array *)malloc( sizeof( array));
-  res->dim = dim;
-  res->size = size;
-  res->shp = (int*)malloc( res->dim * sizeof( int));
-  res->data = (char**) malloc( res->size * sizeof( char *));
-  res->descs = (SAC_array_descriptor_t*)
-              malloc( res->size * sizeof( SAC_array_descriptor_t *));
+  res = (array *)malloc(sizeof(array));
+  res->dim   = dim;
+  res->size  = size;
+  res->shp   = (sac_int *)malloc(res->dim * sizeof(sac_int));
+  res->elems = (SACarg **)malloc(res->size * sizeof(SACarg *));
   
-  return( res);
+  return res;
 }
 
