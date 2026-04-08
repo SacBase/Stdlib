@@ -17,9 +17,6 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
   int dim, size;
   int i;
 
-  SAC_ND_ALLOC__DESC( res_nt, 0);
-  SAC_ND_SET__RC( res_nt, 1);
-
   dim = SAC_ND_A_DESC_SIZE( shp_nt );
   size = 1;
   for( i=0; i < dim; i++) {
@@ -27,6 +24,9 @@ void SAC_StringArray_genarray( SAC_ND_PARAM_out( resout_nt, array *),
   }
 
   res = SAC_StringArray_alloc( dim, size);
+
+  SAC_ND_ALLOC__DESC( res_nt, 0);
+  SAC_ND_SET__RC( res_nt, 1);
 
   for( i=0; i < dim; i++) {
     res->shp[i] = SAC_ND_READ( shp_nt, i);

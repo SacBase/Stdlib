@@ -26,8 +26,7 @@ int SACmkstemp ( SAC_ND_PARAM_out_nodesc (filep_nt, FILE*),
   // initialise filep
   SAC_ND_A_FIELD (filep_nt) = NULL;
 
-  // alloc string descriptor and string
-  SAC_ND_ALLOC__DESC (str_nt, 0)
+  // alloc string
   SAC_ND_SET__RC (str_nt, 1)
   SAC_ND_A_FIELD (str_nt) = SAC_MALLOC (length + 1);
 
@@ -46,6 +45,9 @@ int SACmkstemp ( SAC_ND_PARAM_out_nodesc (filep_nt, FILE*),
 	    error = errno;
     }
   }
+  // alloc string descriptor 
+  SAC_ND_ALLOC__DESC (str_nt, 0)
+
 
   SAC_ND_RET_out__NODESC (filep_nt, filep_nt)
   SAC_ND_RET_out (str_nt, str_nt)
