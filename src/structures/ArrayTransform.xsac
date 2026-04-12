@@ -56,7 +56,7 @@ BUILT_IN(TRANSPOSE)
 
 #define WHERE_AxA(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
-typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ[d:shp] B)                    \
+typ[d>0:shp] where(bool[d>0:shp] p, typ[d>0:shp] A, typ[d>0:shp] B)            \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : _sel_VxA_(iv, B);     \
              iv -> _zval                                       | iv < shp };   \
@@ -64,7 +64,7 @@ typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ[d:shp] B)                    \
 
 #define WHERE_AxS(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
-typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ B)                           \
+typ[d>0:shp] where(bool[d>0:shp] p, typ[d>0:shp] A, typ B)                     \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? _sel_VxA_(iv, A) : B;                    \
              iv -> _zval                        | iv < shp };                  \
@@ -72,7 +72,7 @@ typ[d:shp] where(bool[d:shp] p, typ[d:shp] A, typ B)                           \
 
 #define WHERE_SxA(typ, _postfix, _fmt, _zval, _oval)                           \
 inline                                                                         \
-typ[d:shp] where(bool[d:shp] p, typ A, typ[d:shp] B)                           \
+typ[d>0:shp] where(bool[d>0:shp] p, typ A, typ[d>0:shp] B)                     \
 {                                                                              \
     return { iv -> _sel_VxA_(iv, p) ? A : _sel_VxA_(iv, B);                    \
              iv -> _zval                        | iv < shp };                  \

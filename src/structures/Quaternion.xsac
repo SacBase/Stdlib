@@ -83,20 +83,20 @@ inline struct Quaternion *(struct Quaternion a, struct Quaternion b)
     };
 }
 
-inline struct Quaternion[d:shp] *(struct Quaternion a,
-                                  struct Quaternion[d:shp] b)
+inline struct Quaternion[d>0:shp] *(struct Quaternion a,
+                                    struct Quaternion[d>0:shp] b)
 {
     return { iv -> a * b[iv] | iv < shp };
 }
 
-inline struct Quaternion[d:shp] *(struct Quaternion[d:shp] a,
-                                  struct Quaternion b)
+inline struct Quaternion[d>0:shp] *(struct Quaternion[d>0:shp] a,
+                                    struct Quaternion b)
 {
     return { iv -> a[iv] * b | iv < shp };
 }
 
-inline struct Quaternion[d:shp] *(struct Quaternion[d:shp] a,
-                                  struct Quaternion[d:shp] b)
+inline struct Quaternion[d>0:shp] *(struct Quaternion[d>0:shp] a,
+                                    struct Quaternion[d>0:shp] b)
 {
     return { iv -> a[iv] * b[iv] | iv < shp };
 }
