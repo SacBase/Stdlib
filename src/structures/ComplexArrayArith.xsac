@@ -21,7 +21,7 @@ export all;
 
 #define MAP_BIN_AxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
-b[d:shp] name(a[d:shp] A, a[d:shp] B)                                          \
+b[d>0:shp] name(a[d>0:shp] A, a[d>0:shp] B)                                    \
 {                                                                              \
     return { iv -> name(A[iv], B[iv]) | iv < shp;                              \
              iv -> bdef               | iv < shp };                            \
@@ -29,7 +29,7 @@ b[d:shp] name(a[d:shp] A, a[d:shp] B)                                          \
 
 #define MAP_BIN_AxS(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
-b[d:shp] name(a[d:shp] A, a B)                                                 \
+b[d>0:shp] name(a[d>0:shp] A, a B)                                             \
 {                                                                              \
     return { iv -> name(A[iv], B) | iv < shp;                                  \
              iv -> bdef           | iv < shp };                                \
@@ -37,7 +37,7 @@ b[d:shp] name(a[d:shp] A, a B)                                                 \
 
 #define MAP_BIN_SxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
-b[d:shp] name(a A, a[d:shp] B)                                                 \
+b[d>0:shp] name(a A, a[d>0:shp] B)                                             \
 {                                                                              \
     return { iv -> name(A, B[iv]) | iv < shp;                                  \
              iv -> bdef           | iv < shp };                                \
@@ -54,7 +54,7 @@ b[d:shp] name(a A, a[d:shp] B)                                                 \
 
 #define MAP_MON_AxA(name, op, a, b, adef, bdef)                                \
 inline                                                                         \
-b[d:shp] name(a[d:shp] A)                                                      \
+b[d>0:shp] name(a[d>0:shp] A)                                                  \
 {                                                                              \
     return { iv -> name(A[iv]) | iv < shp;                                     \
              iv -> bdef        | iv < shp };                                   \
