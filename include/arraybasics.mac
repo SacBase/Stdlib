@@ -114,7 +114,7 @@ inline typ[o:oshp,i:ishp] modarray(typ[o:oshp,i:ishp] arr,                     \
 }
 
 #define MODARRAY_AxVxS(typ, _postfix, _fmt, _zval, _oval)                      \
-inline typ[d:shp] modarray(typ[d:shp] arr, int[d] idx, typ val)                \
+inline typ[d>0:shp] modarray(typ[d>0:shp] arr, int[d] idx, typ val)             \
     | _all_V_(_le_SxV_(0, idx)), _all_V_(_lt_VxV_(idx, shp))                   \
 {                                                                              \
     return _modarray_AxVxS_(arr, idx, val);                                    \
