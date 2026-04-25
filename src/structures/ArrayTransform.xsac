@@ -86,11 +86,19 @@ typ[b:shp] where(bool[b:shp] p, typ A, typ B)                                  \
              iv -> _zval         | iv < shp };                                 \
 }
 
+#define WHERE_SSS(typ, _postfix, _fmt, _zval, _oval)                           \
+inline                                                                         \
+typ where(bool p, typ A, typ B)                                                \
+{                                                                              \
+    return p ? A : B;                                                          \
+}
+
 #define WHERE(typ, postfix, fmt, zval, oval)                                   \
 WHERE_AxA(typ, postfix, fmt, zval, oval)                                       \
 WHERE_AxS(typ, postfix, fmt, zval, oval)                                       \
 WHERE_SxA(typ, postfix, fmt, zval, oval)                                       \
-WHERE_SxS(typ, postfix, fmt, zval, oval)
+WHERE_SxS(typ, postfix, fmt, zval, oval)                                       \
+WHERE_SSS(typ, postfix, fmt, zval, oval)
 
 BUILT_IN(WHERE)
 
