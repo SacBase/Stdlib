@@ -1,9 +1,3 @@
-#pragma safe
-
-module VECTOR3;
-
-export all;
-
 struct VECTOR3 {
     REAL VX;
     REAL VY;
@@ -16,7 +10,7 @@ l2norm(struct VECTOR3 v)
     x = _mul_SxS_(v.VX, v.VX);
     y = _mul_SxS_(v.VY, v.VY);
     z = _mul_SxS_(v.VZ, v.VZ);
-    return Math::sqrt(_add_SxS_(_add_SxS_(x, y), z));
+    return sqrt(_add_SxS_(_add_SxS_(x, y), z));
 }
 
 /******************************************************************************

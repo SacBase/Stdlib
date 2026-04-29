@@ -1,3 +1,11 @@
+#pragma safe
+
+module Vector3d;
+
+use Math: { sqrt };
+
+export all;
+
 #define REAL double
 #define VECTOR3 Vector3d
 #define VX xd

@@ -1,3 +1,11 @@
+#pragma safe
+
+module Vector3f;
+
+use Math: { sqrt };
+
+export all;
+
 #define REAL float
 #define VECTOR3 Vector3f
 #define VX xf
