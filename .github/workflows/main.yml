@@ -26,18 +26,14 @@ jobs:
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
-    - name: Create build dir
-      run: |
-        cmake -E make_directory ${{runner.workspace}}/build
     - name: Configure build-system
       shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: cmake -DLINKSETSIZE=200 $GITHUB_WORKSPACE
+      run: |
+        cmake -S . -B build -G Ninja
     - name: Build
       shell: bash
-      working-directory: ${{runner.workspace}}/build
       run: |
-        cmake --build . -j4 2>&1 | tee build.log
+        cmake --build build -j4 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
@@ -75,18 +71,15 @@ jobs:
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
-    - name: Create build dir
-      run: |
-        cmake -E make_directory ${{runner.workspace}}/build
     - name: Configure build-system
       shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: cmake ${GITHUB_WORKSPACE}
+      run: |
+        cmake -S . -B build -G Ninja
     - name: Build
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: |
-        cmake --build . -j3 2>&1 | tee build.log
+        cmake --build build -j4 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
