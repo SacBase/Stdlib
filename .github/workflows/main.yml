@@ -23,7 +23,7 @@ jobs:
       run: |
         git clone --single-branch --recursive https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c
-        make release -j2
+        GENERATOR=Ninja make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
@@ -67,7 +67,7 @@ jobs:
       run: |
         git clone --single-branch --recursive https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c
-        make release -j2
+        GENERATOR=Ninja make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
