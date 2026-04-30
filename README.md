@@ -15,13 +15,19 @@ To build the system one requires an operational [CMake](https://cmake.org/) >= 3
 
 The quick and dirty option is just
 
-```
+```sh
 make -j4
+```
+
+To build with Ninja, change the `GENERATOR` environment variable.
+
+```sh
+GENERATOR=Ninja make -jN
 ```
 
 You can also use the `cmake` build system for more control
 
-```
+```sh
 mkdir build
 cd build
 cmake <OPTIONS> ..
@@ -31,8 +37,8 @@ make -j4
 **NOTE:** *When pulling the latest commit, remember to run `git submodule
 update` or you will be missing changes to the `cmake-common` repository.*
 
-> [!TIP]  
-> An advantage of doing a cmake build is that the generated Makefile will get targets to build individual standard library modules.  
+> [!TIP]
+> An advantage of doing a cmake build is that the generated Makefile will get targets to build individual standard library modules.
 > For instance `make seq-module-File` will then only build the File module for sequential code.
 
 Variables that can be passed to CMake
