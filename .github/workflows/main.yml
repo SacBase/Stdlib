@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Get HEAD and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
         submodules: 'recursive'
@@ -26,7 +26,7 @@ jobs:
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
-    - name: Configure build-system
+    - name: Configure build system
       shell: bash
       run: |
         cmake -S . -B build -G Ninja
@@ -41,7 +41,6 @@ jobs:
         ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
     - name: Test
       shell: bash
-      working-directory: ${{runner.workspace}}/build
       run: |
         git clone --single-branch https://github.com/SacBase/IntegrationTests.git
         cd IntegrationTests
@@ -52,7 +51,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: Get HEAD and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
         submodules: 'recursive'
@@ -71,13 +70,12 @@ jobs:
         make release -j2
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
-    - name: Configure build-system
+    - name: Configure build system
       shell: bash
       run: |
         cmake -S . -B build -G Ninja
     - name: Build
       shell: bash
-      working-directory: ${{runner.workspace}}/build
       run: |
         cmake --build build -j4 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
@@ -87,7 +85,6 @@ jobs:
         ${GITHUB_WORKSPACE}/ci/fail-on-warning.sh build.log
     - name: Test
       shell: bash
-      working-directory: ${{runner.workspace}}/build
       run: |
         git clone --single-branch https://github.com/SacBase/IntegrationTests.git
         cd IntegrationTests
