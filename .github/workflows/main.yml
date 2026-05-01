@@ -67,7 +67,7 @@ jobs:
       run: |
         git clone --single-branch --recursive https://gitlab.sac-home.org/sac-group/sac2c.git
         cd sac2c
-        GENERATOR=Ninja make release -j4
+        GENERATOR=Ninja make release -j3
         cp build_p/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
@@ -77,7 +77,7 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        cmake --build build -j4 2>&1 | tee build.log
+        cmake --build build -j3 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
