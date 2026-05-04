@@ -27,8 +27,9 @@ jobs:
       run: |
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
         cd sac2c
-        GENERATOR=Ninja make release -j4
-        make symlink-release
+        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
+        cmake --build build -j4
+        ln -s $(PWD)/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
       run: |
@@ -70,8 +71,9 @@ jobs:
       run: |
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
         cd sac2c
-        GENERATOR=Ninja make release -j3
-        make symlink-release
+        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
+        cmake --build build -j3
+        ln -s $(PWD)/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
       run: |
