@@ -29,7 +29,7 @@ jobs:
         cd sac2c
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
         cmake --build build -j4
-        ln -s $(PWD)/build/sac2c_p /usr/local/bin/sac2c
+        ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
       run: |
@@ -73,7 +73,7 @@ jobs:
         cd sac2c
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
         cmake --build build -j3
-        ln -s $(PWD)/build/sac2c_p /usr/local/bin/sac2c
+        ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
       run: |
