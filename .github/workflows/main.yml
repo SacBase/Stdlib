@@ -6,7 +6,7 @@ name: Build On Changes
 
 on: [pull_request]
 
-variables:
+env:
   SAC2C_URL: https://gitlab.sac-home.org/sac-group/sac2c.git
   INTTEST_URL: https://github.com/SacBase/IntegrationTests.git
 
