@@ -99,6 +99,10 @@ typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
  *
  * @brief First-axis catenation.
  *
+ * @note The `A[i]` partition is deliberately put second. The final partition
+ * is used in determining the tensor's default value; putting the `A[i]`
+ * partition last makes sure we do not cause a negative selection in `B[0-n]`.
+ *
  ******************************************************************************/
 
 #define CAT(typ, _postfix, _fmt, _zval, _oval)                                 \
@@ -107,8 +111,8 @@ typ[o,d:shp] ++(typ[n,d:shp] A, typ[m,d:shp] B)                                \
     | _eq_SxS_(o, _add_SxS_(n, m))                                             \
 {                                                                              \
     o = _add_SxS_(n, m);                                                       \
-    return { [i] -> A[i] | [i] < [n];                                          \
-             [i] -> B[_sub_SxS_(i, n)] | [n] <= [i] < [o] };                   \
+    return { [i] -> B[_sub_SxS_(i, n)] | [n] <= [i] < [o];                     \
+             [i] -> A[i] | [i] < [n] };                                        \
 }
 
 /******************************************************************************
