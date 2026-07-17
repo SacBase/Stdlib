@@ -210,7 +210,7 @@ typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
                 _sub_SxS_(_sel_VxA_([i], iv), _sel_VxA_([i], counts)),         \
                 _sel_VxA_([i], oshp)                                           \
             ) | [i] < [n];                                                     \
-            [i] -> zval | [i] < [n] }                                          \
+            [i] -> 0 | [i] < [n] }                                             \
         ] | iv < oshp;                                                         \
         iv -> with {} : genarray(ishp, zval) | iv < oshp                       \
     };                                                                         \
