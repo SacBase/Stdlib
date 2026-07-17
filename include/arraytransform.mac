@@ -2,6 +2,11 @@
  *
  * Macros for transformations of arrays.
  *
+ * @remark Due to a bug in the cell-size determination for tensor comprehension
+ * default value (https://gitlab.sac-home.org/sac-group/sac2c/issues/2573).
+ * The current "fix" is to make the default element explicit, which is why
+ * tensor comprehensions here seemingly have a useless extra partition.
+ *
  ******************************************************************************/
 
  /******************************************************************************
@@ -24,7 +29,7 @@
  *
  ******************************************************************************/
 
-#define TAKE(typ, _postfix, _fmt, _zval, _oval)                                \
+#define TAKE(typ, _postfix, _fmt, zval, _oval)                                 \
 inline                                                                         \
 typ[o:stop,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                       \
     | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
@@ -37,7 +42,8 @@ typ[o:stop,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                       \
             | [i] < [o] };                                                     \
     /* Stop signals the location of the last index element of array. */        \
     stop = _abs_V_(sv);                                                        \
-    return { iv -> A[_add_VxV_(start, iv)] | iv < stop };                      \
+    return { iv -> A[_add_VxV_(start, iv)] | iv < stop;                        \
+             iv -> with {} : genarray(ishp, zval) | iv < stop };               \
 }
 
 /******************************************************************************
@@ -60,7 +66,7 @@ typ[o:stop,i:ishp] take(int[o] sv, typ[o:oshp,i:ishp] A)                       \
  *
  ******************************************************************************/
 
-#define DROP(typ, _postfix, _fmt, _zval, _oval)                                \
+#define DROP(typ, _postfix, _fmt, zval, _oval)                                 \
 inline                                                                         \
 typ[o:shp_res,i:ishp] drop(int[o] sv, typ[o:oshp,i:ishp] A)                    \
     | _all_V_(_le_VxV_(_abs_V_(sv), oshp))                                     \
@@ -69,7 +75,8 @@ typ[o:shp_res,i:ishp] drop(int[o] sv, typ[o:oshp,i:ishp] A)                    \
     shp_res = _sub_VxV_(oshp, _abs_V_(sv));                                    \
     /* Start shows the index of the first element to be selected. */           \
     start = _max_VxS_(sv, 0);                                                  \
-    return { iv -> A[_add_VxV_(start, iv)] | iv < shp_res };                   \
+    return { iv -> A[_add_VxV_(start, iv)] | iv < shp_res;                     \
+             iv -> with {} : genarray(ishp, zval) | iv < shp_res };            \
 }
 
 /******************************************************************************
@@ -90,7 +97,8 @@ typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
     , _all_V_(_ge_VxS_(idx, 0))                                                \
     , _all_V_(_le_VxV_(_add_VxV_(shp, idx), oshp))                             \
 {                                                                              \
-    return { iv -> A[_add_VxV_(idx, iv)] | iv < shp };                         \
+    return { iv -> A[_add_VxV_(idx, iv)] | iv < shp;                           \
+             iv -> with {} : genarray(ishp, zval) | iv < shp };                \
 }
 
 /******************************************************************************
@@ -99,7 +107,7 @@ typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
  *
  * @brief First-axis catenation.
  *
- * @note The `A[i]` partition is deliberately put second. The final partition
+ * @remark The `A[i]` partition is deliberately put second. The final partition
  * is used in determining the tensor's default value; putting the `A[i]`
  * partition last makes sure we do not cause a negative selection in `B[0-n]`.
  *
@@ -124,12 +132,14 @@ typ[o,d:shp] ++(typ[n,d:shp] A, typ[m,d:shp] B)                                \
  *
  ******************************************************************************/
 
-#define CATLAST(typ, _postfix, _fmt, _zval, _oval)                             \
+#define CATLAST(typ, _postfix, _fmt, zval, _oval)                              \
 inline                                                                         \
 typ[d:shp,o] ++^(typ[d:shp,n] A, typ[d:shp,m] B)                               \
     | _eq_SxS_(o, _add_SxS_(n, m))                                             \
 {                                                                              \
-    return { iv -> _cat_VxV_(A[iv], B[iv]) | iv < shp };                       \
+    o = _add_SxS_(n, m);                                                       \
+    return { iv -> _cat_VxV_(A[iv], B[iv]) | iv < shp;                         \
+             iv -> with {} : genarray([o], zval) | iv < shp };                 \
 }
 
 /******************************************************************************
@@ -140,11 +150,12 @@ typ[d:shp,o] ++^(typ[d:shp,n] A, typ[d:shp,m] B)                               \
  *
  ******************************************************************************/
 
-#define REVERSE(typ, _postfix, _fmt, _zval, _oval)                             \
+#define REVERSE(typ, _postfix, _fmt, zval, _oval)                              \
 inline                                                                         \
 typ[n,d:shp] reverse(typ[n,d:shp] A)                                           \
 {                                                                              \
-    return { [i] -> A[_sub_SxS_(_sub_SxS_(n, 1), i)] | [i] < [n] };            \
+    return { [i] -> A[_sub_SxS_(_sub_SxS_(n, 1), i)] | [i] < [n];              \
+             [i] -> with {} : genarray(shp, zval) | [i] < [n] };               \
 }
 
 /******************************************************************************
@@ -155,11 +166,12 @@ typ[n,d:shp] reverse(typ[n,d:shp] A)                                           \
  *
  ******************************************************************************/
 
-#define REVERSEAXIS(typ, _postfix, _fmt, _zval, _oval)                         \
+#define REVERSEAXIS(typ, _postfix, _fmt, zval, _oval)                          \
 inline                                                                         \
 typ[axis:oshp,n,i:ishp] reverse(int axis, typ[axis:oshp,n,i:ishp] A)           \
 {                                                                              \
-    return { iv -> reverse(A[iv]) | iv < oshp };                               \
+    return { iv -> reverse(A[iv]) | iv < oshp;                                 \
+             iv -> with {} : genarray(_cat_VxV_([n], ishp), zval) | iv < oshp };\
 }
 
 /******************************************************************************
@@ -173,27 +185,35 @@ typ[axis:oshp,n,i:ishp] reverse(int axis, typ[axis:oshp,n,i:ishp] A)           \
  *
  ******************************************************************************/
 
-#define ROTATE_S(typ, _postfix, _fmt, _zval, _oval)                            \
+#define ROTATE_S(typ, _postfix, _fmt, zval, _oval)                             \
 inline                                                                         \
 typ[o:oshp,n,i:ishp] rotate(int o, int count, typ[o:oshp,n,i:ishp] A)          \
 {                                                                              \
-    return { iv ->                                                             \
-            { [j] ->                                                           \
-                A[_cat_VxV_(iv, [_aplmod_SxS_(_sub_SxS_(j, count), n)])]       \
-            | [j] < [n] }                                                      \
-           | iv < oshp };                                                      \
+    return {                                                                   \
+        iv -> {                                                                \
+            [j] -> A[                                                          \
+                _cat_VxV_(iv, [_aplmod_SxS_(_sub_SxS_(j, count), n)])          \
+            ] | [j] < [n];                                                     \
+            [j] -> with {} : genarray(ishp, zval) | [j] < [n]                  \
+        } | iv < oshp;                                                         \
+        iv -> with {} : genarray(_cat_VxV_([n], ishp), zval) | iv < oshp       \
+    };                                                                         \
 }
 
-#define ROTATE_V(typ, _postfix, _fmt, _zval, _oval)                            \
+#define ROTATE_V(typ, _postfix, _fmt, zval, _oval)                             \
 inline                                                                         \
 typ[n:oshp,i:ishp] rotate(int[n] counts, typ[n:oshp,i:ishp] A)                 \
 {                                                                              \
-  return { iv ->                                                               \
-      A[{ [i] -> _aplmod_SxS_(_sub_SxS_(_sel_VxA_([i], iv),                    \
-                                        _sel_VxA_([i], counts)),               \
-                              _sel_VxA_([i], oshp))                            \
-         | [i] < [n] } ]                                                       \
-    | iv < oshp };                                                             \
+    return {                                                                   \
+        iv -> A[{                                                              \
+            [i] -> _aplmod_SxS_(                                               \
+                _sub_SxS_(_sel_VxA_([i], iv), _sel_VxA_([i], counts)),         \
+                _sel_VxA_([i], oshp)                                           \
+            ) | [i] < [n];                                                     \
+            [i] -> zval | [i] < [n] }                                          \
+        ] | iv < oshp;                                                         \
+        iv -> with {} : genarray(ishp, zval) | iv < oshp                       \
+    };                                                                         \
 }
 
 #define ROTATE(typ, postfix, fmt, zval, oval)                                  \
@@ -209,18 +229,22 @@ ROTATE_V(typ, postfix, fmt, zval, oval)
  *
  ******************************************************************************/
 
-#define SHIFT_S(typ, _postfix, _fmt, _zval, _oval)                             \
+#define SHIFT_S(typ, _postfix, _fmt, zval, _oval)                              \
 inline                                                                         \
 typ[o:oshp,n,i:ishp] shift(int o, int count, typ boundary,                     \
                            typ[o:oshp,n,i:ishp] A)                             \
 {                                                                              \
-    return { iv ->                                                             \
-            { [j] -> _and_SxS_(_lt_SxS_(_sub_SxS_(j, count), n),               \
-                               _ge_SxS_(_sub_SxS_(j, count), 0))               \
-                     ? A[_cat_VxV_(iv, [_sub_SxS_(j, count)])]                 \
-                     : { iv -> boundary | iv < ishp }                          \
-            | [j] < [n] }                                                      \
-           | iv < oshp };                                                      \
+    return {                                                                   \
+        iv -> {                                                                \
+            [j] -> _and_SxS_(_lt_SxS_(_sub_SxS_(j, count), n),                 \
+                             _ge_SxS_(_sub_SxS_(j, count), 0))                 \
+                    ? A[_cat_VxV_(iv, [_sub_SxS_(j, count)])]                  \
+                    : { iv -> boundary | iv < ishp }                           \
+            | [j] < [n];                                                       \
+            [j] -> with {} : genarray(ishp, zval) | [j] < [n]                  \
+        } | iv < oshp;                                                         \
+        iv -> with {} : genarray(_cat_VxV_([n], ishp), zval) | iv < oshp       \
+    };                                                                         \
 }
 
 #define SHIFT_V(typ, _postfix, _fmt, _zval, _oval)                             \
