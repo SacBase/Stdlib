@@ -90,7 +90,7 @@ typ[o:shp_res,i:ishp] drop(int[o] sv, typ[o:oshp,i:ishp] A)                    \
  *
  ******************************************************************************/
 
-#define TILE(typ, _postfix, _fmt, _zval, _oval)                                \
+#define TILE(typ, _postfix, _fmt, zval, _oval)                                 \
 inline                                                                         \
 typ[d:shp,i:ishp] tile(int[d] shp, int[d] idx, typ[d:oshp,i:ishp] A)           \
     | _all_V_(_ge_VxS_(shp, 0))                                                \
