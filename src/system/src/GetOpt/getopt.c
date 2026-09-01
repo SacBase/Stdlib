@@ -143,7 +143,7 @@ char getopt_sac(const char *opts)
                 SAC_optopt = arg[SAC_argind];
             }
 
-            char *p;
+            const char *p;
 
             if (SAC_optopt == ':' ||
                 SAC_optopt == '\0' ||
