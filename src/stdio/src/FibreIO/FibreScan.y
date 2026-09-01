@@ -23,7 +23,7 @@ enum READMODE {
 };
 
 int     boolval;
-char    byteval;
+signed char    byteval;
 short   shortval;
 int     intval;
 long    longval;
@@ -38,7 +38,7 @@ double  doubleval;
 char    *stringval;
 double  *doublearray;
 float   *floatarray;
-char    *bytearray;
+signed char *bytearray;
 short   *shortarray;
 int     *intarray;
 long    *longarray;
@@ -267,7 +267,7 @@ parse_scalar: NUM
                     yyerror( "byte numeric expected!");
                   }
                   else {
-                    bytearray = (char *) SAC_MALLOC( sizeof( char));
+                    bytearray = (signed char *) SAC_MALLOC( sizeof( signed char));
                     *bytearray = $1;
                   }
                  got_scalar = 1;
@@ -485,7 +485,7 @@ array: SQBR_L desc COLON
            }
            switch( mode) {
              case byte_mode:
-               bytearray = (char *) SAC_MALLOC( size * sizeof( char));
+               bytearray = (signed char *) SAC_MALLOC( size * sizeof( signed char));
                break;
              case short_mode:
                shortarray = (short *) SAC_MALLOC( size * sizeof( short));

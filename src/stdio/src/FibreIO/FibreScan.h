@@ -52,7 +52,7 @@ extern int FibreScanlex(void);
 extern void doScan( FILE *stream);
 
 extern int boolval;
-extern char byteval;
+extern signed char byteval;
 extern short shortval;
 extern int intval;
 extern long longval;
@@ -67,7 +67,7 @@ extern double doubleval;
 extern char *stringval;
 extern double *doublearray;
 extern float *floatarray;
-extern char *bytearray;
+extern signed char *bytearray;
 extern short *shortarray;
 extern int *intarray;
 extern long *longarray;
