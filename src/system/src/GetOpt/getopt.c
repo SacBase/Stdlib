@@ -15,6 +15,7 @@
  ******************************************************************************/
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "sac.h"
 #include "sacinterface.h"
@@ -73,12 +74,22 @@ char *get_optarg(void)
     return SAC_optarg ? my_strdup(SAC_optarg) : my_strdup("");
 }
 
+static void printopterror(const char *msg)
+{
+    char *prog = SACargv(0);
+	fprintf(stderr, "%s: %s -- ", prog, msg);
+    free(prog);
+	if (isprint((int)SAC_optopt)) {
+		fprintf(stderr, "'%c'\n", (char)SAC_optopt);
+	} else {
+		fprintf(stderr, "%"PRIisac"\n", SAC_optopt);
+	}
+}
+
 static void badopt(void)
 {
     if (SAC_opterr) {
-        char *prog = SACargv(0);
-        fprintf(stderr, "%s: invalid option -- '%"PRIisac"'\n", prog, SAC_optopt);
-        free(prog);
+        printopterror("invalid option");
     }
 }
 
@@ -94,9 +105,7 @@ static void setarg(char *arg)
 static void missing( void)
 {
     if (SAC_opterr == 1) {
-        char *prog = SACargv(0);
-        fprintf(stderr, "%s: option requires an argument -- '%"PRIisac"'\n", prog, SAC_optopt);
-        free(prog);
+        printopterror("option requires an argument");
     }
 }
 
