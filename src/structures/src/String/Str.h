@@ -12,9 +12,6 @@
 typedef char *string;
 
 string copy_string(string s);
-
-// CUDA compiles generated code as C++, where void* may not be implicitly
-// converted to char*, so we have to make the argument void* instead.
 string free_string(string s);
 
 string SACtostring(unsigned char *arr, sac_int length);
