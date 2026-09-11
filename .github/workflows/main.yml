@@ -11,8 +11,8 @@ env:
   INTTEST_URL: https://github.com/SacBase/IntegrationTests.git
 
 jobs:
-  build-ubuntu24:
-    runs-on: ubuntu-24.04
+  build-ubuntu26:
+    runs-on: nvidia/cuda:13.3.1-devel-ubuntu26.04
     steps:
     - name: Get HEAD and submodules
       uses: actions/checkout@v6
@@ -27,17 +27,20 @@ jobs:
       run: |
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
         cd sac2c
-        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
-        cmake --build build -j4
+        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE -DCUDA=ON
+        cmake --build build --parallel
         ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
       run: |
-        cmake -S . -B build -G Ninja
+        cmake -S . -B build -G Ninja \
+          -DTARGETS="seq;seq_checks;mt_pth;cuda" \
+          -DBUILD_EXT=ON \
+          -DLINKSETSIZE=200
     - name: Build
       shell: bash
       run: |
-        cmake --build build -j4 2>&1 | tee build.log
+        cmake --build build --parallel 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
@@ -72,16 +75,18 @@ jobs:
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
         cd sac2c
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
-        cmake --build build -j3
+        cmake --build build --parallel
         ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
       run: |
-        cmake -S . -B build -G Ninja
+        cmake -S . -B build -G Ninja \
+          -DTARGETS="seq;seq_checks;mt_pth" \
+          -DBUILD_EXT=ON
     - name: Build
       shell: bash
       run: |
-        cmake --build build -j3 2>&1 | tee build.log
+        cmake --build build --parallel 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
