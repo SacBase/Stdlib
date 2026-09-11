@@ -11,7 +11,7 @@ module String;
 export all except { indent };
 
 external typedef string;
-    #pragma ctype "char*"
+    // #pragma ctype "char*"
     #pragma copyfun "copy_string"
     #pragma freefun "free_string"
     #pragma linkobj "src/String/Str.o"

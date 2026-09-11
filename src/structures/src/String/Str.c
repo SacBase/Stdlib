@@ -14,7 +14,7 @@ string copy_string(string s)
     return s2;
 }
 
-string free_string(void *s)
+string free_string(string s)
 {
     free(s);
     return NULL;
