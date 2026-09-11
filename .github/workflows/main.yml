@@ -20,7 +20,17 @@ jobs:
       run: |
         apt-get update
         apt-get install -y \
-          ca-certificates cmake git ninja-build xsltproc
+          git \
+          cmake \
+          ninja-build \
+          ca-certificates \
+          libhwloc-dev \
+          uuid-runtime \
+          uuid-dev \
+          xsltproc \
+          bison \
+          flex \
+          m4
     - name: Get HEAD and submodules
       uses: actions/checkout@v6
       with:
