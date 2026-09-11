@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y \
+        apt-get install --no-install-recommends -y \
           git \
           cmake \
           python3 \
@@ -45,6 +45,8 @@ jobs:
         cmake --build build --parallel
         ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
+    - name: Configure Git
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
     - name: Configure build system
       run: |
         cmake -S . -B build -G Ninja \
