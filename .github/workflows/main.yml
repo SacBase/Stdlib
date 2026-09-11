@@ -12,7 +12,9 @@ env:
 
 jobs:
   build-ubuntu26:
-    runs-on: nvidia/cuda:13.3.1-devel-ubuntu26.04
+    runs-on: ubuntu26.04
+    container:
+      image: nvidia/cuda:13.3.1-devel-ubuntu26.04
     steps:
     - name: Get HEAD and submodules
       uses: actions/checkout@v6
