@@ -42,7 +42,7 @@ jobs:
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
         cd sac2c
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE -DCUDA=ON
-        cmake --build build --parallel
+        cmake --build build -j4
         ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure Git
@@ -56,7 +56,7 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        cmake --build build --parallel 2>&1 | tee build.log
+        cmake --build build -j4 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
@@ -91,7 +91,7 @@ jobs:
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
         cd sac2c
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
-        cmake --build build --parallel
+        cmake --build build -j3
         ln -s $PWD/build/sac2c_p /usr/local/bin/sac2c
         sac2c -V
     - name: Configure build system
@@ -102,7 +102,7 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        cmake --build build --parallel 2>&1 | tee build.log
+        cmake --build build -j3 2>&1 | tee build.log
         if [ ${PIPESTATUS[0]} -ne 0 ]; then
           echo "!!! ERROR detected in build !!!";
           exit 1;
