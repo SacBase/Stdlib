@@ -13,14 +13,9 @@ typedef char *string;
 
 string copy_string(string s);
 
-#ifdef SAC_BACKEND_CUDA
 // CUDA compiles generated code as C++, where void* may not be implicitly
 // converted to char*, so we have to make the argument void* instead.
 string free_string(void *s);
-#else
-string free_string(string s);
-#endif
-
 
 string SACtostring(unsigned char *arr, sac_int length);
 string SACautotostring(SACarg *sarr);
