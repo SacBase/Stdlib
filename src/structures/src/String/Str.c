@@ -14,7 +14,11 @@ string copy_string(string s)
     return s2;
 }
 
+#ifdef SAC_BACKEND_CUDA
+string free_string(void *s)
+#else
 string free_string(string s)
+#endif
 {
     free(s);
     return NULL;
