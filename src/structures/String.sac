@@ -10,6 +10,9 @@ module String;
 
 export all except { indent };
 
+// Using `pragma ctype` leads to issues when compiling for CUDA. CUDA compiles
+// generated code as C++, where using `ctype` introduces an implicit cast from
+// void* to char*, which is not allowed in C++.
 external typedef string;
     // #pragma ctype "char*"
     #pragma copyfun "copy_string"
