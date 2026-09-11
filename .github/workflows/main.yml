@@ -18,18 +18,14 @@ jobs:
     steps:
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
+        apt-get update
+        apt-get install -y \
           ca-certificates cmake git ninja-build xsltproc
     - name: Get HEAD and submodules
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        git clone --recursive \
-          "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-          "${GITHUB_WORKSPACE}"
-        cd "${GITHUB_WORKSPACE}"
-        git checkout "${GITHUB_SHA}"
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        submodules: 'recursive'
     - name: Install sac2c
       run: |
         git clone --single-branch --recursive ${SAC2C_URL} sac2c
